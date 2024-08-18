@@ -1,50 +1,187 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - AltoChicamaSystem</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/AltoChicamaSystem.styles.css" asp-append-version="true" />
+    <title>Alto Chicama</title>
+    <link href="img/icono.png" rel="icon" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="lib/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="lib/animate/animate.min.css" rel="stylesheet" />
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
+
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">AltoChicamaSystem</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-grow text-primary" role="status"></div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - AltoChicamaSystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <div class="container-fluid bg-light p-0">
+        <div class="row gx-0 d-none d-lg-flex">
+            <div class="col-lg-8 px-5 text-start">
+                <div class="h-100 d-inline-flex align-items-center border-end px-2">
+                    <small class="far fa-clock me-2"></small>
+                    <small>Lunes - Jueves : 09 AM - 06 PM</small>
+                </div>
+                <div class="h-100 d-inline-flex align-items-center border-end px-2">
+                    <small class="far fa-clock me-2"></small>
+                    <small>Viernes : 09 AM - 07 PM</small>
+                </div>
+                <div class="h-100 d-inline-flex align-items-center border-end px-2">
+                    <small class="far fa-clock me-2"></small>
+                    <small>Sábado : 09 AM - 01 PM</small>
+                </div>
+            </div>
+            <div class="col-lg-4 px-5 text-end">
+                <div class="h-100 d-inline-flex align-items-center">
+                    <a class="btn btn-square border-end border-start" href="https://www.facebook.com/AltoChicamaSAmbientales"
+                       target="_blank"><i class="fab fa-facebook-f"></i></a>
+                </div>
+            </div>
         </div>
-    </footer>
+    </div>
+    <script>
+        // Function to update the active link
+        function updateActiveLink() {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.navbar .nav-link');
+
+            let currentSection = '';
+
+            sections.forEach((section) => {
+                const sectionTop = section.offsetTop - 60; // Adjust offset for fixed navbar
+                if (window.scrollY >= sectionTop) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach((link) => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${currentSection}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Event listener for scroll
+        window.addEventListener('scroll', updateActiveLink);
+
+        // Initial call to set active link on page load
+        updateActiveLink();
+    </script>
+
+    <!-- Topbar End -->
+    <!-- Navbar Start -->
+    <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top px-4 px-lg-5 py-lg-0">
+        <a href="index.html" class="navbar-brand d-flex align-items-center">
+            <h1 class="m-0">
+                <img src="./img/AltoChicama.webp" alt="">
+            </h1>
+        </a>
+        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto py-3 py-lg-0">
+                <a href="#" class="nav-item nav-link active">Inicio</a>
+                <a href="#sobre-nosotros" class="nav-item nav-link">Sobre Nosotros</a>
+                <a href="#eligenos" class="nav-item nav-link">Elígenos</a>
+                <a href="#servicios" class="nav-item nav-link">Servicios</a>
+                <a href="#contactanos" class="nav-item nav-link">Contáctanos</a>
+                <a href="#galeria" class="nav-item nav-link">Galeria</a>
+
+                <!-- Botón para computadoras -->
+                <button style="margin-left: 1rem;" class="custom-button desktop-only"
+                        onclick="window.open('https://wa.link/834qvx', '_blank');">
+                    <div class="svg-wrapper-1">
+                        <div class="svg-wrapper">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                    </div>
+                    <span>Whatsapp</span>
+                </button>
+
+                <!-- Enlace para dispositivos móviles -->
+                <a href="https://wa.link/834qvx" target="_blank" class="nav-item nav-link mobile-only">Whatsapp</a>
+            </div>
+        </div>
+    </nav>
+    
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+
+    <div class="container-fluid bg-dark footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="row g-3" style="display: flex;justify-content: center;">
+                <div class="col-lg-5 col-md-6">
+                    <div class="mb-4">
+                        <img src="./img/AltoChicama.webp" alt="">
+                    </div>
+                    <p>
+                        Alto Chicama convierte residuos en recursos valiosos. Con innovación y sostenibilidad, protegemos el medio
+                        ambiente.
+                    </p>
+                    <div class="d-flex pt-2" style="justify-content: center;">
+                        <a href="https://www.facebook.com/AltoChicamaSAmbientales"
+                           class="text-white bg-primary border-0 btn btn-gradient btn-primary shadow-lg font-medium rounded-lg text-sm px-4 py-2 text-center mr-2 mb-2"
+                           role="button" style="border-radius: 1rem;">
+                            Facebook
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-7">
+                    <h4 class="text-light mb-4">Dirección</h4>
+                    <p>
+                        <i class="fa fa-map-marker-alt me-3"></i>Panamericana Norte Km. 594 Sector Soledad, distrito de Chicama,
+                        provincia de Ascope, departamento de La Libertad.
+                    </p>
+                    <p><i class="fa fa-phone-alt me-3"></i>914 105 601</p>
+                    <p style="font-size: 0.8rem;">
+                        <i class="fa fa-envelope me-3"></i>comercial@serviciosambientalesaltochicama.com
+                    </p>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-light mb-4">Accesos Directos</h4>
+                    <a class="btn btn-link" href="#sobre-nosotros">Sobre Nosotros</a>
+                    <a class="btn btn-link" href="#contactanos">Contáctanos</a>
+                    <a class="btn btn-link" href="#servicios">Nuestros Servicios</a>
+                </div>
+
+            </div>
+        </div>
+        <div class="container-fluid copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 text-center mb-3 mb-md-0" style="margin: 0 auto;">
+                        <a> Alto Chicama Servicios </a>&copy; Todos los derechos reservados. Diseñado por Devscribelo
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+    <!-- WhatsApp Button -->
+    <a href="https://wa.link/834qvx" target="_blank"
+       class="btn btn-lg mobile-only btn-success btn-lg-square whatsapp-btn">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="lib/swiper/swiper-bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/glightbox/js/glightbox.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
