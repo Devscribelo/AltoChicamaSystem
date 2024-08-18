@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "AltoChicama": {
+    "http": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
@@ -18,7 +18,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "https": {
+    "AltoChicama": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
