@@ -129,17 +129,14 @@
                     var modal = document.getElementById("myModal");
                     var btn = document.getElementById("openModalBtn");
                     var span = document.getElementsByClassName("modal-login-close")[0];
-
                     // Al hacer clic en el botón, se muestra el modal
                     btn.onclick = function () {
                         modal.style.display = "block";
                     }
-
                     // Al hacer clic en la 'x', se cierra el modal
                     span.onclick = function () {
                         modal.style.display = "none";
                     }
-
                     // Al hacer clic fuera del modal, se cierra
                     window.onclick = function (event) {
                         if (event.target == modal) {

@@ -930,6 +930,7 @@ a.btn.btn-primary.py-3.px-5:focus {
 .footer .copyright a:hover {
     color: var(--primary);
 }
+
 /* Estilos para el modal */
 .modal-login-modal {
     display: none; /* Escondido por defecto */
