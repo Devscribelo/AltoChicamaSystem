@@ -95,18 +95,59 @@
                 <a href="#galeria" class="nav-item nav-link">Galeria</a>
 
                 <!-- Botón para computadoras -->
-                <button style="margin-left: 1rem;" class="custom-button desktop-only"
-                        onclick="window.location.href='@Url.Action("Index", "Repositorio")';">
+                <button style="margin-left: 1rem;" class="custom-button desktop-only" id="openModalBtn">
                     <div class="svg-wrapper-1">
-                        <div class="svg-wrapper">
-                            <i class="fab fa-whatsapp"></i>
+                        <div class="svg-wrapper" style="margin-top: -0.2rem;">
+                            <i class="fas fa-user-tie"></i>
                         </div>
                     </div>
-                    <span>Menu</span>
+                    <span>ﾠIngresar</span>
                 </button>
+                <!-- Modal -->
+                <div id="myModal" class="modal-login-modal">
+                    <div class="modal-login-content">
+                        <span class="modal-login-close">&times;</span>
+                        <div class="modal-login-container" id="container">
+                            <div class="modal-login-form-container modal-login-sign-in-container">
+                                <form action="#">
+                                    <h1>Inicia sesión</h1>
+                                    <span>Introduce tus credenciales</span>
+                                    <input type="text" placeholder="Usuario" />
+                                    <input type="password" placeholder="Contraseña" />
+                                    <a href="#">Olvidaste tu contraseña?</a>
+                                    <button>Iniciar sesión</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                <!-- Enlace para dispositivos móviles -->
-                <a href="https://wa.link/834qvx" target="_blank" class="nav-item nav-link mobile-only">Whatsapp</a>
+
+                <!-- Scripts -->
+                <script>
+                    // Obtener el modal y el botón
+                    var modal = document.getElementById("myModal");
+                    var btn = document.getElementById("openModalBtn");
+                    var span = document.getElementsByClassName("modal-login-close")[0];
+
+                    // Al hacer clic en el botón, se muestra el modal
+                    btn.onclick = function () {
+                        modal.style.display = "block";
+                    }
+
+                    // Al hacer clic en la 'x', se cierra el modal
+                    span.onclick = function () {
+                        modal.style.display = "none";
+                    }
+
+                    // Al hacer clic fuera del modal, se cierra
+                    window.onclick = function (event) {
+                        if (event.target == modal) {
+                            modal.style.display = "none";
+                        }
+                    }
+                </script>
+
             </div>
         </div>
     </nav>

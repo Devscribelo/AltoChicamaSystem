@@ -119,14 +119,13 @@ a.btn.btn-primary.py-3.px-5:focus {
     box-shadow: none;}
 
 
-
     .custom-button {
         font-family: inherit;
         height: 2.5rem;
         font-size: 17px;
         background: #0D4B1F;
         color: white;
-        padding: 0.5em 1em;
+        padding: 0.5em 1.5em;
         margin-top: 1rem;
         padding-left: 0.9em;
         display: flex;
@@ -931,4 +930,109 @@ a.btn.btn-primary.py-3.px-5:focus {
 .footer .copyright a:hover {
     color: var(--primary);
 }
+/* Estilos para el modal */
+.modal-login-modal {
+    display: none; /* Escondido por defecto */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro */
+}
 
+.modal-login-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.3s;
+}
+
+.modal-login-close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+    .modal-login-close:hover,
+    .modal-login-close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+.modal-login-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.modal-login-form-container input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.modal-login-form-container button {
+    background-color: var(--primary);
+    color: white;
+    padding: 10px 20px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    .modal-login-form-container button:hover {
+        background-color: var(--secondary);
+    }
+
+.modal-login-overlay-container {
+    background: #f1f1f1;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.modal-login-overlay-panel {
+    padding: 20px;
+    text-align: center;
+}
+
+.modal-login-ghost {
+    background: transparent;
+    border: 2px solid var(--primary);
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: var(--primary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+    .modal-login-ghost:hover {
+        background: var(--primary);
+        color: white;
+    }
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
