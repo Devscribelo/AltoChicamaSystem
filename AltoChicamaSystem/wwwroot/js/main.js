@@ -1,3 +1,4 @@
+
 (function ($) {
     "use strict";
 
@@ -252,3 +253,4 @@ function validateNumberInput(input) {
         input.value = input.value.slice(0, 9);
     }
 }
+
