@@ -13,5 +13,12 @@ namespace AltoChicamaSystem.Negocio
             var result = objDato.listarUsuario(bandera);
             return result;
         }
+
+        public Tuple<string, string> regUsuario(CMUsuario cmUsuario, string bandera)
+        {
+            var result = objDato.regUsuario(cmUsuario, bandera);
+            return result;
+        }
+
     }
 }

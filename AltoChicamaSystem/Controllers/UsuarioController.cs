@@ -1,8 +1,6 @@
-﻿using AltoChicamaSystem.Data.Usuario;
-using AltoChicamaSystem.Models;
+﻿using AltoChicamaSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 using AltoChicamaSystem.Negocio;
-using Microsoft.Extensions.Configuration;
 
 
 namespace AltoChicamaSystem.Controllers
@@ -11,7 +9,6 @@ namespace AltoChicamaSystem.Controllers
     {
         private readonly UsuarioCN objusuarioCN = new UsuarioCN();
         private readonly IConfiguration conf;
-
         public UsuarioController(IConfiguration config)
         {
             conf = config;
@@ -40,5 +37,31 @@ namespace AltoChicamaSystem.Controllers
                 return BadRequest(result);
             }
         }
+
+
+        [HttpPost]
+        public ActionResult RegUsuario([FromBody] CMUsuario cmusuario)
+        {
+            var result = Tuple.Create("1", "Error al Registrar");
+            try
+            {
+                string bandera = conf.GetValue<string>("Bandera");
+                result = objusuarioCN.regUsuario(cmusuario, bandera);
+
+                if (result.Item1 == "0")  // Verifica si la operación fue exitosa
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch
+            {
+                return BadRequest(result);
+            }
+        }
+
     }
 }

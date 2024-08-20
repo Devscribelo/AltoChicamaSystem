@@ -9,7 +9,6 @@
   <ItemGroup>
     <Folder Include="Data\Admin\" />
     <Folder Include="Data\Documento\" />
-    <Folder Include="Data\Empresa\" />
   </ItemGroup>
 
   <ItemGroup>

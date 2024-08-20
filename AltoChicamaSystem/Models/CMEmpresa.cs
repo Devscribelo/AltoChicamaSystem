@@ -4,6 +4,7 @@
     {
         public int empresa_id { get; set; }
         public string empresa_name { get; set; }
-        public int usuario_id { get; set;}
+        public string empresa_ruc { get; set; }
+        public string empresa_correo { get; set; }
     }
 }
