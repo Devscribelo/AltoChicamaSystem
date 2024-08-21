@@ -3,6 +3,56 @@ $(document).ready(function () {
     agregarBotonesExportacion("#table_empresa");
 });
 
+function guardarNewEmpresa() {
+
+    var dataPost = {
+        empresa_name: $("#input_empresa_name").val(),
+        empresa_ruc: $("#input_empresa_ruc").val(),
+        empresa_correo: $("#input_empresa_correo").val(),
+    };
+
+    dataPost = trimJSONFields(dataPost);
+
+    var endpoint = getDomain() + "/Empresa/RegEmpresa";
+
+    $.ajax({
+        type: "POST",
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify(dataPost),
+        dataType: "json",
+        beforeSend: function (xhr) {
+            console.log("Guardando...");
+            $("#btnGuardarNewEmpresa").attr("disabled", true);
+        },
+        success: function (data) {
+            var rpta = data.item1;
+            var msg = data.item2;
+            if (rpta == "0") {
+                // Actualizar la tabla sin recargar la página
+                getListEmpresa();
+                $("#modal_nueva_empresa").modal("hide");
+            } else {
+                // Mostrar mensaje de error
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: msg,
+                });
+            }
+            $("#btnGuardarEditZona").prop("disabled", false);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
+                alert("Ocurrió un fallo: " + jqXHR.responseJSON.message);
+            } else {
+                alert("Ocurrió un fallo: " + errorThrown);
+            }
+        }
+    });
+}
 function getListEmpresa() {
 
     endpoint = getDomain() + "/Empresa/ListaEmpresa"
@@ -91,4 +141,22 @@ function getListEmpresa() {
 
     });
 
+}
+
+function vaciarFormZona() {
+
+    $('#modal_nuevo_zona input[type="text"]').val('');
+    $('#modal_nuevo_zona textarea').val('');
+    $('#modal_nuevo_zona select').val('');
+    $('#modal_nuevo_zona input[type="date"]').val('');
+}
+
+function modalNuevaEmpresa() {
+    vaciarFormZona();
+    $("#modal_nueva_empresa").modal("show");
+
+    $("form").off("submit").one("submit", function (event) {
+        event.preventDefault();
+        guardarNewEmpresa();
+    });
 }
