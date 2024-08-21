@@ -8,6 +8,21 @@
 
   <ItemGroup>
     <Folder Include="Data\Documento\" />
+    <Folder Include="wwwroot\lib\Buttons-2.3.6\css\" />
+    <Folder Include="wwwroot\lib\Buttons-2.3.6\js\" />
+    <Folder Include="wwwroot\lib\DataTables\Buttons\" />
+    <Folder Include="wwwroot\lib\DataTables\ColResize\" />
+    <Folder Include="wwwroot\lib\DataTables\Fixed\" />
+    <Folder Include="wwwroot\lib\DataTables\images\" />
+    <Folder Include="wwwroot\lib\DataTables\Pdf\" />
+    <Folder Include="wwwroot\lib\DataTables\Table\" />
+    <Folder Include="wwwroot\lib\jquery-3.6.0\" />
+    <Folder Include="wwwroot\lib\jquery-validation-unobtrusive\" />
+    <Folder Include="wwwroot\lib\jquery-validation\dist\" />
+    <Folder Include="wwwroot\lib\jsPDF\" />
+    <Folder Include="wwwroot\lib\pdfmake-0.2.7\" />
+    <Folder Include="wwwroot\lib\popper\" />
+    <Folder Include="wwwroot\lib\select2\" />
   </ItemGroup>
 
   <ItemGroup>

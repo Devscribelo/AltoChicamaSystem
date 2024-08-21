@@ -1,12 +1,22 @@
 ﻿<!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!--======== CSS ======== -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/_Layout2.css">
+
+    <link href="~/css/cdn.jsdelivr.net_npm_sweetalert2@11.7.12_dist_sweetalert2.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="~/lib/DataTables/Table/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="~/lib/DataTables/Buttons/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="~/lib/DataTables/ColResize/jquery.dataTables.colResize.css">
+    <link rel="stylesheet" href="~/lib/DataTables/Fixed/fixedColumns.dataTables.min.css">
+
+    <!--======== CSS ======== -->
+    
 
     <!--===== Boxicons CSS ===== -->
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
@@ -34,7 +44,7 @@
             <div class="menu">
                 <li class="search-box">
                     <i class='bx bx-search icon'></i>
-                    <input type="text" placeholder="Search...">
+                    <input type="text" placeholder="Buscar...">
                 </li>
 
                 <ul class="menu-links">
@@ -62,12 +72,7 @@
             </div>
 
             <div class="bottom-content">
-                <li class="">
-                    <a asp-controller="Admin" asp-action="Logout">
-                        <i class='bx bx-log-out icon'></i>
-                        <span class="text nav-text">Cerrar Sesión</span>
-                    </a>
-                </li>
+                <li class=""> <a asp-controller="Account" asp-action="Logout"><i class='bx bx-log-out icon'></i> <span class="text nav-text">Cerrar Sesión</span></a></li>
 
                 <li class="mode">
                     <div class="sun-moon">
@@ -84,7 +89,42 @@
         </div>
     </nav>
 
+    <!-- JQUERY-->
+    <script type="text/javascript" src="~/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+
+    <!-- SELECT 2-->
+    <script src="~/lib/select2/cdn.jsdelivr.net_npm_select2@4.1.0-rc.0_dist_js_select2.min.js"></script>
+    <script src="~/js/navbars.js"></script>
+
+    <!--Data Table-->
+    <script type="text/javascript" src="~/lib/DataTables/Table/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="~/lib/DataTables/Buttons/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="~/lib/DataTables/Buttons/buttons.colVis.min.js"></script>
+    <script type="text/javascript" src="~/lib/DataTables/ColResize/jquery.dataTables.colResize.js"></script>
+    <script type="text/javascript" src="~/lib/DataTables/Fixed/dataTables.fixedColumns.min.js"></script>
+
+    <!--Export table buttons-->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+    <script type="text/javascript" src="~/lib/DataTables/Pdf/pdfmake.min.js"></script>
+    <script type="text/javascript" src="~/lib/DataTables/Pdf/vfs_fonts.js"></script>
+    <script type="text/javascript" src="~/lib/DataTables/Buttons/buttons.html5.min.js"></script>
+
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @*    <script src="~/js/site.js" asp-append-version="true"></script>*@
+
+
+    <script>
+        setInterval(verificarInactividad, 10000);
+    </script>
+
+    <script src="~/js/cdn.jsdelivr.net_npm_sweetalert2@11.7.12_dist_sweetalert2.all.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
     @RenderBody()
     <script src="~/js/_Layout2.js"></script>
+    <script src="~/js/site.js"></script>
 </body>
+
 </html>
