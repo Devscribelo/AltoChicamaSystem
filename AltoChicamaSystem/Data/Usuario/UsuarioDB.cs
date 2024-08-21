@@ -100,5 +100,6 @@ namespace AltoChicamaSystem.Data.Usuario
             }
             return Tuple.Create(rpta, msg);
         }
+
     }
 }

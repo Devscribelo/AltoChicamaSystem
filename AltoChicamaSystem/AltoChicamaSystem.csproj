@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Admin\" />
     <Folder Include="Data\Documento\" />
     <Folder Include="wwwroot\lib\Buttons-2.3.6\css\" />
     <Folder Include="wwwroot\lib\Buttons-2.3.6\js\" />

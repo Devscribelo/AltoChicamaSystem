@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Alto Chicama</title>
     <link href="img/icono.png" rel="icon" />
@@ -112,10 +112,11 @@
                                 <form action="#">
                                     <h1>Inicia sesión</h1>
                                     <span>Introduce tus credenciales</span>
-                                    <input type="text" placeholder="Usuario" />
-                                    <input type="password" placeholder="Contraseña" />
+                                    <input type="text" id="input_usuario" placeholder="Usuario" />
+                                    <input type="password" id="input_password" placeholder="Contraseña" />
                                     <a href="#">Olvidaste tu contraseña?</a>
-                                    <button>Iniciar sesión</button>
+                                    <button type="submit" id="loginButton">Iniciar sesión</button>
+                                    <div id="errorMessage" style="display: none; color: red;"></div>
                                 </form>
                             </div>
                         </div>
@@ -220,7 +221,6 @@
     <!-- Template Javascript -->
     <script src="js/site.js"></script>
     <script src="js/main.js"></script>
-    <script src="~js/empresa.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

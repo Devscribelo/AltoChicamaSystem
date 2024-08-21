@@ -74,6 +74,7 @@ function ekUpload() {
         // Response
         var m = document.getElementById('messages');
         m.innerHTML = msg;
+        console.log(msg);
     }
 
     function parseFile(file) {
