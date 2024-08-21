@@ -1,4 +1,6 @@
-﻿
+﻿var hostProyecto;
+
+hostProyecto = "https://" + window.location.host;
 function getDomain() {
     return "https://" + window.location.host;
 }

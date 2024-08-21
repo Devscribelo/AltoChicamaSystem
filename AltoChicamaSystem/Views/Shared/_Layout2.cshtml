@@ -1,8 +1,10 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -10,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap" rel="stylesheet">
 
     <!-- Boxicons CSS -->
-    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -79,7 +81,12 @@
             </div>
 
             <div class="bottom-content">
-                <li class=""> <a asp-controller="Admin" asp-action="Logout"><i class='bx bx-log-out icon'></i> <span class="text nav-text">Cerrar Sesión</span></a></li>
+                <li class="">
+                    <a asp-controller="Admin" asp-action="Logout">
+                        <i class='bx bx-log-out icon'></i>
+                        <span class="text nav-text">Cerrar Sesión</span>
+                    </a>
+                </li>
 
                 <li class="mode">
                     <div class="sun-moon">
@@ -103,19 +110,16 @@
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="~/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
     <!-- Popper.js -->
     <script src="~/lib/popper/popper.min.js"></script>
 
     <!-- Bootstrap JS -->
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <!-- DataTables JS Local -->
     <script src="~/lib/DataTables/Table/jquery.dataTables.min.js"></script>
-    <script src="~/lib/DataTables/Buttons/buttons.dataTables.min.js"></script>
+    <script src="~/lib/DataTables/Buttons/dataTables.buttons.min.js"></script>
     <script src="~/lib/DataTables/ColResize/jquery.dataTables.colResize.js"></script>
     <script src="~/lib/DataTables/Fixed/dataTables.fixedColumns.min.js"></script>
 
@@ -124,6 +128,7 @@
     <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.24/build/pdfmake.min.js"></script>
     <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.24/build/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/colreorder/1.5.3/js/dataTables.colReorder.min.js"></script>
     <script src="~/lib/Buttons-2.3.6/js/buttons.bootstrap4.js"></script>
 
     <!-- SweetAlert2 JS -->
@@ -136,7 +141,5 @@
     <script src="~/lib/jsPDF/jspdf.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/js/_Layout2.js"></script>
-    <script src="~/lib/animate/"></script>
-
 </body>
 </html>

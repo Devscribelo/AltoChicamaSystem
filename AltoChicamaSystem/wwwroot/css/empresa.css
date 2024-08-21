@@ -6,6 +6,11 @@
     src: url('https://fonts.gstatic.com/s/materialsymbolsoutlined/v205/kJF1BvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzByHX9rA6RzaxHMPdY43zj-jCxv3fzvRNU22ZXGJpEpjC_1n-q_4MrImHCIJIZrDCvHOej.woff2') format('woff2');
 }
 
+.dataTables_filter {
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+}
+
 /* Clase para usar Material Symbols Outlined */
 .material-symbols-outlined {
     font-family: 'Material Symbols Outlined';
@@ -23,6 +28,21 @@
     -webkit-font-smoothing: antialiased;
 }
 
+.material-icons {
+    font-family: 'Material Icons' !important;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px; /* Ajusta el tamaño según sea necesario */
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+}
 
 .btn_export_Excel,
 .btn_export_Pdf {
@@ -51,8 +71,50 @@
 }
 
 
-.table.dataTable tbody td {
-    padding: 4px 10px 0px;
+.custom-table td, .custom-table th {
+    padding: 4px 10px !important;
+}
+
+.custom-table thead th {
+    background-color: #f8f9fa !important;
+    color: #023E73 !important;
+}
+
+.custom-table {
+    border-collapse: separate !important;
+    border-spacing: 3px !important;
+    border-radius: 8px; /* Ajusta el valor según tus necesidades */
+    overflow: hidden; /* Asegura que el radio se aplique a las esquinas */
+}
+
+    .custom-table th,
+    .custom-table td {
+        border: 1px solid #ddd; /* Estilo de borde para celdas */
+        border-radius: 4px; /* Ajusta el valor según tus necesidades */
+    }
+
+    .custom-table td, .custom-table th {
+        border: 1px solid #dee2e6 !important;
+    }
+
+
+.dataTables_wrapper .dataTables_info {
+    clear: both;
+    float: left;
+    padding-top: 0.755em !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+    cursor: default;
+    color: #666 !important;
+    border: 1px solid transparent;
+    background: transparent;
+    box-shadow: none;
+    padding-top: 10px !important;
+}
+
+table.dataTable.no-footer {
+    border-bottom: none !important;
 }
 
 #status {
