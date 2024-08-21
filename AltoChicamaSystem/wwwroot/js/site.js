@@ -154,3 +154,31 @@ document.addEventListener('DOMContentLoaded', function () {
         loginAdmin();
     });
 });
+
+function getListEmpresa() {
+    endpoint = getDomain() + "/Empresa/ListaEmpresa";
+
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: "GET",
+            async: true,
+            url: endpoint,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            dataType: "json",
+            beforeSend: function (xhr) {
+                console.log("Cargando...");
+            },
+            success: function (data) {
+                var dataEmpresa = data.item3;
+                console.log(dataEmpresa); // Muestra la data en la consola
+                resolve(dataEmpresa);
+            },
+            error: function (xhr, status, error) {
+                console.error("Error en la solicitud:", error);
+                reject(error);
+            }
+        });
+    });
+}
