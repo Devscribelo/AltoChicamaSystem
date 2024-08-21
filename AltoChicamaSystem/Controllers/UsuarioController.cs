@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using AltoChicamaSystem.Negocio;
 using System.Reflection;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace AltoChicamaSystem.Controllers
 {
+    [Authorize]
     public class UsuarioController : Controller
     {
         private readonly UsuarioCN objusuarioCN = new UsuarioCN();

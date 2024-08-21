@@ -57,6 +57,45 @@
             </div>
         </main>
 
+        <!-- Modal Nuevo Zona -->
+        <div class="modal" id="modal_nueva_empresa" tabindex="-1">
+            <div class="modal-dialog modal-md modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Empresa</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <form>
+                                    <!-- empresa nombre -->
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Nombre</span>
+                                        <input type="text" class="form-control" id="input_empresa_name" required autocomplete="off" placeholder="Ingrese su nombre" maxlength="10">
+                                    </div>
+
+                                    <!-- empresa ruc -->
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">RUC</span>
+                                        <input type="text" class="form-control" id="input_empresa_ruc" required autocomplete="off">
+                                    </div>
+                                    <!-- empresa_correo -->
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Correo</span>
+                                        <input type="email" class="form-control" id="input_empresa_correo" autocomplete="off" placeholder="Ingrese su correo" maxlength="50">
+                                    </div>
+
+                                    <button id="btnGuardarEmpresa" class="btnGuardar" type="submit">Guardar Empresa</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- JS Personalizado -->
         <script type="text/javascript" src="~/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
         <script src="~/js/js_jquery.dataTables.min.js"></script>

@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using AltoChicamaSystem.Models;
 using AltoChicamaSystem.Negocio;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AltoChicamaSystem.Controllers
 {
+    [Authorize]
     public class EmpresaController : Controller
     {
         public ActionResult Index()

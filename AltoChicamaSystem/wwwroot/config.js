@@ -53,7 +53,6 @@ function agregarBotonesExportacion(tablaId) {
     contenedorBotones.appendChild(crearBoton("btn_export_Pdf", "pdf.png"));
 }
 
-
 function formatAndAssignDate(dateString, inputId) {
     if (dateString) {
         var dateParts = dateString.split(' ')[0].split('/');
