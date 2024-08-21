@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "Empresa";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Material Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="~/css/empresa.css">
+</head>
+<body>
+    <section class="home">
+        <main>
+            <div class="row" style="margin:0px">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h2 class="h2" style="font-size:1.5rem">Empresas</h2>
+                </div>
+                <div class="container">
+                    <div class="row" style="margin-bottom: 15px">
+                        <div class="col-lg-9 col-md-10 col-sm-12 col-xs-12" style="text-align: left">
+                            <button type="button" class="btn_firstrow btn btn-primary" onClick='modalNuevoZona()'>
+                                <span style="margin-left: 4px" class="material-icons">add</span>
+                            </button>
+                            <button type="button" class="btn_firstrow btn btn-primary" onClick="window.location.reload(true)">
+                                <span class="material-icons">sync</span>
+                            </button>
+                        </div>
+                        <div class="col-lg-3 col-md-2 col-sm-12 col-xs-12" style="text-align: right" id="contenedorBotones"></div>
+                    </div>
+                </div>
+
+                <div style="padding-bottom: 9px;">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="table-responsive">
+                                <table class="table table-sm custom-table" id="table_empresa">
+                                    <thead style="color: #023E73;">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nombre</th>
+                                            <th>Ruc</th>
+                                            <th>Correo</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tb_empresa"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- JS Personalizado -->
+        <script type="text/javascript" src="~/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+        <script src="~/js/js_jquery.dataTables.min.js"></script>
+        <script src="~/config.js"></script>
+        <script src="~/js/empresa.js?v=0.0.0.5"></script>
+    </section>
+</body>
+</html>

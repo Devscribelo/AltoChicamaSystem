@@ -9,7 +9,7 @@ namespace AltoChicamaSystem.Controllers
     {
         public ActionResult Index()
         {
-            return View("~/Views/Repositorio/RegistroEmpresa.cshtml");
+            return View("~/Views/Empresa/Index.cshtml");
         }
 
         private readonly EmpresaCN objusuarioCN = new EmpresaCN();

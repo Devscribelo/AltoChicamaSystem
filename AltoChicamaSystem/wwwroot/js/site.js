@@ -75,7 +75,7 @@ function regEmpresa() {
             var rpta = data.item1;
             var msg = data.item2;
             if (rpta == "0") {
-                // Actualizar la tabla sin recargar la página
+                // Actualizar la tabla sin recargar la pï¿½gina
                 console.log("Guardado Correctamente");
             } else {
                 // Mostrar mensaje de error
@@ -88,9 +88,9 @@ function regEmpresa() {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
-                alert("Ocurrió un fallo: " + jqXHR.responseJSON.message);
+                alert("Ocurriï¿½ un fallo: " + jqXHR.responseJSON.message);
             } else {
-                alert("Ocurrió un fallo: " + errorThrown);
+                alert("Ocurriï¿½ un fallo: " + errorThrown);
             }
         }
     });
@@ -119,9 +119,9 @@ function loginAdmin() {
             var rpta = data.item1;
             var msg = data.item2;
             if (rpta == "0") {
-                // Redirigir a una página protegida
+                // Redirigir a una pï¿½gina protegida
                 window.location.href = getDomain() + "/Repositorio";
-                console.log("Inicio de sesión correcto");
+                console.log("Inicio de sesiï¿½n correcto");
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -133,52 +133,18 @@ function loginAdmin() {
         error: function (jqXHR, textStatus, errorThrown) {
             const errorMessageElement = document.getElementById('errorMessage');
             if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
-                errorMessageElement.textContent = "Usuario o contraseña incorrectos";
+                errorMessageElement.textContent = "Usuario o contraseï¿½a incorrectos";
             } else {
-                errorMessageElement.textContent = "Usuario o contraseña incorrectos";
+                errorMessageElement.textContent = "Usuario o contraseï¿½a incorrectos";
             }
             errorMessageElement.style.display = 'block';
         }
     });
 }
-document.addEventListener('DOMContentLoaded', function () {
-    // Obtén el botón por su ID
-    const loginButton = document.getElementById('loginButton');
 
-    // Añade el manejador de eventos al botón
-    loginButton.addEventListener('click', function (event) {
-        // Prevenir la acción por defecto del botón
-        event.preventDefault();
+var loginButton = document.getElementById('loginButton');
 
-        // Llama a la función
-        loginAdmin();
-    });
+loginButton.addEventListener('click', function (event) {
+    event.preventDefault();
+    loginAdmin();
 });
-
-function getListEmpresa() {
-    endpoint = getDomain() + "/Empresa/ListaEmpresa";
-
-    return new Promise((resolve, reject) => {
-        $.ajax({
-            type: "GET",
-            async: true,
-            url: endpoint,
-            headers: {
-                "Content-Type": "application/json"
-            },
-            dataType: "json",
-            beforeSend: function (xhr) {
-                console.log("Cargando...");
-            },
-            success: function (data) {
-                var dataEmpresa = data.item3;
-                console.log(dataEmpresa); // Muestra la data en la consola
-                resolve(dataEmpresa);
-            },
-            error: function (xhr, status, error) {
-                console.error("Error en la solicitud:", error);
-                reject(error);
-            }
-        });
-    });
-}
