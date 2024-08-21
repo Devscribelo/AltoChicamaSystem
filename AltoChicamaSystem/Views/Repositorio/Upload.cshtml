@@ -1,0 +1,42 @@
+﻿
+@{
+    ViewData["Title"] = "Upload";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<section class="home">
+    <div class="text"></div>
+    <div>
+        <h2>File Upload & PDF Preview</h2>
+        <p class="lead">No Plugins <b>Just Javascript</b></p>
+
+        <!-- Container for the upload form -->
+        <div class="bordered-box">
+            <!-- Upload -->
+            <form id="file-upload-form" class="uploader">
+                <input id="file-upload" type="file" name="fileUpload" accept="application/pdf" />
+
+                <label for="file-upload" id="file-drag">
+                    <div id="pdf-preview" class="hidden">
+                        <i class="fa fa-file-pdf-o" aria-hidden="true" style="font-size: 100px;"></i>
+                        <p id="pdf-file-name"></p>
+                    </div>
+                    <div id="start">
+                        <i class="fa fa-download" aria-hidden="true"></i>
+                        <div>Select a PDF file or drag here</div>
+                        <div id="notpdf" class="hidden">Please select a PDF file</div>
+                        <span id="file-upload-btn" class="btn btn-primary">Select a file</span>
+                    </div>
+                    <div id="response" class="hidden">
+                        <div id="messages"></div>
+                        <progress class="progress" id="file-progress" value="0">
+                            <span>0</span>%
+                        </progress>
+                    </div>
+                </label>
+                <!-- Added Submit Button -->
+                <button type="submit" class="btn btn-success">Upload PDF</button>
+            </form>
+        </div>
+    </div>
+</section>
