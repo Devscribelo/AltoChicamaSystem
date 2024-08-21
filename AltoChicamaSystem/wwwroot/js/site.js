@@ -22,10 +22,7 @@ function trimJSONFields(obj) {
     }
     return trimmedObj;
 }
-$(document).ready(function () {
-    getListUsuario();
 
-});
 function getListUsuario() {
     endpoint = getDomain() + "/Usuario/ListaUsuario";
 
@@ -98,3 +95,62 @@ function regEmpresa() {
         }
     });
 }
+
+function loginAdmin() {
+    var dataPost = {
+        admin_user: $("#input_usuario").val(),
+        admin_password: $("#input_password").val(),
+    };
+    dataPost = trimJSONFields(dataPost);
+
+    var endpoint = getDomain() + "/Admin/LoginAdmin";
+    $.ajax({
+        type: "POST",
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify(dataPost),
+        dataType: "json",
+        beforeSend: function (xhr) {
+            console.log("Cargando...");
+        },
+        success: function (data) {
+            var rpta = data.item1;
+            var msg = data.item2;
+            if (rpta == "0") {
+                // Redirigir a una página protegida
+                window.location.href = getDomain() + "/Repositorio";
+                console.log("Inicio de sesión correcto");
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: msg,
+                });
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            const errorMessageElement = document.getElementById('errorMessage');
+            if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
+                errorMessageElement.textContent = "Usuario o contraseña incorrectos";
+            } else {
+                errorMessageElement.textContent = "Usuario o contraseña incorrectos";
+            }
+            errorMessageElement.style.display = 'block';
+        }
+    });
+}
+document.addEventListener('DOMContentLoaded', function () {
+    // Obtén el botón por su ID
+    const loginButton = document.getElementById('loginButton');
+
+    // Añade el manejador de eventos al botón
+    loginButton.addEventListener('click', function (event) {
+        // Prevenir la acción por defecto del botón
+        event.preventDefault();
+
+        // Llama a la función
+        loginAdmin();
+    });
+});

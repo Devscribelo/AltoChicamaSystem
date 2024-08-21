@@ -1,6 +1,7 @@
 ﻿using AltoChicamaSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 using AltoChicamaSystem.Negocio;
+using System.Reflection;
 
 
 namespace AltoChicamaSystem.Controllers

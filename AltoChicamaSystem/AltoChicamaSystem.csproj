@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Admin\" />
     <Folder Include="Data\Documento\" />
   </ItemGroup>
 
