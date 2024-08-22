@@ -163,3 +163,50 @@ function modalNuevaEmpresa() {
         guardarNewEmpresa();
     });
 }
+
+function alterEmpresaStatus(empresaId) {
+    var dataPost = {
+        empresa_id: empresaId
+    };
+
+    var endpoint = getDomain() + "/Empresa/AlterEmpresaStatus";
+
+    $.ajax({
+        type: "POST",
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify(dataPost),
+        dataType: "json",
+        beforeSend: function () {
+            console.log("Actualizando estado...");
+        },
+        success: function (data) {
+            var rpta = data.item1;
+            var msg = data.item2;
+            if (rpta == "0") {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Éxito',
+                    text: 'El estado de la empresa ha sido actualizado.',
+                });
+                // Actualiza la lista de empresas para reflejar los cambios
+                getListEmpresa();
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: msg,
+                });
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
+                alert("Ocurrió un fallo: " + jqXHR.responseJSON.message);
+            } else {
+                alert("Ocurrió un fallo: " + errorThrown);
+            }
+        }
+    });
+}

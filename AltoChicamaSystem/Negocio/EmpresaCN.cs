@@ -27,5 +27,11 @@ namespace AltoChicamaSystem.Negocio
             var result = objDato.modEmpresa(cmEmpresa, bandera);
             return result;
         }
+
+        public Tuple<string, string> alterEmpresaStatus(int empresa_id, string bandera)
+        {
+            var result = objDato.alterEmpresaStatus(empresa_id, bandera);
+            return result;
+        }
     }
 }
