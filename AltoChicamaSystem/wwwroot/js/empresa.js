@@ -88,12 +88,17 @@ function getListEmpresa() {
                         "data-empresa_id='" + dataEmpresa[i].empresa_id + "' " +
                         "data-empresa_name='" + dataEmpresa[i].empresa_name + "' " +
                         "data-empresa_ruc='" + dataEmpresa[i].empresa_ruc + "' " +
-                        "data-empresa_correo='" + dataEmpresa[i].empresa_correo + "'>" +
+                        "data-empresa_correo='" + dataEmpresa[i].empresa_correo + "' " +
+                        "data-empresa_status='" + dataEmpresa[i].empresa_status + "'>" +
                         "<td>" + dataEmpresa[i].empresa_id + "</td>" +
                         "<td>" + dataEmpresa[i].empresa_name + "</td>" +
                         "<td>" + dataEmpresa[i].empresa_ruc + "</td>" +
                         "<td>" + dataEmpresa[i].empresa_correo + "</td>" +
-                        
+                        "<td>" +
+                        "<div class='form-check form-switch'>" +
+                        `<input style='width: 46px'; 'margin-top: 4px' !import  class='form-check-input status3' type='checkbox' id='flexSwitchCheckDefault${i}' ${dataEmpresa[i].empresa_status === 'True' ? 'checked' : ''} data-empresa_status='${dataEmpresa[i].empresa_id}'>` +
+                        "</div>" +
+                        "</td>" +
                         "<td id='acciones'>" +
                         "<i style='color: #FAA716' class='bx bx-edit editar-button' id='editar_zona'></i>" +
                         "<i style='margin-left: 9px; color: red' class='bx bx-trash eliminar-button' id='eliminar_zona'></i>" +
