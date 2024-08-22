@@ -1,14 +1,17 @@
-$(document).ready(function () {
+ï»¿$(document).ready(function () {
     getListEmpresa();
     agregarBotonesExportacion("#table_empresa");
 });
 
 function guardarNewEmpresa() {
 
+    var empresa_status = $("#input_empresa_status_a").is(':checked') ? $("#input_empresa_status_a").val() : $("#input_empresa_status_i").val();
+
     var dataPost = {
         empresa_name: $("#input_empresa_name").val(),
         empresa_ruc: $("#input_empresa_ruc").val(),
         empresa_correo: $("#input_empresa_correo").val(),
+        empresa_status: empresa_status,
     };
 
     dataPost = trimJSONFields(dataPost);
@@ -31,7 +34,7 @@ function guardarNewEmpresa() {
             var rpta = data.item1;
             var msg = data.item2;
             if (rpta == "0") {
-                // Actualizar la tabla sin recargar la página
+                // Actualizar la tabla sin recargar la pÃ¡gina
                 getListEmpresa();
                 $("#modal_nueva_empresa").modal("hide");
             } else {
@@ -46,9 +49,9 @@ function guardarNewEmpresa() {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
-                alert("Ocurrió un fallo: " + jqXHR.responseJSON.message);
+                alert("OcurriÃ³ un fallo: " + jqXHR.responseJSON.message);
             } else {
-                alert("Ocurrió un fallo: " + errorThrown);
+                alert("OcurriÃ³ un fallo: " + errorThrown);
             }
         }
     });
@@ -110,14 +113,14 @@ function getListEmpresa() {
                                 extend: 'excel',
                                 className: 'btn_export_Excel',
                                 exportOptions: {
-                                    columns: ':visible:not(:last-child, :nth-last-child(1))' // Oculta la penúltima y la última columna en la exportación a Excel
+                                    columns: ':visible:not(:last-child, :nth-last-child(1))' // Oculta la penÃºltima y la Ãºltima columna en la exportaciÃ³n a Excel
                                 }
                             },
                             {
                                 extend: 'pdf',
                                 className: 'btn_export_Pdf',
                                 exportOptions: {
-                                    columns: ':visible:not(:last-child, :nth-last-child(1))' // Oculta la penúltima y la última columna en la exportación a PDF
+                                    columns: ':visible:not(:last-child, :nth-last-child(1))' // Oculta la penÃºltima y la Ãºltima columna en la exportaciÃ³n a PDF
                                 }
                             }
                         ],

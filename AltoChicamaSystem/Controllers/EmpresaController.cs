@@ -69,5 +69,52 @@ namespace AltoChicamaSystem.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult EmpresaSelect()
+        {
+            var result = Tuple.Create("1", "Error al listar Empresa", new List<CMEmpresa>());
+            try
+            {
+                string bandera = conf.GetValue<string>("bandera");
+                result = objusuarioCN.EmpresaSelect(bandera);
+                if (result.Item1 == "0")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch
+            {
+                return BadRequest(result);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult modEmpresa([FromBody] CMEmpresa cmempresa)
+        {
+            var result = Tuple.Create("1", "Error al Modificar");
+            try
+            {
+                string bandera = conf.GetValue<string>("Bandera");
+                result = objusuarioCN.modEmpresa(cmempresa, bandera);
+
+                if (result.Item1 == "0")  // Verifica si la operación fue exitosa
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch
+            {
+                return BadRequest(result);
+            }
+        }
+
     }
 }

@@ -41,7 +41,6 @@ namespace AltoChicamaSystem.Data.Usuario
                                 usuario_id = Convert.ToInt32(sdr["usuario_id"]),
                                 usuario_user = sdr["usuario_user"].ToString().Trim(),
                                 usuario_password = sdr["usuario_password"].ToString().Trim(),
-                                usuario_status = Convert.ToBoolean(sdr["usuario_status"].ToString().Trim())
                             };
                             lst.Add(usuario);
                         }
@@ -77,7 +76,6 @@ namespace AltoChicamaSystem.Data.Usuario
                 sqlCmd.CommandType = CommandType.StoredProcedure;
                 sqlCmd.Parameters.AddWithValue("@usuario_user", cmUsuario.usuario_user.Trim());
                 sqlCmd.Parameters.AddWithValue("@usuario_password", cmUsuario.usuario_password.Trim());
-                sqlCmd.Parameters.AddWithValue("@usuario_status", cmUsuario.usuario_status);
                 sqlCmd.Parameters.AddWithValue("@empresa_id", Convert.ToInt32(cmUsuario.empresa_id));
 
                 SqlDataReader sdr = sqlCmd.ExecuteReader();

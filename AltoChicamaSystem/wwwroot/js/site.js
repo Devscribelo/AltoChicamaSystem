@@ -51,51 +51,6 @@ function getListUsuario() {
     });
 }
 
-function regEmpresa() {
-    var dataPost = {
-        empresa_name: "Canicas",
-        empresa_ruc: "1231",
-        empresa_correo: "sdasda@faf.com",
-    };
-    dataPost = trimJSONFields(dataPost);
-
-    var endpoint = getDomain() + "/Empresa/RegEmpresa";
-    $.ajax({
-        type: "POST",
-        url: endpoint,
-        headers: {
-            "Content-Type": "application/json"
-        },
-        data: JSON.stringify(dataPost),
-        dataType: "json",
-        beforeSend: function (xhr) {
-            console.log("Guardando...");
-        },
-        success: function (data) {
-            var rpta = data.item1;
-            var msg = data.item2;
-            if (rpta == "0") {
-                // Actualizar la tabla sin recargar la p�gina
-                console.log("Guardado Correctamente");
-            } else {
-                // Mostrar mensaje de error
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: msg,
-                });
-            }
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
-                alert("Ocurri� un fallo: " + jqXHR.responseJSON.message);
-            } else {
-                alert("Ocurri� un fallo: " + errorThrown);
-            }
-        }
-    });
-}
-
 function loginAdmin() {
     var dataPost = {
         admin_user: $("#input_usuario").val(),
@@ -133,9 +88,9 @@ function loginAdmin() {
         error: function (jqXHR, textStatus, errorThrown) {
             const errorMessageElement = document.getElementById('errorMessage');
             if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
-                errorMessageElement.textContent = "Usuario o contrase�a incorrectos";
+                errorMessageElement.textContent = "Usuario o contraseña incorrectos";
             } else {
-                errorMessageElement.textContent = "Usuario o contrase�a incorrectos";
+                errorMessageElement.textContent = "Usuario o contraseña incorrectos";
             }
             errorMessageElement.style.display = 'block';
         }

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AltoChicamaSystem.Models;
+using AltoChicamaSystem.Negocio;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,79 +9,55 @@ namespace AltoChicamaSystem.Controllers
     [Authorize]
     public class UploadController : Controller
     {
-        // GET: UploadController
         public ActionResult Index()
         {
             // Retorna la vista 'Upload.cshtml'
             return View("~/Views/Repositorio/Upload.cshtml");
         }
+        private readonly DocumentoCN objdocumentoCN = new DocumentoCN();
+        private readonly IConfiguration conf;
 
-        // GET: UploadController/Details/5
-        public ActionResult Details(int id)
+        public UploadController(IConfiguration configuration)
         {
-            return View();
+            conf = configuration;
         }
 
-        // GET: UploadController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: UploadController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult RegDocumento(IFormFile documento_pdf, string documento_titulo, int empresa_id)
         {
+            var result = Tuple.Create("1", "Error al Registrar");
             try
             {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+                // Convertir el archivo PDF a byte[]
+                byte[] fileData = null;
+                using (var memoryStream = new MemoryStream())
+                {
+                    documento_pdf.CopyTo(memoryStream);
+                    fileData = memoryStream.ToArray();
+                }
 
-        // GET: UploadController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
+                CMDocumento cmDocumento = new CMDocumento
+                {
+                    documento_titulo = documento_titulo,
+                    documento_pdf = fileData,
+                    empresa_id = empresa_id
+                };
 
-        // POST: UploadController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+                string bandera = conf.GetValue<string>("Bandera");
+                result = objdocumentoCN.regDocumento(cmDocumento, bandera);
 
-        // GET: UploadController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: UploadController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
+                if (result.Item1 == "0")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return BadRequest(Tuple.Create("1", $"Error al Registrar: {ex.Message}"));
             }
         }
     }

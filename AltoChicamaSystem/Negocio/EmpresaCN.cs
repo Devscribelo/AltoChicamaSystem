@@ -15,5 +15,17 @@ namespace AltoChicamaSystem.Negocio
             var result = objDato.listarEmpresa(bandera);
             return result;
         }
+
+        public Tuple<string, string, List<CMEmpresa>> EmpresaSelect(string bandera)
+        {
+            var result = objDato.EmpresaSelect(bandera);
+            return result;
+        }
+
+        public Tuple<string, string> modEmpresa(CMEmpresa cmEmpresa, string bandera)
+        {
+            var result = objDato.modEmpresa(cmEmpresa, bandera);
+            return result;
+        }
     }
 }

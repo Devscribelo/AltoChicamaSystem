@@ -1,4 +1,6 @@
-﻿namespace AltoChicamaSystem
+﻿using Microsoft.AspNetCore.Http.Features;
+
+namespace AltoChicamaSystem
 {
     public class Startupp
     {
@@ -16,6 +18,10 @@
             });
 
             services.AddControllers();
+            services.Configure<FormOptions>(options => {
+                options.MultipartBodyLengthLimit = 20971520; // 20 MB
+            });
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
