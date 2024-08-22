@@ -1,4 +1,43 @@
-/* @font-face para Material Symbols Outlined */
+* {
+    margin: 0 !important;
+    padding: 0px !important;
+    box-sizing: border-box !important;
+    font-family: 'Poppins', sans-serif !important;
+}
+
+/* Estilo general para los inputs y el botón en el modal */
+.modal-content form .input-group {
+    margin-bottom: 15px; /* Espacio entre los grupos de input */
+}
+
+    .modal-content form .input-group .form-control {
+        padding: 10px; /* Espacio interno en los inputs */
+        border-radius: 5px; /* Esquinas redondeadas en los inputs */
+    }
+
+    .modal-content form .input-group .input-group-text {
+        padding: 10px 15px; /* Espacio interno en los textos del grupo */
+        border-radius: 5px 0 0 5px; /* Redondea solo el borde izquierdo */
+    }
+
+.modal-content form .btnGuardar {
+    display: block;
+    width: 100%; /* Botón de tamaño completo */
+    padding: 10px 15px; /* Espacio interno en el botón */
+    background-color: #007bff; /* Color de fondo del botón */
+    color: #fff; /* Color del texto del botón */
+    border: none; /* Sin bordes */
+    border-radius: 5px; /* Esquinas redondeadas */
+    font-size: 16px; /* Tamaño de fuente */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    transition: background-color 0.3s ease; /* Animación suave al hacer hover */
+}
+
+    .modal-content form .btnGuardar:hover {
+        background-color: #0056b3; /* Color de fondo al pasar el cursor */
+    }
+
+
 @font-face {
     font-family: 'Material Symbols Outlined';
     font-style: normal;
@@ -145,4 +184,18 @@ table.dataTable.no-footer {
     font-size: .875rem;
     border-radius: 0.2rem;
     border: none;
+}
+
+#modal_nueva_empresa{
+    justify-content: center;
+}
+.modal-dialog {
+    width: 100%;
+}
+.modal-content {
+    padding: 1rem !important;
+}
+
+.modal-content * {
+    padding: 4px !important; /* Ajusta el valor según lo necesites */
 }
