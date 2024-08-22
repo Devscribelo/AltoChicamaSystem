@@ -60,5 +60,28 @@ namespace AltoChicamaSystem.Controllers
                 return BadRequest(Tuple.Create("1", $"Error al Registrar: {ex.Message}"));
             }
         }
+
+        [HttpGet]
+        [Route("api/Documento/ObtenerDocumento/{documentoId}")]
+        public IActionResult ObtenerDocumento(int documentoId)
+        {
+            try
+            {
+                string bandera = conf.GetValue<string>("Bandera");
+                var documento = objdocumentoCN.ObtenerDocumentoPorId(documentoId, bandera);
+
+                if (documento == null)
+                {
+                    return NotFound("Documento no encontrado");
+                }
+
+                return File(documento.documento_pdf, "application/pdf", $"{documento.documento_titulo}.pdf");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error al obtener el documento: {ex.Message}");
+            }
+        }
+
     }
 }

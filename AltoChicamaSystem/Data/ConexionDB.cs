@@ -3,7 +3,7 @@ namespace AltoChicamaSystem.Data
 {
     public class ConexionDB
     {
-        private string HOST = "DESKTOP-MTGRJ8E\\SQLEXPRESS";
+        private string HOST = "DESKTOP-GIKIK2R\\SQLEXPRESS";
         private string DB_NAME = "altochicama";
         private string USER = "sa";
         private string PASSWORD = "devscribelo";

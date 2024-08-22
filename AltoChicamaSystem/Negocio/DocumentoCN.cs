@@ -11,5 +11,10 @@ namespace AltoChicamaSystem.Negocio
         {
             return objDato.regDocumento(cmDocumento, bandera);
         }
+        public CMDocumento ObtenerDocumentoPorId(int documentoId, string bandera)
+        {
+            return objDato.ObtenerDocumentoPorId(documentoId, bandera);
+        }
+
     }
 }

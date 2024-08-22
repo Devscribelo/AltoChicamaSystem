@@ -48,5 +48,47 @@ namespace AltoChicamaSystem.Data.Documento
             }
             return Tuple.Create(rpta, msg);
         }
+
+        public CMDocumento ObtenerDocumentoPorId(int documentoId, string bandera)
+        {
+            CMDocumento documento = null;
+            SqlConnection sqlCon = new SqlConnection();
+            try
+            {
+                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                sqlCon.Open();
+                SqlCommand sqlCmd = new SqlCommand
+                {
+                    Connection = sqlCon,
+                    CommandText = "Documento_abrir",
+                    CommandType = CommandType.StoredProcedure
+                };
+                sqlCmd.Parameters.AddWithValue("@DocumentoID", documentoId);
+
+                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                if (sdr.Read())
+                {
+                    documento = new CMDocumento
+                    {
+                        documento_id = Convert.ToInt32(sdr["documento_id"]),
+                        documento_titulo = sdr["documento_titulo"].ToString(),
+                        documento_pdf = (byte[])sdr["documento_pdf"]
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+            }
+            finally
+            {
+                if (sqlCon.State == ConnectionState.Open)
+                {
+                    sqlCon.Close();
+                }
+            }
+            return documento;
+        }
+
     }
 }
