@@ -194,5 +194,40 @@ namespace AltoChicamaSystem.Data.Empresa
             return Tuple.Create(rpta, msg);
         }
 
+        public Tuple<string, string> alterEmpresaStatus(int empresa_id, string bandera)
+        {
+            string rpta = "";
+            string msg = "";
+
+            try
+            {
+                using (SqlConnection sqlCon = new SqlConnection(con.obtenerDatosConexion(bandera)))
+                {
+                    sqlCon.Open();
+                    using (SqlCommand sqlCmd = new SqlCommand("Empresa_alter_status", sqlCon))
+                    {
+                        sqlCmd.CommandType = CommandType.StoredProcedure;
+                        sqlCmd.Parameters.AddWithValue("@empresa_id", empresa_id);
+
+                        using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                        {
+                            if (sdr.Read())
+                            {
+                                rpta = sdr["Rpta"].ToString();
+                                msg = sdr["Msg"].ToString();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                rpta = "1"; // Indicar que hubo un error
+                msg = ex.Message;
+            }
+
+            return Tuple.Create(rpta, msg);
+        }
+
     }
 }

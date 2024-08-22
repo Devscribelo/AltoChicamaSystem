@@ -105,8 +105,8 @@
 }
 
 #acciones {
-    padding-left: 2.3rem;
-    font-size: 19px;
+    padding-left: 2.3rem !important;
+    font-size: 19px !important;
 }
 
 
@@ -161,17 +161,26 @@ table.dataTable.no-footer {
     margin-left: 9px;
 }
 
-.form-check-input:checked {
-    background-color: #26d212;
-    border-color: #26d212;
+.form-check.form-switch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
-.form-switch {
-    padding-left: 3.2em;
+.form-check-input[type=checkbox] {
+    border-radius: 0.25em !important;
+    margin-top: 7px !important;
+    width: 51px !important;
+}
+
+.form-check-input:checked {
+    background-color: #198754;
+    border-color: #198754;
 }
 
 .btn-danger {
-    margin-right: 10px;
+    margin-right: 10px ;
 }
 
 .btnGuardar {
