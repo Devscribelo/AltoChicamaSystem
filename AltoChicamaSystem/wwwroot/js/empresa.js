@@ -153,7 +153,7 @@ function vaciarFormZona() {
 
 function modalNuevaEmpresa() {
     vaciarFormZona();
-    $("#modal_nueva_empresa").modal("show");
+    $("#modal_nueva_empresa").modal("show").css('display', 'flex');
 
     $("form").off("submit").one("submit", function (event) {
         event.preventDefault();
