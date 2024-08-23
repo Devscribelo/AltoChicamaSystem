@@ -20,5 +20,10 @@ namespace AltoChicamaSystem.Negocio
             var result = objDato.listarDocumento(bandera);
             return result;
         }
+
+        public Tuple<string, string> eliminarDocumento(int documentoId, string bandera)
+        {
+            return objDato.eliminarDocumento(documentoId, bandera);
+        }
     }
 }

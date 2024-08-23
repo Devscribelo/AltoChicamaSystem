@@ -44,5 +44,37 @@ namespace AltoChicamaSystem.Controllers
                 return BadRequest(result);
             }
         }
+
+        
+
+        [HttpPost]
+        public IActionResult EliminarDocumento([FromBody] CMDocumento request)
+        {
+            var result = Tuple.Create("1", "Error al eliminar documento");
+            try
+            {
+                if (request == null || request.documento_id <= 0)
+                {
+                    return BadRequest(Tuple.Create("1", "ID de documento inválido"));
+                }
+
+                string bandera = conf.GetValue<string>("bandera");
+                result = objusuarioCN.eliminarDocumento(request.documento_id, bandera);
+
+                if (result.Item1 == "0")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Incluye detalles del error en la respuesta
+                return StatusCode(500, Tuple.Create("1", $"Error interno: {ex.Message}"));
+            }
+        }
     }
 }

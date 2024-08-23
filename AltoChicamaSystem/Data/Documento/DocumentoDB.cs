@@ -142,5 +142,43 @@ namespace AltoChicamaSystem.Data.Documento
             }
             return Tuple.Create(rpta, msg, lst);
         }
+
+        public Tuple<string, string> eliminarDocumento(int documentoId, string bandera)
+        {
+            string rpta = "1";  // Valor por defecto en caso de error
+            string msg = "Error al Eliminar";
+            SqlConnection sqlCon = new SqlConnection();
+            try
+            {
+                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                sqlCon.Open();
+                SqlCommand sqlCmd = new SqlCommand
+                {
+                    Connection = sqlCon,
+                    CommandText = "Documento_delate",
+                    CommandType = CommandType.StoredProcedure
+                };
+                sqlCmd.Parameters.AddWithValue("@documento_id", documentoId);
+
+                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                if (sdr.Read())
+                {
+                    rpta = sdr["Rpta"].ToString();
+                    msg = sdr["Msg"].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                msg = ex.Message;
+            }
+            finally
+            {
+                if (sqlCon.State == ConnectionState.Open)
+                {
+                    sqlCon.Close();
+                }
+            }
+            return Tuple.Create(rpta, msg);
+        }
     }
 }

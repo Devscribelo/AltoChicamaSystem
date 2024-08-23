@@ -14,4 +14,5 @@
         public string documento_titulo { get; set; }
         public string empresa_name { get; set; } // Propiedad para almacenar el nombre de la empresa
     }
+
 }
