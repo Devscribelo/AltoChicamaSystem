@@ -45,6 +45,8 @@ fileInput.addEventListener("change", function (event) {
     }
 });
 
+
+
 form.addEventListener("submit", function (event) {
     event.preventDefault();
     cargarDataPDF();

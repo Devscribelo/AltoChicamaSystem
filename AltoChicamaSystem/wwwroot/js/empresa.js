@@ -1,10 +1,15 @@
 ﻿$(document).ready(function () {
     getListEmpresa();
     agregarBotonesExportacion("#table_empresa");
+
+    // Asignar el event listener fuera de la función getListEmpresa()
+    $(document).on('change', '.status3', function () {
+        var rowData = $(this).closest('tr').data();
+        alterEmpresaStatus(rowData.empresa_id);
+    });
 });
 
 function guardarNewEmpresa() {
-
     var empresa_status = $("#input_empresa_status_a").is(':checked') ? $("#input_empresa_status_a").val() : $("#input_empresa_status_i").val();
 
     var dataPost = {
@@ -56,12 +61,11 @@ function guardarNewEmpresa() {
         }
     });
 }
-function getListEmpresa() {
 
-    endpoint = getDomain() + "/Empresa/ListaEmpresa"
+function getListEmpresa() {
+    var endpoint = getDomain() + "/Empresa/ListaEmpresa";
 
     return new Promise((resolve, reject) => {
-
         $.ajax({
             type: "GET",
             async: true,
@@ -69,18 +73,10 @@ function getListEmpresa() {
             headers: {
                 "Content-Type": "application/json"
             },
-
             dataType: "json",
-            beforeSend: function (xhr) {
-                //xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
-                console.log("cargando");
-            },
-
             success: function (data) {
                 var dataEmpresa = data.item3;
                 var datosRow = "";
-
-                resolve(dataEmpresa);
 
                 for (var i = 0; i < dataEmpresa.length; i++) {
                     datosRow +=
@@ -96,7 +92,7 @@ function getListEmpresa() {
                         "<td>" + dataEmpresa[i].empresa_correo + "</td>" +
                         "<td>" +
                         "<div class='form-check form-switch'>" +
-                        `<input style='width: 46px'; 'margin-top: 4px' !import  class='form-check-input status3' type='checkbox' id='flexSwitchCheckDefault${i}' ${dataEmpresa[i].empresa_status === 'True' ? 'checked' : ''} data-empresa_status='${dataEmpresa[i].empresa_id}'>` +
+                        `<input style='width: 46px'; 'margin-top: 4px' class='form-check-input status3' type='checkbox' id='flexSwitchCheckDefault${i}' ${dataEmpresa[i].empresa_status === 'True' ? 'checked' : ''} data-empresa_status='${dataEmpresa[i].empresa_id}'>` +
                         "</div>" +
                         "</td>" +
                         "<td id='acciones'>" +
@@ -106,8 +102,9 @@ function getListEmpresa() {
                         "</tr>";
                 }
 
+                // Actualizar la tabla
                 if (!$("#table_empresa").hasClass("dataTable")) {
-                    // Inicializar DataTable en la tabla
+                    // Inicializar DataTable solo si no está ya inicializada
                     tableEmpresa = $("#table_empresa").DataTable({
                         language: {
                             url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json' // URL de la biblioteca de idioma
@@ -142,17 +139,13 @@ function getListEmpresa() {
             failure: function (data) {
                 Swal.close();
                 alert('Error fatal ' + data);
-                console.log("failure")
+                console.log("failure");
             }
         });
-
-
     });
-
 }
 
 function vaciarFormZona() {
-
     $('#modal_nuevo_zona input[type="text"]').val('');
     $('#modal_nuevo_zona textarea').val('');
     $('#modal_nuevo_zona select').val('');
@@ -169,9 +162,9 @@ function modalNuevaEmpresa() {
     });
 }
 
-function alterEmpresaStatus(empresaId) {
+function alterEmpresaStatus(empresa_id) {
     var dataPost = {
-        empresa_id: empresaId
+        empresa_id: empresa_id
     };
 
     var endpoint = getDomain() + "/Empresa/AlterEmpresaStatus";
@@ -191,12 +184,6 @@ function alterEmpresaStatus(empresaId) {
             var rpta = data.item1;
             var msg = data.item2;
             if (rpta == "0") {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Éxito',
-                    text: 'El estado de la empresa ha sido actualizado.',
-                });
-                // Actualiza la lista de empresas para reflejar los cambios
                 getListEmpresa();
             } else {
                 Swal.fire({
