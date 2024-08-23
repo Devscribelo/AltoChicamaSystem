@@ -82,6 +82,7 @@ namespace AltoChicamaSystem.Data.Empresa
                                 empresa_name = sdr["empresa_name"].ToString().Trim(),
                                 empresa_correo = sdr["empresa_correo"].ToString().Trim(),
                                 empresa_ruc = sdr["empresa_ruc"].ToString().Trim(),
+                                empresa_status = sdr["empresa_status"].ToString().Trim(),
                             };
                             lst.Add(empresa);
                         }
