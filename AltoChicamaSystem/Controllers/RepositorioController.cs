@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AltoChicamaSystem.Models;
+using AltoChicamaSystem.Negocio;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,78 +9,39 @@ namespace AltoChicamaSystem.Controllers
     [Authorize]
     public class RepositorioController : Controller
     {
+        private readonly DocumentoCN objusuarioCN = new DocumentoCN();
+        private readonly IConfiguration conf;
+        public RepositorioController(IConfiguration config)
+        {
+            conf = config;
+        }
         // GET: RepositorioController
         public ActionResult Index()
         {
             return View();
         }
 
-        // GET: RepositorioController/Details/5
-        public ActionResult Details(int id)
+        [HttpGet]
+        public ActionResult ListaDocumento()
         {
-            return View();
-        }
-
-        // GET: RepositorioController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: RepositorioController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
+            var result = Tuple.Create("1", "Error al listar Empresa", new List<DocumentoResult>());
             try
             {
-                return RedirectToAction(nameof(Index));
+                string bandera = conf.GetValue<string>("bandera");
+                result = objusuarioCN.listarDocumento(bandera);
+
+                if (result.Item1 == "0")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
             }
             catch
             {
-                return View();
-            }
-        }
-
-        // GET: RepositorioController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: RepositorioController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: RepositorioController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: RepositorioController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
+                return BadRequest(result);
             }
         }
     }
