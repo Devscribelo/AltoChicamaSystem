@@ -9,6 +9,8 @@
     });
 });
 
+
+
 function guardarNewEmpresa() {
     var empresa_status = $("#input_empresa_status_a").is(':checked') ? $("#input_empresa_status_a").val() : $("#input_empresa_status_i").val();
 
@@ -50,7 +52,7 @@ function guardarNewEmpresa() {
                     text: msg,
                 });
             }
-            $("#btnGuardarEditZona").prop("disabled", false);
+            $("#btnGuardarEditEmpresa").prop("disabled", false);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
@@ -96,11 +98,16 @@ function getListEmpresa() {
                         "</div>" +
                         "</td>" +
                         "<td id='acciones'>" +
-                        "<i style='color: #FAA716' class='bx bx-edit editar-button' id='editar_zona'></i>" +
+                        "<i style='color: #FAA716' class='bx bx-edit editar-button' id='editar_empresa'></i>" +
                         "<i style='margin-left: 9px; color: red' class='bx bx-trash eliminar-button' id='eliminar_empresa'></i>" +
                         "</td>" +
                         "</tr>";
                 }
+
+                $(document).on('click', '.editar-button', function () {
+                    var rowData = $(this).closest('tr').data();
+                    modalEditarEmpresa(rowData);
+                });
 
                 $(document).on('click', '.eliminar-button', function () {
                     // Obtener los datos de la fila que se va a eliminar
@@ -244,6 +251,35 @@ function eliminarEmpresa(data) {
         }
     });
 }
+
+function modalEditarEmpresa(rowData) {
+
+    // Obtenemos el código de la empresa seleccionada desde los datos de la fila
+    var empresa_id = rowData.empresa_id;
+    var empresa_name = rowData.empresa_name;
+
+    // Seteamos el título del modal con el código de la empresa
+    $("#modal_editar_empresa .modal-title").html("Editando Empresa: <span style='color: #198754'><strong>" + empresa_name + "</strong></span>");
+
+    $("form").off("submit").one("submit", function (event) {
+        event.preventDefault(); // Evita (recargar la página)
+        guardarEditEmpresa(empresa_id);
+    });
+
+    // Seteamos los valores de los inputs con la información de la fila seleccionada
+    $("#edit_empresa_name").val(rowData.empresa_name);
+    $("#edit_empresa_ruc").val(rowData.empresa_ruc);
+    $("#edit_empresa_correo").val(rowData.empresa_correo);
+
+    var estado = rowData.empresa_status;
+
+    $('#edit_empresa_status_a').prop('checked', estado === 'True');
+    $('#edit_empresa_status_i').prop('checked', estado === 'False');
+
+    // Mostramos el modal
+    $("#modal_editar_empresa").modal("show");
+}
+
 function alterEmpresaStatus(empresa_id) {
     var dataPost = {
         empresa_id: empresa_id
@@ -274,6 +310,65 @@ function alterEmpresaStatus(empresa_id) {
                     text: msg,
                 });
             }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
+                alert("Ocurrió un fallo: " + jqXHR.responseJSON.message);
+            } else {
+                alert("Ocurrió un fallo: " + errorThrown);
+            }
+        }
+    });
+}
+
+function guardarEditEmpresa(empresa_id) {
+
+    var empresa_status;
+    if ($('#edit_empresa_status_a').is(':checked')) {
+        empresa_status = $("#edit_empresa_status_a").val();
+    } else {
+        empresa_status = $("#edit_empresa_status_i").val();
+    }
+
+    var dataPost = {
+        empresa_id: empresa_id.toString(),
+        empresa_name: $("#edit_empresa_name").val(),
+        empresa_ruc: $("#edit_empresa_ruc").val(),
+        empresa_correo: $("#edit_empresa_correo").val(),
+        empresa_status: empresa_status
+    };
+
+    dataPost = trimJSONFields(dataPost);
+
+    var endpoint = getDomain() + "/Empresa/modEmpresa";
+
+    $.ajax({
+        type: "POST",
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify(dataPost),
+        dataType: "json",
+        beforeSend: function (xhr) {
+            console.log("Guardando...");
+            $("#btnGuardarEditEmpresa").attr("disabled", true);
+        },
+        success: function (data) {
+            var rpta = data.item1;
+            var msg = data.item2;
+            if (rpta == "0") {
+                getListEmpresa();
+                $("#modal_editar_empresa").modal("hide");
+            } else {
+                // Mostrar mensaje de error
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: msg,
+                });
+            }
+            $("#btnGuardarEditZona").prop("disabled", false);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseJSON && jqXHR.responseJSON.message) {

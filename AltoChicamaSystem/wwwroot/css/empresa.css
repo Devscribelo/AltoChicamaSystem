@@ -34,9 +34,24 @@
 }
 
     .modal-content form .btnGuardar:hover {
-        background-color: #0056b3; /* Color de fondo al pasar el cursor */
+        background-color: #198754; /* Color de fondo al pasar el cursor */
     }
 
+@media (min-width: 576px) {
+    .modal-dialog {
+        max-width: 500px !important;
+        margin: 1.75rem auto !important;
+    }
+}
+
+.form-check-container {
+    display: flex !important;
+    align-items: center !important;
+}
+
+.form-check {
+    margin-right: 15px !important; /* Ajusta el espacio entre los botones si es necesario */
+}
 
 @font-face {
     font-family: 'Material Symbols Outlined';
@@ -46,8 +61,8 @@
 }
 
 .dataTables_filter {
-    padding-top: 12px !important;
-    padding-bottom: 12px !important;
+    padding-top: 22px !important;
+    padding-bottom: 20px !important;
 }
 
 /* Clase para usar Material Symbols Outlined */
@@ -179,8 +194,9 @@ table.dataTable.no-footer {
     border-color: #198754;
 }
 
-.btn-danger {
-    margin-right: 10px ;
+.form-check .form-check-input {
+    /* float: left !important; */
+    margin-top: 0.4em !important;
 }
 
 .btnGuardar {
@@ -208,3 +224,52 @@ table.dataTable.no-footer {
 .modal-content * {
     padding: 4px !important; /* Ajusta el valor según lo necesites */
 }
+
+/* Estilo para el filtro generado por DataTables */
+.dataTables_filter {
+    display: flex !important;
+    align-items: center !important;
+    position: relative !important;
+    max-width: 264px !important;
+}
+
+    .dataTables_filter input[type="search"] {
+        height: 25px !important;
+        line-height: 28px !important;
+        padding: 0 1rem !important;
+        padding-left: 0.5rem !important; /* Ajustado para hacer menos espacio a la izquierda */
+        width: 100% !important;
+        border: 2px solid transparent !important;
+        border-radius: 8px !important;
+        outline: none !important;
+        background-color: #D9E8D8 !important;
+        color: #0d0c22 !important;
+        box-shadow: 0 0 5px #C1D9BF, 0 0 0 10px #f5f5f5eb !important;
+        transition: .3s ease !important;
+    }
+
+        .dataTables_filter input[type="search"]::placeholder {
+            color: #777 !important;
+        }
+
+    /* Ajusta el margen del label para que la palabra "Buscar" esté más a la izquierda */
+    .dataTables_filter label {
+        display: flex;
+        align-items: center;
+        margin: 0;
+        margin-right: 0.5rem; /* Reduce el margen derecho del label */
+    }
+
+    .dataTables_filter .dataTables_filter_label {
+        margin-right: 0; /* Asegura que no haya margen adicional */
+    }
+
+.dataTables_wrapper .dataTables_filter {
+    float: right;
+    text-align: left;
+    margin-right: 14px !important;
+}
+
+    .dataTables_wrapper .dataTables_filter input {
+        margin-left: 1.05em !important;
+    }
