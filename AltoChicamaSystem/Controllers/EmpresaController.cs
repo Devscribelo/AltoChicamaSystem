@@ -117,6 +117,33 @@ namespace AltoChicamaSystem.Controllers
         }
 
         [HttpPost]
+        public ActionResult DelEmpresa([FromBody] CMEmpresa cmempresa)
+        {
+            var result = Tuple.Create("1", "Error al Eliminar");
+            try
+            {
+                // Obtén la bandera desde la configuración o un valor por defecto
+                string bandera = conf.GetValue<string>("Bandera");
+
+                // Asegúrate de que `empresa_id` se maneje como `int`
+                int empresa_id = cmempresa.empresa_id;  // Suponiendo que `empresa_id` es un int en el modelo
+
+                // Llama al método del negocio para eliminar la empresa
+                result = objusuarioCN.delEmpresa(cmempresa, bandera, empresa_id);
+
+                return Ok(result);
+            }
+            catch
+            {
+                // En caso de error, retorna un BadRequest con el mensaje de error
+                return BadRequest(result);
+            }
+        }
+
+
+
+
+        [HttpPost]
         public IActionResult AlterEmpresaStatus([FromBody] CMEmpresa request)
         {
             var result = Tuple.Create("1", "Error al Alterar Estado");

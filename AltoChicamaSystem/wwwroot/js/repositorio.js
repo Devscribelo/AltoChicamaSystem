@@ -38,7 +38,7 @@ function getListDocumento() {
                         "<td>" + dataEmpresa[i].documento_id + "</td>" +
                         "<td>" + dataEmpresa[i].documento_titulo + "</td>" +
                         "<td>" + dataEmpresa[i].empresa_name + "</td>" +
-                        "<td><button onclick='mostrarPDFEnModal(" + dataEmpresa[i].documento_id + ")'>Ver PDF</button></td>" +
+                        "<td><a href='#' onclick='mostrarPDFEnModal(" + dataEmpresa[i].documento_id + ")'><i class=\"bx bxs-file-pdf\" style=\"font-size: 24px; color: black;\"></i></a></td>" +
                         "</tr>";
                 }
 

@@ -97,10 +97,16 @@ function getListEmpresa() {
                         "</td>" +
                         "<td id='acciones'>" +
                         "<i style='color: #FAA716' class='bx bx-edit editar-button' id='editar_zona'></i>" +
-                        "<i style='margin-left: 9px; color: red' class='bx bx-trash eliminar-button' id='eliminar_zona'></i>" +
+                        "<i style='margin-left: 9px; color: red' class='bx bx-trash eliminar-button' id='eliminar_empresa'></i>" +
                         "</td>" +
                         "</tr>";
                 }
+
+                $(document).on('click', '.eliminar-button', function () {
+                    // Obtener los datos de la fila que se va a eliminar
+                    var rowData = $(this).closest('tr').data();
+                    modalConfirmacionEliminar(rowData.empresa_id);
+                });
 
                 // Actualizar la tabla
                 if (!$("#table_empresa").hasClass("dataTable")) {
@@ -162,6 +168,82 @@ function modalNuevaEmpresa() {
     });
 }
 
+function modalConfirmacionEliminar(data) {
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+    })
+
+    swalWithBootstrapButtons.fire({
+        title: 'Estas segur@? ',
+        text: "Recuerda que no podrás revertir los cambios! Ya que al eliminar, eliminaras la empresa y todos sus documentos asociados, te recomendamos desactivar la empresa en Status para mantener sus documentos en el repositorio",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, elimina!',
+        cancelButtonText: 'No, cancela!',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            eliminarEmpresa(data),
+                swalWithBootstrapButtons.fire(
+                    'Eliminado!',
+                    'la empresa fue eliminado.',
+                    'success'
+                )
+        } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            swalWithBootstrapButtons.fire(
+                'Cancelado',
+                'La empresa y sus documentos siguen almacenados',
+                'error'
+            )
+        }
+    })
+}
+function eliminarEmpresa(data) {
+    var empresa_id = data.toString();
+
+    var dataPost = {
+        empresa_id: empresa_id,
+    };
+
+    var endpoint = getDomain() + "/Empresa/DelEmpresa";
+    $.ajax({
+        type: "POST", // Cambia el método HTTP según tu configuración
+        url: endpoint, // Cambia la URL a la que enviar la solicitud
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify(dataPost),
+        dataType: "json",
+        success: function (data) {
+            // Llama al actuador para eliminar la fila si la eliminación fue exitosa
+            var rpta = data.item1; // Cambio aquí
+            var msg = data.item2; // Cambio aquí
+            if (rpta == "0") {
+                getListEmpresa();
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: msg,
+                })
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
+                alert("Ocurrió un fallo: " + jqXHR.responseJSON.message);
+            } else {
+                alert("Ocurrió un fallo: " + errorThrown);
+            }
+        }
+    });
+}
 function alterEmpresaStatus(empresa_id) {
     var dataPost = {
         empresa_id: empresa_id

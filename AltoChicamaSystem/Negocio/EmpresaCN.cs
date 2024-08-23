@@ -28,6 +28,12 @@ namespace AltoChicamaSystem.Negocio
             return result;
         }
 
+        public Tuple<string, string> delEmpresa(CMEmpresa cmEmpresa, string bandera, int empresa_id)
+        {
+            var result = objDato.delEmpresa(cmEmpresa, bandera, empresa_id);
+            return result;
+        }
+
         public Tuple<string, string> alterEmpresaStatus(int empresa_id, string bandera)
         {
             var result = objDato.alterEmpresaStatus(empresa_id, bandera);

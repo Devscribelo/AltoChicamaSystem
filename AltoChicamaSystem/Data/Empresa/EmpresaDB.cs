@@ -195,6 +195,45 @@ namespace AltoChicamaSystem.Data.Empresa
             return Tuple.Create(rpta, msg);
         }
 
+        public Tuple<string, string> delEmpresa(CMEmpresa cmEmpresa, string bandera, int empresa_id)
+        {
+            string rpta = "";
+            string msg = "";
+            SqlConnection sqlCon = new SqlConnection();
+            try
+            {
+                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                sqlCon.Open();
+                SqlCommand sqlCmd = new SqlCommand();
+                sqlCmd.Connection = sqlCon;
+                sqlCmd.CommandText = "Empresa_delete"; // Nombre del procedimiento almacenado para eliminación
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.Parameters.AddWithValue("@empresa_id", empresa_id); // Aceptar int
+
+                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                if (sdr.Read())
+                {
+                    rpta = sdr["Rpta"].ToString();
+                    msg = sdr["Msg"].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                msg = ex.Message;
+                cmEmpresa = new CMEmpresa();
+            }
+            finally
+            {
+                if (sqlCon.State == ConnectionState.Open)
+                {
+                    sqlCon.Close();
+                }
+            }
+            return Tuple.Create(rpta, msg);
+        }
+
+
+
         public Tuple<string, string> alterEmpresaStatus(int empresa_id, string bandera)
         {
             string rpta = "";
