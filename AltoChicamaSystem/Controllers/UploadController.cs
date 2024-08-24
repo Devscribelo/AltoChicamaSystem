@@ -61,6 +61,7 @@ namespace AltoChicamaSystem.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [Route("api/Documento/ObtenerDocumento/{documentoId}")]
         public IActionResult ObtenerDocumento(int documentoId)
