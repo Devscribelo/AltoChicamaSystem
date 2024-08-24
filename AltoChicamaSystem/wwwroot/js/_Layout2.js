@@ -1,8 +1,6 @@
 ﻿const body = document.querySelector('body'),
     sidebar = body.querySelector('nav'),
-    toggle = body.querySelector(".toggle"),
-    modeSwitch = body.querySelector(".toggle-switch"),
-    modeText = body.querySelector(".mode-text");
+    toggle = body.querySelector(".toggle"),    modeText = body.querySelector(".mode-text");
 const form = document.getElementById("file-upload-form");
 const fileInput = document.getElementById("file-upload");
 const pdfPreview = document.getElementById("pdf-preview");
@@ -16,17 +14,6 @@ const fileProgress = document.getElementById("file-progress");
 toggle.addEventListener("click", () => {
     sidebar.classList.toggle("close");
 })
-
-modeSwitch.addEventListener("click", () => {
-    body.classList.toggle("dark");
-
-    if (body.classList.contains("dark")) {
-        modeText.innerText = "Light mode";
-    } else {
-        modeText.innerText = "Dark mode";
-
-    }
-});
 
 fileInput.addEventListener("change", function (event) {
     const file = event.target.files[0];
@@ -206,6 +193,8 @@ async function guardarDocumento(file) {
                 icon: 'error',
                 confirmButtonText: 'OK',
             });
+            responseContainer.classList.add('hidden');
+            progressBar.value = 0;
         },
         complete: function() {
             // Ocultar la barra de progreso después de la carga

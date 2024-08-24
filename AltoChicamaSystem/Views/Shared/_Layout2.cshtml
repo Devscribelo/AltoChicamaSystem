@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["Action"]?.ToString();
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -51,23 +56,22 @@
 
         <div class="menu-bar">
             <div class="menu">
-                 
                 <ul class="menu-links">
-                    <li class="nav-link  mode">
+                    <li class="nav-link @(currentController == "Repositorio" && currentAction == "Index" ? "mode" : "")">
                         <a asp-controller="Repositorio" asp-action="Index">
                             <i class='bx bx-folder-open icon'></i>
                             <span class="text nav-text">Repositorios</span>
                         </a>
                     </li>
 
-                    <li class="nav-link">
+                    <li class="nav-link @(currentController == "Empresa" && currentAction == "Index" ? "mode" : "")">
                         <a asp-controller="Empresa" asp-action="Index">
                             <i class='bx bx-user-plus icon'></i>
                             <span class="text nav-text">Registrar</span>
                         </a>
                     </li>
 
-                    <li class="nav-link">
+                    <li class="nav-link @(currentController == "Upload" && currentAction == "Index" ? "mode" : "")">
                         <a asp-controller="Upload" asp-action="Index">
                             <i class='bx bx-upload icon'></i>
                             <span class="text nav-text">Subir Archivos</span>
@@ -85,10 +89,7 @@
                 </li>
 
                 <li class="mode">
-
-                    <div class="toggle-switch">
-
-
+                    <i class='bx bxs-user icon'></i>
                 </li>
             </div>
         </div>
