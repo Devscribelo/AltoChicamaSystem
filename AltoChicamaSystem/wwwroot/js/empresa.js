@@ -9,8 +9,6 @@
     });
 });
 
-
-
 function guardarNewEmpresa() {
     var empresa_status = $("#input_empresa_status_a").is(':checked') ? $("#input_empresa_status_a").val() : $("#input_empresa_status_i").val();
 
