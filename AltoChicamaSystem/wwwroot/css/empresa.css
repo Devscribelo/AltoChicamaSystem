@@ -5,6 +5,49 @@
     font-family: 'Poppins', sans-serif !important;
 }
 
+.subscribe {
+    margin-top: 10px !important;
+    position: relative !important;
+    height: 49px !important;
+    width: 100% !important;
+    padding: 20px !important;
+    background-color: #FFF !important;
+    border-radius: 4px !important;
+    color: #333 !important;
+}
+
+    .subscribe p {
+        text-align: center !important;
+        font-size: 22px !important;
+        font-weight: bold !important;
+        letter-spacing: 4px !important;
+    }
+
+    .subscribe .submit-btn {
+        position: absolute !important;
+        border-bottom-right-radius: 0 !important;
+        border-top-right-radius: 0 !important;
+        background-color: #0d4b1f !important;
+        color: #FFF !important;
+        padding: 12px 25px !important;
+        display: inline-block !important;
+        font-size: 15px !important;
+        font-weight: bold !important;
+        letter-spacing: 5px !important;
+        left: 50% !important; /* Centro horizontal */
+        transform: translateX(-50%) !important; /* Ajuste para centrar */
+        bottom: -19px !important;
+        cursor: pointer !important;
+        transition: all .25s ease !important;
+    }
+
+        .subscribe .submit-btn:hover {
+            background-color: #0d4b1f !important;
+        }
+
+
+
+
 .border-bottom {
     border-bottom: 1px solid #000 !important;
 }
@@ -28,7 +71,7 @@
     display: block;
     width: 100%; /* Botón de tamaño completo */
     padding: 10px 15px; /* Espacio interno en el botón */
-    background-color: #007bff; /* Color de fondo del botón */
+    background-color: #198754 !important; /* Color de fondo del botón */
     color: #fff; /* Color del texto del botón */
     border: none; /* Sin bordes */
     border-radius: 5px; /* Esquinas redondeadas */
@@ -185,8 +228,8 @@ table.dataTable.no-footer {
 }
 
 .form-check-input:checked {
-    background-color: #198754;
-    border-color: #198754;
+    background-color: #0d4b1f;
+    border-color: #0d4b1f;
 }
 
 .form-check .form-check-input {
@@ -336,7 +379,7 @@ table.dataTable.no-footer {
         }
 
         #btnExportExcel:hover, #btnExportPdf:hover {
-            background: #17795E !important;
+            background: #0d4b1f !important;
         }
 
         #btnExportPdf:hover {
@@ -369,8 +412,8 @@ table.dataTable.no-footer {
         }
 
 #btnExportExcel {
-    border: 1px solid #17795E !important;
-    background-color: #209978 !important; /* Color de fondo verde para Excel */
+    border: 1px solid #0d4b1f !important;
+    background-color: #0d4b1f !important; /* Color de fondo verde para Excel */
 }
 
 #btnExportPdf {
@@ -479,12 +522,12 @@ table.dataTable.no-footer {
     justify-content: left !important;
     line-height: 1 !important;
     text-decoration: none !important;
-    color: #198754 !important;
+    color: #0d4b1f !important;
     font-size: 15px !important;
-    border-radius: 5px !important;
+    border-radius: 0px !important;
     width: 110px !important;
     height: 37px !important;
-    border: 1px solid #198754 !important;
+    border: 1px solid #0d4b1f !important;
     position: relative !important;
     transition: 0.3s !important;
     background-color: #ffffff !important;
@@ -496,7 +539,7 @@ table.dataTable.no-footer {
         content: "+" !important; /* Icono de añadir */
         display: block !important;
         font-size: 20px !important; /* Ajusta el tamaño del ícono si es necesario */
-        background-color: #198754 !important;
+        background-color: #0d4b1f !important;
         color: #fff !important;
         border-radius: 50% !important; /* Forma circular */
         width: 20px !important; /* Ajusta el tamaño del ícono si es necesario */
@@ -523,7 +566,7 @@ table.dataTable.no-footer {
     text-decoration: none !important;
     color: #0a58ca !important; /* Cambia el color si es necesario */
     font-size: 15px !important;
-    border-radius: 5px !important;
+    border-radius: 0px !important;
     width: 110px !important;
     height: 37px !important;
     border: 1px solid #0a58ca !important; /* Cambia el color si es necesario */
@@ -554,4 +597,33 @@ table.dataTable.no-footer {
 
     #btnActualizar:hover::before {
         transform: translate(-5px, -70%) !important; /* Ajusta el movimiento en hover si es necesario */
+    }
+
+.icon-circle {
+    display: inline-flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 29px !important;
+    height: 29px !important;
+    border-radius: 50% !important;
+    background-color: #f0f0f0 !important; /* Fondo gris claro para todos los íconos */
+    color: #02409c !important; /* Color de ícono por defecto */
+    font-size: 18px !important;
+    margin: 0 5px !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important; /* Sombra sutil */
+}
+
+    .icon-circle.red {
+        background-color: #f0f0f0 !important; /* Fondo gris claro para el ícono de eliminar */
+        color: red !important; /* Color del ícono de eliminar */
+    }
+
+    .icon-circle.edit {
+        color: #FAA716 !important; /* Color del ícono de editar */
+    }
+
+    .icon-circle:hover {
+        transform: scale(1.1) !important; /* Efecto de zoom al pasar el cursor */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3) !important; /* Sombra más pronunciada al pasar el cursor */
     }

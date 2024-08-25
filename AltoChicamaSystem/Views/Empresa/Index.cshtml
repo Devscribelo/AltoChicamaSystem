@@ -14,6 +14,7 @@
 
     <!-- CSS personalizado -->
     <link rel="stylesheet" href="~/css/empresa.css">
+    <link rel="stylesheet" href="~/css/alert.css">
 </head>
 
 
@@ -21,11 +22,13 @@
     <section class="home">
         <main>
             <div class="row" style="margin:0px">
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h2 class="h2" style="font-size:1.5rem">Empresas</h2>
+                <div class="subscribe">
+                    <br>
+                    <div class="submit-btn">EMPRESAS</div>
                 </div>
+
                 <div class="container">
-                    <div class="row" style="margin-bottom: 15px">
+                    <div class="row" style="margin-top: 25px !important">
                         <!-- Columna izquierda: Botones Agregar y Refresh -->
                         <div class="col-lg-6 col-md-6 col-sm-12 d-flex align-items-center justify-content-start justify-content-xs-center">
                             <button id="btnAgregar" class="button me-2" onClick="modalNuevaEmpresa()">
@@ -147,7 +150,7 @@
 
                                     <!-- empresa_ruc -->
                                     <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">Orden Ruta</span>
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">RUC</span>
                                         <input type="text" class="form-control" id="edit_empresa_ruc" autocomplete="off">
                                     </div>
 

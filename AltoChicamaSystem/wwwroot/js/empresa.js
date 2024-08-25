@@ -92,15 +92,16 @@ function getListEmpresa() {
                         "<td>" + dataEmpresa[i].empresa_correo + "</td>" +
                         "<td>" +
                         "<div class='form-check form-switch'>" +
-                        `<input style='width: 46px'; 'margin-top: 4px' class='form-check-input status3' type='checkbox' id='flexSwitchCheckDefault${i}' ${dataEmpresa[i].empresa_status === 'True' ? 'checked' : ''} data-empresa_status='${dataEmpresa[i].empresa_id}'>` +
+                        `<input style='width: 46px; margin-top: 4px;' class='form-check-input status3' type='checkbox' id='flexSwitchCheckDefault${i}' ${dataEmpresa[i].empresa_status === 'True' ? 'checked' : ''} data-empresa_status='${dataEmpresa[i].empresa_id}'>` +
                         "</div>" +
                         "</td>" +
                         "<td id='acciones'>" +
-                        "<i style='color: #FAA716' class='bx bx-edit editar-button' id='editar_empresa'></i>" +
-                        "<i style='margin-left: 9px; color: red' class='bx bx-trash eliminar-button' id='eliminar_empresa'></i>" +
+                        "<i class='bx bx-edit editar-button icon-circle' id='editar_empresa" + i + "'></i>" +
+                        "<i style='margin-left: 9px;' class='bx bx-trash eliminar-button icon-circle red' id='eliminar_empresa" + i + "'></i>" +
                         "</td>" +
                         "</tr>";
                 }
+
 
                 $(document).on('click', '.editar-button', function () {
                     var rowData = $(this).closest('tr').data();
@@ -156,15 +157,18 @@ function getListEmpresa() {
     });
 }
 
-function vaciarFormZona() {
-    $('#modal_nuevo_zona input[type="text"]').val('');
-    $('#modal_nuevo_zona textarea').val('');
-    $('#modal_nuevo_zona select').val('');
-    $('#modal_nuevo_zona input[type="date"]').val('');
+
+
+function vaciarFormEmpresa() {
+    $('#modal_nueva_empresa input[type="text"]').val('');
+    $('#modal_nueva_empresa input[type="checkbox"]').prop('checked', false);
+    $('#modal_nueva_empresa textarea').val('');
+    $('#modal_nueva_empresa select').val('');
+    $('#modal_nueva_empresa input[type="email"]').val(''); // Limpia el campo de correo electrónico
 }
 
 function modalNuevaEmpresa() {
-    vaciarFormZona();
+    vaciarFormEmpresa();
     $("#modal_nueva_empresa").modal("show").css('display', 'flex');
 
     $("form").off("submit").one("submit", function (event) {

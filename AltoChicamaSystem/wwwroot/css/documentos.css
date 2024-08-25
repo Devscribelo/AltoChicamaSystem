@@ -1,0 +1,39 @@
+﻿#table_empresa_wrapper {
+    margin-top: 16px !important;
+}
+
+.icon-circle {
+    display: inline-flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 29px !important;
+    height: 29px !important;
+    border-radius: 50% !important;
+    background-color: #f0f0f0 !important; /* Fondo gris claro para todos los íconos */
+    color: white !important; /* Color de ícono por defecto */
+    font-size: 18px !important;
+    margin: 0 5px !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important; /* Sombra sutil */
+}
+
+    .icon-circle.red i {
+        color: red !important; /* Color rojo para el ícono de eliminar */
+    }
+
+    .icon-circle.green i {
+        color: green !important; /* Color verde para el ícono de descargar */
+    }
+
+    .icon-circle.black i {
+        color: black !important; /* Color negro para el ícono de compartir */
+    }
+
+    .icon-circle.pdf-icon i {
+        color: red !important; /* Color rojo para el ícono PDF */
+    }
+
+    .icon-circle:hover {
+        transform: scale(1.1) !important; /* Efecto de zoom al pasar el cursor */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3) !important; /* Sombra más pronunciada al pasar el cursor */
+    }

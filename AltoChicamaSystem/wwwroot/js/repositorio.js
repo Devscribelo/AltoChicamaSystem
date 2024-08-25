@@ -59,15 +59,28 @@ function getListDocumento() {
                         "<td>" + dataEmpresa[i].documento_id + "</td>" +
                         "<td>" + dataEmpresa[i].documento_titulo + "</td>" +
                         "<td>" + dataEmpresa[i].empresa_name + "</td>" +
-                        "<td><a href='#' onclick='mostrarPDFEnModal(" + dataEmpresa[i].documento_id + ")'><i class=\"bx bxs-file-pdf\" style=\"font-size: 24px; color: black;\"></i></a></td>" +
                         "<td>" +
-                            "<div>"+
-                                "<a href='#' onclick='eliminarDocumento(" + dataEmpresa[i].documento_id + ")'><i class=\"bx bxs-trash\" style=\"font-size: 24px; color: red;\"></i></a>"+
-                                "<a href=" + apiUrl + dataEmpresa[i].documento_id + "><i class=\"bx bxs-download\" style=\"font-size: 24px; color: green;\"></i></a>" +
-                                "<a href='#' onclick=\"copiarTexto('" + x + dataEmpresa[i].documento_id + "')\"><i class=\"bx bxs-share\" style=\"font-size: 24px; color: black;\"></i></a></div></td>" +
-
+                        "<a href='#' onclick='mostrarPDFEnModal(" + dataEmpresa[i].documento_id + ")'>" +
+                        "<span class='icon-circle pdf-icon'><i class=\"bx bxs-file-pdf\"></i></span>" +
+                        "</a>" +
+                        "</td>" +
+                        "<td>" +
+                        "<div>" +
+                        "<a href='#' onclick='eliminarDocumento(" + dataEmpresa[i].documento_id + ")'>" +
+                        "<span class='icon-circle red'><i class=\"bx bxs-trash\"></i></span>" +
+                        "</a>" +
+                        "<a href='" + apiUrl + dataEmpresa[i].documento_id + "'>" +
+                        "<span class='icon-circle green'><i class=\"bx bxs-download\"></i></span>" +
+                        "</a>" +
+                        "<a href='#' onclick=\"copiarTexto('" + x + dataEmpresa[i].documento_id + "')\">" +
+                        "<span class='icon-circle black'><i class=\"bx bxs-share-alt\"></i></span>" +
+                        "</a>" +
+                        "</div>" +
+                        "</td>" +
                         "</tr>";
                 }
+
+
 
 
                 if (!$("#table_empresa").hasClass("dataTable")) {
