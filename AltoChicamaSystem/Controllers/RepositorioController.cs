@@ -45,8 +45,6 @@ namespace AltoChicamaSystem.Controllers
             }
         }
 
-        
-
         [HttpPost]
         public IActionResult EliminarDocumento([FromBody] CMDocumento request)
         {

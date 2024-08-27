@@ -94,18 +94,20 @@
                                     <!-- empresa nombre -->
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Nombre</span>
-                                        <input type="text" class="form-control" id="input_empresa_name" required autocomplete="off" placeholder="Ingrese su nombre" maxlength="100">
+                                        <input type="text" class="form-control" id="input_empresa_name" required autocomplete="off" placeholder="Ingrese el nombre" maxlength="100">
                                     </div>
 
                                     <!-- empresa ruc -->
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">RUC</span>
-                                        <input type="text" class="form-control" id="input_empresa_ruc" required autocomplete="off">
+                                        <input type="text" class="form-control" id="input_empresa_ruc" required autocomplete="off"
+                                               pattern="\d{11}" maxlength="11" inputmode="numeric" placeholder="Ingrese el RUC">
                                     </div>
+
                                     <!-- empresa_correo -->
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Correo</span>
-                                        <input type="email" class="form-control" id="input_empresa_correo" autocomplete="off" placeholder="Ingrese su correo" maxlength="50">
+                                        <input type="email" class="form-control" id="input_empresa_correo" autocomplete="off" placeholder="Ingrese el correo" maxlength="100">
                                     </div>
                                     <!-- Status -->
                                     <div class="form-group" style="margin-right: 144px !important;">
@@ -144,14 +146,15 @@
 
                                     <!-- empresa_nombre -->
                                     <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">Empresa Nombre</span>
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Nombre</span>
                                         <input type="text" class="form-control" id="edit_empresa_name" required autocomplete="off">
                                     </div>
 
-                                    <!-- empresa_ruc -->
+                                    <!-- empresa ruc -->
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">RUC</span>
-                                        <input type="text" class="form-control" id="edit_empresa_ruc" autocomplete="off">
+                                        <input type="text" class="form-control" id="edit_empresa_ruc" required autocomplete="off"
+                                               pattern="\d{11}" maxlength="11" inputmode="numeric">
                                     </div>
 
                                     <!-- empresa_correo -->
@@ -184,5 +187,11 @@
         </div>
         
     </section>
+    <script>
+        document.getElementById('input_empresa_ruc').addEventListener('input', function (e) {
+            this.value = this.value.replace(/\D/g, '').substring(0, 11);
+        });
+
+    </script>
 </body>
 </html>

@@ -381,3 +381,76 @@ function guardarEditEmpresa(empresa_id) {
         }
     });
 }
+
+
+function guardarNewTransportista() {
+    var dataPost = {
+        transportista_ruc:"21239421",
+        transportista_nombre: "RamosExpress",
+        empresa_id: '1023' // Asegúrate de tener un select para la empresa
+    };
+
+    dataPost = trimJSONFields(dataPost);
+
+    var endpoint = getDomain() + "/Transportista/RegTransportista";
+
+    $.ajax({
+        type: "POST",
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify(dataPost),
+        dataType: "json",
+        beforeSend: function (xhr) {
+            console.log("Guardando transportista...");
+        },
+        success: function (data) {
+            var rpta = data.item1;
+            var msg = data.item2;
+            if (rpta == "0") {
+                // Si es exitoso, recarga la lista o actualiza la interfaz
+            } else {
+                // Mostrar mensaje de error
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: msg,
+                });
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
+                alert("Ocurrió un fallo: " + jqXHR.responseJSON.message);
+            } else {
+                alert("Ocurrió un fallo: " + errorThrown);
+            }
+        }
+    });
+}
+
+function getListTransportista() {
+    var endpoint = getDomain() + "/Transportista/ListaTransportista";
+
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: "GET",
+            async: true,
+            url: endpoint,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            dataType: "json",
+            success: function (data) {
+                var dataEmpresa = data.item3;
+                var datosRow = "";
+                console.log(dataEmpresa);
+            },
+            failure: function (data) {
+                Swal.close();
+                alert('Error fatal ' + data);
+                console.log("failure");
+            }
+        });
+    });
+}
