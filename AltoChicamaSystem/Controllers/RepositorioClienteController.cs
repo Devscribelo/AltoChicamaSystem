@@ -9,7 +9,7 @@ namespace AltoChicamaSystem.Controllers
     [Authorize]
     public class RepositorioClienteController : Controller
     {
-        private readonly DocumentoClienteCN objusuarioCN = new DocumentoCN();
+        private readonly DocumentoClienteCN objusuarioCN = new DocumentoClienteCN();
         private readonly IConfiguration conf;
         public RepositorioClienteController(IConfiguration config)
         {
