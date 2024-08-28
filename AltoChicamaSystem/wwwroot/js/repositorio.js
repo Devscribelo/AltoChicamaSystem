@@ -1,5 +1,6 @@
 ﻿$(document).ready(function () {
     getListDocumento();
+    getListDocumentoFiltrado();
     // Asignar el event listener fuera de la función getListEmpresa()
     $(document).on('change', '.status3', function () {
         var rowData = $(this).closest('tr').data();
@@ -137,6 +138,109 @@ function getListDocumento() {
     });
 
 }
+
+function getListDocumentoFiltrado() {
+    const apiUrl = `/api/Documento/ObtenerDocumento/`;
+    const x = getDomain() + apiUrl;
+    endpoint = getDomain() + "/RepositorioCliente/listarDocumentoFiltrado"
+
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: "GET",
+            async: true,
+            url: endpoint,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            dataType: "json",
+            beforeSend: function (xhr) {
+                console.log("Cargando datos filtrados...");
+            },
+            success: function (data) {
+                var dataEmpresaFiltrada = data.item3;
+                var datosRow = "";
+
+                console.log("Datos filtrados obtenidos:", dataEmpresaFiltrada);
+                resolve(dataEmpresaFiltrada);
+
+                for (var i = 0; i < dataEmpresaFiltrada.length; i++) {
+                    datosRow +=
+                        "<tr class='filaTabla' " +
+                        "data-empresa_id='" + dataEmpresaFiltrada[i].documento_id + "' " +
+                        "data-empresa_name='" + dataEmpresaFiltrada[i].documento_titulo + "' " +
+                        "data-empresa_ruc='" + dataEmpresaFiltrada[i].empresa_name + "' " +
+                        "data-documento_status='" + dataEmpresaFiltrada[i].documento_status + "'" +
+                        "data-documento_id='" + dataEmpresaFiltrada[i].documento_id + "'>" +
+                        "<td>" + dataEmpresaFiltrada[i].documento_id + "</td>" +
+                        "<td>" + dataEmpresaFiltrada[i].documento_titulo + "</td>" +
+                        "<td>" + dataEmpresaFiltrada[i].empresa_name + "</td>" +
+                        "<td>" +
+                        "<div class='form-check form-switch'>" +
+                        `<input style='width: 46px; margin-top: 4px;' class='form-check-input status3' type='checkbox' id='flexSwitchCheckDefault${i}' ${dataEmpresaFiltrada[i].documento_status === 'True' ? 'checked' : ''} data-empresa_status='${dataEmpresaFiltrada[i].documento_id}'>` +
+                        "</div>" +
+                        "</td>" +
+                        "<td>" +
+                        "<a href='#' onclick='mostrarPDFEnModal(" + dataEmpresaFiltrada[i].documento_id + ")'>" +
+                        "<span class='icon-circle pdf-icon'><i class=\"bx bxs-file-pdf\"></i></span>" +
+                        "</a>" +
+                        "</td>" +
+                        "<td>" +
+                        "<div>" +
+                        "<a href='#' onclick='eliminarDocumento(" + dataEmpresaFiltrada[i].documento_id + ")'>" +
+                        "<span class='icon-circle red'><i class=\"bx bxs-trash\"></i></span>" +
+                        "</a>" +
+                        "<a href='" + apiUrl + dataEmpresaFiltrada[i].documento_id + "'>" +
+                        "<span class='icon-circle green'><i class=\"bx bxs-download\"></i></span>" +
+                        "</a>" +
+                        "<a href='#' onclick=\"copiarTexto('" + x + dataEmpresaFiltrada[i].documento_id + "')\">" +
+                        "<span class='icon-circle black'><i class=\"bx bxs-share-alt\"></i></span>" +
+                        "</a>" +
+                        "</div>" +
+                        "</td>" +
+                        "</tr>";
+                }
+
+                if (!$("#table_empresa").hasClass("dataTable")) {
+                    tableEmpresa = $("#table_empresa").DataTable({
+                        language: {
+                            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                        },
+                        dom: 'frtip',
+                        buttons: [
+                            {
+                                extend: 'excel',
+                                className: 'btn_export_Excel',
+                                exportOptions: {
+                                    columns: ':visible:not(:last-child, :nth-last-child(1))'
+                                }
+                            },
+                            {
+                                extend: 'pdf',
+                                className: 'btn_export_Pdf',
+                                exportOptions: {
+                                    columns: ':visible:not(:last-child, :nth-last-child(1))'
+                                }
+                            }
+                        ],
+                        colResize: {
+                            tableWidthFixed: 'false'
+                        },
+                        colReorder: true
+                    });
+                }
+
+                tableEmpresa.clear();
+                tableEmpresa.rows.add($(datosRow)).draw();
+            },
+            failure: function (data) {
+                Swal.close();
+                alert('Error fatal ' + data);
+                console.log("failure");
+            }
+        });
+    });
+}
+
 
 function alterDocumentoStatus(documento_id) {
     var dataPost = {
