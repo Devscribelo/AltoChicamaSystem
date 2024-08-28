@@ -4,7 +4,7 @@
     $(document).on('change', '.status3', function () {
         var rowData = $(this).closest('tr').data();
         alterDocumentoStatus(rowData.documento_id);
-    });
+        });
 });
 
 function copiarTexto(texto) {
@@ -59,7 +59,8 @@ function getListDocumento() {
                         "data-empresa_id='" + dataEmpresa[i].documento_id + "' " +
                         "data-empresa_name='" + dataEmpresa[i].documento_titulo + "' " +
                         "data-empresa_ruc='" + dataEmpresa[i].empresa_name + "' " +
-                        "data-empresa_rucs='" + dataEmpresa[i].documento_id + "'>" +
+                        "data-documento_status='" + dataEmpresa[i].documento_status + "'" +
+                        "data-documento_id='" + dataEmpresa[i].documento_id + "'>" +
                         "<td>" + dataEmpresa[i].documento_id + "</td>" +
                         "<td>" + dataEmpresa[i].documento_titulo + "</td>" +
                         "<td>" + dataEmpresa[i].empresa_name + "</td>" +
@@ -142,7 +143,7 @@ function alterDocumentoStatus(documento_id) {
         documento_id: documento_id
     };
 
-    var endpoint = getDomain() + "/Documento/AlterDocumentoStatus";
+    var endpoint = getDomain() + "/Repositorio/alterDocumentoStatus";
 
     $.ajax({
         type: "POST",
