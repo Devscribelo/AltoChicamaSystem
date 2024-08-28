@@ -25,5 +25,11 @@ namespace AltoChicamaSystem.Negocio
         {
             return objDato.eliminarDocumento(documentoId, bandera);
         }
+
+        public Tuple<string, string> alterDocumentoStatus(int documento_id, string bandera)
+        {
+            var result = objDato.alterDocumentoStatus(documento_id, bandera);
+            return result;
+        }
     }
 }

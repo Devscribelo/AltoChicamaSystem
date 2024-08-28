@@ -74,5 +74,35 @@ namespace AltoChicamaSystem.Controllers
                 return StatusCode(500, Tuple.Create("1", $"Error interno: {ex.Message}"));
             }
         }
+
+        [HttpPost]
+        public IActionResult AlterDocumentoStatus([FromBody] CMDocumento request)
+        {
+            var result = Tuple.Create("1", "Error al Alterar Estado");
+
+            try
+            {
+                string bandera = conf.GetValue<string>("Bandera");
+
+                // Usar empresa_id del modelo CMEmpresa
+                result = objusuarioCN.alterDocumentoStatus(request.documento_id, bandera);
+
+                if (result.Item1 == "0")  // Verifica si la operación fue exitosa
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (optional)
+                // logger.LogError(ex, "An error occurred while altering the company status.");
+
+                return BadRequest(result);
+            }
+        }
     }
 }

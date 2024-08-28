@@ -1,5 +1,10 @@
 ﻿$(document).ready(function () {
     getListDocumento();
+    // Asignar el event listener fuera de la función getListEmpresa()
+    $(document).on('change', '.status3', function () {
+        var rowData = $(this).closest('tr').data();
+        alterDocumentoStatus(rowData.documento_id);
+    });
 });
 
 function copiarTexto(texto) {
@@ -21,7 +26,6 @@ function copiarTexto(texto) {
         confirmButtonText: 'OK',
     });
 }
-
 function getListDocumento() {
     const apiUrl = `/api/Documento/ObtenerDocumento/`;
     const x = getDomain() + apiUrl;
@@ -59,6 +63,11 @@ function getListDocumento() {
                         "<td>" + dataEmpresa[i].documento_id + "</td>" +
                         "<td>" + dataEmpresa[i].documento_titulo + "</td>" +
                         "<td>" + dataEmpresa[i].empresa_name + "</td>" +
+                        "<td>" +
+                        "<div class='form-check form-switch'>" +
+                        `<input style='width: 46px; margin-top: 4px;' class='form-check-input status3' type='checkbox' id='flexSwitchCheckDefault${i}' ${dataEmpresa[i].documento_status === 'True' ? 'checked' : ''} data-empresa_status='${dataEmpresa[i].documento_id}'>` +
+                        "</div>" +
+                        "</td>" +
                         "<td>" +
                         "<a href='#' onclick='mostrarPDFEnModal(" + dataEmpresa[i].documento_id + ")'>" +
                         "<span class='icon-circle pdf-icon'><i class=\"bx bxs-file-pdf\"></i></span>" +
@@ -128,6 +137,46 @@ function getListDocumento() {
 
 }
 
+function alterDocumentoStatus(documento_id) {
+    var dataPost = {
+        documento_id: documento_id
+    };
+
+    var endpoint = getDomain() + "/Documento/AlterDocumentoStatus";
+
+    $.ajax({
+        type: "POST",
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify(dataPost),
+        dataType: "json",
+        beforeSend: function () {
+            console.log("Actualizando estado...");
+        },
+        success: function (data) {
+            var rpta = data.item1;
+            var msg = data.item2;
+            if (rpta == "0") {
+                getListDocumento();
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: msg,
+                });
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
+                alert("Ocurrió un fallo: " + jqXHR.responseJSON.message);
+            } else {
+                alert("Ocurrió un fallo: " + errorThrown);
+            }
+        }
+    });
+}
 function eliminarDocumento(documento_id) {
     var endpoint = getDomain() + "/Repositorio/EliminarDocumento";
 

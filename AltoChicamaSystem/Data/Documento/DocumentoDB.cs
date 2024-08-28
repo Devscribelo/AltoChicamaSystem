@@ -27,6 +27,8 @@ namespace AltoChicamaSystem.Data.Documento
                 sqlCmd.Parameters.AddWithValue("@documento_titulo", cmDocumento.documento_titulo.Trim());
                 sqlCmd.Parameters.AddWithValue("@documento_pdf", cmDocumento.documento_pdf);
                 sqlCmd.Parameters.AddWithValue("@empresa_id", cmDocumento.empresa_id);
+                sqlCmd.Parameters.AddWithValue("@documento_status", cmDocumento.documento_status);
+
 
                 SqlDataReader sdr = sqlCmd.ExecuteReader();
                 if (sdr.Read())
@@ -123,6 +125,7 @@ namespace AltoChicamaSystem.Data.Documento
                         documento.documento_id = Convert.ToInt32(sdr["documento_id"]);
                         documento.documento_titulo = sdr["documento_titulo"].ToString().Trim();
                         documento.empresa_name = sdr["empresa_name"].ToString().Trim();
+                        documento.documento_status = sdr["documento_status"].ToString().Trim();
                         lst.Add(documento);
                     }
 
@@ -178,6 +181,41 @@ namespace AltoChicamaSystem.Data.Documento
                     sqlCon.Close();
                 }
             }
+            return Tuple.Create(rpta, msg);
+        }
+
+        public Tuple<string, string> alterDocumentoStatus(int documento_id, string bandera)
+        {
+            string rpta = "";
+            string msg = "";
+
+            try
+            {
+                using (SqlConnection sqlCon = new SqlConnection(con.obtenerDatosConexion(bandera)))
+                {
+                    sqlCon.Open();
+                    using (SqlCommand sqlCmd = new SqlCommand("Documento_alter_status", sqlCon))
+                    {
+                        sqlCmd.CommandType = CommandType.StoredProcedure;
+                        sqlCmd.Parameters.AddWithValue("@documento_id", documento_id);
+
+                        using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                        {
+                            if (sdr.Read())
+                            {
+                                rpta = sdr["Rpta"].ToString();
+                                msg = sdr["Msg"].ToString();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                rpta = "1"; // Indicar que hubo un error
+                msg = ex.Message;
+            }
+
             return Tuple.Create(rpta, msg);
         }
     }
