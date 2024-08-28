@@ -1,6 +1,5 @@
-﻿var hostProyecto;
+﻿const empresaID = window.userId;
 
-hostProyecto = "https://" + window.location.host;
 function getDomain() {
     return "https://" + window.location.host;
 }

@@ -10,7 +10,6 @@ const response = document.getElementById("response");
 const messages = document.getElementById("messages");
 const fileProgress = document.getElementById("file-progress");
 
-
 toggle.addEventListener("click", () => {
     sidebar.classList.toggle("close");
 })

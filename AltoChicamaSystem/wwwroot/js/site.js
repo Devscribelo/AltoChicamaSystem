@@ -77,7 +77,13 @@ function loginAdmin() {
                 // Redirigir a una p�gina protegida
                 window.location.href = getDomain() + "/Repositorio";
                 console.log("Inicio de sesi�n correcto");
-            } else {
+            }
+            if (rpta == "1") {
+                // Redirigir a una p�gina protegida
+                window.location.href = getDomain() + "/Repositorio";
+                console.log("Inicio de sesi�n correcto");
+            }
+            else {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',

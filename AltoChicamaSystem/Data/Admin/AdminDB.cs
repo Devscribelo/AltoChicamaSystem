@@ -8,10 +8,11 @@ namespace AltoChicamaSystem.Data.Admin
     public class AdminDB
     {
         private ConexionDB con = new ConexionDB();
-        public Tuple<string, string> loginAdmin(CMAdmin cmadmin, string bandera)
+        public Tuple<string, string, int> loginAdmin(CMAdmin cmadmin, string bandera)
         {
             string rpta = "";
             string msg = "";
+            int loginId = 0;
             SqlConnection sqlCon = new SqlConnection();
 
             try
@@ -31,6 +32,7 @@ namespace AltoChicamaSystem.Data.Admin
                 {
                     rpta = sdr["Rpta"].ToString();
                     msg = sdr["Msg"].ToString();
+                    loginId = Convert.ToInt32(sdr["LoginId"]);
                 }
             }
             catch (Exception ex)
@@ -45,7 +47,7 @@ namespace AltoChicamaSystem.Data.Admin
                 }
             }
 
-            return Tuple.Create(rpta, msg);
+            return Tuple.Create(rpta, msg, loginId);
         }
     }
 }
