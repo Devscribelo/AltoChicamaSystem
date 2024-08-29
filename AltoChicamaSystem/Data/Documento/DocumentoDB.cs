@@ -27,7 +27,8 @@ namespace AltoChicamaSystem.Data.Documento
                 sqlCmd.Parameters.AddWithValue("@documento_titulo", cmDocumento.documento_titulo.Trim());
                 sqlCmd.Parameters.AddWithValue("@documento_pdf", cmDocumento.documento_pdf);
                 sqlCmd.Parameters.AddWithValue("@empresa_id", cmDocumento.empresa_id);
-                sqlCmd.Parameters.AddWithValue("@documento_status", cmDocumento.documento_status);
+                sqlCmd.Parameters.AddWithValue("@transportista_id", cmDocumento.transportista_id);
+                //sqlCmd.Parameters.AddWithValue("@documento_status", cmDocumento.documento_status);
 
 
                 SqlDataReader sdr = sqlCmd.ExecuteReader();
@@ -125,6 +126,7 @@ namespace AltoChicamaSystem.Data.Documento
                         documento.documento_id = Convert.ToInt32(sdr["documento_id"]);
                         documento.documento_titulo = sdr["documento_titulo"].ToString().Trim();
                         documento.empresa_name = sdr["empresa_name"].ToString().Trim();
+                        documento.transportista_nombre = sdr["transportista_nombre"].ToString().Trim();
                         documento.documento_status = sdr["documento_status"].ToString().Trim();
                         lst.Add(documento);
                     }
