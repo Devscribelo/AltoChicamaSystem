@@ -29,7 +29,7 @@ function copiarTexto(texto) {
 }
 function getListDocumento() {
     const apiUrl = `/api/Documento/ObtenerDocumento/`;
-    const x = getDomain() + apiUrl;
+    //const x = getDomain() + apiUrl;
     endpoint = getDomain() + "/Repositorio/ListaDocumento"
 
     return new Promise((resolve, reject) => {
@@ -83,7 +83,7 @@ function getListDocumento() {
                         "<a href='" + apiUrl + dataEmpresa[i].documento_id + "'>" +
                         "<span class='icon-circle green'><i class=\"bx bxs-download\"></i></span>" +
                         "</a>" +
-                        "<a href='#' onclick=\"copiarTexto('" + x + dataEmpresa[i].documento_id + "')\">" +
+                        "<a href='#' onclick=\"copiarTexto('" + getDomain() + abrirEnlaceEnVentana(dataEmpresa[i].documento_id) + "')\">" +
                         "<span class='icon-circle black'><i class=\"bx bxs-share-alt\"></i></span>" +
                         "</a>" +
                         "</div>" +

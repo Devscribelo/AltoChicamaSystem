@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alto Chicama</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            background-color: #1a1a1a;
+            font-family: Arial, sans-serif;
+            color: #fff;
+        }
+
+        #main-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        #zoom-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #333;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        #pdf-viewer-container {
+            flex-grow: 1;
+            overflow: auto;
+            background-color: #2a2a2a;
+        }
+
+        #pdf-viewer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100%;
+        }
+
+        .page-container {
+            margin-bottom: 20px;
+        }
+
+        canvas {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        button {
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 0 10px;
+        }
+
+            button:hover {
+                background-color: #357abd;
+            }
+
+            button:focus {
+                outline: none;
+                box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.5);
+            }
+
+        #zoom-level {
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            margin: 0 15px;
+        }
+    </style>
+</head>
+<body>
+    <div id="main-container">
+        <div id="zoom-controls">
+            <button id="zoom-out" aria-label="Zoom out">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </button>
+            <span id="zoom-level">100%</span>
+            <button id="zoom-in" aria-label="Zoom in">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </button>
+        </div>
+        <div id="pdf-viewer-container">
+            <div id="pdf-viewer"></div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.0.279/pdf.min.js"></script>
+    <script>
+        var url = new URLSearchParams(window.location.search).get('file');
+        var currentZoom = 100;
+        var pdfDoc = null;
+        var pageContainers = [];
+        var pdfViewerContainer = document.getElementById('pdf-viewer-container');
+        var pdfViewer = document.getElementById('pdf-viewer');
+
+        if (url) {
+            var pdfjsLib = window['pdfjs-dist/build/pdf'];
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.0.279/pdf.worker.min.js';
+
+            pdfjsLib.getDocument(url).promise.then(function (pdf) {
+                pdfDoc = pdf;
+                for (var pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+                    renderPage(pageNumber);
+                }
+            });
+        }
+
+        function renderPage(pageNumber) {
+            pdfDoc.getPage(pageNumber).then(function (page) {
+                var scale = 3;
+                var viewport = page.getViewport({ scale: scale });
+                var pageContainer = document.createElement('div');
+                pageContainer.className = 'page-container';
+                var canvas = document.createElement('canvas');
+                var context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                pageContainer.appendChild(canvas);
+                pdfViewer.appendChild(pageContainer);
+                pageContainers.push(pageContainer);
+
+                var renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+                page.render(renderContext).promise.then(function () {
+                    canvas.style.width = "100%";
+                    canvas.style.height = "auto";
+                    updateZoom();
+                });
+            });
+        }
+
+        function updateZoom() {
+            document.getElementById('zoom-level').textContent = currentZoom + '%';
+            pageContainers.forEach(function (container) {
+                container.style.width = currentZoom + '%';
+            });
+
+            // Centrar el contenido
+            if (currentZoom <= 100) {
+                pdfViewer.style.justifyContent = 'center';
+            } else {
+                pdfViewer.style.justifyContent = 'flex-start';
+            }
+            if (currentZoom >= 100) {
+                pdfViewer.style.alignItems = 'flex-start'; // Elimina el centrado
+            } else {
+                pdfViewer.style.alignItems = 'center'; // Centrando el contenido
+            }
+
+            // Mantener la posición de desplazamiento relativa
+            var scrollPercentX = pdfViewerContainer.scrollLeft / (pdfViewerContainer.scrollWidth - pdfViewerContainer.clientWidth);
+            var scrollPercentY = pdfViewerContainer.scrollTop / (pdfViewerContainer.scrollHeight - pdfViewerContainer.clientHeight);
+
+            requestAnimationFrame(function () {
+                pdfViewerContainer.scrollLeft = scrollPercentX * (pdfViewerContainer.scrollWidth - pdfViewerContainer.clientWidth);
+                pdfViewerContainer.scrollTop = scrollPercentY * (pdfViewerContainer.scrollHeight - pdfViewerContainer.clientHeight);
+            });
+        }
+
+        document.getElementById('zoom-in').addEventListener('click', function () {
+            currentZoom = Math.min(200, currentZoom + 10);
+            updateZoom();
+        });
+
+        document.getElementById('zoom-out').addEventListener('click', function () {
+            currentZoom = Math.max(50, currentZoom - 10);
+            updateZoom();
+        });
+    </script>
+</body>
+</html>

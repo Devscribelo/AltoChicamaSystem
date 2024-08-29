@@ -83,6 +83,32 @@ namespace AltoChicamaSystem.Controllers
                 return BadRequest($"Error al obtener el documento: {ex.Message}");
             }
         }
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("api/Documento/Ver/{documentoId}")]
+        public IActionResult VerDocumento(int documentoId)
+        {
+            try
+            {
+                string bandera = conf.GetValue<string>("Bandera");
+                var documento = objdocumentoCN.ObtenerDocumentoPorId(documentoId, bandera);
+
+                if (documento == null)
+                {
+                    return NotFound("Documento no encontrado");
+                }
+
+                // Configura el Content-Disposition como inline
+                Response.Headers.Add("Content-Disposition", "inline; filename=" + $"{documento.documento_titulo}.pdf");
+
+                return File(documento.documento_pdf, "application/pdf");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error al obtener el documento: {ex.Message}");
+            }
+        }
+
 
     }
 }

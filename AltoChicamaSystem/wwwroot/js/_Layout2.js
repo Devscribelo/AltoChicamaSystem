@@ -251,3 +251,17 @@ function mostrarPDFEnModal(documentoId) {
             alert('Error al obtener el documento PDF');
         });
 }
+
+
+function generarEnlacePermanente(documentoId) {
+    // URL de la API que devuelve el PDF directamente
+    const enlace = `/api/Documento/Ver/${documentoId}`;
+    return enlace;
+}
+
+function abrirEnlaceEnVentana(documentoId) {
+    const enlace = `/api/Documento/Ver/${documentoId}`;
+    const viewerUrl = `/views/pdf-viewer.html?file=${encodeURIComponent(window.location.origin + enlace)}`;
+    //window.open(viewerUrl, '_blank');
+    return viewerUrl;
+}
