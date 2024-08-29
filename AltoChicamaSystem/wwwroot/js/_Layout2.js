@@ -99,6 +99,71 @@ $(document).on('click', '.btnGuardar', function () {
     guardarDocumento(empresa_id);
 });
 
+function TransportistaSelect(id_transportista) {
+    var endpoint = getDomain() + "/Transportista/TransportistaSelect";
+
+    $.ajax({
+        type: "GET",
+        async: true,
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        dataType: "json",
+        beforeSend: function (xhr) {
+            console.log("cargando");
+        },
+        success: function (data) {
+            var TransportistaSelect = data.item3;
+
+            // Limpiar el select y agregar opción por defecto
+            if (id_transportista === "#input_transportista") {
+                $(id_transportista).empty();
+                $(id_transportista).append('<option value="" disabled selected>Seleccione un transportista...</option>');
+            }
+
+            // Verificar si la data es null, vacía, o contiene solo espacios en blanco
+            if (TransportistaSelect && TransportistaSelect.length > 0) {
+                // Agregar opciones al select
+                for (var i = 0; i < TransportistaSelect.length; i++) {
+                    var item = TransportistaSelect[i];
+                    $(id_transportista).append(
+                        '<option value="' + item.transportista_id + '">' + item.transportista_nombre + '</option>'
+                    );
+                }
+            }
+
+        },
+        error: function (data) {
+            alert('Error fatal ' + data);
+            console.log("failure");
+        }
+    });
+}
+
+function obtenerIdTransportistaSeleccionada(id_transportista) {
+    // Obtener el valor de la opción seleccionada en el select
+    var valorSeleccionadoTransportista = $(id_transportista).val();
+
+    // Mostrar el valor (transportista_id) en la consola
+    if (valorSeleccionadoTransportista) {
+        console.log("El ID del transportista seleccionada es: " + valorSeleccionadoTransportista);
+    } else {
+        console.log("No hay ninguna transportista seleccionada.");
+    }
+
+    return valorSeleccionadoTransportista;  // Retorna el valor (empresa_id) seleccionado
+}
+
+// Llamada inicial para llenar el select de empresas
+TransportistaSelect("#input_transportista");
+
+$(document).on('click', '.btnGuardar', function () {
+    TransportistaSelect("#input_transportista");
+    var empresa_id = $("#input_transportista_id").val();
+    guardarDocumento(transportista_id);
+});
+
 // Guardar documento
 function cargarDataPDF() {
     var inputFile = document.getElementById('file-upload');
@@ -119,6 +184,7 @@ function cargarDataPDF() {
 
 async function guardarDocumento(file) {
     var empresa_id = obtenerIdEmpresaSeleccionada("#input_empresa");
+    var transportista_id = obtenerIdTransportistaSeleccionada("#input_transportista");
 
     if (!empresa_id) {
         Swal.fire({
@@ -130,10 +196,27 @@ async function guardarDocumento(file) {
         return;
     }
 
+    if (!transportista_id) {
+        Swal.fire({
+            title: 'Error',
+            text: 'Debe seleccionar un transportista.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+
     var formData = new FormData();
     formData.append('documento_titulo', file.name);
     formData.append('documento_pdf', file);
     formData.append('empresa_id', empresa_id);
+    formData.append('transportista_id', transportista_id);
+
+    // Mostrar los datos que se están enviando
+    console.log("Datos enviados a Upload/RegDocumento:");
+    for (var pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+    }
 
     var endpoint = getDomain() + "/Upload/RegDocumento";
 
@@ -148,11 +231,11 @@ async function guardarDocumento(file) {
         processData: false,
         contentType: false,
         data: formData,
-        xhr: function() {
+        xhr: function () {
             var xhr = new window.XMLHttpRequest();
 
             // Progreso de carga
-            xhr.upload.addEventListener("progress", function(evt) {
+            xhr.upload.addEventListener("progress", function (evt) {
                 if (evt.lengthComputable) {
                     var percentComplete = evt.loaded / evt.total * 100;
                     progressBar.value = percentComplete;
@@ -162,10 +245,10 @@ async function guardarDocumento(file) {
 
             return xhr;
         },
-        beforeSend: function() {
+        beforeSend: function () {
             console.log("Guardando...");
         },
-        success: function(data) {
+        success: function (data) {
             var rpta = data.item1;
             var msg = data.item2;
             if (rpta === "0") {
@@ -184,7 +267,7 @@ async function guardarDocumento(file) {
                 });
             }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             var msg = jqXHR.responseJSON ? jqXHR.responseJSON.message : errorThrown;
             Swal.fire({
                 title: 'Ya se ha registrado un documento con ese nombre',
@@ -195,13 +278,14 @@ async function guardarDocumento(file) {
             responseContainer.classList.add('hidden');
             progressBar.value = 0;
         },
-        complete: function() {
+        complete: function () {
             // Ocultar la barra de progreso después de la carga
             responseContainer.classList.add('hidden');
             progressBar.value = 0;
         }
     });
 }
+
 
 function mostrarPDFEnModal(documentoId) {
     // URL de la API que devuelve el PDF según el ID

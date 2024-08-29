@@ -60,11 +60,13 @@ function getListDocumento() {
                         "data-empresa_id='" + dataEmpresa[i].documento_id + "' " +
                         "data-empresa_name='" + dataEmpresa[i].documento_titulo + "' " +
                         "data-empresa_ruc='" + dataEmpresa[i].empresa_name + "' " +
+                        "data-transportista_nombre='" + dataEmpresa[i].transportista_nombre + "' " +
                         "data-documento_status='" + dataEmpresa[i].documento_status + "'" +
                         "data-documento_id='" + dataEmpresa[i].documento_id + "'>" +
                         "<td>" + dataEmpresa[i].documento_id + "</td>" +
                         "<td>" + dataEmpresa[i].documento_titulo + "</td>" +
                         "<td>" + dataEmpresa[i].empresa_name + "</td>" +
+                        "<td>" + dataEmpresa[i].transportista_nombre + "</td>" +
                         "<td>" +
                         "<div class='form-check form-switch'>" +
                         `<input style='width: 46px; margin-top: 4px;' class='form-check-input status3' type='checkbox' id='flexSwitchCheckDefault${i}' ${dataEmpresa[i].documento_status === 'True' ? 'checked' : ''} data-empresa_status='${dataEmpresa[i].documento_id}'>` +

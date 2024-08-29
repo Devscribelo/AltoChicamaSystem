@@ -27,7 +27,6 @@ namespace AltoChicamaSystem.Data.Transportista
                 };
                 sqlCmd.Parameters.AddWithValue("@transportista_ruc", cmTransportista.transportista_ruc.Trim());
                 sqlCmd.Parameters.AddWithValue("@transportista_nombre", cmTransportista.transportista_nombre.Trim());
-                sqlCmd.Parameters.AddWithValue("@empresa_id", cmTransportista.empresa_id);
 
                 SqlDataReader sdr = sqlCmd.ExecuteReader();
                 if (sdr.Read())
@@ -49,9 +48,46 @@ namespace AltoChicamaSystem.Data.Transportista
             }
             return Tuple.Create(rpta, msg);
         }
-        public Tuple<string, string, List<TransportistaResult>> listaTransportista(string bandera)
+        public Tuple<string, string> modTransportista(CMTransportista cmTransportista, string bandera)
         {
-            List<TransportistaResult> lst = new List<TransportistaResult>();
+            string rpta = "";
+            string msg = "";
+            SqlConnection sqlCon = new SqlConnection();
+            try
+            {
+                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                sqlCon.Open();
+                SqlCommand sqlCmd = new SqlCommand();
+                sqlCmd.Connection = sqlCon;
+                sqlCmd.CommandText = "Transportista_mod";
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.Parameters.AddWithValue("@transportista_id", cmTransportista.transportista_id);
+                sqlCmd.Parameters.AddWithValue("@transportista_nombre", cmTransportista.transportista_nombre.Trim());
+                sqlCmd.Parameters.AddWithValue("@transportista_ruc", cmTransportista.transportista_ruc.Trim());
+
+                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                if (sdr.Read())
+                {
+                    rpta = sdr["Rpta"].ToString();
+                    msg = sdr["Msg"].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                msg = ex.Message;
+            }
+            finally
+            {
+                if (sqlCon.State == ConnectionState.Open)
+                {
+                    sqlCon.Close();
+                }
+            }
+            return Tuple.Create(rpta, msg);
+        }
+        public Tuple<string, string, List<CMTransportista>> listaTransportista(string bandera)
+        {
+            List<CMTransportista> lst = new List<CMTransportista>();
             SqlConnection sqlCon = new SqlConnection();
             string rpta = "";
             string msg = "";
@@ -76,12 +112,11 @@ namespace AltoChicamaSystem.Data.Transportista
                     {
                         while (sdr.Read())
                         {
-                            TransportistaResult transportista = new TransportistaResult
+                            CMTransportista transportista = new CMTransportista
                             {
                                 transportista_id = Convert.ToInt32(sdr["transportista_id"]),
                                 transportista_ruc = sdr["transportista_ruc"].ToString().Trim(),
-                                transportista_nombre = sdr["transportista_nombre"].ToString().Trim(),
-                                empresa_name = sdr["empresa_name"].ToString().Trim(),
+                                transportista_nombre = sdr["transportista_nombre"].ToString().Trim()
                             };
                             lst.Add(transportista);
                         }
@@ -90,7 +125,7 @@ namespace AltoChicamaSystem.Data.Transportista
             }
             catch (Exception ex)
             {
-                lst = new List<TransportistaResult>();
+                lst = new List<CMTransportista>();
                 rpta = ex.Message;
             }
             finally
@@ -102,7 +137,94 @@ namespace AltoChicamaSystem.Data.Transportista
             }
             return Tuple.Create(rpta, msg, lst);
         }
+        public Tuple<string, string, List<CMTransportista>> TransportistaSelect(string bandera)
+        {
+            List<CMTransportista> lst = new List<CMTransportista>();
+            CMTransportista transportistaselect = new CMTransportista();
+            SqlConnection sqlCon = new SqlConnection();
+            string rpta = "";
+            string msg = "";
+            int count = 0;
+            try
+            {
+                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                sqlCon.Open();
+                SqlCommand sqlCmd = new SqlCommand();
+                sqlCmd.Connection = sqlCon;
+                sqlCmd.CommandText = "Transportista_List_Select";
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                SqlDataReader sdr = sqlCmd.ExecuteReader();
 
+                while (sdr.Read())
+                {
+                    count++;
+                    if (count == 1)
+                    {
+                        rpta = sdr["Rpta"].ToString();
+                        msg = sdr["Msg"].ToString();
+                        sdr.NextResult();
+                    }
+                    if (rpta == "0" && count >= 2)
+                    {
+                        transportistaselect = new CMTransportista();
+                        transportistaselect.transportista_id = Convert.ToInt32(sdr["transportista_id"]);
+                        transportistaselect.transportista_nombre = sdr["transportista_nombre"].ToString().Trim();
+                        lst.Add(transportistaselect);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                lst = new List<CMTransportista>();
+                msg = ex.Message;
+            }
+            finally
+            {
+                if (sqlCon.State == ConnectionState.Open)
+                {
+                    sqlCon.Close();
+                }
+            }
+            return Tuple.Create(rpta, msg, lst);
+        }
+
+        public Tuple<string, string> delTransportista(CMTransportista cmTransportista, string bandera, int transportista_id)
+        {
+            string rpta = "";
+            string msg = "";
+            SqlConnection sqlCon = new SqlConnection();
+            try
+            {
+                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                sqlCon.Open();
+                SqlCommand sqlCmd = new SqlCommand();
+                sqlCmd.Connection = sqlCon;
+                sqlCmd.CommandText = "Transportista_delete"; // Nombre del procedimiento almacenado para eliminación
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.Parameters.AddWithValue("@transportista_id", transportista_id); // Aceptar int
+
+                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                if (sdr.Read())
+                {
+                    rpta = sdr["Rpta"].ToString();
+                    msg = sdr["Msg"].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                msg = ex.Message;
+                cmTransportista = new CMTransportista();
+            }
+            finally
+            {
+                if (sqlCon.State == ConnectionState.Open)
+                {
+                    sqlCon.Close();
+                }
+            }
+            return Tuple.Create(rpta, msg);
+        }
     }
 
     
