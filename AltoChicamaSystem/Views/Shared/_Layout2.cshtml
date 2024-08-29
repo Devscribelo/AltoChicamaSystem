@@ -78,6 +78,13 @@
                             <span class="text nav-text">Subir Archivos</span>
                         </a>
                     </li>
+
+                    <li class="nav-link @(currentController == "Transportista" && currentAction == "Index" ? "mode" : "")">
+                        <a asp-controller="Transportista" asp-action="Index">
+                            <i class='bx bx-car icon'></i>
+                            <span class="text nav-text">Transportista</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
 

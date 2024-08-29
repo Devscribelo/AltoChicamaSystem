@@ -11,7 +11,7 @@ namespace AltoChicamaSystem.Controllers
     {
         public ActionResult Index()
         {
-            return View("");
+            return View("~/Views/Transportista/Index.cshtml");
         }
 
         private readonly TransportistaCN objusuarioCN = new TransportistaCN();
@@ -48,7 +48,7 @@ namespace AltoChicamaSystem.Controllers
         [HttpGet]
         public ActionResult ListaTransportista()
         {
-            var result = Tuple.Create("1", "Error al listar Empresa", new List<TransportistaResult>());
+            var result = Tuple.Create("1", "Error al listar Empresa", new List<CMTransportista>());
             try
             {
                 string bandera = conf.GetValue<string>("bandera");

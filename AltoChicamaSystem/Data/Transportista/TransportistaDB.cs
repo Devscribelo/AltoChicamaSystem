@@ -27,7 +27,6 @@ namespace AltoChicamaSystem.Data.Transportista
                 };
                 sqlCmd.Parameters.AddWithValue("@transportista_ruc", cmTransportista.transportista_ruc.Trim());
                 sqlCmd.Parameters.AddWithValue("@transportista_nombre", cmTransportista.transportista_nombre.Trim());
-                sqlCmd.Parameters.AddWithValue("@empresa_id", cmTransportista.empresa_id);
 
                 SqlDataReader sdr = sqlCmd.ExecuteReader();
                 if (sdr.Read())
@@ -49,9 +48,9 @@ namespace AltoChicamaSystem.Data.Transportista
             }
             return Tuple.Create(rpta, msg);
         }
-        public Tuple<string, string, List<TransportistaResult>> listaTransportista(string bandera)
+        public Tuple<string, string, List<CMTransportista>> listaTransportista(string bandera)
         {
-            List<TransportistaResult> lst = new List<TransportistaResult>();
+            List<CMTransportista> lst = new List<CMTransportista>();
             SqlConnection sqlCon = new SqlConnection();
             string rpta = "";
             string msg = "";
@@ -76,12 +75,11 @@ namespace AltoChicamaSystem.Data.Transportista
                     {
                         while (sdr.Read())
                         {
-                            TransportistaResult transportista = new TransportistaResult
+                            CMTransportista transportista = new CMTransportista
                             {
                                 transportista_id = Convert.ToInt32(sdr["transportista_id"]),
                                 transportista_ruc = sdr["transportista_ruc"].ToString().Trim(),
-                                transportista_nombre = sdr["transportista_nombre"].ToString().Trim(),
-                                empresa_name = sdr["empresa_name"].ToString().Trim(),
+                                transportista_nombre = sdr["transportista_nombre"].ToString().Trim()
                             };
                             lst.Add(transportista);
                         }
@@ -90,7 +88,7 @@ namespace AltoChicamaSystem.Data.Transportista
             }
             catch (Exception ex)
             {
-                lst = new List<TransportistaResult>();
+                lst = new List<CMTransportista>();
                 rpta = ex.Message;
             }
             finally

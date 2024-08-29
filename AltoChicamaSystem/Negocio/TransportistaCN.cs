@@ -13,7 +13,7 @@ namespace AltoChicamaSystem.Negocio
             return result;
         }
 
-        public Tuple<string, string, List<TransportistaResult>> listaTransportista(string bandera)
+        public Tuple<string, string, List<CMTransportista>> listaTransportista(string bandera)
         {
             var result = objDato.listaTransportista(bandera);
             return result;
