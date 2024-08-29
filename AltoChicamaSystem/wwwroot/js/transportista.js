@@ -109,6 +109,75 @@ function getListTransportista() {
     });
 
 }
+
+function vaciarFormEmpresa() {
+    $('#modal_nuevo_transportista input[type="text"]').val('');
+    $('#modal_nuevo_transportista input[type="checkbox"]').prop('checked', false);
+    $('#modal_nuevo_transportista textarea').val('');
+    $('#modal_nuevo_transportista select').val('');
+    $('#modal_nuevo_transportista input[type="email"]').val(''); // Limpia el campo de correo electrónico
+}
+
+function modalNuevoTransportista() {
+    vaciarFormEmpresa();
+    $("#modal_nuevo_transportista").modal("show").css('display', 'flex');
+
+    $("form").off("submit").one("submit", function (event) {
+        event.preventDefault();
+        guardarNewTransportista();
+    });
+}
+
+function guardarNewTransportista() {
+
+    var dataPost = {
+        transportista_nombre: $("#input_transportista_nombre").val(),
+        transportista_ruc: $("#input_transportista_ruc").val()
+    };
+
+    dataPost = trimJSONFields(dataPost);
+
+    var endpoint = getDomain() + "/Transportista/RegTransportista";
+
+    $.ajax({
+        type: "POST",
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify(dataPost),
+        dataType: "json",
+        beforeSend: function (xhr) {
+            console.log("Guardando...");
+            $("#btnGuardarNewEmpresa").attr("disabled", true);
+        },
+        success: function (data) {
+            var rpta = data.item1;
+            var msg = data.item2;
+            if (rpta == "0") {
+                // Actualizar la tabla sin recargar la página
+                getListTransportista();
+                $("#modal_nuevo_transportista").modal("hide");
+            } else {
+                // Mostrar mensaje de error
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: msg,
+                });
+            }
+            $("#btnGuardarEditTransportista").prop("disabled", false);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
+                alert("Ocurrió un fallo: " + jqXHR.responseJSON.message);
+            } else {
+                alert("Ocurrió un fallo: " + errorThrown);
+            }
+        }
+    });
+}
+
 function eliminarDocumento(documento_id) {
     var endpoint = getDomain() + "/Repositorio/EliminarDocumento";
 

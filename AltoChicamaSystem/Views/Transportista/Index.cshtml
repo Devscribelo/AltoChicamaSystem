@@ -21,6 +21,22 @@
                 <div class="submit-btn">TRANSPORTISTAS</div>
             </div>
             <div class="container">
+                <div class="row" style="margin-top: 25px !important">
+                    <!-- Columna izquierda: Botones Agregar y Refresh -->
+                    <div class="col-lg-6 col-md-6 col-sm-12 d-flex align-items-center justify-content-start justify-content-xs-center">
+                        <button id="btnAgregar" class="button me-2" onClick="modalNuevoTransportista()">
+                            ㅤ AGREGAR
+                        </button>
+                        <button id="btnActualizar" class="button" onClick="window.location.reload(true)">
+                            ㅤ REFRESH
+                        </button>
+                    </div>
+
+                    <!-- Columna derecha: Contenedor de botones -->
+                    <div class="col-lg-6 col-md-6 col-sm-12 d-flex align-items-center justify-content-end" id="contenedorBotones">
+                        <!-- Aquí se agregarán más botones si es necesario -->
+                    </div>
+                </div>
             </div>
 
             <div style="padding-bottom: 9px;">
@@ -50,4 +66,39 @@
     <script src="~/js/js_jquery.dataTables.min.js"></script>
     <script src="~/config.js"></script>
     <script src="~/js/transportista.js"></script>
+
+    <!-- Modal Nueva Transportista -->
+    <div class="modal" id="modal_nuevo_transportista" tabindex="-1">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Empresa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <form>
+                                <!-- Transportista nombre -->
+                                <div class="input-group input-group-sm mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">Nombre</span>
+                                    <input type="text" class="form-control" id="input_transportista_nombre" required autocomplete="off" placeholder="Ingrese el nombre" maxlength="100">
+                                </div>
+
+                                <!-- Transportista ruc -->
+                                <div class="input-group input-group-sm mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">RUC</span>
+                                    <input type="number" class="form-control" id="input_transportista_ruc" required autocomplete="off" placeholder="Ingrese el RUC" maxlength="100">
+                                </div>
+
+                                <button id="btnGuardarTransportista" class="btnGuardar" type="submit">Guardar Transportista</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </section>
