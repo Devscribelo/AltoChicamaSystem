@@ -18,5 +18,11 @@ namespace AltoChicamaSystem.Negocio
             var result = objDato.listaTransportista(bandera);
             return result;
         }
+
+        public Tuple<string, string, List<CMTransportista>> TransportistaSelect(string bandera)
+        {
+            var result = objDato.TransportistaSelect(bandera);
+            return result;
+        }
     }
 }

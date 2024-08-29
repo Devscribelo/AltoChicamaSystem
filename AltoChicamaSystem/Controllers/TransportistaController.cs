@@ -68,5 +68,28 @@ namespace AltoChicamaSystem.Controllers
                 return BadRequest(result);
             }
         }
+
+        [HttpGet]
+        public ActionResult TransportistaSelect()
+        {
+            var result = Tuple.Create("1", "Error al listar Empresa", new List<CMTransportista>());
+            try
+            {
+                string bandera = conf.GetValue<string>("bandera");
+                result = objusuarioCN.TransportistaSelect(bandera);
+                if (result.Item1 == "0")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch
+            {
+                return BadRequest(result);
+            }
+        }
     }
 }

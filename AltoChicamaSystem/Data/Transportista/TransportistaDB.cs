@@ -100,7 +100,57 @@ namespace AltoChicamaSystem.Data.Transportista
             }
             return Tuple.Create(rpta, msg, lst);
         }
+        public Tuple<string, string, List<CMTransportista>> TransportistaSelect(string bandera)
+        {
+            List<CMTransportista> lst = new List<CMTransportista>();
+            CMTransportista transportistaselect = new CMTransportista();
+            SqlConnection sqlCon = new SqlConnection();
+            string rpta = "";
+            string msg = "";
+            int count = 0;
+            try
+            {
+                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                sqlCon.Open();
+                SqlCommand sqlCmd = new SqlCommand();
+                sqlCmd.Connection = sqlCon;
+                sqlCmd.CommandText = "Transportista_List_Select";
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                SqlDataReader sdr = sqlCmd.ExecuteReader();
 
+                while (sdr.Read())
+                {
+                    count++;
+                    if (count == 1)
+                    {
+                        rpta = sdr["Rpta"].ToString();
+                        msg = sdr["Msg"].ToString();
+                        sdr.NextResult();
+                    }
+                    if (rpta == "0" && count >= 2)
+                    {
+                        transportistaselect = new CMTransportista();
+                        transportistaselect.transportista_id = Convert.ToInt32(sdr["transportista_id"]);
+                        transportistaselect.transportista_nombre = sdr["transportista_nombre"].ToString().Trim();
+                        lst.Add(transportistaselect);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                lst = new List<CMTransportista>();
+                msg = ex.Message;
+            }
+            finally
+            {
+                if (sqlCon.State == ConnectionState.Open)
+                {
+                    sqlCon.Close();
+                }
+            }
+            return Tuple.Create(rpta, msg, lst);
+        }
     }
 
     
