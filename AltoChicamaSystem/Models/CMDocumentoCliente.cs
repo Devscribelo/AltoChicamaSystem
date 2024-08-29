@@ -9,12 +9,11 @@
         public string documento_status { get; set; }
     }
 
-    public class DocumentoResultCliente
+    public class CMDocumentoResultCliente
     {
         public int documento_id { get; set; }
         public string documento_titulo { get; set; }
         public string empresa_name { get; set; } // Propiedad para almacenar el nombre de la empresa
-        public string documento_status { get; set; }
     }
 
 }

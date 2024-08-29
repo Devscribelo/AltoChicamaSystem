@@ -58,6 +58,15 @@
         <div class="menu-bar">
             <div class="menu">
                 <ul class="menu-links">
+
+                    <li class="nav-link @(currentController == "RepositorioCliente" && currentAction == "Index" ? "mode" : "")">
+                        <a asp-controller="RepositorioCliente" asp-action="Index">
+                            <i class='bx bx-folder-open icon'></i>
+                            <span class="text nav-text">RepositorioCliente</span>
+                        </a>
+                    </li>
+
+
                     <li class="nav-link @(currentController == "Repositorio" && currentAction == "Index" ? "mode" : "")">
                         <a asp-controller="Repositorio" asp-action="Index">
                             <i class='bx bx-folder-open icon'></i>

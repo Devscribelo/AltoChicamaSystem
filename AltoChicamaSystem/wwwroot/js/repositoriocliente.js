@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    getListDocumento();
+    getListDocumentoCliente(1032);
 });
 
 function copiarTexto(texto) {
@@ -21,29 +21,29 @@ function copiarTexto(texto) {
         confirmButtonText: 'OK',
     });
 }
-function getListDocumento() {
-    const apiUrl = `/api/Documento/ObtenerDocumento/`;
-    const x = getDomain() + apiUrl;
-    endpoint = getDomain() + "/Repositorio/ListaDocumento"
+
+function getListDocumentoCliente(empresa_id) {
 
     return new Promise((resolve, reject) => {
+        const apiUrl = `/api/Documento/ObtenerDocumento/`;
+        const x = getDomain() + apiUrl;
+        const endpoint = getDomain() + "/RepositorioCliente/listarDocumentoFiltrado";
 
         $.ajax({
-            type: "GET",
+            type: "POST",
             async: true,
             url: endpoint,
             headers: {
                 "Content-Type": "application/json"
             },
-
+            data: JSON.stringify(empresa_id), // Serializa los datos a JSON
             dataType: "json",
             beforeSend: function (xhr) {
-                //xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
                 console.log("cargando");
             },
-
             success: function (data) {
-                var dataEmpresa = data.item3;
+                var dataEmpresa = data.item3; // Obtén los datos de la respuesta
+                console.log(dataEmpresa);
                 var datosRow = "";
 
                 resolve(dataEmpresa);
@@ -51,11 +51,9 @@ function getListDocumento() {
                 for (var i = 0; i < dataEmpresa.length; i++) {
                     datosRow +=
                         "<tr class='filaTabla' " +
-                        "data-empresa_id='" + dataEmpresa[i].documento_id + "' " +
-                        "data-empresa_name='" + dataEmpresa[i].documento_titulo + "' " +
-                        "data-empresa_ruc='" + dataEmpresa[i].empresa_name + "' " +
-                        "data-documento_status='" + dataEmpresa[i].documento_status + "'" +
-                        "data-documento_id='" + dataEmpresa[i].documento_id + "'>" +
+                        "data-documento_id='" + dataEmpresa[i].documento_id + "' " +
+                        "data-documento_titulo='" + dataEmpresa[i].documento_titulo + "' " +
+                        "data-empresa_name='" + dataEmpresa[i].empresa_name + "' >" +
                         "<td>" + dataEmpresa[i].documento_id + "</td>" +
                         "<td>" + dataEmpresa[i].documento_titulo + "</td>" +
                         "<td>" + dataEmpresa[i].empresa_name + "</td>" +
@@ -64,56 +62,63 @@ function getListDocumento() {
                         "<span class='icon-circle pdf-icon'><i class=\"bx bxs-file-pdf\"></i></span>" +
                         "</a>" +
                         "</td>" +
+                        "<td>" +
+                        "<div>" +
+                        "<a href='#' onclick='eliminarDocumento(" + dataEmpresa[i].documento_id + ")'>" +
+                        "<span class='icon-circle red'><i class=\"bx bxs-trash\"></i></span>" +
+                        "</a>" +
+                        "<a href='" + apiUrl + dataEmpresa[i].documento_id + "'>" +
+                        "<span class='icon-circle green'><i class=\"bx bxs-download\"></i></span>" +
+                        "</a>" +
+                        "<a href='#' onclick=\"copiarTexto('" + endpoint + dataEmpresa[i].documento_id + "')\">" +
+                        "<span class='icon-circle black'><i class=\"bx bxs-share-alt\"></i></span>" +
+                        "</div>" +
+                        "</td>" +
                         "</tr>";
                 }
 
-
-
-
-                if (!$("#table_empresa").hasClass("dataTable")) {
-                    // Inicializar DataTable en la tabla
-                    tableEmpresa = $("#table_empresa").DataTable({
+                if (!$("#tableEmpresa").hasClass("dataTable")) {
+                    tableEmpresa = $("#tableEmpresa").DataTable({
                         language: {
-                            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json' // URL de la biblioteca de idioma
+                            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
                         },
-                        dom: 'frtip',
+                        dom: 'frtip',   
                         buttons: [
                             {
                                 extend: 'excel',
                                 className: 'btn_export_Excel',
                                 exportOptions: {
-                                    columns: ':visible:not(:last-child, :nth-last-child(1))' // Oculta la penúltima y la última columna en la exportación a Excel
+                                    columns: ':visible:not(:last-child, :nth-last-child(1))'
                                 }
                             },
                             {
                                 extend: 'pdf',
                                 className: 'btn_export_Pdf',
                                 exportOptions: {
-                                    columns: ':visible:not(:last-child, :nth-last-child(1))' // Oculta la penúltima y la última columna en la exportación a PDF
+                                    columns: ':visible:not(:last-child, :nth-last-child(1))'
                                 }
                             }
                         ],
                         colResize: {
                             tableWidthFixed: 'false'
                         },
-                        colReorder: true // Activa la funcionalidad de reordenamiento de columnas
+                        colReorder: true
                     });
                 }
 
                 tableEmpresa.clear();
                 tableEmpresa.rows.add($(datosRow)).draw();
             },
-            failure: function (data) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 Swal.close();
-                alert('Error fatal ' + data);
-                console.log("failure")
+                alert('Error fatal: ' + textStatus + ' - ' + errorThrown);
+                console.log("failure: " + textStatus + " - " + errorThrown);
             }
         });
-
-
     });
-
 }
+
+
 
 function alterDocumentoStatus(documento_id) {
     var dataPost = {

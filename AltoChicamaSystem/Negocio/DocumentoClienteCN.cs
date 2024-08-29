@@ -10,10 +10,13 @@ namespace AltoChicamaSystem.Negocio
         {
             return objDato.ObtenerDocumentoPorId(documentoId, bandera);
         }
-        public Tuple<string, string, List<DocumentoResult>> listarDocumentoFiltrado(string bandera)
+
+        public Tuple<string, string, List<CMDocumentoResultCliente>> listarDocumentoFiltrado(int empresa_id, string bandera)
         {
-            var result = objDato.listarDocumentoFiltrado(bandera);
+            var result = objDato.listarDocumentoFiltrado(empresa_id, bandera);
             return result;
         }
+
     }
 }
+

@@ -50,14 +50,15 @@ namespace AltoChicamaSystem.Data.Documento
             return documento;
         }
 
-        public Tuple<string, string, List<DocumentoResult>> listarDocumentoFiltrado(string bandera)
+        public Tuple<string, string, List<CMDocumentoResultCliente>> listarDocumentoFiltrado(int empresa_id, string bandera)
         {
-            List<DocumentoResult> lst = new List<DocumentoResult>();
-            DocumentoResult documento = new DocumentoResult();
+            List<CMDocumentoResultCliente> lst = new List<CMDocumentoResultCliente>();
+            CMDocumentoResultCliente documento = new CMDocumentoResultCliente();
             SqlConnection sqlCon = new SqlConnection();
             string rpta = "";
             string msg = "";
             int count = 0;
+
             try
             {
                 sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
@@ -66,6 +67,7 @@ namespace AltoChicamaSystem.Data.Documento
                 sqlCmd.Connection = sqlCon;
                 sqlCmd.CommandText = "Documento_List_Empresa_Filtro";
                 sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.Parameters.AddWithValue("@empresa_id", Convert.ToInt32(empresa_id));
                 SqlDataReader sdr = sqlCmd.ExecuteReader();
 
                 while (sdr.Read())
@@ -79,7 +81,7 @@ namespace AltoChicamaSystem.Data.Documento
                     }
                     if (rpta == "0" && count >= 2)
                     {
-                        documento = new DocumentoResult();
+                        documento = new CMDocumentoResultCliente();
                         documento.documento_id = Convert.ToInt32(sdr["documento_id"]);
                         documento.documento_titulo = sdr["documento_titulo"].ToString().Trim();
                         documento.empresa_name = sdr["empresa_name"].ToString().Trim();
@@ -90,7 +92,7 @@ namespace AltoChicamaSystem.Data.Documento
             }
             catch (Exception ex)
             {
-                lst = new List<DocumentoResult>();
+                lst = new List<CMDocumentoResultCliente>();
                 msg = ex.Message;
             }
             finally
@@ -102,5 +104,8 @@ namespace AltoChicamaSystem.Data.Documento
             }
             return Tuple.Create(rpta, msg, lst);
         }
+
+            
+
     }
 }

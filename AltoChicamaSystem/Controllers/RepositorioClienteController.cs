@@ -9,28 +9,28 @@ namespace AltoChicamaSystem.Controllers
     [Authorize]
     public class RepositorioClienteController : Controller
     {
+        public ActionResult Index()
+        {
+            return View("~/Views/RepositorioCliente/Index.cshtml");
+        }
+
         private readonly DocumentoClienteCN objusuarioCN = new DocumentoClienteCN();
         private readonly IConfiguration conf;
         public RepositorioClienteController(IConfiguration config)
         {
             conf = config;
         }
-        // GET: RepositorioController
-        public ActionResult Index()
-        {
-            return View();
-        }
 
-        [HttpGet]
-        public ActionResult listarDocumentoFiltrado()
+        [HttpPost]
+        public ActionResult listarDocumentoFiltrado([FromBody] int empresa_id)
         {
-            var result = Tuple.Create("1", "Error al listar Empresa", new List<DocumentoResult>());
+            var result = Tuple.Create("1", "Error al listar", new List<CMDocumentoResultCliente>());
+
             try
             {
-                string bandera = conf.GetValue<string>("bandera");
-                result = objusuarioCN.listarDocumentoFiltrado(bandera);
-
-                if (result.Item1 == "0")
+                string bandera = conf.GetValue<string>("Bandera");
+                result = objusuarioCN.listarDocumentoFiltrado(empresa_id, bandera);
+                if (result.Item1 == "0")  // Verifica si la operación fue exitosa
                 {
                     return Ok(result);
                 }
@@ -44,5 +44,6 @@ namespace AltoChicamaSystem.Controllers
                 return BadRequest(result);
             }
         }
+
     }
 }
