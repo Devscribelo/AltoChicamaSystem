@@ -56,13 +56,22 @@ function getListTransportista() {
                         "<td>" + dataEmpresa[i].transportista_ruc + "</td>" +
                         "<td>" + dataEmpresa[i].transportista_nombre + "</td>" +
                         "<td id='acciones'>" +
-                        "<i class='bx bx-edit editar-button icon-circle' id='editar_empresa" + i + "'></i>" +
-                        "<i style='margin-left: 9px;' class='bx bx-trash eliminar-button icon-circle red' id='eliminar_empresa" + i + "'></i>" +
+                        "<i class='bx bx-edit editar-button icon-circle' id='editar_transportista" + i + "'></i>" +
+                        "<i style='margin-left: 9px;' class='bx bx-trash eliminar-button icon-circle red' id='eliminar_transportista" + i + "'></i>" +
                         "</td>" +
                         "</tr>";
                 }
 
+                $(document).on('click', '.editar-button', function () {
+                    var rowData = $(this).closest('tr').data();
+                    modalEditarTransportista(rowData);
+                });
 
+                $(document).on('click', '.eliminar-button', function () {
+                    // Obtener los datos de la fila que se va a eliminar
+                    var rowData = $(this).closest('tr').data();
+                    modalConfirmacionEliminarTransportista(rowData.transportista_id);
+                });
 
 
                 if (!$("#table_empresa").hasClass("dataTable")) {
@@ -178,8 +187,154 @@ function guardarNewTransportista() {
     });
 }
 
-function eliminarDocumento(documento_id) {
-    var endpoint = getDomain() + "/Repositorio/EliminarDocumento";
+function modalEditarTransportista(rowData) {
+
+    // Obtenemos el código de la empresa seleccionada desde los datos de la fila
+    var transportista_id = rowData.transportista_id;
+    var transportista_nombre = rowData.transportista_nombre;
+
+    // Seteamos el título del modal con el código de la empresa
+    $("#modal_editar_transportista .modal-title").html("Editando Transportista: <span style='color: #198754'><strong>" + transportista_nombre + "</strong></span>");
+
+    $("form").off("submit").one("submit", function (event) {
+        event.preventDefault(); // Evita (recargar la página)
+        guardarEditTransportista(transportista_id);
+    });
+
+    // Seteamos los valores de los inputs con la información de la fila seleccionada
+    $("#edit_transportista_nombre").val(rowData.transportista_nombre);
+    $("#edit_transportista_ruc").val(rowData.transportista_ruc);
+
+    // Mostramos el modal
+    $("#modal_editar_transportista").modal("show");
+}
+function guardarEditTransportista(transportista_id) {
+
+    var dataPost = {
+        transportista_id: transportista_id.toString(),
+        transportista_nombre: $("#edit_transportista_nombre").val(),
+        transportista_ruc: $("#edit_transportista_ruc").val()
+    };
+
+    dataPost = trimJSONFields(dataPost);
+
+    var endpoint = getDomain() + "/Transportista/modTransportista";
+
+    $.ajax({
+        type: "POST",
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify(dataPost),
+        dataType: "json",
+        beforeSend: function (xhr) {
+            console.log("Guardando...");
+            $("#btnGuardarEditTransportista").attr("disabled", true);
+        },
+        success: function (data) {
+            var rpta = data.item1;
+            var msg = data.item2;
+            if (rpta == "0") {
+                getListTransportista();
+                $("#modal_editar_transportista").modal("hide");
+            } else {
+                // Mostrar mensaje de error
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: msg,
+                });
+            }
+            $("#btnGuardarEditTransportista").prop("disabled", false);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
+                alert("Ocurrió un fallo: " + jqXHR.responseJSON.message);
+            } else {
+                alert("Ocurrió un fallo: " + errorThrown);
+            }
+        }
+    });
+}
+function modalConfirmacionEliminarTransportista(data) {
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+    })
+
+    swalWithBootstrapButtons.fire({
+        title: 'Estas segur@? ',
+        text: "Recuerda que no podrás revertir los cambios!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, elimina!',
+        cancelButtonText: 'No, cancela!',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            eliminarTransportista(data),
+                swalWithBootstrapButtons.fire(
+                    'Eliminado!',
+                    'El transportista fue eliminado.',
+                    'success'
+                )
+        } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            swalWithBootstrapButtons.fire(
+                'Cancelado',
+                'El transportista y sus documentos siguen almacenados',
+                'error'
+            )
+        }
+    })
+}
+function eliminarTransportista(data) {
+    var transportista_id = data.toString();
+
+    var dataPost = {
+        transportista_id: transportista_id,
+    };
+
+    var endpoint = getDomain() + "/Transportista/DelTransportista";
+    $.ajax({
+        type: "POST", // Cambia el método HTTP según tu configuración
+        url: endpoint, // Cambia la URL a la que enviar la solicitud
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify(dataPost),
+        dataType: "json",
+        success: function (data) {
+            // Llama al actuador para eliminar la fila si la eliminación fue exitosa
+            var rpta = data.item1; // Cambio aquí
+            var msg = data.item2; // Cambio aquí
+            if (rpta == "0") {
+                getListTransportista();
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: msg,
+                })
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
+                alert("Ocurrió un fallo: " + jqXHR.responseJSON.message);
+            } else {
+                alert("Ocurrió un fallo: " + errorThrown);
+            }
+        }
+    });
+}
+function eliminarTransportista2(transportista_id) {
+    var endpoint = getDomain() + "/Transportista/DelTransportista";
 
     Swal.fire({
         title: '¿Estás seguro?',
@@ -194,7 +349,7 @@ function eliminarDocumento(documento_id) {
             $.ajax({
                 type: "POST",
                 url: endpoint,
-                data: JSON.stringify({ documento_id: documento_id }),  // Asegúrate de que el nombre del parámetro sea correcto
+                data: JSON.stringify({ transportista_id: transportista_id }),  // Asegúrate de que el nombre del parámetro sea correcto
                 contentType: "application/json",
                 success: function (response) {
                     if (response.item1 === "0") {
@@ -203,13 +358,13 @@ function eliminarDocumento(documento_id) {
                             response.item2,
                             'success'
                         );
-                        getListDocumento(); // Recarga la lista de documentos
+                        getListTransportista(); // Recarga la lista de documentos
                     } else {
                         Swal.fire('Error!', response.item2, 'error');
                     }
                 },
                 error: function (xhr, status, error) {
-                    Swal.fire('Error!', 'Hubo un problema al eliminar el documento.', 'error');
+                    Swal.fire('Error!', 'Hubo un problema al eliminar el transportista.', 'error');
                 }
             });
         }

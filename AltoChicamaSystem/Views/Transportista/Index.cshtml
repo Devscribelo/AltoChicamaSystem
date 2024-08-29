@@ -72,7 +72,7 @@
         <div class="modal-dialog modal-md modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Empresa</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Agregar Transportista</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -93,6 +93,43 @@
                                 </div>
 
                                 <button id="btnGuardarTransportista" class="btnGuardar" type="submit">Guardar Transportista</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Transportista -->
+    <div class="modal" id="modal_editar_transportista" tabindex="-1">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Editar Transportista</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <form>
+
+                                <!-- empresa_nombre -->
+                                <div class="input-group input-group-sm mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">Nombre</span>
+                                    <input type="text" class="form-control" id="edit_transportista_nombre" required autocomplete="off">
+                                </div>
+
+                                <!-- empresa ruc -->
+                                <div class="input-group input-group-sm mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">RUC</span>
+                                    <input type="text" class="form-control" id="edit_transportista_ruc" required autocomplete="off"
+                                           pattern="\d{11}" maxlength="11" inputmode="numeric">
+                                </div>
+
+                                <button id="btnGuardarEditTransportista" class="btnGuardar" type="submit">Actualizar</button>
+
                             </form>
                         </div>
                     </div>

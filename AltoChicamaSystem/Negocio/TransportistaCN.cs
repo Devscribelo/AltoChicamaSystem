@@ -12,7 +12,11 @@ namespace AltoChicamaSystem.Negocio
             var result = objDato.regTransportista(cmTransportista, bandera);
             return result;
         }
-
+        public Tuple<string, string> modTransportista(CMTransportista cmTransportista, string bandera)
+        {
+            var result = objDato.modTransportista(cmTransportista, bandera);
+            return result;
+        }
         public Tuple<string, string, List<CMTransportista>> listaTransportista(string bandera)
         {
             var result = objDato.listaTransportista(bandera);
@@ -22,6 +26,12 @@ namespace AltoChicamaSystem.Negocio
         public Tuple<string, string, List<CMTransportista>> TransportistaSelect(string bandera)
         {
             var result = objDato.TransportistaSelect(bandera);
+            return result;
+        }
+
+        public Tuple<string, string> delTransportista(CMTransportista cmTransportista, string bandera, int transportista_id)
+        {
+            var result = objDato.delTransportista(cmTransportista, bandera, transportista_id);
             return result;
         }
     }
