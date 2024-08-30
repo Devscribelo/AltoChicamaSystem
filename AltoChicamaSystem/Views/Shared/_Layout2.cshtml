@@ -1,93 +1,78 @@
-﻿@{
+﻿@using System.Security.Claims;
+@{
     var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
     var currentAction = ViewContext.RouteData.Values["Action"]?.ToString();
+    string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    bool isAdmin = User.IsInRole("Admin");
+    bool isUser = User.IsInRole("User");
 }
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <!-- Estilos y Scripts comunes -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/alert.css">
-
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap" rel="stylesheet">
-
-    <!-- Boxicons CSS -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-
-    <!-- DataTables CSS Local -->
     <link rel="stylesheet" href="~/lib/DataTables/Table/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="~/lib/DataTables/Buttons/buttons.dataTables.min.css">
-    <link rel="stylesheet" href="~/lib/DataTables/ColResize/jquery.dataTables.colResize.css">
-    <link rel="stylesheet" href="~/lib/DataTables/Fixed/fixedColumns.dataTables.min.css">
     <link rel="stylesheet" href="~/lib/Buttons-2.3.6/css/buttons.bootstrap4.min.css">
-
-    <!-- SweetAlert2 CSS -->
     <link href="~/css/cdn.jsdelivr.net_npm_sweetalert2@11.7.12_dist_sweetalert2.min.css" rel="stylesheet">
-
-    <!-- Estilos Locales -->
     <link rel="stylesheet" href="~/css/_Layout2.css">
-
     <title>@ViewData["Title"]</title>
 </head>
 <body>
+
     <nav class="sidebar close">
         <header>
             <div class="image-text">
                 <span class="image">
                     <img style="margin-right: 5px;" src="~/img/logo.png" alt="">
                 </span>
-
                 <div class="text logo-text">
                     <span class="name">Alto Chicama</span>
                     <span class="profession">Servicios Ambientales</span>
                 </div>
             </div>
-
             <i class='bx bx-chevron-right toggle'></i>
         </header>
 
         <div class="menu-bar">
             <div class="menu">
                 <ul class="menu-links">
-
-                    <li class="nav-link @(currentController == "RepositorioCliente" && currentAction == "Index" ? "mode" : "")">
-                        <a asp-controller="RepositorioCliente" asp-action="Index">
-                            <i class='bx bx-folder-open icon'></i>
-                            <span class="text nav-text">RepositorioCliente</span>
-                        </a>
-                    </li>
-
-
-                    <li class="nav-link @(currentController == "Repositorio" && currentAction == "Index" ? "mode" : "")">
-                        <a asp-controller="Repositorio" asp-action="Index">
-                            <i class='bx bx-folder-open icon'></i>
-                            <span class="text nav-text">Repositorios</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-link @(currentController == "Empresa" && currentAction == "Index" ? "mode" : "")">
-                        <a asp-controller="Empresa" asp-action="Index">
-                            <i class='bx bx-user-plus icon'></i>
-                            <span class="text nav-text">Registrar</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-link @(currentController == "Upload" && currentAction == "Index" ? "mode" : "")">
-                        <a asp-controller="Upload" asp-action="Index">
-                            <i class='bx bx-upload icon'></i>
-                            <span class="text nav-text">Subir Archivos</span>
-                        </a>
-                    </li>
-
+                    @if (isAdmin)
+                    {
+                            <li class="nav-link @(currentController == "Repositorio" && currentAction == "Index" ? "mode" : "")">
+                                <a asp-controller="Repositorio" asp-action="Index">
+                                    <i class='bx bx-folder-open icon'></i>
+                                    <span class="text nav-text">Repositorios</span>
+                                </a>
+                            </li>
+                            <li class="nav-link @(currentController == "Empresa" && currentAction == "Index" ? "mode" : "")">
+                                <a asp-controller="Empresa" asp-action="Index">
+                                    <i class='bx bx-user-plus icon'></i>
+                                    <span class="text nav-text">Registrar</span>
+                                </a>
+                            </li>
+                            <li class="nav-link @(currentController == "Upload" && currentAction == "Index" ? "mode" : "")">
+                                <a asp-controller="Upload" asp-action="Index">
+                                    <i class='bx bx-upload icon'></i>
+                                    <span class="text nav-text">Subir Archivos</span>
+                                </a>
+                            </li>
+                    }
+                    @if (isUser)
+                    {
+                            <li class="nav-link @(currentController == "RepositorioCliente" && currentAction == "Index" ? "mode" : "")">
+                                <a asp-controller="RepositorioCliente" asp-action="Index">
+                                    <i class='bx bx-folder-open icon'></i>
+                                    <span class="text nav-text">RepositorioCliente</span>
+                                </a>
+                            </li>
+                    }
                     <li class="nav-link @(currentController == "Transportista" && currentAction == "Index" ? "mode" : "")">
                         <a asp-controller="Transportista" asp-action="Index">
                             <i class='bx bx-car icon'></i>
@@ -98,61 +83,40 @@
             </div>
 
             <div class="bottom-content">
-                <li class="">
+                <li>
                     <a asp-controller="Admin" asp-action="Logout">
                         <i class='bx bx-log-out icon'></i>
                         <span class="text nav-text">Cerrar Sesión</span>
                     </a>
                 </li>
-
                 <li class="mode">
                     <i class='bx bxs-user icon'></i>
-                    <span class="text nav-text">Administrador</span>
+                    <span class="text nav-text">@((isAdmin) ? "Administrador" : "Empresa")</span>
                 </li>
             </div>
         </div>
     </nav>
 
-    <!-- Scripts de la Página -->
+    <!-- Scripts y contenido comunes -->
     @await RenderSectionAsync("Scripts", required: false)
-
     @RenderBody()
 
-    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <!-- SELECT 2-->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-    <!-- Popper.js -->
     <script src="~/lib/popper/popper.min.js"></script>
-
-    <!-- Bootstrap JS -->
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- DataTables JS Local -->
     <script src="~/lib/DataTables/Table/jquery.dataTables.min.js"></script>
     <script src="~/lib/DataTables/Buttons/dataTables.buttons.min.js"></script>
-    <script src="~/lib/DataTables/ColResize/jquery.dataTables.colResize.js"></script>
-    <script src="~/lib/DataTables/Fixed/dataTables.fixedColumns.min.js"></script>
-
-    <!-- Export Table Buttons -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.24/build/pdfmake.min.js"></script>
-    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.24/build/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.html5.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/colreorder/1.5.3/js/dataTables.colReorder.min.js"></script>
-
-    <!-- SweetAlert2 JS -->
+    <script src="~/lib/Buttons-2.3.6/js/buttons.bootstrap4.min.js"></script>
     <script src="~/js/cdn.jsdelivr.net_npm_sweetalert2@11.7.12_dist_sweetalert2.all.min.js"></script>
-
-    <!-- Otros Scripts -->
     <script src="~/lib/chart/chart.js"></script>
-    <script src="~/lib/glightbox/js/glightbox.min.js"></script>
-    <script src="~/lib/pdfmake-0.2.7/pdfmake.min.js"></script>
-    <script src="~/lib/jsPDF/jspdf.min.js"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/js/_Layout2.js"></script>
 
+    @if (isUser)
+    {
+            <script type="text/javascript">
+                empresaID = '@userId';
+            </script>
+    }
 </body>
 </html>

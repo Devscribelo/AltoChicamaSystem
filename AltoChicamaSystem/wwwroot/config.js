@@ -1,5 +1,4 @@
-﻿const empresaID = window.userId;
-
+﻿
 function getDomain() {
     return "https://" + window.location.host;
 }

@@ -13,7 +13,7 @@
     z-index: 1000;
   }
   
-  /* Bot��n WhatsApp */
+  /* Botón WhatsApp */
   .whatsapp-btn {
     position: fixed;
     bottom: 20px;
@@ -313,7 +313,7 @@ a.btn.btn-primary.py-3.px-5:focus {
     }
   }
   
-  /* CSS para dispositivos m��viles (ancho de pantalla menor a 768px) */
+  /* CSS para dispositivos móviles (ancho de pantalla menor a 768px) */
   @media (max-width: 767px) {
     .desktop-only {
       display: none;
@@ -391,17 +391,17 @@ a.btn.btn-primary.py-3.px-5:focus {
 
 
 
-/* Ajusta el carrusel para que tenga un ��ndice z m��s bajo */
+/* Ajusta el carrusel para que tenga un índice z más bajo */
 .carousel {
   position: relative;
   z-index: 1;
 }
 
-/* Ajusta la secci��n de servicios */
+/* Ajusta la sección de servicios */
 .ftco-services {
   position: relative;
-  z-index: 10; /* Aseg��rate de que sea m��s alto que el carrusel */
-  margin-top: -225px; /* Ajusta este valor seg��n tus necesidades */
+  z-index: 10; /* Asegúrate de que sea más alto que el carrusel */
+  margin-top: -225px; /* Ajusta este valor según tus necesidades */
   display: flex;
   justify-content: center;
 }
@@ -426,7 +426,7 @@ a.btn.btn-primary.py-3.px-5:focus {
 }
 
 .service-2 .icon {
-  background: linear-gradient(45deg, #6fae6e, #207222); /* Degradado verde m��s oscuro */
+  background: linear-gradient(45deg, #6fae6e, #207222); /* Degradado verde más oscuro */
   color: #ffffff; /* Color del icono */
 }
 
@@ -464,11 +464,11 @@ a.btn.btn-primary.py-3.px-5:focus {
 
 .service-1 p,
 .service-2 p {
-  color: #ffffff; /* Color del texto del p��rrafo */
+  color: #ffffff; /* Color del texto del párrafo */
   text-align: center; /* Centrar texto */
 }
 
-/* Estilo del bot��n */
+/* Estilo del botón */
 .button {
   padding: 12px 25px;
   background: #fff;
@@ -514,7 +514,7 @@ a.btn.btn-primary.py-3.px-5:focus {
 
 .card {
   padding-top: 4%;
-  height: auto; /* Permite que la altura se ajuste autom��ticamente */
+  height: auto; /* Permite que la altura se ajuste automáticamente */
   background: #fff;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
@@ -534,7 +534,7 @@ a.btn.btn-primary.py-3.px-5:focus {
 
 .card img {
   width: 76%;
-  height: auto; /* Ajusta la altura autom��ticamente */
+  height: auto; /* Ajusta la altura automáticamente */
 }
 
 .card:hover {
@@ -608,30 +608,30 @@ a.btn.btn-primary.py-3.px-5:focus {
 }
 
 .overlay {
-  width: 31%; /* Ajusta el ancho de manera proporcional al tama�0�9o del contenedor */
-  height: 53%; /* Ajusta la altura de manera proporcional al tama�0�9o del contenedor */
+  width: 31%; /* Ajusta el ancho de manera proporcional al tamaño del contenedor */
+  height: 53%; /* Ajusta la altura de manera proporcional al tamaño del contenedor */
   position: absolute;
   border-radius: 50%;
   background: var(--bg-color);
-  top: 9%; /* Ajusta la posici��n desde el borde superior */
-  left: 35%; /* Ajusta la posici��n desde el borde izquierdo */
+  top: 9%; /* Ajusta la posición desde el borde superior */
+  left: 35%; /* Ajusta la posición desde el borde izquierdo */
   z-index: 0;
   transition: transform 0.3s ease-out;
 }
 
 #environmental-services {
   background-color: #207222; /* Color de fondo */
-  padding: 20px; /* Ajusta el padding seg��n sea necesario */
+  padding: 20px; /* Ajusta el padding según sea necesario */
 }
 
 #environmental-services .display-6 {
-  font-size: calc(1.875rem - 15px); /* Ajusta el tama�0�9o de la fuente */
+  font-size: calc(1.875rem - 15px); /* Ajusta el tamaño de la fuente */
 }
 
 .card1 {
   width: 80vw; /* Ajusta el ancho al 80% del ancho de la ventana */
-  max-width: 366px; /* Asegura que no sea m��s ancho de 366px */
-  height: auto; /* Permite que la altura se ajuste autom��ticamente */
+  max-width: 366px; /* Asegura que no sea más ancho de 366px */
+  height: auto; /* Permite que la altura se ajuste automáticamente */
   background: #fff;
   overflow: hidden;
   display: flex;
@@ -652,7 +652,7 @@ a.btn.btn-primary.py-3.px-5:focus {
   text-align: center;
 }
 
-/* Estilos para cuando el dise�0�9o es responsive */
+/* Estilos para cuando el diseño es responsive */
 @media (max-width: 768px) {
   /* Oculta el div con la clase especificada */
   .col-md-2.col-lg-4.d-flex.services.align-self-stretch.p-4.ftco-animate {
@@ -661,11 +661,11 @@ a.btn.btn-primary.py-3.px-5:focus {
 
   /* Ajustes adicionales para responsive */
   .ftco-services {
-    margin-top: -95px !important; /* Ajusta el margen superior para dispositivos m��viles */
+    margin-top: -95px !important; /* Ajusta el margen superior para dispositivos móviles */
   }
 
   .card, .card1 {
-    width: 100%; /* Ajusta el ancho al 90% del ancho de la ventana en dispositivos m��viles */
+    width: 100%; /* Ajusta el ancho al 90% del ancho de la ventana en dispositivos móviles */
   }
 }
 
@@ -836,7 +836,7 @@ a.btn.btn-primary.py-3.px-5:focus {
 }
 .close {
     position: absolute;
-    top: 5rem; /* Mover la 'x' m��s abajo */
+    top: 5rem; /* Mover la 'x' más abajo */
     right: 35px;
     color: #f1f1f1;
     font-size: 40px;

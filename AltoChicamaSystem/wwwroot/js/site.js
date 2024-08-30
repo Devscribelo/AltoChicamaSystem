@@ -74,14 +74,14 @@ function loginAdmin() {
             var rpta = data.item1;
             var msg = data.item2;
             if (rpta == "0") {
-                // Redirigir a una p�gina protegida
+                // Redirigir a una página protegida
                 window.location.href = getDomain() + "/Repositorio";
-                console.log("Inicio de sesi�n correcto");
+                console.log("Inicio de sesión correcto");
             }
             if (rpta == "1") {
-                // Redirigir a una p�gina protegida
-                window.location.href = getDomain() + "/Repositorio";
-                console.log("Inicio de sesi�n correcto");
+                // Redirigir a una página protegida
+                window.location.href = getDomain() + "/RepositorioCliente";
+                console.log("Inicio de sesión correcto");
             }
             else {
                 Swal.fire({

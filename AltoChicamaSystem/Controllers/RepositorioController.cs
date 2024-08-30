@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AltoChicamaSystem.Controllers
 {
-    [Authorize(Roles = "Admin,User")]
+    [Authorize(Roles = "Admin")]
     public class RepositorioController : Controller
     {
         private readonly DocumentoCN objusuarioCN = new DocumentoCN();

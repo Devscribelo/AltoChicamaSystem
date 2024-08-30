@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AltoChicamaSystem.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin, User")]
     public class RepositorioClienteController : Controller
     {
         public ActionResult Index()

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace AltoChicamaSystem.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class UsuarioController : Controller
     {
         private readonly UsuarioCN objusuarioCN = new UsuarioCN();
