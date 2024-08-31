@@ -104,5 +104,29 @@ namespace AltoChicamaSystem.Controllers
                 return BadRequest(result);
             }
         }
+
+        [HttpPost]
+        public ActionResult listarDocumentoEmpresa([FromBody] DocumentoResult request)
+        {
+            var result = Tuple.Create("1", "Error al listar", new List<DocumentoResult>());
+
+            try
+            {
+                string bandera = conf.GetValue<string>("Bandera");
+                result = objusuarioCN.listarDocumentoEmpresa(request.empresa_id, request.estado, bandera);
+                if (result.Item1 == "0")  // Verifica si la operación fue exitosa
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch
+            {
+                return BadRequest(result);
+            }
+        }
     }
 }

@@ -19,9 +19,32 @@
                 <br>
                 <div class="submit-btn">DOCUMENTOS</div>
             </div>
-            <div class="container">
-                
+
+            <div class="container mt-2">
+                <div class="row">
+                    <div class="col-md-8">
+                        <label class="input-group-text" for="input_empresa">Empresa</label>
+                        <select class="form-select" id="input_empresa">
+                            <!-- Opciones de empresa -->
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="input-group-text" for="input_estado">Estado</label>
+                        <select class="form-select" id="input_estado">
+                            <option value="" disabled selected>Seleccionar el estado</option>
+                            <option value="1">Activo</option>
+                            <option value="0">Inactivo</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-1">
+                        <button id="btnConsultar" class="btn btn-primary">Consultar</button>
+                    </div>
+
+                </div>
             </div>
+
 
             <div style="padding-bottom: 9px;">
                 <div class="row">
