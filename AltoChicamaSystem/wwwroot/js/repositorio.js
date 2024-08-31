@@ -1,11 +1,75 @@
 ﻿$(document).ready(function () {
+    EmpresaSelect("#input_empresa");
     getListDocumento();
     // Asignar el event listener fuera de la función getListEmpresa()
     $(document).on('change', '.status3', function () {
         var rowData = $(this).closest('tr').data();
         alterDocumentoStatus(rowData.documento_id);
-        });
+    });
+
+    // Manejar el evento de clic en el botón "Consultar"
+    $("#btnConsultar").click(function () {
+        capturarValoresSeleccionados();
+    });
 });
+
+
+function EmpresaSelect(empresaSelecionada) {
+    var endpoint = getDomain() + "/Empresa/EmpresaSelect";
+
+    $.ajax({
+        type: "GET",
+        async: true,
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        dataType: "json",
+        beforeSend: function (xhr) {
+            console.log("cargando");
+        },
+        success: function (data) {
+            var EmpresaSelect = data.item3;
+
+            // Limpiar el select y agregar opción por defecto
+            if (empresaSelecionada === "#input_empresa") {
+                $(empresaSelecionada).empty();
+                $(empresaSelecionada).append('<option value="" disabled selected>Seleccione una empresa...</option>');
+            }
+
+            // Verificar si la data es null, vacía, o contiene solo espacios en blanco
+            if (EmpresaSelect && EmpresaSelect.length > 0) {
+                // Agregar opciones al select
+                for (var i = 0; i < EmpresaSelect.length; i++) {
+                    var item = EmpresaSelect[i];
+                    $(empresaSelecionada).append(
+                        '<option value="' + item.empresa_id + '">' + item.empresa_name + '</option>'
+                    );
+                }
+            }
+
+        },
+        error: function (data) {
+            alert('Error fatal ' + data);
+            console.log("failure");
+        }
+    });
+}
+
+function obtenerIdEmpresaSeleccionada(empresaSelecionada) {
+    // Obtener el valor de la opción seleccionada en el select
+    var valorSeleccionado = $(empresaSelecionada).val();
+
+    // Mostrar el valor (empresa_id) en la consola
+    if (valorSeleccionado) {
+        console.log("El ID de la empresa seleccionada es: " + valorSeleccionado);
+    } else {
+        console.log("No hay ninguna empresa seleccionada.");
+    }
+
+    return valorSeleccionado;  // Retorna el valor (empresa_id) seleccionado
+}
+
 
 function copiarTexto(texto) {
     // Crear un elemento de texto temporal
@@ -140,6 +204,139 @@ function getListDocumento() {
 
 }
 
+
+function capturarValoresSeleccionados() {
+    // Capturar los valores seleccionados
+    var empresa_id = obtenerIdEmpresaSeleccionada("#input_empresa");
+    var estado = $("#input_estado").val();
+
+    // Validar que ambos valores estén seleccionados
+    if (empresa_id && estado !== null) {
+        console.log("ID de Empresa seleccionada: " + empresa_id);
+        console.log("Estado seleccionado: " + estado);
+
+        // Llamar a la función para enviar los datos
+        getListDocumentoEmpresa(empresa_id, estado);
+    } else {
+        alert("Por favor, seleccione una empresa y un estado.");
+    }
+}
+
+
+function getListDocumentoEmpresa(empresa_id, estado) {
+
+    const apiUrl = `/api/Documento/ObtenerDocumento/`;
+    //const x = getDomain() + apiUrl;
+    endpoint = getDomain() + "/Repositorio/listarDocumentoEmpresa";
+
+    return new Promise((resolve, reject) => {
+
+        $.ajax({
+            type: "POST",
+            async: true,
+            url: endpoint,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify({ empresa_id: empresa_id, estado: estado }), // Serializa ambos parámetros como un objeto
+            dataType: "json",
+            beforeSend: function (xhr) {
+                //xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
+                console.log("cargando");
+            },
+
+            success: function (data) {
+                var dataEmpresa = data.item3;
+                var datosRow = "";
+
+                resolve(dataEmpresa);
+
+                for (var i = 0; i < dataEmpresa.length; i++) {
+                    datosRow +=
+                        "<tr class='filaTabla' " +
+                        "data-empresa_id='" + dataEmpresa[i].documento_id + "' " +
+                        "data-empresa_name='" + dataEmpresa[i].documento_titulo + "' " +
+                        "data-empresa_ruc='" + dataEmpresa[i].empresa_name + "' " +
+                        "data-transportista_nombre='" + dataEmpresa[i].transportista_nombre + "' " +
+                        "data-documento_status='" + dataEmpresa[i].documento_status + "'" +
+                        "data-documento_id='" + dataEmpresa[i].documento_id + "'>" +
+                        "<td>" + dataEmpresa[i].documento_id + "</td>" +
+                        "<td>" + dataEmpresa[i].documento_titulo + "</td>" +
+                        "<td>" + dataEmpresa[i].empresa_name + "</td>" +
+                        "<td>" + dataEmpresa[i].transportista_nombre + "</td>" +
+                        "<td>" +
+                        "<div class='form-check form-switch'>" +
+                        `<input style='width: 46px; margin-top: 4px;' class='form-check-input status3' type='checkbox' id='flexSwitchCheckDefault${i}' ${dataEmpresa[i].documento_status === 'True' ? 'checked' : ''} data-empresa_status='${dataEmpresa[i].documento_id}'>` +
+                        "</div>" +
+                        "</td>" +
+                        "<td>" +
+                        "<a href='#' onclick='mostrarPDFEnModal(" + dataEmpresa[i].documento_id + ")'>" +
+                        "<span class='icon-circle pdf-icon'><i class=\"bx bxs-file-pdf\"></i></span>" +
+                        "</a>" +
+                        "</td>" +
+                        "<td>" +
+                        "<div>" +
+                        "<a href='#' onclick='eliminarDocumento(" + dataEmpresa[i].documento_id + ")'>" +
+                        "<span class='icon-circle red'><i class=\"bx bxs-trash\"></i></span>" +
+                        "</a>" +
+                        "<a href='" + apiUrl + dataEmpresa[i].documento_id + "'>" +
+                        "<span class='icon-circle green'><i class=\"bx bxs-download\"></i></span>" +
+                        "</a>" +
+                        "<a href='#' onclick=\"copiarTexto('" + getDomain() + abrirEnlaceEnVentana(dataEmpresa[i].documento_id) + "')\">" +
+                        "<span class='icon-circle black'><i class=\"bx bxs-share-alt\"></i></span>" +
+                        "</a>" +
+                        "</div>" +
+                        "</td>" +
+                        "</tr>";
+                }
+
+
+
+
+                if (!$("#table_empresa").hasClass("dataTable")) {
+                    // Inicializar DataTable en la tabla
+                    tableEmpresa = $("#table_empresa").DataTable({
+                        language: {
+                            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json' // URL de la biblioteca de idioma
+                        },
+                        dom: 'frtip',
+                        buttons: [
+                            {
+                                extend: 'excel',
+                                className: 'btn_export_Excel',
+                                exportOptions: {
+                                    columns: ':visible:not(:last-child, :nth-last-child(1))' // Oculta la penúltima y la última columna en la exportación a Excel
+                                }
+                            },
+                            {
+                                extend: 'pdf',
+                                className: 'btn_export_Pdf',
+                                exportOptions: {
+                                    columns: ':visible:not(:last-child, :nth-last-child(1))' // Oculta la penúltima y la última columna en la exportación a PDF
+                                }
+                            }
+                        ],
+                        colResize: {
+                            tableWidthFixed: 'false'
+                        },
+                        colReorder: true // Activa la funcionalidad de reordenamiento de columnas
+                    });
+                }
+
+                tableEmpresa.clear();
+                tableEmpresa.rows.add($(datosRow)).draw();
+            },
+            failure: function (data) {
+                Swal.close();
+                alert('Error fatal ' + data);
+                console.log("failure")
+            }
+        });
+
+
+    });
+
+}
 
 function alterDocumentoStatus(documento_id) {
     var dataPost = {

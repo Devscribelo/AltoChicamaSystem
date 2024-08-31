@@ -220,5 +220,66 @@ namespace AltoChicamaSystem.Data.Documento
 
             return Tuple.Create(rpta, msg);
         }
+
+ 
+        public Tuple<string, string, List<DocumentoResult>> listarDocumentoEmpresa(int empresa_id, int estado , string bandera)
+        {
+            List<DocumentoResult> lst = new List<DocumentoResult>();
+            DocumentoResult documento = new DocumentoResult();
+            SqlConnection sqlCon = new SqlConnection();
+            string rpta = "";
+            string msg = "";
+            int count = 0;
+            try
+            {
+                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                sqlCon.Open();
+                SqlCommand sqlCmd = new SqlCommand();
+                sqlCmd.Connection = sqlCon;
+                sqlCmd.CommandText = "Documento_List_Empresa";
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.Parameters.AddWithValue("@empresa_id", Convert.ToInt32(empresa_id));
+                sqlCmd.Parameters.AddWithValue("@estado", Convert.ToInt32(estado));
+                SqlDataReader sdr = sqlCmd.ExecuteReader();
+
+                while (sdr.Read())
+                {
+                    count++;
+                    if (count == 1)
+                    {
+                        rpta = sdr["Rpta"].ToString();
+                        msg = sdr["Msg"].ToString();
+                        sdr.NextResult();
+                    }
+                    if (rpta == "0" && count >= 2)
+                    {
+                        documento = new DocumentoResult();
+                        documento.documento_id = Convert.ToInt32(sdr["documento_id"]);
+                        documento.documento_titulo = sdr["documento_titulo"].ToString().Trim();
+                        documento.empresa_name = sdr["empresa_name"].ToString().Trim();
+                        documento.transportista_nombre = sdr["transportista_nombre"].ToString().Trim();
+                        documento.documento_status = sdr["documento_status"].ToString().Trim();
+                        lst.Add(documento);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                lst = new List<DocumentoResult>();
+                msg = ex.Message;
+            }
+            finally
+            {
+                if (sqlCon.State == ConnectionState.Open)
+                {
+                    sqlCon.Close();
+                }
+            }
+            return Tuple.Create(rpta, msg, lst);
+        }
+
+
+
     }
 }

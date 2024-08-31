@@ -21,6 +21,13 @@ namespace AltoChicamaSystem.Negocio
             return result;
         }
 
+        public Tuple<string, string, List<DocumentoResult>> listarDocumentoEmpresa(int empresa_id, int estado, string bandera)
+        {
+            var result = objDato.listarDocumentoEmpresa(empresa_id,estado, bandera);
+            return result;
+        }
+
+
         public Tuple<string, string> eliminarDocumento(int documentoId, string bandera)
         {
             return objDato.eliminarDocumento(documentoId, bandera);
