@@ -1,22 +1,16 @@
 $(document).ready(function () {
-    getListDocumentoCliente(1032);
+    getListDocumentoCliente(empresaID);
 });
 
 function copiarTexto(texto) {
-    // Crear un elemento de texto temporal
     const tempInput = document.createElement('input');
-    // Establecer el valor del elemento de texto al texto a copiar
     tempInput.value = texto;
-    // Agregar el elemento al DOM
     document.body.appendChild(tempInput);
-    // Seleccionar el texto del elemento
     tempInput.select();
-    // Copiar el texto seleccionado al portapapeles
     document.execCommand('copy');
-    // Eliminar el elemento del DOM
     document.body.removeChild(tempInput);
     Swal.fire({
-        title: 'Enlace copiado con éxito',
+        title: 'Enlace copiado con Ã©xito',
         icon: 'success',
         confirmButtonText: 'OK',
     });
@@ -42,7 +36,7 @@ function getListDocumentoCliente(empresa_id) {
                 console.log("cargando");
             },
             success: function (data) {
-                var dataEmpresa = data.item3; // Obtén los datos de la respuesta
+                var dataEmpresa = data.item3; // Obtï¿½n los datos de la respuesta
                 console.log(dataEmpresa);
                 var datosRow = "";
 
@@ -70,7 +64,7 @@ function getListDocumentoCliente(empresa_id) {
                         "<a href='" + apiUrl + dataEmpresa[i].documento_id + "'>" +
                         "<span class='icon-circle green'><i class=\"bx bxs-download\"></i></span>" +
                         "</a>" +
-                        "<a href='#' onclick=\"copiarTexto('" + endpoint + dataEmpresa[i].documento_id + "')\">" +
+                        "<a href='#' onclick=\"copiarTexto('" + getDomain() + abrirEnlaceEnVentana(dataEmpresa[i].documento_id) + "')\">" +
                         "<span class='icon-circle black'><i class=\"bx bxs-share-alt\"></i></span>" +
                         "</div>" +
                         "</td>" +
@@ -153,9 +147,9 @@ function alterDocumentoStatus(documento_id) {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
-                alert("Ocurrió un fallo: " + jqXHR.responseJSON.message);
+                alert("OcurriÃ³ un fallo: " + jqXHR.responseJSON.message);
             } else {
-                alert("Ocurrió un fallo: " + errorThrown);
+                alert("OcurriÃ³ un fallo: " + errorThrown);
             }
         }
     });
@@ -164,19 +158,19 @@ function eliminarDocumento(documento_id) {
     var endpoint = getDomain() + "/Repositorio/EliminarDocumento";
 
     Swal.fire({
-        title: '¿Estás seguro?',
-        text: "No podrás revertir esto!",
+        title: 'Â¿EstÃ¡s seguro?',
+        text: "No podrÃ¡s revertir esto!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, eliminarlo!'
+        confirmButtonText: 'SÃ­, eliminarlo!'
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
                 type: "POST",
                 url: endpoint,
-                data: JSON.stringify({ documento_id: documento_id }),  // Asegúrate de que el nombre del parámetro sea correcto
+                data: JSON.stringify({ documento_id: documento_id }),  // Asegï¿½rate de que el nombre del parï¿½metro sea correcto
                 contentType: "application/json",
                 success: function (response) {
                     if (response.item1 === "0") {

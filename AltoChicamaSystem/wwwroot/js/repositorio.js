@@ -1,4 +1,6 @@
-﻿$(document).ready(function () {
+﻿var consult = false;
+$(document).ready(function () {
+    consult = false;
     EmpresaSelect("#input_empresa");
     getListDocumento();
     // Asignar el event listener fuera de la función getListEmpresa()
@@ -248,6 +250,7 @@ function getListDocumentoEmpresa(empresa_id, estado) {
             success: function (data) {
                 var dataEmpresa = data.item3;
                 var datosRow = "";
+                consult = true;
 
                 resolve(dataEmpresa);
 
@@ -360,7 +363,9 @@ function alterDocumentoStatus(documento_id) {
             var rpta = data.item1;
             var msg = data.item2;
             if (rpta == "0") {
-                getListDocumento();
+                if (consult != true) {
+                    getListDocumento();
+                }
             } else {
                 Swal.fire({
                     icon: 'error',
