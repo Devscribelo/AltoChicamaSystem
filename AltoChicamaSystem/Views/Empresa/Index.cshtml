@@ -191,7 +191,9 @@
         document.getElementById('input_empresa_ruc').addEventListener('input', function (e) {
             this.value = this.value.replace(/\D/g, '').substring(0, 11);
         });
-
+        document.getElementById('edit_empresa_ruc').addEventListener('input', function (e) {
+            this.value = this.value.replace(/\D/g, '').substring(0, 11);
+        });
     </script>
 </body>
 </html>

@@ -37,7 +37,6 @@ function getListDocumentoCliente(empresa_id) {
             },
             success: function (data) {
                 var dataEmpresa = data.item3; // Obt�n los datos de la respuesta
-                console.log(dataEmpresa);
                 var datosRow = "";
 
                 resolve(dataEmpresa);
@@ -58,9 +57,6 @@ function getListDocumentoCliente(empresa_id) {
                         "</td>" +
                         "<td>" +
                         "<div>" +
-                        "<a href='#' onclick='eliminarDocumento(" + dataEmpresa[i].documento_id + ")'>" +
-                        "<span class='icon-circle red'><i class=\"bx bxs-trash\"></i></span>" +
-                        "</a>" +
                         "<a href='" + apiUrl + dataEmpresa[i].documento_id + "'>" +
                         "<span class='icon-circle green'><i class=\"bx bxs-download\"></i></span>" +
                         "</a>" +

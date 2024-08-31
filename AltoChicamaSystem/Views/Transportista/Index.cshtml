@@ -89,7 +89,8 @@
                                 <!-- Transportista ruc -->
                                 <div class="input-group input-group-sm mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">RUC</span>
-                                    <input type="number" class="form-control" id="input_transportista_ruc" required autocomplete="off" placeholder="Ingrese el RUC" maxlength="100">
+                                    <input type="text" class="form-control" id="input_transportista_ruc" required autocomplete="off"
+                                           pattern="\d{11}" placeholder="Ingrese el RUC" maxlength="11" inputmode="numeric">
                                 </div>
 
                                 <button id="btnGuardarTransportista" class="btnGuardar" type="submit">Guardar Transportista</button>
@@ -139,3 +140,12 @@
     </div>
 
 </section>
+
+<script>
+    document.getElementById('input_transportista_ruc').addEventListener('input', function (e) {
+        this.value = this.value.replace(/\D/g, '').substring(0, 11);
+    });
+    document.getElementById('edit_transportista_ruc').addEventListener('input', function (e) {
+        this.value = this.value.replace(/\D/g, '').substring(0, 11);
+    });
+</script>

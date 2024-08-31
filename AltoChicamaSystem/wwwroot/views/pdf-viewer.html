@@ -125,7 +125,7 @@
 
         function renderPage(pageNumber) {
             pdfDoc.getPage(pageNumber).then(function (page) {
-                var scale = 3;
+                var scale = 5;
                 var viewport = page.getViewport({ scale: scale });
                 var pageContainer = document.createElement('div');
                 pageContainer.className = 'page-container';
