@@ -5,7 +5,7 @@ namespace AltoChicamaSystem.Negocio
     public class EmpresaCN
     {
         private EmpresaDB objDato = new EmpresaDB();
-        public Tuple<string, string> regEmpresa(CMEmpresa cmEmpresa, string bandera)
+        public Tuple<string, string> regEmpresa(EmpresaResult cmEmpresa, string bandera)
         {
             var result = objDato.regEmpresa(cmEmpresa, bandera);
             return result;

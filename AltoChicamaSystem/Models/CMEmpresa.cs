@@ -8,4 +8,15 @@
         public string empresa_correo { get; set; }
         public string empresa_status { get; set; }
     }
+
+    public class EmpresaResult
+    {
+        public int empresa_id { get; set; }
+        public string empresa_name { get; set; }
+        public string empresa_ruc { get; set; }
+        public string empresa_correo { get; set; }
+        public string empresa_status { get; set; }
+        public string usuario_user { get; set; }
+        public string usuario_password { get; set; }
+    }
 }

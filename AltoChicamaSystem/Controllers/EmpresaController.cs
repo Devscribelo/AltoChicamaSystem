@@ -22,7 +22,7 @@ namespace AltoChicamaSystem.Controllers
         }
 
         [HttpPost]
-        public ActionResult RegEmpresa([FromBody] CMEmpresa cmempresa)
+        public ActionResult RegEmpresa([FromBody] EmpresaResult cmempresa)
         {
             var result = Tuple.Create("1", "Error al Registrar");
             try

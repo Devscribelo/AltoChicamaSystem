@@ -17,6 +17,8 @@ function guardarNewEmpresa() {
         empresa_ruc: $("#input_empresa_ruc").val(),
         empresa_correo: $("#input_empresa_correo").val(),
         empresa_status: empresa_status,
+        usuario_user: $("#input_empresa_usuario").val(),
+        usuario_password: $("#input_empresa_password").val(),
     };
 
     dataPost = trimJSONFields(dataPost);

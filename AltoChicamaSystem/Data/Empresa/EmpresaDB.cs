@@ -10,7 +10,7 @@ namespace AltoChicamaSystem.Data.Empresa
     {
         private ConexionDB con = new ConexionDB();
 
-        public Tuple<string, string> regEmpresa(CMEmpresa cmEmpresa, string bandera)
+        public Tuple<string, string> regEmpresa(EmpresaResult cmEmpresa, string bandera)
         {
             string rpta = "";
             string msg = "";
@@ -27,6 +27,8 @@ namespace AltoChicamaSystem.Data.Empresa
                 sqlCmd.Parameters.AddWithValue("@empresa_ruc", cmEmpresa.empresa_ruc.Trim());
                 sqlCmd.Parameters.AddWithValue("@empresa_correo", cmEmpresa.empresa_correo.Trim());
                 sqlCmd.Parameters.AddWithValue("@empresa_status", cmEmpresa.empresa_status);
+                sqlCmd.Parameters.AddWithValue("@usuario_user", cmEmpresa.usuario_user.Trim());
+                sqlCmd.Parameters.AddWithValue("@usuario_password", cmEmpresa.usuario_password.Trim());
 
                 SqlDataReader sdr = sqlCmd.ExecuteReader();
                 if (sdr.Read())
