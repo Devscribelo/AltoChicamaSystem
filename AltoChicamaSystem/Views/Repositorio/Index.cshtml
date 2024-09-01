@@ -21,15 +21,15 @@
             </div>
 
             <div class="container mt-2">
-                <div class="row">
-                    <div class="col-md-8">
+                <div class="row align-items-center">
+                    <div class="col-md-7 d-flex justify-content-end">
                         <label class="input-group-text" for="input_empresa">Empresa</label>
                         <select class="form-select" id="input_empresa">
                             <!-- Opciones de empresa -->
                         </select>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-3 d-flex justify-content-end">
                         <label class="input-group-text" for="input_estado">Estado</label>
                         <select class="form-select" id="input_estado">
                             <option value="" disabled selected>Seleccionar el estado</option>
@@ -38,12 +38,15 @@
                         </select>
                     </div>
 
-                    <div class="col-md-1">
-                        <button id="btnConsultar" class="btn btn-primary">Consultar</button>
+                    <div class="col-md-2 d-flex justify-content-end p-0">
+                        <button id="btnConsultar" class="btn btn-primary me-2 bg-custom">Consultar</button>
+                        <button id="btnConsultar2" class="btn btn-primary bg-custom">
+                            <i class='bx bx-refresh'></i>
+                        </button>
                     </div>
-
                 </div>
             </div>
+
 
 
             <div style="padding-bottom: 9px;">
