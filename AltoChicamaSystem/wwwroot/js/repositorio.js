@@ -62,13 +62,6 @@ function obtenerIdEmpresaSeleccionada(empresaSelecionada) {
     // Obtener el valor de la opción seleccionada en el select
     var valorSeleccionado = $(empresaSelecionada).val();
 
-    // Mostrar el valor (empresa_id) en la consola
-    if (valorSeleccionado) {
-        console.log("El ID de la empresa seleccionada es: " + valorSeleccionado);
-    } else {
-        console.log("No hay ninguna empresa seleccionada.");
-    }
-
     return valorSeleccionado;  // Retorna el valor (empresa_id) seleccionado
 }
 
@@ -109,8 +102,8 @@ function getListDocumento() {
 
             dataType: "json",
             beforeSend: function (xhr) {
-                //xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
                 console.log("cargando");
+                //xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
             },
 
             success: function (data) {
@@ -214,13 +207,14 @@ function capturarValoresSeleccionados() {
 
     // Validar que ambos valores estén seleccionados
     if (empresa_id && estado !== null) {
-        console.log("ID de Empresa seleccionada: " + empresa_id);
-        console.log("Estado seleccionado: " + estado);
-
         // Llamar a la función para enviar los datos
         getListDocumentoEmpresa(empresa_id, estado);
     } else {
-        alert("Por favor, seleccione una empresa y un estado.");
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: "Por favor, seleccione una empresa y un estado.",
+        });
     }
 }
 
@@ -243,8 +237,8 @@ function getListDocumentoEmpresa(empresa_id, estado) {
             data: JSON.stringify({ empresa_id: empresa_id, estado: estado }), // Serializa ambos parámetros como un objeto
             dataType: "json",
             beforeSend: function (xhr) {
-                //xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
                 console.log("cargando");
+                //xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
             },
 
             success: function (data) {

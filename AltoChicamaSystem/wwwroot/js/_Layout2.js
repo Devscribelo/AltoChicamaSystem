@@ -80,13 +80,6 @@ function obtenerIdEmpresaSeleccionada(id_grupo) {
     // Obtener el valor de la opción seleccionada en el select
     var valorSeleccionado = $(id_grupo).val();
 
-    // Mostrar el valor (empresa_id) en la consola
-    if (valorSeleccionado) {
-        console.log("El ID de la empresa seleccionada es: " + valorSeleccionado);
-    } else {
-        console.log("No hay ninguna empresa seleccionada.");
-    }
-
     return valorSeleccionado;  // Retorna el valor (empresa_id) seleccionado
 }
 

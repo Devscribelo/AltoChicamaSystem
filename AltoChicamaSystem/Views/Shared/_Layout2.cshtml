@@ -57,6 +57,12 @@
                                     <span class="text nav-text">Registrar</span>
                                 </a>
                             </li>
+                            <li class="nav-link @(currentController == "Transportista" && currentAction == "Index" ? "mode" : "")">
+                                <a asp-controller="Transportista" asp-action="Index">
+                                    <i class='bx bx-car icon'></i>
+                                    <span class="text nav-text">Transportista</span>
+                                </a>
+                            </li>
                             <li class="nav-link @(currentController == "Upload" && currentAction == "Index" ? "mode" : "")">
                                 <a asp-controller="Upload" asp-action="Index">
                                     <i class='bx bx-upload icon'></i>
@@ -69,16 +75,18 @@
                             <li class="nav-link @(currentController == "RepositorioCliente" && currentAction == "Index" ? "mode" : "")">
                                 <a asp-controller="RepositorioCliente" asp-action="Index">
                                     <i class='bx bx-folder-open icon'></i>
-                                    <span class="text nav-text">RepositorioCliente</span>
+                                    <span class="text nav-text">Repositorio</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-link @(currentController == "Transportista" && currentAction == "Index" ? "mode" : "")">
+                                <a asp-controller="Transportista" asp-action="Index">
+                                    <i class='bx bx-car icon'></i>
+                                    <span class="text nav-text">Transportista</span>
                                 </a>
                             </li>
                     }
-                    <li class="nav-link @(currentController == "Transportista" && currentAction == "Index" ? "mode" : "")">
-                        <a asp-controller="Transportista" asp-action="Index">
-                            <i class='bx bx-car icon'></i>
-                            <span class="text nav-text">Transportista</span>
-                        </a>
-                    </li>
+                   
                 </ul>
             </div>
 
