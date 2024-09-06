@@ -85,6 +85,7 @@ namespace AltoChicamaSystem.Data.Documento
                         documento.documento_id = Convert.ToInt32(sdr["documento_id"]);
                         documento.documento_titulo = sdr["documento_titulo"].ToString().Trim();
                         documento.empresa_name = sdr["empresa_name"].ToString().Trim();
+                        documento.documento_matriculas = sdr["documento_matriculas"].ToString().Trim();
                         lst.Add(documento);
                     }
 

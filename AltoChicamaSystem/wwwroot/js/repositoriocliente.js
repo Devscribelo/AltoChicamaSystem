@@ -47,9 +47,11 @@ function getListDocumentoCliente(empresa_id) {
                         "data-documento_id='" + dataEmpresa[i].documento_id + "' " +
                         "data-documento_titulo='" + dataEmpresa[i].documento_titulo + "' " +
                         "data-empresa_name='" + dataEmpresa[i].empresa_name + "' >" +
+                        "data-empresa_name='" + dataEmpresa[i].documento_matriculas + "' >" +
                         "<td>" + dataEmpresa[i].documento_id + "</td>" +
                         "<td>" + dataEmpresa[i].documento_titulo + "</td>" +
                         "<td>" + dataEmpresa[i].empresa_name + "</td>" +
+                        "<td>" + dataEmpresa[i].documento_matriculas + "</td>" +
                         "<td>" +
                         "<a href='#' onclick='mostrarPDFEnModal(" + dataEmpresa[i].documento_id + ")'>" +
                         "<span class='icon-circle pdf-icon'><i class=\"bx bxs-file-pdf\"></i></span>" +

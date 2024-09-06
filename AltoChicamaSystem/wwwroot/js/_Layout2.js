@@ -178,6 +178,9 @@ function cargarDataPDF() {
 async function guardarDocumento(file) {
     var empresa_id = obtenerIdEmpresaSeleccionada("#input_empresa");
     var transportista_id = obtenerIdTransportistaSeleccionada("#input_transportista");
+    var matricula_1 = $("#input_matricula_1").val();
+    var matricula_2 = $("#input_matricula_2").length ? $("#input_matricula_2").val() : '';
+    var documento_matriculas = matricula_1 + ',' + matricula_2;
 
     if (!empresa_id) {
         Swal.fire({
@@ -204,6 +207,7 @@ async function guardarDocumento(file) {
     formData.append('documento_pdf', file);
     formData.append('empresa_id', empresa_id);
     formData.append('transportista_id', transportista_id);
+    formData.append('documento_matriculas', documento_matriculas);
 
     // Mostrar los datos que se están enviando
     console.log("Datos enviados a Upload/RegDocumento:");
