@@ -5,56 +5,56 @@
 
 <style>
     body {
-        font-family: Arial, sans-serif !important;
-        max-width: 800px !important;
-        margin: 0 auto !important;
-        padding: 20px !important;
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
     }
 
     form {
-        display: flex !important;
-        flex-direction: column !important;
+        display: flex;
+        flex-direction: column;
     }
 
     label {
-        margin-top: 10px !important;
+        margin-top: 10px;
     }
 
     input,
     textarea,
     select {
-        margin-bottom: 10px !important;
-        padding: 5px !important;
+        margin-bottom: 10px;
+        padding: 5px;
     }
 
     button {
-        background-color: #4caf50 !important;
-        color: white !important;
-        padding: 10px !important;
-        border: none !important;
-        cursor: pointer !important;
-        margin-top: 10px !important;
+        background-color: #4caf50;
+        color: white;
+        padding: 10px;
+        border: none;
+        cursor: pointer;
+        margin-top: 10px;
     }
 
         button:hover {
-            background-color: #45a049 !important;
+            background-color: #45a049;
         }
 
     table {
-        width: 100% !important;
-        border-collapse: collapse !important;
-        margin-top: 20px !important;
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
     }
 
     th,
     td {
-        border: 1px solid #ddd !important;
-        padding: 8px !important;
-        text-align: left !important;
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
     }
 
     th {
-        background-color: #f2f2f2 !important;
+        background-color: #f2f2f2;
     }
 
     .form-container {
@@ -62,152 +62,150 @@
     }
 </style>
 
-<section class="home">
-    <h1>Seleccione un PDF</h1>
-    <button onclick="showForm('pdfResiduos')">PDF RESIDUOS SOLIDOS</button>
-    <button onclick="showForm('pdfAguas')">PDF AGUAS</button>
+<h1>Seleccione un PDF</h1>
+<button onclick="showForm('pdfResiduos')">PDF RESIDUOS SOLIDOS</button>
+<button onclick="showForm('pdfAguas')">PDF AGUAS</button>
 
-    <div id="pdfResiduos" class="form-container">
-        <h1>Formulario para Certificado de Valorización</h1>
-        <form id="formResiduos">
-            <!-- Campos del formulario para residuos sólidos -->
-            <label for="codigoEmpresa">Código de la Empresa:</label>
-            <input type="text" id="codigoEmpresa" name="codigoEmpresa" required />
+<div id="pdfResiduos" class="form-container">
+    <h1>Formulario para Certificado de Valorización</h1>
+    <form id="formResiduos">
+        <!-- Campos del formulario para residuos sólidos -->
+        <label for="codigoEmpresa">Código de la Empresa:</label>
+        <input type="text" id="codigoEmpresa" name="codigoEmpresa" required />
 
-            <label for="opcion">Seleccione una opción:</label>
-            <select id="opcion" name="opcion" required>
-                <option value="VALORIZACIÓN DE RESIDUOS DE CONSTRUCCIÓN Y DEMOLICIÓN – APROVECHABLES">
-                    Opción 1: VALORIZACIÓN DE RESIDUOS DE CONSTRUCCIÓN
-                </option>
-                <option value="VALORIZACIÓN DE RESIDUOS SOLIDOS – APROVECHABLES">
-                    Opción 2: VALORIZACIÓN DE RESIDUOS SOLIDOS – APROVECHABLES
-                </option>
-                <option value="VALORIZACIÓN DE RESIDUOS INORGÁNICOS APROVECHABLES">
-                    Opción 3: VALORIZACIÓN DE RESIDUOS INORGÁNICOS APROVECHABLES
-                </option>
-                <option value="DESTRUCCIÓN Y VALORIZACIÓN DE DESMEDROS">
-                    Opción 3: DESTRUCCIÓN Y VALORIZACIÓN DE DESMEDROS
-                </option>
-                <option value="VALORIZACIÓN DE LODOS NO PELIGROSOS">
-                    Opción 4: VALORIZACIÓN DE LODOS
-                </option>
-            </select>
+        <label for="opcion">Seleccione una opción:</label>
+        <select id="opcion" name="opcion" required>
+            <option value="VALORIZACIÓN DE RESIDUOS DE CONSTRUCCIÓN Y DEMOLICIÓN – APROVECHABLES">
+                Opción 1: VALORIZACIÓN DE RESIDUOS DE CONSTRUCCIÓN
+            </option>
+            <option value="VALORIZACIÓN DE RESIDUOS SOLIDOS – APROVECHABLES">
+                Opción 2: VALORIZACIÓN DE RESIDUOS SOLIDOS – APROVECHABLES
+            </option>
+            <option value="VALORIZACIÓN DE RESIDUOS INORGÁNICOS APROVECHABLES">
+                Opción 3: VALORIZACIÓN DE RESIDUOS INORGÁNICOS APROVECHABLES
+            </option>
+            <option value="DESTRUCCIÓN Y VALORIZACIÓN DE DESMEDROS">
+                Opción 3: DESTRUCCIÓN Y VALORIZACIÓN DE DESMEDROS
+            </option>
+            <option value="VALORIZACIÓN DE LODOS NO PELIGROSOS">
+                Opción 4: VALORIZACIÓN DE LODOS
+            </option>
+        </select>
 
-            <label for="fecha">Fecha:</label>
-            <input type="date" id="fecha" name="fecha" required />
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" name="fecha" required />
 
-            <label for="numeroGuia">N° de Guía:</label>
-            <input type="text" id="numeroGuia" name="numeroGuia" required />
+        <label for="numeroGuia">N° de Guía:</label>
+        <input type="text" id="numeroGuia" name="numeroGuia" required />
 
-            <label for="empresa">Empresa:</label>
-            <select id="empresa" name="empresa" required>
-                <option value="EMPRESA GEMEFE S.A">EMPRESA GEMEFE S.A</option>
-                <option value="EMPRESA BAZOOKA S.A">EMPRESA BAZOOKA S.A</option>
-                <option value="EMPRESA JOSESITO S.A">EMPRESA JOSESITO S.A</option>
-            </select>
+        <label for="empresa">Empresa:</label>
+        <select id="empresa" name="empresa" required>
+            <option value="EMPRESA GEMEFE S.A">EMPRESA GEMEFE S.A</option>
+            <option value="EMPRESA BAZOOKA S.A">EMPRESA BAZOOKA S.A</option>
+            <option value="EMPRESA JOSESITO S.A">EMPRESA JOSESITO S.A</option>
+        </select>
 
-            <label for="tipoResiduoTitulo">Seleccione una opción de RESIDUO:</label>
-            <select id="tipoResiduoTitulo" name="tipoResiduoTitulo" required>
-                <option value="Tipo de Residuo">Opción 1: Tipo de Residuo</option>
-                <option value="Tipo de Residuo Sólido">
-                    Opción 2: Tipo de Residuo Sólido
-                </option>
-                <option value="Tipo de Residuos Orgánicos">
-                    Opción 3: Tipo de Residuos Orgánicos
-                </option>
-            </select>
+        <label for="tipoResiduoTitulo">Seleccione una opción de RESIDUO:</label>
+        <select id="tipoResiduoTitulo" name="tipoResiduoTitulo" required>
+            <option value="Tipo de Residuo">Opción 1: Tipo de Residuo</option>
+            <option value="Tipo de Residuo Sólido">
+                Opción 2: Tipo de Residuo Sólido
+            </option>
+            <option value="Tipo de Residuos Orgánicos">
+                Opción 3: Tipo de Residuos Orgánicos
+            </option>
+        </select>
 
-            <label for="tipoRCD">Tipo de Residuo:</label>
-            <input type="text" id="tipoRCD" name="tipoRCD" required />
+        <label for="tipoRCD">Tipo de Residuo:</label>
+        <input type="text" id="tipoRCD" name="tipoRCD" required />
 
-            <label for="toneladas">TN:</label>
-            <input type="number" id="toneladas" name="toneladas" required />
+        <label for="toneladas">TN:</label>
+        <input type="number" id="toneladas" name="toneladas" required />
 
-            <label for="residuos">Dirección de Residuos:</label>
-            <textarea id="residuos" name="residuos" rows="4" required></textarea>
+        <label for="residuos">Dirección de Residuos:</label>
+        <textarea id="residuos" name="residuos" rows="4" required></textarea>
 
-            <label for="nomEmpresa">Nombre de la empresa:</label>
-            <input type="text" id="nomEmpresa" name="nomEmpresa" required />
+        <label for="nomEmpresa">Nombre de la empresa:</label>
+        <input type="text" id="nomEmpresa" name="nomEmpresa" required />
 
-            <label for="ruc">RUC:</label>
-            <input type="number" id="ruc" name="ruc" required />
+        <label for="ruc">RUC:</label>
+        <input type="number" id="ruc" name="ruc" required />
 
-            <label for="firma">Firma de la empresa (imagen):</label>
-            <input type="file" id="firma" name="firma" accept="image/*" />
+        <label for="firma">Firma de la empresa (imagen):</label>
+        <input type="file" id="firma" name="firma" accept="image/*" />
 
-            <button type="button" onclick="generarPDF('pdfResiduos')">
-                Generar PDF
-            </button>
-        </form>
-    </div>
+        <button type="button" onclick="generarPDF('pdfResiduos')">
+            Generar PDF
+        </button>
+    </form>
+</div>
 
-    <div id="pdfAguas" class="form-container">
-        <h1>Formulario para Certificado de Valorización</h1>
-        <form id="formAguas">
-            <!-- Campos del formulario para aguas -->
-            <label for="codigoEmpresa">Código de la Empresa:</label>
-            <input type="text" id="codigoEmpresa" name="codigoEmpresa" required />
+<div id="pdfAguas" class="form-container">
+    <h1>Formulario para Certificado de Valorización</h1>
+    <form id="formAguas">
+        <!-- Campos del formulario para aguas -->
+        <label for="codigoEmpresa">Código de la Empresa:</label>
+        <input type="text" id="codigoEmpresa" name="codigoEmpresa" required />
 
-            <label for="opcion">Seleccione una opción:</label>
-            <select id="opcion" name="opcion" required>
-                <option value="TRATAMIENTO DE LÍQUIDOS RESIDUALES">
-                    Opción 2: TRATAMIENTO DE LÍQUIDOS
-                </option>
-                <option value="TRATAMIENTO DE GRASAS RESIDUALES DOMÉSTICAS">
-                    Opción 3: TRATAMIENTO DE GRASAS
-                </option>
-                <option value="TRATAMIENTO DE AGUAS RESIDUALES – TIPO DOMÉSTICAS">
-                    Opción 4: TRATAMIENTO DE AGUAS
-                </option>
-            </select>
+        <label for="opcion">Seleccione una opción:</label>
+        <select id="opcion" name="opcion" required>
+            <option value="TRATAMIENTO DE LÍQUIDOS RESIDUALES">
+                Opción 2: TRATAMIENTO DE LÍQUIDOS
+            </option>
+            <option value="TRATAMIENTO DE GRASAS RESIDUALES DOMÉSTICAS">
+                Opción 3: TRATAMIENTO DE GRASAS
+            </option>
+            <option value="TRATAMIENTO DE AGUAS RESIDUALES – TIPO DOMÉSTICAS">
+                Opción 4: TRATAMIENTO DE AGUAS
+            </option>
+        </select>
 
-            <label for="fecha">Fecha:</label>
-            <input type="date" id="fecha" name="fecha" required />
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" name="fecha" required />
 
-            <label for="numeroGuia">N° de Guía:</label>
-            <input type="text" id="numeroGuia" name="numeroGuia" required />
+        <label for="numeroGuia">N° de Guía:</label>
+        <input type="text" id="numeroGuia" name="numeroGuia" required />
 
-            <label for="empresa">Empresa:</label>
-            <select id="empresa" name="empresa" required>
-                <option value="EMPRESA GEMEFE S.A">EMPRESA GEMEFE S.A</option>
-                <option value="EMPRESA BAZOOKA S.A">EMPRESA BAZOOKA S.A</option>
-                <option value="EMPRESA JOSESITO S.A">EMPRESA JOSESITO S.A</option>
-            </select>
+        <label for="empresa">Empresa:</label>
+        <select id="empresa" name="empresa" required>
+            <option value="EMPRESA GEMEFE S.A">EMPRESA GEMEFE S.A</option>
+            <option value="EMPRESA BAZOOKA S.A">EMPRESA BAZOOKA S.A</option>
+            <option value="EMPRESA JOSESITO S.A">EMPRESA JOSESITO S.A</option>
+        </select>
 
-            <label for="tipoAguaTitulo">Seleccione una opción de RESIDUO:</label>
-            <select id="tipoAguaTitulo" name="tipoAguaTitulo" required>
-                <option value="Tipo de Agua Residual">
-                    Opción 1: Tipo de Agua Residual
-                </option>
-                <option value="Tipo de Residuo Líquido">
-                    Opción 2: Tipo de Residuo Líquido
-                </option>
-            </select>
+        <label for="tipoAguaTitulo">Seleccione una opción de RESIDUO:</label>
+        <select id="tipoAguaTitulo" name="tipoAguaTitulo" required>
+            <option value="Tipo de Agua Residual">
+                Opción 1: Tipo de Agua Residual
+            </option>
+            <option value="Tipo de Residuo Líquido">
+                Opción 2: Tipo de Residuo Líquido
+            </option>
+        </select>
 
-            <label for="tipoAgua">Tipo de Residuo:</label>
-            <input type="text" id="tipoAgua" name="tipoAgua" required />
+        <label for="tipoAgua">Tipo de Residuo:</label>
+        <input type="text" id="tipoAgua" name="tipoAgua" required />
 
-            <label for="metros3">M³:</label>
-            <input type="number" id="metros3" name="metros3" required />
+        <label for="metros3">M³:</label>
+        <input type="number" id="metros3" name="metros3" required />
 
-            <label for="residuos">Dirección de Residuos:</label>
-            <textarea id="residuos" name="residuos" rows="4" required></textarea>
+        <label for="residuos">Dirección de Residuos:</label>
+        <textarea id="residuos" name="residuos" rows="4" required></textarea>
 
-            <label for="nomEmpresa">Nombre de la empresa:</label>
-            <input type="text" id="nomEmpresa" name="nomEmpresa" required />
+        <label for="nomEmpresa">Nombre de la empresa:</label>
+        <input type="text" id="nomEmpresa" name="nomEmpresa" required />
 
-            <label for="ruc">RUC:</label>
-            <input type="number" id="ruc" name="ruc" required />
+        <label for="ruc">RUC:</label>
+        <input type="number" id="ruc" name="ruc" required />
 
-            <label for="firma">Firma de la empresa (imagen):</label>
-            <input type="file" id="firma" name="firma" accept="image/*" />
+        <label for="firma">Firma de la empresa (imagen):</label>
+        <input type="file" id="firma" name="firma" accept="image/*" />
 
-            <button type="button" onclick="generarPDF('pdfAguas')">
-                Generar PDF
-            </button>
-        </form>
-    </div>
-</section>
+        <button type="button" onclick="generarPDF('pdfAguas')">
+            Generar PDF
+        </button>
+    </form>
+</div>
 
 <script src="~/lib/jsPDF/jspdf.min.js"></script>
 <script src="~/js/generador.js"></script>
