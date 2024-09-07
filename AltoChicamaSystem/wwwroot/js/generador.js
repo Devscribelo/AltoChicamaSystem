@@ -16,6 +16,92 @@ document.addEventListener("DOMContentLoaded", () => {
     showForm("pdfResiduos"); // Mostrar por defecto el formulario de residuos sólidos
 });
 
+function EmpresaSelect(id_grupo) {
+    var endpoint = getDomain() + "/Empresa/EmpresaSelect";
+
+    $.ajax({
+        type: "GET",
+        async: true,
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        dataType: "json",
+        beforeSend: function (xhr) {
+            console.log("cargando");
+        },
+        success: function (data) {
+            var EmpresaSelect = data.item3;
+
+            // Limpiar el select y agregar opción por defecto
+            if (id_grupo === "#nomEmpresa") {
+                $(id_grupo).empty();
+                $(id_grupo).append('<option value="" disabled selected>Seleccione una empresa...</option>');
+            }
+
+            // Verificar si la data es null, vacía, o contiene solo espacios en blanco
+            if (EmpresaSelect && EmpresaSelect.length > 0) {
+                // Agregar opciones al select
+                for (var i = 0; i < EmpresaSelect.length; i++) {
+                    var item = EmpresaSelect[i];
+                    $(id_grupo).append(
+                        '<option value="' + item.empresa_name + '">' + item.empresa_name + '</option>'
+                    );
+                }
+            }
+
+        },
+        error: function (data) {
+            alert('Error fatal ' + data);
+            console.log("failure");
+        }
+    });
+}
+
+EmpresaSelect("#nomEmpresa");
+
+function TransportistaSelect(id_transportista) {
+    var endpoint = getDomain() + "/Transportista/TransportistaSelect";
+
+    $.ajax({
+        type: "GET",
+        async: true,
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        dataType: "json",
+        beforeSend: function (xhr) {
+            console.log("cargando");
+        },
+        success: function (data) {
+            var TransportistaSelect = data.item3;
+
+            // Limpiar el select y agregar opción por defecto
+            if (id_transportista === "#empresa") {
+                $(id_transportista).empty();
+                $(id_transportista).append('<option value="" disabled selected>Seleccione un transportista...</option>');
+            }
+
+            // Verificar si la data es null, vacía, o contiene solo espacios en blanco
+            if (TransportistaSelect && TransportistaSelect.length > 0) {
+                // Agregar opciones al select
+                for (var i = 0; i < TransportistaSelect.length; i++) {
+                    var item = TransportistaSelect[i];
+                    $(id_transportista).append(
+                        '<option value="' + item.transportista_nombre + '">' + item.transportista_nombre + '</option>'
+                    );
+                }
+            }
+
+        },
+        error: function (data) {
+            alert('Error fatal ' + data);
+            console.log("failure");
+        }
+    });
+}
+TransportistaSelect("#empresa");
 async function loadImage(path) {
     return new Promise((resolve, reject) => {
         const img = new Image();

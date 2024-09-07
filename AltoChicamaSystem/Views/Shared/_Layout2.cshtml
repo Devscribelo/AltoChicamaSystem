@@ -69,6 +69,12 @@
                                     <span class="text nav-text">Subir Archivos</span>
                                 </a>
                             </li>
+                            <li class="nav-link @(currentController == "Generador" && currentAction == "Index" ? "mode" : "")">
+                                <a asp-controller="Generador" asp-action="Index">
+                                    <i class='bx bx-upload icon'></i>
+                                    <span class="text nav-text">Subir Archivos</span>
+                                </a>
+                            </li>
                     }
                     @if (isUser)
                     {

@@ -9,6 +9,7 @@
         public int transportista_id { get; set; }
         public string documento_status { get; set; } 
         public string documento_matriculas { get; set; }
+        public int documento_numero { get; set; }
     }
 
     public class DocumentoResult
@@ -24,7 +25,7 @@
         public string documento_status { get; set; }
 
         public string documento_matriculas { get; set; }
-
+        public int documento_numero { get; set; }
     }
 
 }

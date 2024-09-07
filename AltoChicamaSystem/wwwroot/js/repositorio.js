@@ -115,14 +115,14 @@ function getListDocumento() {
                 for (var i = 0; i < dataEmpresa.length; i++) {
                     datosRow +=
                         "<tr class='filaTabla' " +
-                        "data-empresa_id='" + dataEmpresa[i].documento_id + "' " +
+                        "data-empresa_id='" + dataEmpresa[i].documento_numero + "' " +
                         "data-empresa_name='" + dataEmpresa[i].documento_titulo + "' " +
                         "data-empresa_ruc='" + dataEmpresa[i].empresa_name + "' " +
                         "data-transportista_nombre='" + dataEmpresa[i].transportista_nombre + "' " +
                         "data-matriculas='" + dataEmpresa[i].documento_matriculas + "' " +
                         "data-documento_status='" + dataEmpresa[i].documento_status + "'" +
-                        "data-documento_id='" + dataEmpresa[i].documento_id + "'>" +
-                        "<td>" + dataEmpresa[i].documento_id + "</td>" +
+                        "data-documento_id='" + dataEmpresa[i].documento_numero + "'>" +
+                        "<td>" + dataEmpresa[i].documento_numero + "</td>" +
                         "<td>" + dataEmpresa[i].documento_titulo + "</td>" +
                         "<td>" + dataEmpresa[i].empresa_name + "</td>" +
                         "<td>" + dataEmpresa[i].transportista_nombre + "</td>" +

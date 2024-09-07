@@ -2,6 +2,7 @@
 using AltoChicamaSystem.Data;
 using System.Data;
 using System.Data.SqlClient;
+using System;
 
 namespace AltoChicamaSystem.Data.Documento
 {
@@ -129,6 +130,7 @@ namespace AltoChicamaSystem.Data.Documento
                         documento.transportista_nombre = sdr["transportista_nombre"].ToString().Trim();
                         documento.documento_status = sdr["documento_status"].ToString().Trim();
                         documento.documento_matriculas = sdr["documento_matriculas"].ToString().Trim();
+                        documento.documento_numero = Convert.ToInt32(sdr["documento_numero"]);
                         lst.Add(documento);
                     }
                 }
