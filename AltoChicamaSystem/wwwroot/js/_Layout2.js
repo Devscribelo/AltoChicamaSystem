@@ -179,8 +179,8 @@ async function guardarDocumento(file) {
     var empresa_id = obtenerIdEmpresaSeleccionada("#input_empresa");
     var transportista_id = obtenerIdTransportistaSeleccionada("#input_transportista");
     var matricula_1 = $("#input_matricula_1").val();
-    var matricula_2 = $("#input_matricula_2").length ? $("#input_matricula_2").val() : '';
-    var documento_matriculas = matricula_1 + ',' + matricula_2;
+    var matricula_2 = $("#input_matricula_2").length ? $("#input_matricula_2").val().trim() : '';
+    var documento_matriculas = matricula_2 ? matricula_1 + ',' + matricula_2 : matricula_1;
 
     if (!empresa_id) {
         Swal.fire({

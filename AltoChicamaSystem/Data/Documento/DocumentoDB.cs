@@ -261,6 +261,8 @@ namespace AltoChicamaSystem.Data.Documento
                         documento.empresa_name = sdr["empresa_name"].ToString().Trim();
                         documento.transportista_nombre = sdr["transportista_nombre"].ToString().Trim();
                         documento.documento_status = sdr["documento_status"].ToString().Trim();
+                        documento.documento_numero = Convert.ToInt32(sdr["documento_numero"]);
+                        documento.documento_matriculas = sdr["documento_matriculas"].ToString().Trim();
                         lst.Add(documento);
                     }
 

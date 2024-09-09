@@ -44,11 +44,11 @@ function getListDocumentoCliente(empresa_id) {
                 for (var i = 0; i < dataEmpresa.length; i++) {
                     datosRow +=
                         "<tr class='filaTabla' " +
-                        "data-documento_id='" + dataEmpresa[i].documento_id + "' " +
+                        "data-documento_id='" + dataEmpresa[i].documento_numero + "' " +
                         "data-documento_titulo='" + dataEmpresa[i].documento_titulo + "' " +
                         "data-empresa_name='" + dataEmpresa[i].empresa_name + "' >" +
                         "data-empresa_name='" + dataEmpresa[i].documento_matriculas + "' >" +
-                        "<td>" + dataEmpresa[i].documento_id + "</td>" +
+                        "<td>" + dataEmpresa[i].documento_numero + "</td>" +
                         "<td>" + dataEmpresa[i].documento_titulo + "</td>" +
                         "<td>" + dataEmpresa[i].empresa_name + "</td>" +
                         "<td>" + dataEmpresa[i].documento_matriculas + "</td>" +
