@@ -34,7 +34,7 @@ function EmpresaSelect(id_grupo) {
             var EmpresaSelect = data.item3;
 
             // Limpiar el select y agregar opción por defecto
-            if (id_grupo === "#nomEmpresa") {
+            if (id_grupo === "#nomEmpresa" || id_grupo === "#nomEmpresa1") {
                 $(id_grupo).empty();
                 $(id_grupo).append('<option value="" disabled selected>Seleccione una empresa...</option>');
             }
@@ -59,6 +59,7 @@ function EmpresaSelect(id_grupo) {
 }
 
 EmpresaSelect("#nomEmpresa");
+EmpresaSelect("#nomEmpresa1");
 
 function TransportistaSelect(id_transportista) {
     var endpoint = getDomain() + "/Transportista/TransportistaSelect";
@@ -78,7 +79,7 @@ function TransportistaSelect(id_transportista) {
             var TransportistaSelect = data.item3;
 
             // Limpiar el select y agregar opción por defecto
-            if (id_transportista === "#empresa") {
+            if (id_transportista === "#empresa" || id_transportista === "#empresa1" ) {
                 $(id_transportista).empty();
                 $(id_transportista).append('<option value="" disabled selected>Seleccione un transportista...</option>');
             }
@@ -102,6 +103,7 @@ function TransportistaSelect(id_transportista) {
     });
 }
 TransportistaSelect("#empresa");
+TransportistaSelect("#empresa1");
 async function loadImage(path) {
     return new Promise((resolve, reject) => {
         const img = new Image();
@@ -110,19 +112,22 @@ async function loadImage(path) {
         img.src = path;
     });
 }
-
 async function generarPDF(formId) {
     const { jsPDF } = window.jspdf;
-    const input = document.getElementById("firma");
-    const file = input.files[0];
-
-    if (!file) {
-        alert("Por favor, selecciona una imagen.");
-        return;
-    }
-
+    
     if (formId === "pdfResiduos") {
+        const input = document.getElementById("firma");
+        const file = input.files[0];
+        const inputQr = document.getElementById("qr");
+        const fileQr = inputQr.files[0];
+
+        if (!file || !fileQr) {
+            alert("Por favor, selecciona una imagen de firma y QR");
+            return;
+        }
+
         const reader = new FileReader();
+        const readerQR = new FileReader();
         reader.onload = async function (event) {
             const imgData = event.target.result;
             const doc = new jsPDF();
@@ -433,82 +438,104 @@ async function generarPDF(formId) {
             // Firma de la empresa
             doc.addImage(imgData, "PNG", 75, startY + 85, 60, 30);
 
-            // Obtener la fecha de la ID 'fecha' y transformarla
-            const fecha = new Date(document.getElementById("fecha").value); // Suponiendo que tienes una fecha en formato 'YYYY-MM-DD'
-            const meses = [
-                "Enero",
-                "Febrero",
-                "Marzo",
-                "Abril",
-                "Mayo",
-                "Junio",
-                "Julio",
-                "Agosto",
-                "Septiembre",
-                "Octubre",
-                "Noviembre",
-                "Diciembre",
-            ];
-            const dia = fecha.getDate();
-            const mes = meses[fecha.getMonth()];
-            const anio = fecha.getFullYear();
+            // Leer la imagen del QR
+            readerQR.onload = function (event) {
+                const imgQR = event.target.result;
 
-            // Crear la cadena de texto para la fecha
-            const textoFecha = `Trujillo, ${dia} de ${mes} del ${anio}`;
+                // Agregar la imagen del QR
+                doc.addImage(imgQR, "PNG", 160, startY + 125, 25, 20); // Ajusta las coordenadas y tamaño según sea necesario
+                // Obtener la fecha de la ID 'fecha' y transformarla
+                const fecha = new Date(document.getElementById("fecha").value); // Suponiendo que tienes una fecha en formato 'YYYY-MM-DD'
+                const meses = [
+                    "Enero",
+                    "Febrero",
+                    "Marzo",
+                    "Abril",
+                    "Mayo",
+                    "Junio",
+                    "Julio",
+                    "Agosto",
+                    "Septiembre",
+                    "Octubre",
+                    "Noviembre",
+                    "Diciembre",
+                ];
+                const dia = fecha.getDate();
+                const mes = meses[fecha.getMonth()];
+                const anio = fecha.getFullYear();
 
-            // Obtener el ancho de la página y calcular la posición para el texto
-            const pdfPageWidth = doc.internal.pageSize.width; // Usar un nombre diferente para evitar conflictos
-            const textWidth = doc.getTextWidth(textoFecha); // Ancho del texto
-            const textX = pdfPageWidth - textWidth - 10; // Posición X (alineado a la derecha)
-            const textY = startY + 120; // Posición Y (ajusta según sea necesario)
+                // Crear la cadena de texto para la fecha
+                const textoFecha = `Trujillo, ${dia} de ${mes} del ${anio}`;
 
-            doc.setFontSize(10);
-            doc.setTextColor(105, 105, 105); // Color gris para el texto
+                // Obtener el ancho de la página y calcular la posición para el texto
+                const pdfPageWidth = doc.internal.pageSize.width; // Usar un nombre diferente para evitar conflictos
+                const textWidth = doc.getTextWidth(textoFecha); // Ancho del texto
+                const textX = pdfPageWidth - textWidth - 10; // Posición X (alineado a la derecha)
+                const textY = startY + 120; // Posición Y (ajusta según sea necesario)
 
-            // Añadir la fecha al PDF
-            doc.text(textoFecha, textX, textY);
+                doc.setFontSize(10);
+                doc.setTextColor(105, 105, 105); // Color gris para el texto
 
-            // Texto adicional en la parte inferior izquierda
-            const textLeft = 10; // Posición en X
-            const textBottom = pageHeight - 30; // Posición en Y (desde abajo)
+                // Añadir la fecha al PDF
+                doc.text(textoFecha, textX, textY);
 
-            doc.setFontSize(10);
-            doc.setTextColor(105, 105, 105); // Color gris para el texto
+                // Texto adicional en la parte inferior izquierda
+                const textLeft = 10; // Posición en X
+                const textBottom = pageHeight - 30; // Posición en Y (desde abajo)
 
-            // Primera línea de texto
-            doc.text(
-                "OFICINA / INFRAESTRUCTURA DE VALORIZACIÓN",
-                textLeft,
-                textBottom
-            );
+                doc.setFontSize(10);
+                doc.setTextColor(105, 105, 105); // Color gris para el texto
 
-            // Segunda línea de texto
-            doc.text(
-                "Panamericana Norte Km 594, Sector La Soledad – Chicama – Ascope – La Libertad",
-                textLeft,
-                textBottom + 5
-            );
+                // Primera línea de texto
+                doc.text(
+                    "OFICINA / INFRAESTRUCTURA DE VALORIZACIÓN",
+                    textLeft,
+                    textBottom
+                );
 
-            // Tercera línea de texto
-            doc.text("comercial@", textLeft, textBottom + 10);
-            doc.setTextColor(0, 128, 0); // Color verde para el correo
-            doc.text(
-                "serviciosambientalesaltochicama.com",
-                textLeft + doc.getTextWidth("comercial@"),
-                textBottom + 10
-            );
+                // Segunda línea de texto
+                doc.text(
+                    "Panamericana Norte Km 594, Sector La Soledad – Chicama – Ascope – La Libertad",
+                    textLeft,
+                    textBottom + 5
+                );
 
-            // Cuarta línea de texto
-            doc.setTextColor(105, 105, 105); // Volver a color gris
-            doc.text("914 105 601 | 913 036 413", textLeft, textBottom + 15);
-            //DESCARGA
-            doc.save("certificado_valorizacion.pdf");
+                // Tercera línea de texto
+                doc.text("comercial@", textLeft, textBottom + 10);
+                doc.setTextColor(0, 128, 0); // Color verde para el correo
+                doc.text(
+                    "serviciosambientalesaltochicama.com",
+                    textLeft + doc.getTextWidth("comercial@"),
+                    textBottom + 10
+                );
+
+                // Cuarta línea de texto
+                doc.setTextColor(105, 105, 105); // Volver a color gris
+                doc.text("914 105 601 | 913 036 413", textLeft, textBottom + 15);
+                //DESCARGA
+                doc.save("certificado_valorizacion.pdf");
+            };
+            // Leer el archivo del QR
+            readerQR.readAsDataURL(fileQr);
+
         };
+
         reader.readAsDataURL(file);
     } else if (formId === "pdfAguas") {
-        const reader = new FileReader();
-        reader.onload = async function (event) {
-            const imgData = event.target.result;
+        const input1 = document.getElementById("firma1");
+        const file1 = input1.files[0];
+        const inputQr1 = document.getElementById("qr1");
+        const fileQr1 = inputQr1.files[0];
+
+        if (!file1 || !fileQr1) {
+            alert("Por favor, selecciona una imagen de firma y QR");
+            return;
+        }
+
+        const reader1 = new FileReader();
+        const readerQR1 = new FileReader();
+        reader1.onload = async function (event) {
+            const imgData1 = event.target.result;
             const doc = new jsPDF();
 
             // Cargar las imágenes de encabezado y pie de página
@@ -552,7 +579,7 @@ async function generarPDF(formId) {
             doc.setTextColor(0, 0, 0);
             doc.setFont(undefined, "bold");
             doc.text(
-                "N°" + document.getElementById("codigoEmpresa").value,
+                "N°" + document.getElementById("codigoEmpresa1").value,
                 pageWidth / 2,
                 60,
                 null,
@@ -565,7 +592,7 @@ async function generarPDF(formId) {
             doc.setDrawColor(0, 100, 0);
             let textYPosition = 70;
             let textHeight = doc.getTextDimensions(
-                `${document.getElementById("opcion").value}`
+                `${document.getElementById("opcion1").value}`
             ).h;
             let rectYPosition = textYPosition - textHeight / 2 - 2;
             let rectHeight = textHeight + 2;
@@ -573,7 +600,7 @@ async function generarPDF(formId) {
 
             // Obtener el texto y el tamaño del texto
             // Obtener el texto y el tamaño del texto
-            const texto = document.getElementById("opcion").value;
+            const texto = document.getElementById("opcion1").value;
             doc.setFontSize(11);
 
             // Obtener el ancho del texto usando doc.getTextWidth()
@@ -648,7 +675,7 @@ async function generarPDF(formId) {
 
             let headers = [
                 "Fecha",
-                "N° de Guía \n" + document.getElementById("empresa").value,
+                "N° de Guía \n" + document.getElementById("empresa1").value,
                 document.getElementById("tipoAguaTitulo").value,
                 "M³",
             ];
@@ -671,8 +698,8 @@ async function generarPDF(formId) {
             startY += cellHeight;
 
             let rowData = [
-                document.getElementById("fecha").value,
-                document.getElementById("numeroGuia").value,
+                document.getElementById("fecha1").value,
+                document.getElementById("numeroGuia1").value,
                 document.getElementById("tipoAgua").value,
                 document.getElementById("metros3").value,
             ];
@@ -705,7 +732,7 @@ async function generarPDF(formId) {
                 });
             });
 
-            let residuos = document.getElementById("residuos").value;
+            let residuos = document.getElementById("residuos1").value;
 
             if (residuos) {
                 doc.setFontSize(11);
@@ -723,8 +750,8 @@ async function generarPDF(formId) {
             let infoCellWidthRight = contentWidth * 0.3; // 30% del ancho para la segunda celda
             let infoCellHeight = 10;
 
-            let nomEmpresa = `${document.getElementById("nomEmpresa").value}`;
-            let rucValue = `RUC: ${document.getElementById("ruc").value}`;
+            let nomEmpresa = `${document.getElementById("nomEmpresa1").value}`;
+            let rucValue = `RUC: ${document.getElementById("ruc1").value}`;
 
             // Dibuja la primera celda (nombre de la empresa)
             doc.rect(margin, infoStartY, infoCellWidthLeft, infoCellHeight);
@@ -759,8 +786,8 @@ async function generarPDF(formId) {
 
             // Agregar el texto predeterminado con los datos de la empresa y el RUC
             doc.setFontSize(11);
-            let nombreEmpresa = document.getElementById("empresa").value;
-            let ruc = document.getElementById("ruc").value;
+            let nombreEmpresa = document.getElementById("empresa1").value;
+            let ruc = document.getElementById("ruc1").value;
 
             let textoPredeterminado3 = `Transportados por la empresa ${nombreEmpresa} con RUC: ${ruc} hacia la Infraestructura de Valorización Alto Chicama, ubicada en la Panamericana Norte Km 594, Sector La Soledad – Chicama – Ascope – La Libertad; para su valorización.`;
 
@@ -771,79 +798,90 @@ async function generarPDF(formId) {
             doc.text(splittedText, margin, infoStartY + 20);
 
             // Firma de la empresa
-            doc.addImage(imgData, "PNG", 75, startY + 75, 60, 30);
+            doc.addImage(imgData1, "PNG", 75, startY + 75, 60, 30);
 
-            // Obtener la fecha de la ID 'fecha' y transformarla
-            const fecha = new Date(document.getElementById("fecha").value); // Suponiendo que tienes una fecha en formato 'YYYY-MM-DD'
-            const meses = [
-                "Enero",
-                "Febrero",
-                "Marzo",
-                "Abril",
-                "Mayo",
-                "Junio",
-                "Julio",
-                "Agosto",
-                "Septiembre",
-                "Octubre",
-                "Noviembre",
-                "Diciembre",
-            ];
-            const dia = fecha.getDate();
-            const mes = meses[fecha.getMonth()];
-            const anio = fecha.getFullYear();
+            // Leer la imagen del QR
+            readerQR1.onload = function (event) {
+                const imgQR1 = event.target.result;
 
-            // Crear la cadena de texto para la fecha
-            const textoFecha = `Trujillo, ${dia} de ${mes} del ${anio}`;
+                // Agregar la imagen del QR
+                doc.addImage(imgQR1, "PNG", 160, startY + 125, 25, 20); // Ajusta las coordenadas y tamaño según sea necesario
+                // Obtener la fecha de la ID 'fecha' y transformarla
+                const fecha = new Date(document.getElementById("fecha1").value); // Suponiendo que tienes una fecha en formato 'YYYY-MM-DD'
+                const meses = [
+                    "Enero",
+                    "Febrero",
+                    "Marzo",
+                    "Abril",
+                    "Mayo",
+                    "Junio",
+                    "Julio",
+                    "Agosto",
+                    "Septiembre",
+                    "Octubre",
+                    "Noviembre",
+                    "Diciembre",
+                ];
+                const dia = fecha.getDate();
+                const mes = meses[fecha.getMonth()];
+                const anio = fecha.getFullYear();
 
-            // Obtener el ancho de la página y calcular la posición para el texto
-            const pdfPageWidth = doc.internal.pageSize.width; // Usar un nombre diferente para evitar conflictos
-            const textWidth = doc.getTextWidth(textoFecha); // Ancho del texto
-            const textX = pdfPageWidth - textWidth - 10; // Posición X (alineado a la derecha)
-            const textY = startY + 120; // Posición Y (ajusta según sea necesario)
+                // Crear la cadena de texto para la fecha
+                const textoFecha = `Trujillo, ${dia} de ${mes} del ${anio}`;
 
-            doc.setFontSize(10);
-            doc.setTextColor(105, 105, 105); // Color gris para el texto
+                // Obtener el ancho de la página y calcular la posición para el texto
+                const pdfPageWidth = doc.internal.pageSize.width; // Usar un nombre diferente para evitar conflictos
+                const textWidth = doc.getTextWidth(textoFecha); // Ancho del texto
+                const textX = pdfPageWidth - textWidth - 10; // Posición X (alineado a la derecha)
+                const textY = startY + 120; // Posición Y (ajusta según sea necesario)
 
-            // Añadir la fecha al PDF
-            doc.text(textoFecha, textX, textY);
+                doc.setFontSize(10);
+                doc.setTextColor(105, 105, 105); // Color gris para el texto
 
-            // Texto adicional en la parte inferior izquierda
-            const textLeft = 10; // Posición en X
-            const textBottom = pageHeight - 30; // Posición en Y (desde abajo)
+                // Añadir la fecha al PDF
+                doc.text(textoFecha, textX, textY);
 
-            doc.setFontSize(10);
-            doc.setTextColor(105, 105, 105); // Color gris para el texto
+                // Texto adicional en la parte inferior izquierda
+                const textLeft = 10; // Posición en X
+                const textBottom = pageHeight - 30; // Posición en Y (desde abajo)
 
-            // Primera línea de texto
-            doc.text(
-                "OFICINA / INFRAESTRUCTURA DE VALORIZACIÓN",
-                textLeft,
-                textBottom
-            );
+                doc.setFontSize(10);
+                doc.setTextColor(105, 105, 105); // Color gris para el texto
 
-            // Segunda línea de texto
-            doc.text(
-                "Panamericana Norte Km 594, Sector La Soledad – Chicama – Ascope – La Libertad",
-                textLeft,
-                textBottom + 5
-            );
+                // Primera línea de texto
+                doc.text(
+                    "OFICINA / INFRAESTRUCTURA DE VALORIZACIÓN",
+                    textLeft,
+                    textBottom
+                );
 
-            // Tercera línea de texto
-            doc.text("comercial@", textLeft, textBottom + 10);
-            doc.setTextColor(0, 128, 0); // Color verde para el correo
-            doc.text(
-                "serviciosambientalesaltochicama.com",
-                textLeft + doc.getTextWidth("comercial@"),
-                textBottom + 10
-            );
+                // Segunda línea de texto
+                doc.text(
+                    "Panamericana Norte Km 594, Sector La Soledad – Chicama – Ascope – La Libertad",
+                    textLeft,
+                    textBottom + 5
+                );
 
-            // Cuarta línea de texto
-            doc.setTextColor(105, 105, 105); // Volver a color gris
-            doc.text("914 105 601 | 913 036 413", textLeft, textBottom + 15);
+                // Tercera línea de texto
+                doc.text("comercial@", textLeft, textBottom + 10);
+                doc.setTextColor(0, 128, 0); // Color verde para el correo
+                doc.text(
+                    "serviciosambientalesaltochicama.com",
+                    textLeft + doc.getTextWidth("comercial@"),
+                    textBottom + 10
+                );
 
-            doc.save("certificado_valorizacion.pdf");
+                // Cuarta línea de texto
+                doc.setTextColor(105, 105, 105); // Volver a color gris
+                doc.text("914 105 601 | 913 036 413", textLeft, textBottom + 15);
+
+                doc.save("certificado_valorizacion.pdf");
+            };
+
+            // Leer el archivo del QR
+            readerQR1.readAsDataURL(fileQr1);
+
         };
-        reader.readAsDataURL(file);
+        reader1.readAsDataURL(file1);
     }
 }
