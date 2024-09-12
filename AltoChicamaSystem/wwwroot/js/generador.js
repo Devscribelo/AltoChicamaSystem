@@ -41,15 +41,27 @@ function EmpresaSelect(id_grupo) {
 
             // Verificar si la data es null, vacía, o contiene solo espacios en blanco
             if (EmpresaSelect && EmpresaSelect.length > 0) {
+                // Guardar datos de las empresas en una variable accesible
+                var empresas = {};
+
                 // Agregar opciones al select
                 for (var i = 0; i < EmpresaSelect.length; i++) {
                     var item = EmpresaSelect[i];
                     $(id_grupo).append(
                         '<option value="' + item.empresa_name + '">' + item.empresa_name + '</option>'
                     );
+                    empresas[item.empresa_name] = item.empresa_ruc;
                 }
-            }
 
+                // Manejar el evento de cambio en el select
+                $(id_grupo).change(function () {
+                    var selectedEmpresa = $(this).val();
+                    if (empresas[selectedEmpresa]) {
+                        document.getElementById('ruc').value = empresas[selectedEmpresa];
+                        document.getElementById('ruc1').value = empresas[selectedEmpresa];
+                    }
+                });
+            }
         },
         error: function (data) {
             alert('Error fatal ' + data);
@@ -57,6 +69,7 @@ function EmpresaSelect(id_grupo) {
         }
     });
 }
+
 
 EmpresaSelect("#nomEmpresa");
 EmpresaSelect("#nomEmpresa1");
@@ -520,7 +533,7 @@ async function generarPDF(formId) {
 
         };
 
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(file); // AQUÍ CREA CANICAS
     } else if (formId === "pdfAguas") {
         const input1 = document.getElementById("firma1");
         const file1 = input1.files[0];

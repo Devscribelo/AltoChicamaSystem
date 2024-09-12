@@ -138,6 +138,7 @@ namespace AltoChicamaSystem.Data.Empresa
                         empresaselect = new CMEmpresa();
                         empresaselect.empresa_id = Convert.ToInt32(sdr["empresa_id"]);
                         empresaselect.empresa_name = sdr["empresa_name"].ToString().Trim();
+                        empresaselect.empresa_ruc = sdr["empresa_ruc"].ToString().Trim();
                         lst.Add(empresaselect);
                     }
 
