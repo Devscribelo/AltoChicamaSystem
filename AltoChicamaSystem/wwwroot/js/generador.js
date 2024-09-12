@@ -125,6 +125,53 @@ async function loadImage(path) {
         img.src = path;
     });
 }
+var documentoidvalor;
+function obtenerMayorDocumentoID() {
+    var endpoint = "/Repositorio/ObtenerMayorDocumentoID"; // Ruta relativa del endpoint
+
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: "POST",
+            url: endpoint,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log("Respuesta del servidor:", data); // Inspecciona la respuesta completa
+                console.log(data.item3);
+                documentoidvalor = parseInt(data.item3) + 1;
+
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+                alert('Error fatal: ' + error);
+                reject(error); // Rechaza la promesa en caso de error
+            }
+        });
+    });
+}
+
+function generarQR(documentoId) 
+{
+
+    enlace = abrirEnlaceEnVentana(documentoId);
+    // Obtener el elemento donde se generará el QR
+    const contenedorQR = document.getElementById('qrcode');
+
+    // Limpiar cualquier QR previo
+    contenedorQR.innerHTML = "";
+
+    // Generar el QR con el enlace proporcionado
+    new QRCode(contenedorQR, {
+        text: enlace,
+        width: 128,  // Ancho del QR
+        height: 128  // Alto del QR
+    });
+}
+
+generarQR(documentoidvalor);
+
 async function generarPDF(formId) {
     const { jsPDF } = window.jspdf;
     
@@ -228,7 +275,7 @@ async function generarPDF(formId) {
                 textoPredeterminado,
                 contentWidth
             );
-            textLines.forEach((line, index) => {
+            textLines.forEach((line, index) => {    
                 doc.text(line, margin, textoYPosition + index * 6);
             });
 
