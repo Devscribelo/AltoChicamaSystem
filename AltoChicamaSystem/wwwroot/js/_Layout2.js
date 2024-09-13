@@ -1,6 +1,6 @@
 ﻿const body = document.querySelector('body'),
     sidebar = body.querySelector('nav'),
-    toggle = body.querySelector(".toggle"),    modeText = body.querySelector(".mode-text");
+    toggle = body.querySelector(".toggle"), modeText = body.querySelector(".mode-text");
 const form = document.getElementById("file-upload-form");
 const fileInput = document.getElementById("file-upload");
 const pdfPreview = document.getElementById("pdf-preview");
@@ -161,7 +161,6 @@ $(document).on('click', '.btnGuardar', function () {
 function cargarDataPDF() {
     var inputFile = document.getElementById('file-upload');
     var file = inputFile.files[0];
-    console.log(file);
 
     if (!file) {
         Swal.fire({
@@ -177,16 +176,11 @@ function cargarDataPDF() {
 }
 
 async function guardarDocumento(file) {
-    var empresa_id = 1023;
-    var transportista_id = 1;
-    var matricula_1 = "MAT1";
-    var matricula_2 = "MAT2";
-    var documento_matriculas = matricula_2 ? matricula_1 + ',' + matricula_2 : matricula_1;
-    //var empresa_id = obtenerIdEmpresaSeleccionada("#input_empresa");
-    //var transportista_id = obtenerIdTransportistaSeleccionada("#input_transportista");
-    //var matricula_1 = $("#input_matricula_1").val();
-    //var matricula_2 = $("#input_matricula_2").length ? $("#input_matricula_2").val().trim() : '';
-    //var documento_matriculas = matricula_2 ? matricula_1 + ',' + matricula_2 : matricula_1;
+    var empresa_id = obtenerIdEmpresaSeleccionada("#input_empresa");
+    var transportista_id = obtenerIdTransportistaSeleccionada("#input_transportista");
+    var matricula_1 = $("#input_matricula_1").val();
+    var matricula_2 = $("#input_matricula_2").length ? $("#input_matricula_2").val() : '';
+    var documento_matriculas = matricula_1 + ',' + matricula_2;
 
     if (!empresa_id) {
         Swal.fire({
@@ -209,7 +203,7 @@ async function guardarDocumento(file) {
     }
 
     var formData = new FormData();
-    formData.append('documento_titulo', "prueba");
+    formData.append('documento_titulo', file.name);
     formData.append('documento_pdf', file);
     formData.append('empresa_id', empresa_id);
     formData.append('transportista_id', transportista_id);
@@ -222,6 +216,11 @@ async function guardarDocumento(file) {
     }
 
     var endpoint = getDomain() + "/Upload/RegDocumento";
+
+    // Mostrar la barra de progreso
+    var progressBar = document.getElementById('file-progress');
+    var responseContainer = document.getElementById('response');
+    responseContainer.classList.remove('hidden');
 
     $.ajax({
         type: "POST",
