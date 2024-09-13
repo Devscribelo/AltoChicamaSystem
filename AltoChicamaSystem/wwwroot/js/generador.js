@@ -540,7 +540,7 @@ async function generarPDF(formId) {
             // Leer la imagen del QR
 
             // Agregar la imagen del QR
-                doc.addImage(imgQR12, "PNG", 160, startY + 125, 25, 20); // Ajusta las coordenadas y tamaño según sea necesario
+                doc.addImage(imgQR12, "PNG", 160, startY + 122, 25, 25); // Ajusta las coordenadas y tamaño según sea necesario
                 // Obtener la fecha de la ID 'fecha' y transformarla
                 const fecha = new Date(document.getElementById("fecha").value); // Suponiendo que tienes una fecha en formato 'YYYY-MM-DD'
                 const meses = [
