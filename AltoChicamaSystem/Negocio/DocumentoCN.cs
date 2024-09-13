@@ -38,5 +38,25 @@ namespace AltoChicamaSystem.Negocio
             var result = objDato.alterDocumentoStatus(documento_id, bandera);
             return result;
         }
+
+        public Tuple<string, string> ObtenerMayorDocumentoID(string bandera)
+        {
+            try
+            {
+                // Llama al método en la carpeta Data que ejecuta el procedimiento almacenado
+                int mayorDocumentoID = objDato.ObtenerMayorDocumentoID(bandera);
+
+                // Devuelve el resultado como un Tuple
+                return new Tuple<string, string>("Exito", mayorDocumentoID.ToString());
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                return new Tuple<string, string>("Error", ex.Message);
+            }
+        }
+
+
+
     }
 }

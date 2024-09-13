@@ -67,6 +67,9 @@
     <button onclick="showForm('pdfResiduos')">PDF RESIDUOS SOLIDOS</button>
     <button onclick="showForm('pdfAguas')">PDF AGUAS</button>
 
+    <div id="qrcode" style="margin: 20px;"></div>
+
+
     <div id="pdfResiduos" class="form-container">
         <h1>Formulario para Certificado de Valorización</h1>
         <form id="formResiduos">
@@ -209,6 +212,7 @@
     </div>
 </section>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="~/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="~/config.js"></script>

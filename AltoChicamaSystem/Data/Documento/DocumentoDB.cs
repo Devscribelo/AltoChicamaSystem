@@ -283,6 +283,43 @@ namespace AltoChicamaSystem.Data.Documento
             return Tuple.Create(rpta, msg, lst);
         }
 
+        public int ObtenerMayorDocumentoID(string bandera)
+        {
+            int mayorDocumentoID = 0; // Valor por defecto en caso de error o no resultados
+
+            using (SqlConnection sqlCon = new SqlConnection(con.obtenerDatosConexion(bandera)))
+            {
+                try
+                {
+                    sqlCon.Open();
+                    using (SqlCommand sqlCmd = new SqlCommand("ObtenerMayorDocumentoID", sqlCon))
+                    {
+                        sqlCmd.CommandType = CommandType.StoredProcedure;
+
+                        using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                        {
+                            if (sdr.Read())
+                            {
+                                // Lee el valor máximo del documento_id
+                                if (sdr["MayorDocumentoID"] != DBNull.Value)
+                                {
+                                    mayorDocumentoID = Convert.ToInt32(sdr["MayorDocumentoID"]);
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Manejo de errores: considera registrar el error para fines de depuración
+                    Console.WriteLine("Error al obtener el mayor documento ID: " + ex.Message);
+                }
+            }
+            return mayorDocumentoID;
+        }
+
+
+
 
 
     }
