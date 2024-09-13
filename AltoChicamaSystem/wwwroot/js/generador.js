@@ -125,7 +125,7 @@ async function loadImage(path) {
         img.src = path;
     });
 }
-var documentoidvalor;
+let documentoidvalor;
 function obtenerMayorDocumentoID() {
     var endpoint = "/Repositorio/ObtenerMayorDocumentoID"; // Ruta relativa del endpoint
 
@@ -141,6 +141,7 @@ function obtenerMayorDocumentoID() {
                 console.log("Respuesta del servidor:", data); // Inspecciona la respuesta completa
                 console.log(data.item3);
                 documentoidvalor = parseInt(data.item3) + 1;
+                usarQR();
 
             },
             error: function (xhr, status, error) {
@@ -152,36 +153,74 @@ function obtenerMayorDocumentoID() {
     });
 }
 
-function generarQR(documentoId) 
-{
+function abrirEnlaceEnVentana(documentoId) {
+    const enlace = `/api/Documento/Ver/${documentoId}`;
+    const viewerUrl = `/views/pdf-viewer.html?file=${encodeURIComponent(window.location.origin + enlace)}`;
+    //window.open(viewerUrl, '_blank');
+    return viewerUrl;
+}
 
-    enlace = abrirEnlaceEnVentana(documentoId);
-    // Obtener el elemento donde se generará el QR
-    const contenedorQR = document.getElementById('qrcode');
+let imgQR12; // Variable global para almacenar la imagen QR en base64
 
-    // Limpiar cualquier QR previo
-    contenedorQR.innerHTML = "";
+function generarQR(documentoId) {
+    return new Promise((resolve, reject) => {
+        var dominio = getDomain();
+        var enlace = dominio + abrirEnlaceEnVentana(documentoId);
+        console.log(enlace);
+        const contenedorQR = document.getElementById('qrcode');
 
-    // Generar el QR con el enlace proporcionado
-    new QRCode(contenedorQR, {
-        text: enlace,
-        width: 128,  // Ancho del QR
-        height: 128  // Alto del QR
+        if (!contenedorQR) {
+            reject("El contenedor QR no se encontró.");
+            return;
+        }
+
+        // Limpiar cualquier QR previo
+        contenedorQR.innerHTML = "";
+
+        // Generar el QR con el enlace proporcionado
+        const qrCode = new QRCode(contenedorQR, {
+            text: enlace,
+            width: 128,  // Ancho del QR
+            height: 128  // Alto del QR
+        });
+
+        // Esperar a que el QR se genere y convertir a imagen
+        setTimeout(() => {
+            // Obtener el canvas del QR generado
+            const canvas = contenedorQR.querySelector('canvas');
+
+            if (canvas) {
+                // Convertir el canvas a una imagen PNG en formato base64
+                imgQR12 = canvas.toDataURL('image/png'); // Asigna el resultado a imgQR1
+                resolve(imgQR12); // Retorna la imagen en base64
+            } else {
+                reject("No se pudo generar el QR.");
+            }
+        }, 1000); // Ajustar el tiempo de espera según sea necesario
     });
 }
 
-generarQR(documentoidvalor);
-
+// Ejemplo de uso
+async function usarQR() {
+    try {
+        var enlace = documentoidvalor;
+        const qrData = await generarQR(enlace);
+        console.log(qrData); // imgQR1 contiene la imagen QR en base64
+        // Aquí puedes hacer algo con imgQR1
+    } catch (error) {
+        console.error('Error al usar el QR:', error);
+    }
+}
+obtenerMayorDocumentoID();
 async function generarPDF(formId) {
     const { jsPDF } = window.jspdf;
     
     if (formId === "pdfResiduos") {
         const input = document.getElementById("firma");
         const file = input.files[0];
-        const inputQr = document.getElementById("qr");
-        const fileQr = inputQr.files[0];
 
-        if (!file || !fileQr) {
+
+        if (!file) {
             alert("Por favor, selecciona una imagen de firma y QR");
             return;
         }
@@ -499,11 +538,9 @@ async function generarPDF(formId) {
             doc.addImage(imgData, "PNG", 75, startY + 85, 60, 30);
 
             // Leer la imagen del QR
-            readerQR.onload = function (event) {
-                const imgQR = event.target.result;
 
-                // Agregar la imagen del QR
-                doc.addImage(imgQR, "PNG", 160, startY + 125, 25, 20); // Ajusta las coordenadas y tamaño según sea necesario
+            // Agregar la imagen del QR
+                doc.addImage(imgQR12, "PNG", 160, startY + 125, 25, 20); // Ajusta las coordenadas y tamaño según sea necesario
                 // Obtener la fecha de la ID 'fecha' y transformarla
                 const fecha = new Date(document.getElementById("fecha").value); // Suponiendo que tienes una fecha en formato 'YYYY-MM-DD'
                 const meses = [
@@ -574,20 +611,18 @@ async function generarPDF(formId) {
                 doc.text("914 105 601 | 913 036 413", textLeft, textBottom + 15);
                 //DESCARGA
                 doc.save("certificado_valorizacion.pdf");
-            };
             // Leer el archivo del QR
-            readerQR.readAsDataURL(fileQr);
-
+            //readerQR.readAsDataURL(fileQr);
+            window.location.reload();
         };
 
         reader.readAsDataURL(file); // AQUÍ CREA CANICAS
+
     } else if (formId === "pdfAguas") {
         const input1 = document.getElementById("firma1");
         const file1 = input1.files[0];
-        const inputQr1 = document.getElementById("qr1");
-        const fileQr1 = inputQr1.files[0];
 
-        if (!file1 || !fileQr1) {
+        if (!file1) {
             alert("Por favor, selecciona una imagen de firma y QR");
             return;
         }
@@ -861,11 +896,9 @@ async function generarPDF(formId) {
             doc.addImage(imgData1, "PNG", 75, startY + 75, 60, 30);
 
             // Leer la imagen del QR
-            readerQR1.onload = function (event) {
-                const imgQR1 = event.target.result;
 
                 // Agregar la imagen del QR
-                doc.addImage(imgQR1, "PNG", 160, startY + 125, 25, 20); // Ajusta las coordenadas y tamaño según sea necesario
+                doc.addImage(imgQR12, "PNG", 160, startY + 125, 25, 20); // Ajusta las coordenadas y tamaño según sea necesario
                 // Obtener la fecha de la ID 'fecha' y transformarla
                 const fecha = new Date(document.getElementById("fecha1").value); // Suponiendo que tienes una fecha en formato 'YYYY-MM-DD'
                 const meses = [
@@ -936,12 +969,15 @@ async function generarPDF(formId) {
                 doc.text("914 105 601 | 913 036 413", textLeft, textBottom + 15);
 
                 doc.save("certificado_valorizacion.pdf");
-            };
 
             // Leer el archivo del QR
-            readerQR1.readAsDataURL(fileQr1);
+            //readerQR1.readAsDataURL(fileQr1);
 
         };
         reader1.readAsDataURL(file1);
+        window.location.reload();
+
     }
+    
+
 }

@@ -67,7 +67,7 @@
     <button onclick="showForm('pdfResiduos')">PDF RESIDUOS SOLIDOS</button>
     <button onclick="showForm('pdfAguas')">PDF AGUAS</button>
 
-    <div id="qrcode" style="margin: 20px;"></div>
+    <div id="qrcode" style="margin: 20px; display:none;"></div>
 
 
     <div id="pdfResiduos" class="form-container">
@@ -134,9 +134,6 @@
 
             <label for="firma">Firma de la empresa (imagen):</label>
             <input type="file" id="firma" name="firma" accept="image/*" />
-
-            <label for="qr">QR (imagen):</label>
-            <input type="file" id="qr" name="qr" accept="image/*" />
 
             <button type="button" onclick="generarPDF('pdfResiduos')">
                 Generar PDF
