@@ -9,9 +9,23 @@
 
     // Mostrar el contenedor del formulario seleccionado
     document.getElementById(formId).style.display = "block";
+
+    // Obtener todos los botones
+    const buttons = document.querySelectorAll(".buttons button");
+
+    // Remover la clase activa de todos los botones
+    buttons.forEach((button) => {
+        button.classList.remove("button-active");
+    });
+
+    // Agregar la clase activa al botón seleccionado
+    const activeButton = document.getElementById(`btn${formId.replace('pdf', '')}`);
+    if (activeButton) {
+        activeButton.classList.add("button-active");
+    }
 }
 
-// Inicialmente ocultar todos los formularios
+// Inicialmente ocultar todos los formularios y aplicar la clase activa al botón por defecto
 document.addEventListener("DOMContentLoaded", () => {
     showForm("pdfResiduos"); // Mostrar por defecto el formulario de residuos sólidos
 });
