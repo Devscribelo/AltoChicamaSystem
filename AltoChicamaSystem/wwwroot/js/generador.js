@@ -153,6 +153,44 @@ function obtenerMayorDocumentoID() {
     });
 }
 
+function Documento_MaxNumero() {
+    var endpoint = "/Repositorio/Documento_MaxNumero"; // Ruta relativa del endpoint
+
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: "POST",
+            url: endpoint,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log("Respuesta del servidor:", data); // Inspecciona la respuesta completa
+                console.log(data.item3);
+
+                // Asegúrate de que `data.item3` sea el valor que necesitas y conviértelo a string
+                var obtenerdocumentonumero = (parseInt(data.item3) + 1).toString();
+                usarQR(); // Llama a la función usarQR
+
+                // Asigna el valor convertido a los campos de código de empresa
+                document.getElementById('codigoEmpresa').value = obtenerdocumentonumero;
+                document.getElementById('codigoEmpresa1').value = obtenerdocumentonumero;
+
+                // Resuelve la promesa con el valor string
+                resolve(obtenerdocumentonumero);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+                alert('Error fatal: ' + error);
+                reject(error); // Rechaza la promesa en caso de error
+            }
+        });
+    });
+}
+
+Documento_MaxNumero()
+
+
 function abrirEnlaceEnVentana(documentoId) {
     const enlace = `/api/Documento/Ver/${documentoId}`;
     const viewerUrl = `/views/pdf-viewer.html?file=${encodeURIComponent(window.location.origin + enlace)}`;
@@ -535,7 +573,7 @@ async function generarPDF(formId) {
             });
 
             // Firma de la empresa
-            doc.addImage(imgData, "PNG", 75, startY + 85, 60, 30);
+            doc.addImage(imgData, "PNG", 75, startY + 85, 60, 25);
 
             // Leer la imagen del QR
 
@@ -613,7 +651,6 @@ async function generarPDF(formId) {
                 doc.save("certificado_valorizacion.pdf");
             // Leer el archivo del QR
             //readerQR.readAsDataURL(fileQr);
-            window.location.reload();
         };
 
         reader.readAsDataURL(file); // AQUÍ CREA CANICAS
@@ -975,7 +1012,7 @@ async function generarPDF(formId) {
 
         };
         reader1.readAsDataURL(file1);
-        window.location.reload();
+        //window.location.reload();
 
     }
     

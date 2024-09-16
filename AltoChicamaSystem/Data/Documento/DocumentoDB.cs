@@ -223,8 +223,8 @@ namespace AltoChicamaSystem.Data.Documento
             return Tuple.Create(rpta, msg);
         }
 
- 
-        public Tuple<string, string, List<DocumentoResult>> listarDocumentoEmpresa(int empresa_id, int estado , string bandera)
+
+        public Tuple<string, string, List<DocumentoResult>> listarDocumentoEmpresa(int empresa_id, int estado, string bandera)
         {
             List<DocumentoResult> lst = new List<DocumentoResult>();
             DocumentoResult documento = new DocumentoResult();
@@ -316,6 +316,41 @@ namespace AltoChicamaSystem.Data.Documento
                 }
             }
             return mayorDocumentoID;
+        }
+
+        public int Documento_MaxNumero(string bandera)
+        {
+            int MaxDocumentoNumero = 0; // Valor por defecto en caso de error o no resultados
+
+            using (SqlConnection sqlCon = new SqlConnection(con.obtenerDatosConexion(bandera)))
+            {
+                try
+                {
+                    sqlCon.Open();
+                    using (SqlCommand sqlCmd = new SqlCommand("Documento_MaxNumero", sqlCon))
+                    {
+                        sqlCmd.CommandType = CommandType.StoredProcedure;
+
+                        using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                        {
+                            if (sdr.Read())
+                            {
+                                // Lee el valor máximo del documento_id
+                                if (sdr["MaxDocumentoNumero"] != DBNull.Value)
+                                {
+                                    MaxDocumentoNumero = Convert.ToInt32(sdr["MaxDocumentoNumero"]);
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Manejo de errores: considera registrar el error para fines de depuración
+                    Console.WriteLine("Error al obtener el numero de documento: " + ex.Message);
+                }
+            }
+            return MaxDocumentoNumero;
         }
 
 

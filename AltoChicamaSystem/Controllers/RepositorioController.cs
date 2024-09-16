@@ -156,6 +156,33 @@ namespace AltoChicamaSystem.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult Documento_MaxNumero()
+        {
+            var result = Tuple.Create("1", "Error al obtener el mayor numero de Documento", string.Empty);
+
+            try
+            {
+                string bandera = conf.GetValue<string>("Bandera");
+                var negocioResult = objusuarioCN.Documento_MaxNumero(bandera);
+
+                if (negocioResult.Item1 == "Exito")
+                {
+                    result = Tuple.Create("0", "Operación exitosa", negocioResult.Item2);
+                }
+                else
+                {
+                    result = Tuple.Create("1", "Error al obtener el mayor documento ID", negocioResult.Item2);
+                }
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                result = Tuple.Create("1", "Excepción: " + ex.Message, string.Empty);
+                return Json(result);
+            }
+        }
+
 
 
     }

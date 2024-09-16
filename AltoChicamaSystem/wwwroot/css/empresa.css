@@ -52,7 +52,7 @@
     border-bottom: 1px solid #000 !important;
 }
 
-/* Estilo general para los inputs y el botón en el modal */
+/* Estilo general para los inputs y el botï¿½n en el modal */
 .modal-content form .input-group {
     margin-bottom: 15px; /* Espacio entre los grupos de input */
 }
@@ -69,15 +69,15 @@
 
 .modal-content form .btnGuardar {
     display: block;
-    width: 100%; /* Botón de tamaño completo */
-    padding: 10px 15px; /* Espacio interno en el botón */
-    background-color: #198754 !important; /* Color de fondo del botón */
-    color: #fff; /* Color del texto del botón */
+    width: 100%; /* Botï¿½n de tamaï¿½o completo */
+    padding: 10px 15px; /* Espacio interno en el botï¿½n */
+    background-color: #198754 !important; /* Color de fondo del botï¿½n */
+    color: #fff; /* Color del texto del botï¿½n */
     border: none; /* Sin bordes */
     border-radius: 5px; /* Esquinas redondeadas */
-    font-size: 16px; /* Tamaño de fuente */
-    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
-    transition: background-color 0.3s ease; /* Animación suave al hacer hover */
+    font-size: 16px; /* Tamaï¿½o de fuente */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botï¿½n */
+    transition: background-color 0.3s ease; /* Animaciï¿½n suave al hacer hover */
 }
 
     .modal-content form .btnGuardar:hover {
@@ -114,7 +114,7 @@
     font-family: 'Material Symbols Outlined';
     font-weight: normal;
     font-style: normal;
-    font-size: 24px; /* Ajusta el tamaño según sea necesario */
+    font-size: 24px; /* Ajusta el tamaï¿½o segï¿½n sea necesario */
     line-height: 1;
     letter-spacing: normal;
     text-transform: none;
@@ -130,7 +130,7 @@
     font-family: 'Material Icons' !important;
     font-weight: normal;
     font-style: normal;
-    font-size: 24px; /* Ajusta el tamaño según sea necesario */
+    font-size: 24px; /* Ajusta el tamaï¿½o segï¿½n sea necesario */
     line-height: 1;
     letter-spacing: normal;
     text-transform: none;
@@ -172,14 +172,14 @@
 .custom-table {
     border-collapse: separate !important;
     border-spacing: 3px !important;
-    border-radius: 8px; /* Ajusta el valor según tus necesidades */
+    border-radius: 8px; /* Ajusta el valor segï¿½n tus necesidades */
     overflow: hidden; /* Asegura que el radio se aplique a las esquinas */
 }
 
     .custom-table th,
     .custom-table td {
         border: 1px solid #ddd; /* Estilo de borde para celdas */
-        border-radius: 4px; /* Ajusta el valor según tus necesidades */
+        border-radius: 4px; /* Ajusta el valor segï¿½n tus necesidades */
     }
 
     .custom-table td, .custom-table th {
@@ -259,7 +259,7 @@ table.dataTable.no-footer {
 }
 
 .modal-content * {
-    padding: 4px !important; /* Ajusta el valor según lo necesites */
+    padding: 4px !important; /* Ajusta el valor segï¿½n lo necesites */
 }
 
 /* Estilo para el filtro generado por DataTables */
@@ -289,7 +289,7 @@ table.dataTable.no-footer {
             color: #777 !important;
         }
 
-    /* Ajusta el margen del label para que la palabra "Buscar" esté más a la izquierda */
+    /* Ajusta el margen del label para que la palabra "Buscar" estï¿½ mï¿½s a la izquierda */
     .dataTables_filter label {
         display: flex;
         align-items: center;
@@ -324,7 +324,7 @@ table.dataTable.no-footer {
     }
 }
 
-/* Estilos específicos para los botones */
+/* Estilos especï¿½ficos para los botones */
 #btnExportExcel, #btnExportPdf {
     position: relative;
     width: 144px;
@@ -420,7 +420,7 @@ table.dataTable.no-footer {
     background-color: #e74c3c !important; /* Color de fondo rojo para PDF */
 }
 
-/* Consultas de medios para pantallas pequeñas */
+/* Consultas de medios para pantallas pequeï¿½as */
 @media (max-width: 768px) {
     #contenedorBotones {
         gap: 1px; /* Ajuste del espacio entre botones para tabletas */
@@ -447,7 +447,7 @@ table.dataTable.no-footer {
 
 @media (max-width: 480px) {
     #contenedorBotones {
-        gap: 1px; /* Ajuste del espacio entre botones para móviles */
+        gap: 1px; /* Ajuste del espacio entre botones para mï¿½viles */
         margin-top: 10px !important;
         justify-content: center !important;
     }
@@ -531,18 +531,18 @@ table.dataTable.no-footer {
     transition: 0.3s !important;
     background-color: #ffffff !important;
     font-weight: 600 !important;
-    margin-right: 10px !important; /* Ajusta el valor según el espacio que desees */
+    margin-right: 10px !important; /* Ajusta el valor segï¿½n el espacio que desees */
 }
 
     #btnAgregar::before {
-        content: "+" !important; /* Icono de añadir */
+        content: "+" !important; /* Icono de aï¿½adir */
         display: block !important;
-        font-size: 20px !important; /* Ajusta el tamaño del ícono si es necesario */
+        font-size: 20px !important; /* Ajusta el tamaï¿½o del ï¿½cono si es necesario */
         background-color: #0d4b1f !important;
         color: #fff !important;
         border-radius: 50% !important; /* Forma circular */
-        width: 20px !important; /* Ajusta el tamaño del ícono si es necesario */
-        height: 20px !important; /* Ajusta el tamaño del ícono si es necesario */
+        width: 20px !important; /* Ajusta el tamaï¿½o del ï¿½cono si es necesario */
+        height: 20px !important; /* Ajusta el tamaï¿½o del ï¿½cono si es necesario */
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -578,12 +578,12 @@ table.dataTable.no-footer {
     #btnActualizar::before {
         content: "O" !important; /* Icono de refrescar */
         display: block !important;
-        font-size: 20px !important; /* Ajusta el tamaño del ícono si es necesario */
+        font-size: 20px !important; /* Ajusta el tamaï¿½o del ï¿½cono si es necesario */
         background-color: #0a58ca !important; /* Cambia el color si es necesario */
         color: #fff !important;
         border-radius: 50% !important; /* Forma circular */
-        width: 20px !important; /* Ajusta el tamaño del ícono si es necesario */
-        height: 20px !important; /* Ajusta el tamaño del ícono si es necesario */
+        width: 20px !important; /* Ajusta el tamaï¿½o del ï¿½cono si es necesario */
+        height: 20px !important; /* Ajusta el tamaï¿½o del ï¿½cono si es necesario */
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -605,8 +605,8 @@ table.dataTable.no-footer {
     width: 29px !important;
     height: 29px !important;
     border-radius: 50% !important;
-    background-color: #f0f0f0 !important; /* Fondo gris claro para todos los íconos */
-    color: #02409c !important; /* Color de ícono por defecto */
+    background-color: #f0f0f0 !important; /* Fondo gris claro para todos los ï¿½conos */
+    color: #02409c !important; /* Color de ï¿½cono por defecto */
     font-size: 18px !important;
     margin: 0 5px !important;
     transition: transform 0.3s ease, box-shadow 0.3s ease !important;
@@ -614,15 +614,15 @@ table.dataTable.no-footer {
 }
 
     .icon-circle.red {
-        background-color: #f0f0f0 !important; /* Fondo gris claro para el ícono de eliminar */
-        color: red !important; /* Color del ícono de eliminar */
+        background-color: #f0f0f0 !important; /* Fondo gris claro para el ï¿½cono de eliminar */
+        color: red !important; /* Color del ï¿½cono de eliminar */
     }
 
     .icon-circle.edit {
-        color: #FAA716 !important; /* Color del ícono de editar */
+        color: #FAA716 !important; /* Color del ï¿½cono de editar */
     }
 
     .icon-circle:hover {
         transform: scale(1.1) !important; /* Efecto de zoom al pasar el cursor */
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3) !important; /* Sombra más pronunciada al pasar el cursor */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3) !important; /* Sombra mï¿½s pronunciada al pasar el cursor */
     }
