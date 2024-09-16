@@ -256,10 +256,16 @@ async function generarPDF(formId) {
     if (formId === "pdfResiduos") {
         const input = document.getElementById("firma");
         const file = input.files[0];
+        let residuos = document.getElementById("residuos").value;
+        let fecha = document.getElementById("fecha").value;
+        let numeroGuia = document.getElementById("numeroGuia").value;
+        let empresa = document.getElementById("empresa").value;
+        let tipoResiduoTitulo = document.getElementById("tipoResiduoTitulo").value;
+        let toneladas = document.getElementById("toneladas").value;
+        let nomEmpresa = document.getElementById("nomEmpresa").value;
 
-
-        if (!file) {
-            alert("Por favor, selecciona una imagen de firma y QR");
+        if (!file || !residuos || !fecha || !numeroGuia || !empresa || !tipoResiduoTitulo || !toneladas || nomEmpresa) {
+            alert("Por favor llene todos los campos");
             return;
         }
 
@@ -456,8 +462,6 @@ async function generarPDF(formId) {
                 });
             });
 
-            let residuos = document.getElementById("residuos").value;
-
             if (residuos) {
                 doc.setFontSize(11);
                 let texto = `Residuos sólidos provenientes de la siguiente dirección: ${residuos}, generados por:`;
@@ -465,6 +469,7 @@ async function generarPDF(formId) {
                 doc.text(splittedText, margin, textoYPositionAdicional + 40);
             } else {
                 alert("Por favor, complete el campo 'residuos'.");
+                return;
             }
 
             // Cuadro con información de RUC y Nombre de la Empresa
@@ -658,9 +663,16 @@ async function generarPDF(formId) {
     } else if (formId === "pdfAguas") {
         const input1 = document.getElementById("firma1");
         const file1 = input1.files[0];
+        let residuos = document.getElementById("residuos1").value;
+        let fecha = document.getElementById("fecha1").value;
+        let numeroGuia = document.getElementById("numeroGuia1").value;
+        let empresa = document.getElementById("empresa1").value;
+        let tipoAguaTitulo = document.getElementById("tipoAguaTitulo").value;
+        let metros = document.getElementById("metros3").value;
+        let nomEmpresa = document.getElementById("nomEmpresa1").value;
 
-        if (!file1) {
-            alert("Por favor, selecciona una imagen de firma y QR");
+        if (!file1 || !residuos || !fecha || !numeroGuia || !empresa || !tipoResiduoTitulo || !toneladas || nomEmpresa) {
+            alert("Por favor llene todos los campos");
             return;
         }
 
@@ -864,15 +876,13 @@ async function generarPDF(formId) {
                 });
             });
 
-            let residuos = document.getElementById("residuos1").value;
+            
 
             if (residuos) {
                 doc.setFontSize(11);
                 let texto = `Líquidos residuales provenientes de la siguiente dirección: ${residuos}, generados por:`;
                 let splittedText = doc.splitTextToSize(texto, contentWidth);
                 doc.text(splittedText, margin, textoYPositionAdicional + 45);
-            } else {
-                alert("Por favor, complete el campo 'residuos'.");
             }
 
             // Cuadro con información de RUC y Nombre de la Empresa
