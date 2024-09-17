@@ -213,7 +213,7 @@
 
             <div class="form-row">
                 <label for="toneladas">TN:</label>
-                <input type="number" id="toneladas" name="toneladas" required />
+                <input type="text" id="toneladas" name="toneladas" required />
             </div>
 
             <div class="form-row">
@@ -228,7 +228,7 @@
 
             <div class="form-row">
                 <label for="ruc">RUC:</label>
-                <input type="number" id="ruc" name="ruc" required disabled/>
+                <input type="text" id="ruc" name="ruc" required disabled/>
             </div>
 
             <div class="firma-container">
@@ -301,7 +301,7 @@
             
             <div class="form-row">
                 <label for="metros3">M³:</label>
-                <input type="number" id="metros3" name="metros3" required />
+                <input type="text" id="metros3" name="metros3" required />
             </div>
 
             <div class="form-row">
@@ -316,7 +316,7 @@
 
             <div class="form-row">
                 <label for="ruc1">RUC:</label>
-                <input type="number" id="ruc1" name="ruc1" required disabled/>
+                <input type="text" id="ruc1" name="ruc1" required disabled/>
             </div>
 
             <div class="firma-container">
@@ -330,6 +330,21 @@
         </form>
     </div>
 </section>
+
+<script>
+    document.getElementById('toneladas').addEventListener('input', function (e) {
+        this.value = this.value.replace(/\D/g, '').substring(0, 11);
+    });
+    document.getElementById('metros3').addEventListener('input', function (e) {
+        this.value = this.value.replace(/\D/g, '').substring(0, 11);
+    });
+    document.getElementById('ruc').addEventListener('input', function (e) {
+        this.value = this.value.replace(/\D/g, '').substring(0, 11);
+    });
+    document.getElementById('ruc1').addEventListener('input', function (e) {
+        this.value = this.value.replace(/\D/g, '').substring(0, 11);
+    });
+</script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="~/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
