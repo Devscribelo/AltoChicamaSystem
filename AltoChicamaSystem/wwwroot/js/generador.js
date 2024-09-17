@@ -478,7 +478,7 @@ async function generarPDF(formId) {
 
             if (residuos) {
                 doc.setFontSize(11);
-                let texto = `Residuos sólidos provenientes de la siguiente dirección: ${residuos}, generados por:`;
+                let texto = `Residuos sólidos provenientes de la siguiente dirección: ${residuos}, generados por la empresa:`;
                 let splittedText = doc.splitTextToSize(texto, contentWidth);
                 doc.text(splittedText, margin, textoYPositionAdicional + 40);
             } else {
@@ -542,7 +542,7 @@ async function generarPDF(formId) {
 
             // Definir el texto completo
             let textoCompleto =
-                "La EO-RS ALTO CHICAMA S.R.L. es una empresa comprometida con el cuidado del medio ambiente y que opera en cumplimiento a lo dispuesto por el D.L. N° 1278, Ley de Gestión Integral de Residuos Sólidos, su modificatoria la Ley N° 1501; su reglamento y modificatoria.";
+                "La EO-RS ALTO CHICAMA S.R.L.   es una empresa comprometida con el cuidado del medio ambiente y que opera en cumplimiento a lo dispuesto por el D.L. N° 1278, Ley de Gestión Integral de Residuos Sólidos, su modificatoria la Ley N° 1501; su reglamento y modificatoria.";
 
             // Ancho máximo permitido para el texto en la página
             let maxWidth = doc.internal.pageSize.getWidth() - margin * 2;
@@ -847,8 +847,9 @@ async function generarPDF(formId) {
                     cellWidth,
                     cellHeight
                 );
+
                 let headerX = margin + index * cellWidth + cellWidth / 2;
-                let headerY = startY + cellHeight / 2.5;
+                let headerY = startY + cellHeight / 2;
                 doc.text(header, headerX, headerY, null, null, "center");
             });
             doc.setFont(undefined, "normal");
@@ -878,23 +879,22 @@ async function generarPDF(formId) {
                 // Calcula el inicio Y para centrar el texto verticalmente
                 let lineHeight = 5; // Altura de cada línea de texto
                 let totalTextHeight = lines.length * lineHeight;
-                let textY =
-                    startY + (cellHeight - totalTextHeight) / 2 + lineHeight;
+                let textY = startY + (cellHeight - totalTextHeight) / 2 + lineHeight / 2;
 
                 lines.forEach((line) => {
                     let textWidth = doc.getTextWidth(line);
-                    let textX =
-                        margin + index * cellWidth + (cellWidth - textWidth) / 2; // Centramos horizontalmente
+                    let textX = margin + index * cellWidth + (cellWidth - textWidth) / 2; // Centramos horizontalmente
                     doc.text(line, textX, textY);
                     textY += lineHeight; // Mueve hacia abajo para la siguiente línea
                 });
             });
 
+
             
 
             if (residuos) {
                 doc.setFontSize(11);
-                let texto = `Líquidos residuales provenientes de la siguiente dirección: ${residuos}, generados por:`;
+                let texto = `Líquidos residuales provenientes de la siguiente dirección: ${residuos}, generados por la empresa:`;
                 let splittedText = doc.splitTextToSize(texto, contentWidth);
                 doc.text(splittedText, margin, textoYPositionAdicional + 45);
             }

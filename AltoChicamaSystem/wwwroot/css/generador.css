@@ -1,0 +1,175 @@
+﻿body {
+    font-family: Arial, sans-serif !important;
+    max-width: 800px !important;
+    margin: 0 auto !important;
+    padding: 20px !important;
+    background-color: #e6f3f0 !important;
+}
+
+.form-row {
+    display: flex !important;
+    align-items: stretch !important;
+    margin-bottom: 10px !important;
+}
+
+label {
+    flex: 0 0 30% !important;
+    background-color: #c5e0dc !important;
+    padding: 10px !important;
+    margin-right: 10px !important;
+    border: 1px solid #a3c1bd !important;
+    border-radius: 5px 0 0 5px !important;
+    font-weight: bold !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+input, select {
+    flex: 1 !important;
+    padding: 10px !important;
+    border: 1px solid #ccc !important;
+    border-radius: 0 5px 5px 0 !important;
+    font-size: 16px !important;
+}
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+        border-color: #3498db !important;
+    }
+
+button {
+    background-color: #4caf50 !important; /* Verde */
+    color: white !important;
+    padding: 12px 20px !important; /* Mayor padding para mejor aspecto */
+    border: none !important;
+    cursor: pointer !important;
+    margin-top: 10px !important;
+    font-size: 16px !important; /* Tamaño de fuente */
+    font-weight: bold !important; /* Texto en negrita */
+    transition: background-color 0.3s ease, transform 0.3s ease !important; /* Transiciones suaves */
+}
+
+    button:hover {
+        background-color: #45a049 !important; /* Color verde más oscuro al pasar el ratón */
+        transform: scale(1.05) !important; /* Aumento ligero al pasar el ratón */
+    }
+
+    button:active {
+        background-color: #388e3c !important; /* Verde aún más oscuro cuando se presiona */
+        transform: scale(0.95) !important; /* Efecto de presión */
+    }
+
+table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin-top: 20px !important;
+}
+
+th,
+td {
+    border: 1px solid #ddd !important;
+    padding: 8px !important;
+    text-align: left !important;
+}
+
+th {
+    background-color: #f2f2f2 !important;
+}
+
+.form-container {
+    display: none;
+}
+
+.firma-container {
+    display: flex !important;
+
+    align-items: flex-start !important;
+    margin-bottom: 20px !important;
+    align-items: center !important;
+}
+
+    .firma-container label {
+        font-size: 16px !important;
+        font-weight: bold !important;
+        margin-bottom: -5px !important;
+    }
+
+    .firma-container input[type="file"] {
+        padding: 10px 20px !important;
+        border: 2px solid #0d4b1f !important;
+        background-color: #f4f4f4 !important;
+        border-radius: 5px !important;
+        cursor: pointer !important;
+        color: #0d4b1f !important;
+        transition: all 0.3s ease !important;
+    }
+
+        .firma-container input[type="file"]::file-selector-button {
+            background-color: #0d4b1f !important;
+            color: white !important;
+            border: none !important;
+            padding: 10px 20px !important;
+            border-radius: 5px !important;
+            cursor: pointer !important;
+            transition: background-color 0.3s ease !important;
+        }
+
+            .firma-container input[type="file"]::file-selector-button:hover {
+                background-color: #0d4b1f !important;
+            }
+
+        .firma-container input[type="file"]:hover {
+            border-color: #0d4b1f !important;
+        }
+
+.subscribe .submit-btn {
+    position: absolute !important;
+    border-bottom-right-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    background-color: #0d4b1f !important;
+    color: #FFF !important;
+    padding: 9px 64px !important;
+    display: inline-block !important;
+    font-size: 19px !important;
+    font-weight: bold !important;
+    /* letter-spacing: 5px !important; */
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    bottom: 91% !important;
+    cursor: pointer !important;
+    transition: all .25s ease !important;
+}
+
+/* Ajuste para alinear botones a la izquierda en la misma fila */
+.d-flex {
+    display: flex !important;
+    gap: 10px; /* Espacio entre los botones, ajusta según sea necesario */
+}
+
+.col-md-9 {
+    display: flex !important;
+    justify-content: flex-start !important; /* Alinea los botones a la izquierda */
+}
+
+/* Asegura que los botones no se superpongan en pantallas pequeñas */
+@media (max-width: 767px) {
+    .d-flex {
+        flex-direction: column !important;
+    }
+}
+
+
+#btnResiduos.button-active,
+#btnAguas.button-active {
+    background-color: #2ecc71 !important; /* Color de fondo para el botón activo */
+    color: white !important; /* Color del texto para el botón activo */
+    border: none !important; /* Eliminar el borde si es necesario */
+}
+
+/* Estilo para los botones no activos */
+.buttons button {
+    background-color: #f8f9fa !important; /* Color de fondo para botones no activos */
+    color: #000 !important; /* Color del texto para botones no activos */
+    border: 1px solid #ccc !important; /* Borde para botones no activos */
+}
