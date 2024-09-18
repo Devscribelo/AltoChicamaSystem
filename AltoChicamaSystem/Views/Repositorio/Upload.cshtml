@@ -10,6 +10,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
     <link href="~/css/upload.css" rel="stylesheet" />
+    <style>
+
+        .plate-container {
+            margin-bottom: 15px; /* Espacio entre matrículas */
+        }
+
+        .plate-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px !important;
+        }
+
+        .plate-title {
+            font-size: 18px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .plate-input {
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            font-size: 24px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+            .plate-input:focus {
+                outline: none;
+                border-color: #17795E;
+            }
+
+        span {
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <section class="home">
@@ -138,44 +175,6 @@
                 }
             });
         </script>
-        <style>
-
-            .plate-container {
-                margin-bottom: 15px; /* Espacio entre matrículas */
-            }
-
-            .plate-row {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                margin-bottom: 10px !important;
-            }
-
-            .plate-title {
-                font-size: 18px;
-                margin-right: 10px;
-                font-weight: bold;
-            }
-
-            .plate-input {
-                width: 40px;
-                height: 40px;
-                text-align: center;
-                font-size: 24px;
-                border: 1px solid #ccc;
-                border-radius: 5px;
-            }
-
-                .plate-input:focus {
-                    outline: none;
-                    border-color: #17795E;
-                }
-
-            span {
-                font-size: 24px;
-                font-weight: bold;
-            }
-        </style>
     </section>
 </body>
 </html>
