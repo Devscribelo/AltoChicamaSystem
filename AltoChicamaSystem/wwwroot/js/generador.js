@@ -278,8 +278,12 @@ async function generarPDF(formId) {
         let toneladas = document.getElementById("toneladas").value;
         let nomEmpresa = document.getElementById("nomEmpresa").value;
 
-        if (!file || !residuos || !fecha || !numeroGuia || !empresa || !tipoResiduoTitulo || !toneladas || !nomEmpresa) {
-            alert("Por favor llene todos los campos");
+        if (!file || !residuos || !fecha || !numeroGuia || !empresa || !tipoResiduoTitulo || !toneladas || !nomEmpresa) {   
+            Swal.fire({
+                icon: 'error',
+                title: 'Ocurrió un error!',
+                text: 'Por favor llene todos los campos',
+            });
             return;
         }
 
@@ -686,7 +690,11 @@ async function generarPDF(formId) {
         let nomEmpresa = document.getElementById("nomEmpresa1").value;
 
         if (!file1 || !residuos || !fecha || !numeroGuia || !empresa || !tipoResiduoTitulo || !toneladas || !nomEmpresa) {
-            alert("Por favor llene todos los campos");
+            Swal.fire({
+                icon: 'error',
+                title: 'Ocurrió un error!',
+                text: 'Por favor llene todos los campos',
+            });
             return;
         }
 

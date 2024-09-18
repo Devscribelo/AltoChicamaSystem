@@ -173,3 +173,7 @@ th {
     color: #000 !important; /* Color del texto para botones no activos */
     border: 1px solid #ccc !important; /* Borde para botones no activos */
 }
+
+.swal2-checkbox {
+    display: none !important;
+}
