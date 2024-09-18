@@ -9,9 +9,23 @@
 
     // Mostrar el contenedor del formulario seleccionado
     document.getElementById(formId).style.display = "block";
+
+    // Obtener todos los botones
+    const buttons = document.querySelectorAll(".buttons button");
+
+    // Remover la clase activa de todos los botones
+    buttons.forEach((button) => {
+        button.classList.remove("button-active");
+    });
+
+    // Agregar la clase activa al botón seleccionado
+    const activeButton = document.getElementById(`btn${formId.replace('pdf', '')}`);
+    if (activeButton) {
+        activeButton.classList.add("button-active");
+    }
 }
 
-// Inicialmente ocultar todos los formularios
+// Inicialmente ocultar todos los formularios y aplicar la clase activa al botón por defecto
 document.addEventListener("DOMContentLoaded", () => {
     showForm("pdfResiduos"); // Mostrar por defecto el formulario de residuos sólidos
 });
@@ -256,10 +270,20 @@ async function generarPDF(formId) {
     if (formId === "pdfResiduos") {
         const input = document.getElementById("firma");
         const file = input.files[0];
+        let residuos = document.getElementById("residuos").value;
+        let fecha = document.getElementById("fecha").value;
+        let numeroGuia = document.getElementById("numeroGuia").value;
+        let empresa = document.getElementById("empresa").value;
+        let tipoResiduoTitulo = document.getElementById("tipoResiduoTitulo").value;
+        let toneladas = document.getElementById("toneladas").value;
+        let nomEmpresa = document.getElementById("nomEmpresa").value;
 
-
-        if (!file) {
-            alert("Por favor, selecciona una imagen de firma y QR");
+        if (!file || !residuos || !fecha || !numeroGuia || !empresa || !tipoResiduoTitulo || !toneladas || !nomEmpresa) {   
+            Swal.fire({
+                icon: 'error',
+                title: 'Ocurrió un error!',
+                text: 'Por favor llene todos los campos',
+            });
             return;
         }
 
@@ -456,15 +480,14 @@ async function generarPDF(formId) {
                 });
             });
 
-            let residuos = document.getElementById("residuos").value;
-
             if (residuos) {
                 doc.setFontSize(11);
-                let texto = `Residuos sólidos provenientes de la siguiente dirección: ${residuos}, generados por:`;
+                let texto = `Residuos sólidos provenientes de la siguiente dirección: ${residuos}, generados por la empresa:`;
                 let splittedText = doc.splitTextToSize(texto, contentWidth);
                 doc.text(splittedText, margin, textoYPositionAdicional + 40);
             } else {
                 alert("Por favor, complete el campo 'residuos'.");
+                return;
             }
 
             // Cuadro con información de RUC y Nombre de la Empresa
@@ -523,7 +546,7 @@ async function generarPDF(formId) {
 
             // Definir el texto completo
             let textoCompleto =
-                "La EO-RS ALTO CHICAMA S.R.L. es una empresa comprometida con el cuidado del medio ambiente y que opera en cumplimiento a lo dispuesto por el D.L. N° 1278, Ley de Gestión Integral de Residuos Sólidos, su modificatoria la Ley N° 1501; su reglamento y modificatoria.";
+                "La EO-RS ALTO CHICAMA S.R.L.   es una empresa comprometida con el cuidado del medio ambiente y que opera en cumplimiento a lo dispuesto por el D.L. N° 1278, Ley de Gestión Integral de Residuos Sólidos, su modificatoria la Ley N° 1501; su reglamento y modificatoria.";
 
             // Ancho máximo permitido para el texto en la página
             let maxWidth = doc.internal.pageSize.getWidth() - margin * 2;
@@ -658,9 +681,20 @@ async function generarPDF(formId) {
     } else if (formId === "pdfAguas") {
         const input1 = document.getElementById("firma1");
         const file1 = input1.files[0];
+        let residuos = document.getElementById("residuos1").value;
+        let fecha = document.getElementById("fecha1").value;
+        let numeroGuia = document.getElementById("numeroGuia1").value;
+        let empresa = document.getElementById("empresa1").value;
+        let tipoAguaTitulo = document.getElementById("tipoAguaTitulo").value;
+        let metros = document.getElementById("metros3").value;
+        let nomEmpresa = document.getElementById("nomEmpresa1").value;
 
-        if (!file1) {
-            alert("Por favor, selecciona una imagen de firma y QR");
+        if (!file1 || !residuos || !fecha || !numeroGuia || !empresa || !tipoResiduoTitulo || !toneladas || !nomEmpresa) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Ocurrió un error!',
+                text: 'Por favor llene todos los campos',
+            });
             return;
         }
 
@@ -821,8 +855,9 @@ async function generarPDF(formId) {
                     cellWidth,
                     cellHeight
                 );
+
                 let headerX = margin + index * cellWidth + cellWidth / 2;
-                let headerY = startY + cellHeight / 2.5;
+                let headerY = startY + cellHeight / 2;
                 doc.text(header, headerX, headerY, null, null, "center");
             });
             doc.setFont(undefined, "normal");
@@ -852,27 +887,24 @@ async function generarPDF(formId) {
                 // Calcula el inicio Y para centrar el texto verticalmente
                 let lineHeight = 5; // Altura de cada línea de texto
                 let totalTextHeight = lines.length * lineHeight;
-                let textY =
-                    startY + (cellHeight - totalTextHeight) / 2 + lineHeight;
+                let textY = startY + (cellHeight - totalTextHeight) / 2 + lineHeight / 2;
 
                 lines.forEach((line) => {
                     let textWidth = doc.getTextWidth(line);
-                    let textX =
-                        margin + index * cellWidth + (cellWidth - textWidth) / 2; // Centramos horizontalmente
+                    let textX = margin + index * cellWidth + (cellWidth - textWidth) / 2; // Centramos horizontalmente
                     doc.text(line, textX, textY);
                     textY += lineHeight; // Mueve hacia abajo para la siguiente línea
                 });
             });
 
-            let residuos = document.getElementById("residuos1").value;
+
+            
 
             if (residuos) {
                 doc.setFontSize(11);
-                let texto = `Líquidos residuales provenientes de la siguiente dirección: ${residuos}, generados por:`;
+                let texto = `Líquidos residuales provenientes de la siguiente dirección: ${residuos}, generados por la empresa:`;
                 let splittedText = doc.splitTextToSize(texto, contentWidth);
                 doc.text(splittedText, margin, textoYPositionAdicional + 45);
-            } else {
-                alert("Por favor, complete el campo 'residuos'.");
             }
 
             // Cuadro con información de RUC y Nombre de la Empresa

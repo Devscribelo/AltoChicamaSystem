@@ -64,10 +64,12 @@
                     <label class="input-group-text" for="select_matriculas">N° Matrículas</label>
                     <select class="form-select" id="select_matriculas">
                         <option value="" disabled selected>Seleccione el # de Matrículas...</option>
-                        <option>1</option>
-                        <option>2</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
                     </select>
                 </div>
+
+                <!-- Contenedor donde se agregan las entradas dinámicamente -->
                 <div id="matriculas_container" class="mt-3"></div>
 
             </div>
@@ -80,38 +82,98 @@
 
         <script>
             document.getElementById('select_matriculas').addEventListener('change', function () {
-                var matriculasContainer = document.getElementById('matriculas_container');
-                var numberOfInputs = parseInt(this.value);
+                const matriculasContainer = document.getElementById('matriculas_container');
+                const numberOfMatriculas = parseInt(this.value);
 
-                // Limpiar el contenedor de inputs
                 matriculasContainer.innerHTML = '';
 
-                // Crear los inputs necesarios
-                for (var i = 1; i <= numberOfInputs; i++) {
-                    var inputGroup = document.createElement('div');
-                    inputGroup.classList.add('input-group', 'mt-3');
+                for (let i = 1; i <= numberOfMatriculas; i++) {
+                    const plateDiv = document.createElement('div');
+                    plateDiv.classList.add('plate-container');
 
-                    var inputLabel = document.createElement('span');
-                    inputLabel.classList.add('input-group-text');
-                    inputLabel.textContent = `Matrícula ${i}`;
+                    plateDiv.innerHTML = `
+                            <div class="plate-row">
+                                <div class="plate-title">Matrícula ${i} :</div>
+                                <input type="text" maxlength="1" class="plate-input" id="char${i}_1" autofocus>
+                                <input type="text" maxlength="1" class="plate-input" id="char${i}_2">
+                                <input type="text" maxlength="1" class="plate-input" id="char${i}_3">
+                                <span>-</span>
+                                <input type="text" maxlength="1" class="plate-input" id="num${i}_1">
+                                <input type="text" maxlength="1" class="plate-input" id="num${i}_2">
+                                <input type="text" maxlength="1" class="plate-input" id="num${i}_3">
+                            </div>
+                        `;
 
-                    var inputField = document.createElement('input');
-                    inputField.type = 'text';
-                    inputField.classList.add('form-control', 'input-form2');
-                    inputField.id = `input_matricula_${i}`;
-                    inputField.placeholder = 'Ingrese la matrícula';
+                    matriculasContainer.appendChild(plateDiv);
+                }
 
-                    inputGroup.appendChild(inputLabel);
-                    inputGroup.appendChild(inputField);
+                function updatePlate(plateIndex) {
+                    const plateInputs = document.querySelectorAll(`#char${plateIndex}_1, #char${plateIndex}_2, #char${plateIndex}_3, #num${plateIndex}_1, #num${plateIndex}_2, #num${plateIndex}_3`);
+                    const plateValue =
+                        Array.from(plateInputs).map(input => input.value.toUpperCase()).join('');
 
-                    matriculasContainer.appendChild(inputGroup);
+                    // Update the plate value directly in the plate row
+                    const plateRow = document.querySelector(`.plate-container:nth-of-type(${plateIndex}) .plate-row`);
+                    plateRow.querySelectorAll('.plate-input').forEach((input, idx) => {
+                        if (input.id.includes(`char${plateIndex}`) || input.id.includes(`num${plateIndex}`)) {
+                            input.value = plateValue.charAt(idx) || '';
+                        }
+                    });
+                }
+
+                for (let i = 1; i <= numberOfMatriculas; i++) {
+                    const inputs = document.querySelectorAll(`#char${i}_1, #char${i}_2, #char${i}_3, #num${i}_1, #num${i}_2, #num${i}_3`);
+
+                    inputs.forEach(input => {
+                        input.addEventListener('input', function () {
+                            if (this.value.length === 1) {
+                                const nextInput = this.nextElementSibling;
+                                if (nextInput && nextInput.tagName === 'INPUT') {
+                                    nextInput.focus();
+                                }
+                            }
+                            updatePlate(i);
+                        });
+                    });
                 }
             });
-
         </script>
         <style>
-            .input-form2{
-                padding: 10px !important;
+
+            .plate-container {
+                margin-bottom: 15px; /* Espacio entre matrículas */
+            }
+
+            .plate-row {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 10px !important;
+            }
+
+            .plate-title {
+                font-size: 18px;
+                margin-right: 10px;
+                font-weight: bold;
+            }
+
+            .plate-input {
+                width: 40px;
+                height: 40px;
+                text-align: center;
+                font-size: 24px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+
+                .plate-input:focus {
+                    outline: none;
+                    border-color: #17795E;
+                }
+
+            span {
+                font-size: 24px;
+                font-weight: bold;
             }
         </style>
     </section>

@@ -178,9 +178,14 @@ function cargarDataPDF() {
 async function guardarDocumento(file) {
     var empresa_id = obtenerIdEmpresaSeleccionada("#input_empresa");
     var transportista_id = obtenerIdTransportistaSeleccionada("#input_transportista");
-    var matricula_1 = $("#input_matricula_1").val();
-    var matricula_2 = $("#input_matricula_2").length ? $("#input_matricula_2").val() : '';
-    var documento_matriculas = matricula_1 + ',' + matricula_2;
+    var matricula_1 = $("#char1_1").val() + $("#char1_2").val() + $("#char1_3").val() + ' - ' + $("#num1_1").val() + $("#num1_2").val() + $("#num1_3").val();
+    var matricula_2 = $("#char2_1").val() + $("#char2_2").val() + $("#char2_3").val() + ' - ' + $("#num2_1").val() + $("#num2_2").val() + $("#num2_3").val();
+
+    var documento_matriculas = matricula_1;
+    if ($("#char2_1").val() || $("#num2_1").val()) {
+        documento_matriculas += ' , ' + matricula_2;
+    }
+
 
     if (!empresa_id) {
         Swal.fire({

@@ -3,159 +3,35 @@
     Layout = "~/Views/Shared/_Layout2.cshtml";
 }
 
-<style>
-    body {
-        font-family: Arial, sans-serif !important;
-        max-width: 800px !important;
-        margin: 0 auto !important;
-        padding: 20px !important;
-        background-color: #e6f3f0 !important;
-    }
-
-    .form-row {
-        display: flex !important;
-        align-items: stretch !important;
-        margin-bottom: 10px !important;
-    }
-
-    label {
-        flex: 0 0 30% !important;
-        background-color: #c5e0dc !important;
-        padding: 10px !important;
-        margin-right: 10px !important;
-        border: 1px solid #a3c1bd !important;
-        border-radius: 5px 0 0 5px !important;
-        font-weight: bold !important;
-        display: flex !important;
-        align-items: center !important;
-    }
-
-    input, select {
-        flex: 1 !important;
-        padding: 10px !important;
-        border: 1px solid #ccc !important;
-        border-radius: 0 5px 5px 0 !important;
-        font-size: 16px !important;
-    }
-
-        input:focus,
-        textarea:focus,
-        select:focus {
-            border-color: #3498db !important;
-        }
-
-    button {
-        background-color: #4caf50 !important; /* Verde */
-        color: white !important;
-        padding: 12px 20px !important; /* Mayor padding para mejor aspecto */
-        border: none !important;
-        border-radius: 5px !important; /* Esquinas redondeadas */
-        cursor: pointer !important;
-        margin-top: 10px !important;
-        font-size: 16px !important; /* Tamaño de fuente */
-        font-weight: bold !important; /* Texto en negrita */
-        transition: background-color 0.3s ease, transform 0.3s ease !important; /* Transiciones suaves */
-    }
-
-        button:hover {
-            background-color: #45a049 !important; /* Color verde más oscuro al pasar el ratón */
-            transform: scale(1.05) !important; /* Aumento ligero al pasar el ratón */
-        }
-
-        button:active {
-            background-color: #388e3c !important; /* Verde aún más oscuro cuando se presiona */
-            transform: scale(0.95) !important; /* Efecto de presión */
-        }
-
-
-        button:hover {
-            background-color: #45a049 !important;
-        }
-
-    table {
-        width: 100% !important;
-        border-collapse: collapse !important;
-        margin-top: 20px !important;
-    }
-
-    th,
-    td {
-        border: 1px solid #ddd !important;
-        padding: 8px !important;
-        text-align: left !important;
-    }
-
-    th {
-        background-color: #f2f2f2 !important;
-    }
-
-    .form-container {
-        display: none;
-    }
-
-    .firma-container {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        margin-bottom: 20px !important;
-    }
-
-        .firma-container label {
-            font-size: 16px !important;
-            font-weight: bold !important;
-            margin-bottom: 8px !important;
-        }
-
-        .firma-container input[type="file"] {
-            padding: 10px 20px !important;
-            border: 2px solid #3498db !important;
-            background-color: #f4f4f4 !important;
-            border-radius: 5px !important;
-            cursor: pointer !important;
-            color: #3498db !important;
-            transition: all 0.3s ease !important;
-        }
-
-            .firma-container input[type="file"]::file-selector-button {
-                background-color: #3498db !important;
-                color: white !important;
-                border: none !important;
-                padding: 10px 20px !important;
-                border-radius: 5px !important;
-                cursor: pointer !important;
-                transition: background-color 0.3s ease !important;
-            }
-
-                .firma-container input[type="file"]::file-selector-button:hover {
-                    background-color: #2980b9 !important;
-                }
-
-            .firma-container input[type="file"]:hover {
-                border-color: #2980b9 !important;
-            }
-
-
-</style>
+<link rel="stylesheet" href="~/css/generador.css">
 
 <section class="home">
-    <h1>Seleccione un PDF</h1>
-    <button onclick="showForm('pdfResiduos')">PDF RESIDUOS SOLIDOS</button>
-    <button onclick="showForm('pdfAguas')">PDF AGUAS</button>
+
+    <div class="subscribe">
+        <div class="submit-btn">SELECCIONE UN PDF:</div>
+    </div>
+
+    <div class="buttons" style="display: flex; justify-content: center; gap: 10px; margin-top: 71px !important;">
+        <button id="btnResiduos" onclick="showForm('pdfResiduos')">PDF RESIDUOS SOLIDOS</button>
+        <button id="btnAguas" onclick="showForm('pdfAguas')">PDF AGUAS</button>
+    </div>
 
     <div id="qrcode" style="margin: 20px; display:none;"></div>
 
 
     <div id="pdfResiduos" class="form-container">
-        <h1>Formulario para Certificado de Valorización</h1>
+        <h1 style="margin-top:19px !important; margin-bottom:19px !important; font-size:23px !important; border-bottom: 2px solid black !important; padding-bottom: 6px !important; font-weight: bold !important; text-transform: uppercase !important;">
+            Formulario para Certificado de Valorización
+        </h1>
 
         <form id="formResiduos">
             <!-- Campos del formulario para residuos sólidos -->
-            
+
             <div class="form-row">
                 <label class="codigoEmpresa" for="codigoEmpresa">Número de Certificado:</label>
                 <input type="text" id="codigoEmpresa" name="codigoEmpresa" required disabled />
             </div>
-            
+
             <div class="form-row">
                 <label for="opcion">Seleccione una opción:</label>
                 <select id="opcion" name="opcion" required>
@@ -218,7 +94,7 @@
 
             <div class="form-row">
                 <label for="residuos">Dirección de Residuos:</label>
-                <textarea id="residuos" name="residuos" rows="4" required></textarea>
+                <textarea id="residuos" name="residuos" rows="1" required style="width:100% !important;"></textarea>
             </div>
 
             <div class="form-row">
@@ -228,7 +104,7 @@
 
             <div class="form-row">
                 <label for="ruc">RUC:</label>
-                <input type="number" id="ruc" name="ruc" required disabled/>
+                <input type="number" id="ruc" name="ruc" required disabled />
             </div>
 
             <div class="firma-container">
@@ -236,36 +112,38 @@
                 <input type="file" id="firma" name="firma" accept="image/*" />
             </div>
 
-            <button type="button" onclick="generarPDF('pdfResiduos')">
+            <button style="margin-bottom:16px !important;" type="button" onclick="generarPDF('pdfResiduos')">
                 Generar PDF
             </button>
         </form>
     </div>
 
     <div id="pdfAguas" class="form-container">
-        <h1>Formulario para Certificado de Valorización</h1>
+        <h1 style="margin-top:19px !important; margin-bottom:19px !important; font-size:23px !important; border-bottom: 2px solid black !important; padding-bottom: 6px !important; font-weight: bold !important; text-transform: uppercase !important;">
+            Formulario para Certificado de Valorización
+        </h1>
         <form id="formAguas">
             <!-- Campos del formulario para aguas -->
             <div class="form-row">
                 <label for="codigoEmpresa1">Número de Certificado:</label>
-                <input type="text" id="codigoEmpresa1" name="codigoEmpresa1" required disabled/>
+                <input type="text" id="codigoEmpresa1" name="codigoEmpresa1" required disabled />
             </div>
 
             <div class="form-row">
                 <label for="opcion1">Seleccione una opción:</label>
                 <select id="opcion1" name="opcion1" required>
                     <option value="TRATAMIENTO DE LÍQUIDOS RESIDUALES">
-                        Opción 2: TRATAMIENTO DE LÍQUIDOS RESIDUALES
+                        Opción 1: TRATAMIENTO DE LÍQUIDOS RESIDUALES
                     </option>
                     <option value="TRATAMIENTO DE GRASAS RESIDUALES DOMÉSTICAS">
-                        Opción 3: TRATAMIENTO DE GRASAS RESIDUALES DOMÉSTICAS
+                        Opción 2: TRATAMIENTO DE GRASAS RESIDUALES DOMÉSTICAS
                     </option>
                     <option value="TRATAMIENTO DE AGUAS RESIDUALES – TIPO DOMÉSTICAS">
-                        Opción 4: TRATAMIENTO DE AGUAS RESIDUALES – TIPO DOMÉSTICAS
+                        Opción 3: TRATAMIENTO DE AGUAS RESIDUALES – TIPO DOMÉSTICAS
                     </option>
                 </select>
             </div>
-            
+
             <div class="form-row">
                 <label for="fecha1">Fecha:</label>
                 <input type="date" id="fecha1" name="fecha1" required />
@@ -283,7 +161,7 @@
             </div>
 
             <div class="form-row">
-                <label for="tipoAguaTitulo">Seleccione una opción de de Título de RESIDUO:</label>
+                <label for="tipoAguaTitulo">Seleccione una opción de Título de RESIDUO:</label>
                 <select id="tipoAguaTitulo" name="tipoAguaTitulo" required>
                     <option value="Tipo de Agua Residual">
                         Opción 1: Tipo de Agua Residual
@@ -298,7 +176,7 @@
                 <label for="tipoAgua">Tipo de Residuo:</label>
                 <input type="text" id="tipoAgua" name="tipoAgua" required />
             </div>
-            
+
             <div class="form-row">
                 <label for="metros3">M³:</label>
                 <input type="number" id="metros3" name="metros3" required />
@@ -306,7 +184,7 @@
 
             <div class="form-row">
                 <label for="residuos1">Dirección de Residuos:</label>
-                <textarea id="residuos1" name="residuos1" rows="4" required></textarea>
+                <textarea id="residuos1" name="residuos1" rows="1" required style="width: 100% !important;"></textarea>
             </div>
 
             <div class="form-row">
@@ -316,7 +194,7 @@
 
             <div class="form-row">
                 <label for="ruc1">RUC:</label>
-                <input type="number" id="ruc1" name="ruc1" required disabled/>
+                <input type="number" id="ruc1" name="ruc1" required disabled />
             </div>
 
             <div class="firma-container">
@@ -324,15 +202,32 @@
                 <input type="file" id="firma1" name="firma1" accept="image/*" />
             </div>
 
-            <button type="button" onclick="generarPDF('pdfAguas')">
+            <button style="margin-bottom:16px !important;" type="button" onclick="generarPDF('pdfAguas')">
                 Generar PDF
             </button>
         </form>
     </div>
 </section>
 
+<script>
+    document.getElementById('toneladas').addEventListener('input', function (e) {
+        this.value = this.value.replace(/\D/g, '').substring(0, 11);
+    });
+    document.getElementById('metros3').addEventListener('input', function (e) {
+        this.value = this.value.replace(/\D/g, '').substring(0, 11);
+    });
+    document.getElementById('ruc').addEventListener('input', function (e) {
+        this.value = this.value.replace(/\D/g, '').substring(0, 11);
+    });
+    document.getElementById('ruc1').addEventListener('input', function (e) {
+        this.value = this.value.replace(/\D/g, '').substring(0, 11);
+    });
+</script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="~/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="~/config.js"></script>
 <script src="~/js/generador.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
