@@ -106,22 +106,34 @@ function TransportistaSelect(id_transportista) {
             var TransportistaSelect = data.item3;
 
             // Limpiar el select y agregar opción por defecto
-            if (id_transportista === "#empresa" || id_transportista === "#empresa1" ) {
+            if (id_transportista === "#empresa" || id_transportista === "#empresa1") {
                 $(id_transportista).empty();
                 $(id_transportista).append('<option value="" disabled selected>Seleccione un transportista...</option>');
             }
 
             // Verificar si la data es null, vacía, o contiene solo espacios en blanco
             if (TransportistaSelect && TransportistaSelect.length > 0) {
+                // Guardar datos de los transportistas en una variable accesible
+                var transportistas = {};
+
                 // Agregar opciones al select
                 for (var i = 0; i < TransportistaSelect.length; i++) {
                     var item = TransportistaSelect[i];
                     $(id_transportista).append(
                         '<option value="' + item.transportista_nombre + '">' + item.transportista_nombre + '</option>'
                     );
+                    transportistas[item.transportista_nombre] = item.transportista_ruc;
                 }
-            }
 
+                // Manejar el evento de cambio en el select
+                $(id_transportista).change(function () {
+                    var selectedTransportista = $(this).val();
+                    if (transportistas[selectedTransportista]) {
+                        document.getElementById('ruct').value = transportistas[selectedTransportista];
+                        document.getElementById('ruct1').value = transportistas[selectedTransportista];
+                    }
+                });
+            }
         },
         error: function (data) {
             alert('Error fatal ' + data);
@@ -129,6 +141,7 @@ function TransportistaSelect(id_transportista) {
         }
     });
 }
+
 TransportistaSelect("#empresa");
 TransportistaSelect("#empresa1");
 async function loadImage(path) {
@@ -533,10 +546,10 @@ async function generarPDF(formId) {
 
             // Agregar el texto predeterminado con los datos de la empresa y el RUC
             doc.setFontSize(11);
-            let nombreEmpresa = document.getElementById("nomEmpresa").value;
-            let ruc = document.getElementById("ruc").value;
+            let nombreEmpresa = document.getElementById("empresa").value;
+            let ruct = document.getElementById("ruct").value;
 
-            let textoPredeterminado3 = `Transportados por la empresa ${nombreEmpresa} con RUC: ${ruc} hacia la Infraestructura de Valorización Alto Chicama, ubicada en la Panamericana Norte Km 594, Sector La Soledad – Chicama – Ascope – La Libertad; para su valorización.`;
+            let textoPredeterminado3 = `Transportados por la empresa ${nombreEmpresa} con RUC: ${ruct} hacia la Infraestructura de Valorización Alto Chicama, ubicada en la Panamericana Norte Km 594, Sector La Soledad – Chicama – Ascope – La Libertad; para su valorización.`;
 
             let splittedText = doc.splitTextToSize(
                 textoPredeterminado3,
@@ -951,9 +964,9 @@ async function generarPDF(formId) {
             // Agregar el texto predeterminado con los datos de la empresa y el RUC
             doc.setFontSize(11);
             let nombreEmpresa = document.getElementById("empresa1").value;
-            let ruc = document.getElementById("ruc1").value;
+            let ruct = document.getElementById("ruct1").value;
 
-            let textoPredeterminado3 = `Transportados por la empresa ${nombreEmpresa} con RUC: ${ruc} hacia la Infraestructura de Valorización Alto Chicama, ubicada en la Panamericana Norte Km 594, Sector La Soledad – Chicama – Ascope – La Libertad; para su valorización.`;
+            let textoPredeterminado3 = `Transportados por la empresa ${nombreEmpresa} con RUC: ${ruct} hacia la Infraestructura de Valorización Alto Chicama, ubicada en la Panamericana Norte Km 594, Sector La Soledad – Chicama – Ascope – La Libertad; para su valorización.`;
 
             let splittedText = doc.splitTextToSize(
                 textoPredeterminado3,
@@ -967,7 +980,7 @@ async function generarPDF(formId) {
             // Leer la imagen del QR
 
                 // Agregar la imagen del QR
-                doc.addImage(imgQR12, "PNG", 160, startY + 125, 25, 20); // Ajusta las coordenadas y tamaño según sea necesario
+                doc.addImage(imgQR12, "PNG", 160, startY + 122, 25, 25); // Ajusta las coordenadas y tamaño según sea necesario
                 // Obtener la fecha de la ID 'fecha' y transformarla
                 const fecha = new Date(document.getElementById("fecha1").value); // Suponiendo que tienes una fecha en formato 'YYYY-MM-DD'
                 const meses = [

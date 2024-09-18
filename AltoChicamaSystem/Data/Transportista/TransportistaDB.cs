@@ -151,7 +151,7 @@ namespace AltoChicamaSystem.Data.Transportista
                 sqlCon.Open();
                 SqlCommand sqlCmd = new SqlCommand();
                 sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Transportista_List_Select";
+                sqlCmd.CommandText = "Transportista_list";
                 sqlCmd.CommandType = CommandType.StoredProcedure;
                 SqlDataReader sdr = sqlCmd.ExecuteReader();
 
@@ -169,6 +169,7 @@ namespace AltoChicamaSystem.Data.Transportista
                         transportistaselect = new CMTransportista();
                         transportistaselect.transportista_id = Convert.ToInt32(sdr["transportista_id"]);
                         transportistaselect.transportista_nombre = sdr["transportista_nombre"].ToString().Trim();
+                        transportistaselect.transportista_ruc = sdr["transportista_ruc"].ToString().Trim();
                         lst.Add(transportistaselect);
                     }
 
