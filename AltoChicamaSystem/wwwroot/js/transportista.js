@@ -171,17 +171,25 @@ function guardarNewTransportista() {
                 // Mostrar mensaje de error
                 Swal.fire({
                     icon: 'error',
-                    title: 'Oops...',
-                    text: msg,
+                    title: 'Ocurrió un error!',
+                    text: 'La empresa o el usuario ya fueron registrados',
                 });
             }
             $("#btnGuardarEditTransportista").prop("disabled", false);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
-                alert("Ocurrió un fallo: " + jqXHR.responseJSON.message);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Ocurrió un error!',
+                    text: 'La empresa o el usuario ya fueron registrados',
+                });
             } else {
-                alert("Ocurrió un fallo: " + errorThrown);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Ocurrió un error!',
+                    text: 'La empresa o el usuario ya fueron registrados',
+                });
             }
         }
     });
@@ -242,17 +250,25 @@ function guardarEditTransportista(transportista_id) {
                 // Mostrar mensaje de error
                 Swal.fire({
                     icon: 'error',
-                    title: 'Oops...',
-                    text: msg,
+                    title: 'Ocurrió un error!',
+                    text: 'La empresa o el usuario ya fueron registrados',
                 });
             }
             $("#btnGuardarEditTransportista").prop("disabled", false);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
-                alert("Ocurrió un fallo: " + jqXHR.responseJSON.message);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Ocurrió un error!',
+                    text: 'La empresa o el usuario ya fueron registrados',
+                });
             } else {
-                alert("Ocurrió un fallo: " + errorThrown);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Ocurrió un error!',
+                    text: 'La empresa o el usuario ya fueron registrados',
+                });
             }
         }
     });
