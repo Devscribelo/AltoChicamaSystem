@@ -581,33 +581,42 @@ async function generarPDF(formId) {
             // Agregar la imagen del QR
                 doc.addImage(imgQR12, "PNG", 160, startY + 122, 25, 25); // Ajusta las coordenadas y tamaño según sea necesario
                 // Obtener la fecha de la ID 'fecha' y transformarla
-                const fecha = new Date(document.getElementById("fecha").value); // Suponiendo que tienes una fecha en formato 'YYYY-MM-DD'
-                const meses = [
-                    "Enero",
-                    "Febrero",
-                    "Marzo",
-                    "Abril",
-                    "Mayo",
-                    "Junio",
-                    "Julio",
-                    "Agosto",
-                    "Septiembre",
-                    "Octubre",
-                    "Noviembre",
-                    "Diciembre",
-                ];
+            // Obtener la fecha en formato 'YYYY-MM-DD'
+            const fechaString = document.getElementById("fecha").value; // Formato 'YYYY-MM-DD'
+
+            // Convertir la fecha de formato 'YYYY-MM-DD' a un objeto Date
+            const [anio, mes, dia] = fechaString.split('-').map(Number);
+
+            // Crear un objeto Date usando el valor sin ajuste de zona horaria
+            const fecha = new Date(anio, mes - 1, dia);
+
+            // Crear una función que obtenga la fecha en formato local
+            function obtenerFechaLocal(fecha) {
                 const dia = fecha.getDate();
-                const mes = meses[fecha.getMonth()];
+                const mes = fecha.getMonth(); // Nota: los meses van de 0 a 11
                 const anio = fecha.getFullYear();
 
-                // Crear la cadena de texto para la fecha
-                const textoFecha = `Trujillo, ${dia} de ${mes} del ${anio}`;
+                return { dia, mes, anio };
+            }
 
-                // Obtener el ancho de la página y calcular la posición para el texto
-                const pdfPageWidth = doc.internal.pageSize.width; // Usar un nombre diferente para evitar conflictos
-                const textWidth = doc.getTextWidth(textoFecha); // Ancho del texto
-                const textX = pdfPageWidth - textWidth - 10; // Posición X (alineado a la derecha)
-                const textY = startY + 120; // Posición Y (ajusta según sea necesario)
+            // Obtener la fecha en formato local
+            const { dia: diaLocal, mes: mesLocal, anio: anioLocal } = obtenerFechaLocal(fecha);
+
+            // Array de nombres de meses
+            const meses = [
+                "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+            ];
+
+            // Crear la cadena de texto para la fecha
+            const textoFecha = `Trujillo, ${diaLocal} de ${meses[mesLocal]} del ${anioLocal}`;
+
+            // Obtener el ancho de la página y calcular la posición para el texto
+            const pdfPageWidth = doc.internal.pageSize.width; // Usar un nombre diferente para evitar conflictos
+            const textWidth = doc.getTextWidth(textoFecha); // Ancho del texto
+            const textX = pdfPageWidth - textWidth - 10; // Posición X (alineado a la derecha)
+            const textY = startY + 120; // Posición Y (ajusta según sea necesario)
+
 
                 doc.setFontSize(10);
                 doc.setTextColor(105, 105, 105); // Color gris para el texto
@@ -947,33 +956,41 @@ async function generarPDF(formId) {
                 // Agregar la imagen del QR
                 doc.addImage(imgQR12, "PNG", 160, startY + 122, 25, 25); // Ajusta las coordenadas y tamaño según sea necesario
                 // Obtener la fecha de la ID 'fecha' y transformarla
-                const fecha = new Date(document.getElementById("fecha1").value); // Suponiendo que tienes una fecha en formato 'YYYY-MM-DD'
-                const meses = [
-                    "Enero",
-                    "Febrero",
-                    "Marzo",
-                    "Abril",
-                    "Mayo",
-                    "Junio",
-                    "Julio",
-                    "Agosto",
-                    "Septiembre",
-                    "Octubre",
-                    "Noviembre",
-                    "Diciembre",
-                ];
+            // Obtener la fecha en formato 'YYYY-MM-DD'
+            const fechaString = document.getElementById("fecha1").value; // Formato 'YYYY-MM-DD'
+
+            // Convertir la fecha de formato 'YYYY-MM-DD' a un objeto Date
+            const [anio, mes, dia] = fechaString.split('-').map(Number);
+
+            // Crear un objeto Date usando el valor sin ajuste de zona horaria
+            const fecha = new Date(anio, mes - 1, dia);
+
+            // Crear una función que obtenga la fecha en formato local
+            function obtenerFechaLocal(fecha) {
                 const dia = fecha.getDate();
-                const mes = meses[fecha.getMonth()];
+                const mes = fecha.getMonth(); // Nota: los meses van de 0 a 11
                 const anio = fecha.getFullYear();
 
-                // Crear la cadena de texto para la fecha
-                const textoFecha = `Trujillo, ${dia} de ${mes} del ${anio}`;
+                return { dia, mes, anio };
+            }
 
-                // Obtener el ancho de la página y calcular la posición para el texto
-                const pdfPageWidth = doc.internal.pageSize.width; // Usar un nombre diferente para evitar conflictos
-                const textWidth = doc.getTextWidth(textoFecha); // Ancho del texto
-                const textX = pdfPageWidth - textWidth - 10; // Posición X (alineado a la derecha)
-                const textY = startY + 120; // Posición Y (ajusta según sea necesario)
+            // Obtener la fecha en formato local
+            const { dia: diaLocal, mes: mesLocal, anio: anioLocal } = obtenerFechaLocal(fecha);
+
+            // Array de nombres de meses
+            const meses = [
+                "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+            ];
+
+            // Crear la cadena de texto para la fecha
+            const textoFecha = `Trujillo, ${diaLocal} de ${meses[mesLocal]} del ${anioLocal}`;
+
+            // Obtener el ancho de la página y calcular la posición para el texto
+            const pdfPageWidth = doc.internal.pageSize.width; // Usar un nombre diferente para evitar conflictos
+            const textWidth = doc.getTextWidth(textoFecha); // Ancho del texto
+            const textX = pdfPageWidth - textWidth - 10; // Posición X (alineado a la derecha)
+            const textY = startY + 120; // Posición Y (ajusta según sea necesario)
 
                 doc.setFontSize(10);
                 doc.setTextColor(105, 105, 105); // Color gris para el texto

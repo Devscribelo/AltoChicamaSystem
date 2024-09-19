@@ -17,6 +17,7 @@ $(document).ready(function () {
 });
 
 
+
 function EmpresaSelect(empresaSelecionada) {
     var endpoint = getDomain() + "/Empresa/EmpresaSelect";
 
@@ -86,9 +87,23 @@ function copiarTexto(texto) {
         confirmButtonText: 'OK',
     });
 }
+
+function formatDateString(dateString) {
+    if (dateString) {
+        // Asume que el formato de entrada es 'YYYY-MM-DDTHH:MM:SS'
+        var dateParts = dateString.split('T')[0].split('-');
+        var day = dateParts[2];
+        var month = dateParts[1];
+        var year = dateParts[0];
+        return `${day}-${month}-${year}`;
+    }
+    return '';
+}
+
+
+
 function getListDocumento() {
     const apiUrl = `/api/Documento/ObtenerDocumento/`;
-    //const x = getDomain() + apiUrl;
     endpoint = getDomain() + "/Repositorio/ListaDocumento"
 
     return new Promise((resolve, reject) => {
@@ -104,7 +119,6 @@ function getListDocumento() {
             dataType: "json",
             beforeSend: function (xhr) {
                 console.log("cargando");
-                //xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
             },
 
             success: function (data) {
@@ -115,6 +129,9 @@ function getListDocumento() {
                 console.log(dataEmpresa);
 
                 for (var i = 0; i < dataEmpresa.length; i++) {
+                    var fechaServicio = formatDateString(dataEmpresa[i].fecha_servicio);
+                    var fechaPago = formatDateString(dataEmpresa[i].fecha_pago);
+
                     datosRow +=
                         "<tr class='filaTabla' " +
                         "data-empresa_id='" + dataEmpresa[i].documento_id + "' " +
@@ -123,17 +140,17 @@ function getListDocumento() {
                         "data-transportista_nombre='" + dataEmpresa[i].transportista_nombre + "' " +
                         "data-matriculas='" + dataEmpresa[i].documento_matriculas + "' " +
                         "data-documento_status='" + dataEmpresa[i].documento_status + "'" +
-                        "data-fecha_servicio='" + dataEmpresa[i].documento_status + "'" +
-                        "data-fecha_pago='" + dataEmpresa[i].documento_status + "'" +
-                        "data-documento_deuda='" + dataEmpresa[i].documento_status + "'" +
+                        "data-fecha_servicio='" + dataEmpresa[i].fecha_servicio + "'" +
+                        "data-fecha_pago='" + dataEmpresa[i].fecha_pago + "'" +
+                        "data-documento_deuda='" + dataEmpresa[i].documento_deuda + "'" +
                         "data-documento_id='" + dataEmpresa[i].documento_id + "'>" +
                         "<td>" + dataEmpresa[i].documento_numero + "</td>" +
                         "<td>" + dataEmpresa[i].documento_titulo + "</td>" +
                         "<td>" + dataEmpresa[i].empresa_name + "</td>" +
                         "<td>" + dataEmpresa[i].transportista_nombre + "</td>" +
                         "<td>" + dataEmpresa[i].documento_matriculas + "</td>" +
-                        "<td>" + dataEmpresa[i].fecha_servicio + "</td>" +
-                        "<td>" + dataEmpresa[i].fecha_pago + "</td>" +
+                        "<td>" + fechaServicio + "</td>" +
+                        "<td>" + fechaPago + "</td>" +
                         "<td>" + dataEmpresa[i].documento_deuda + "</td>" +
                         "<td>" +
                         "<div class='form-check form-switch'>" +
@@ -161,14 +178,10 @@ function getListDocumento() {
                         "</tr>";
                 }
 
-
-
-
                 if (!$("#table_empresa").hasClass("dataTable")) {
-                    // Inicializar DataTable en la tabla
                     tableEmpresa = $("#table_empresa").DataTable({
                         language: {
-                            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json' // URL de la biblioteca de idioma
+                            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
                         },
                         dom: 'frtip',
                         buttons: [
@@ -176,21 +189,21 @@ function getListDocumento() {
                                 extend: 'excel',
                                 className: 'btn_export_Excel',
                                 exportOptions: {
-                                    columns: ':visible:not(:last-child, :nth-last-child(1))' // Oculta la penúltima y la última columna en la exportación a Excel
+                                    columns: ':visible:not(:last-child, :nth-last-child(1))'
                                 }
                             },
                             {
                                 extend: 'pdf',
                                 className: 'btn_export_Pdf',
                                 exportOptions: {
-                                    columns: ':visible:not(:last-child, :nth-last-child(1))' // Oculta la penúltima y la última columna en la exportación a PDF
+                                    columns: ':visible:not(:last-child, :nth-last-child(1))'
                                 }
                             }
                         ],
                         colResize: {
                             tableWidthFixed: 'false'
                         },
-                        colReorder: true // Activa la funcionalidad de reordenamiento de columnas
+                        colReorder: true
                     });
                 }
 
@@ -203,11 +216,9 @@ function getListDocumento() {
                 console.log("failure")
             }
         });
-
-
     });
-
 }
+
 
 
 function capturarValoresSeleccionados() {
@@ -260,6 +271,9 @@ function getListDocumentoEmpresa(empresa_id, estado) {
                 console.log(dataEmpresa);
 
                 for (var i = 0; i < dataEmpresa.length; i++) {
+                    var fechaServicio1 = formatDateString(dataEmpresa[i].fecha_servicio);
+                    var fechaPago1 = formatDateString(dataEmpresa[i].fecha_pago);
+
                     datosRow +=
                         "<tr class='filaTabla' " +
                         "data-empresa_id='" + dataEmpresa[i].documento_id + "' " +
@@ -268,12 +282,18 @@ function getListDocumentoEmpresa(empresa_id, estado) {
                         "data-transportista_nombre='" + dataEmpresa[i].transportista_nombre + "' " +
                         "data-matriculas='" + dataEmpresa[i].documento_matriculas + "' " +
                         "data-documento_status='" + dataEmpresa[i].documento_status + "'" +
+                        "data-fecha_servicio='" + dataEmpresa[i].fecha_servicio + "'" +
+                        "data-fecha_pago='" + dataEmpresa[i].fecha_pago + "'" +
+                        "data-documento_deuda='" + dataEmpresa[i].documento_deuda + "'" +
                         "data-documento_id='" + dataEmpresa[i].documento_id + "'>" +
                         "<td>" + dataEmpresa[i].documento_numero + "</td>" +
                         "<td>" + dataEmpresa[i].documento_titulo + "</td>" +
                         "<td>" + dataEmpresa[i].empresa_name + "</td>" +
                         "<td>" + dataEmpresa[i].transportista_nombre + "</td>" +
                         "<td>" + dataEmpresa[i].documento_matriculas + "</td>" +
+                        "<td>" + fechaServicio1 + "</td>" +
+                        "<td>" + fechaPago1 + "</td>" +
+                        "<td>" + dataEmpresa[i].documento_deuda + "</td>" +
                         "<td>" +
                         "<div class='form-check form-switch'>" +
                         `<input style='width: 46px; margin-top: 4px;' class='form-check-input status3' type='checkbox' id='flexSwitchCheckDefault${i}' ${dataEmpresa[i].documento_status === 'True' ? 'checked' : ''} data-empresa_status='${dataEmpresa[i].documento_id}'>` +
