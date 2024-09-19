@@ -39,6 +39,23 @@ namespace AltoChicamaSystem.Negocio
             return result;
         }
 
+        public Tuple<string, string> obtenerDeudaEmpresa(int empresa_id, string bandera)
+        {
+            try
+            {
+                // Llama al método en la carpeta Data que ejecuta el procedimiento almacenado
+                decimal mayorDocumentoID = objDato.obtenerDeudaEmpresa(empresa_id, bandera);
+
+                // Devuelve el resultado como un Tuple
+                return new Tuple<string, string>("Exito", mayorDocumentoID.ToString());
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                return new Tuple<string, string>("Error", ex.Message);
+            }
+        }
+
         public Tuple<string, string> ObtenerMayorDocumentoID(string bandera)
         {
             try

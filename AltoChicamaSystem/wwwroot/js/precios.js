@@ -65,6 +65,36 @@ function obtenerIdEmpresaSeleccionada(empresaSelecionada) {
     return valorSeleccionado;  // Retorna el valor (empresa_id) seleccionado
 }
 
+function obtenerDeudasEmpresa(empresa_id) {
+    var dataPost = {
+        empresa_id: empresa_id
+    };
+    var endpoint = "/Repositorio/ObtenerDeudaEmpresa"; // Ruta relativa del endpoint
+
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: "POST",
+            url: endpoint,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify(dataPost),
+            dataType: "json",
+            success: function (data) {
+                console.log("Respuesta del servidor:", data); // Inspecciona la respuesta completa
+                console.log(data.item3);
+                document.getElementById('input_deuda').value = data.item3;
+
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+                alert('Error fatal: ' + error);
+                reject(error); // Rechaza la promesa en caso de error
+            }
+        });
+    });
+}
+
 function capturarValoresSeleccionados() {
     // Capturar los valores seleccionados
     var empresa_id = obtenerIdEmpresaSeleccionada("#input_empresa");
@@ -79,6 +109,7 @@ function capturarValoresSeleccionados() {
             document.getElementById('precio_empresa').style = "display:none;";
         }
         // Llamar a la función para enviar los datos
+        obtenerDeudasEmpresa(empresa_id);
         getListDocumentoEmpresa(empresa_id, estado);
     } else {
         Swal.fire({
@@ -88,6 +119,7 @@ function capturarValoresSeleccionados() {
         });
     }
 }
+
 
 function getListDocumento() {
     const apiUrl = `/api/Documento/ObtenerDocumento/`;
@@ -125,12 +157,12 @@ function getListDocumento() {
                         "data-transportista_nombre='" + dataEmpresa[i].transportista_nombre + "' " +
                         "data-documento_status='" + dataEmpresa[i].documento_status + "'" +
                         "data-documento_id='" + dataEmpresa[i].documento_id + "'>" +
-                        "data-documento_precio='" + dataEmpresa[i].documento_id + "'>" +
+                        "data-documento_precio='" + dataEmpresa[i].documento_deuda + "'>" +
                         "<td>" + dataEmpresa[i].documento_numero + "</td>" +
                         "<td>" + dataEmpresa[i].documento_titulo + "</td>" +
                         "<td>" + dataEmpresa[i].empresa_name + "</td>" +
                         "<td>" + dataEmpresa[i].transportista_nombre + "</td>" +
-                        "<td>" + dataEmpresa[i].documento_titulo + "</td>" +
+                        "<td>" + dataEmpresa[i].documento_deuda + "</td>" +
                         "<td>" +
                         "<div class='form-check form-switch'>" +
                         `<input style='width: 46px; margin-top: 4px;' class='form-check-input status3' type='checkbox' id='flexSwitchCheckDefault${i}' ${dataEmpresa[i].documento_status === 'True' ? 'checked' : ''} data-empresa_status='${dataEmpresa[i].documento_id}'>` +
@@ -223,12 +255,12 @@ function getListDocumentoEmpresa(empresa_id, estado) {
                         "data-transportista_nombre='" + dataEmpresa[i].transportista_nombre + "' " +
                         "data-documento_status='" + dataEmpresa[i].documento_status + "'" +
                         "data-documento_id='" + dataEmpresa[i].documento_id + "'>" +
-                        "data-documento_precio='" + dataEmpresa[i].documento_id + "'>" +
+                        "data-documento_precio='" + dataEmpresa[i].documento_deuda + "'>" +
                         "<td>" + dataEmpresa[i].documento_numero + "</td>" +
                         "<td>" + dataEmpresa[i].documento_titulo + "</td>" +
                         "<td>" + dataEmpresa[i].empresa_name + "</td>" +
                         "<td>" + dataEmpresa[i].transportista_nombre + "</td>" +
-                        "<td>" + dataEmpresa[i].documento_titulo + "</td>" +
+                        "<td>" + dataEmpresa[i].documento_deuda + "</td>" +
                         "<td>" +
                         "<div class='form-check form-switch'>" +
                         `<input style='width: 46px; margin-top: 4px;' class='form-check-input status3' type='checkbox' id='flexSwitchCheckDefault${i}' ${dataEmpresa[i].documento_status === 'True' ? 'checked' : ''} data-empresa_status='${dataEmpresa[i].documento_id}'>` +

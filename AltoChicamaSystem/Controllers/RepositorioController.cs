@@ -106,6 +106,33 @@ namespace AltoChicamaSystem.Controllers
         }
 
         [HttpPost]
+        public ActionResult ObtenerDeudaEmpresa([FromBody] CMDocumento request)
+        {
+            var result = Tuple.Create("1", "Error al obtener la deuda", string.Empty);
+
+            try
+            {
+                string bandera = conf.GetValue<string>("Bandera");
+                var negocioResult = objusuarioCN.obtenerDeudaEmpresa(request.empresa_id, bandera);
+
+                if (negocioResult.Item1 == "Exito")
+                {
+                    result = Tuple.Create("0", "Operación exitosa", negocioResult.Item2);
+                }
+                else
+                {
+                    result = Tuple.Create("1", "Error al obtener la deuda", negocioResult.Item2);
+                }
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                result = Tuple.Create("1", "Excepción: " + ex.Message, string.Empty);
+                return Json(result);
+            }
+        }
+
+        [HttpPost]
         public ActionResult listarDocumentoEmpresa([FromBody] DocumentoResult request)
         {
             var result = Tuple.Create("1", "Error al listar", new List<DocumentoResult>());
