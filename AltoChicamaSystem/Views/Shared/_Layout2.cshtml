@@ -5,6 +5,7 @@
     string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
     bool isAdmin = User.IsInRole("Admin");
     bool isUser = User.IsInRole("User");
+    bool isTransportista = User.IsInRole("Transportista"); 
 }
 <!DOCTYPE html>
 <html lang="es">
@@ -75,6 +76,12 @@
                                     <span class="text nav-text">Subir Archivos</span>
                                 </a>
                             </li>
+                            <li class="nav-link @(currentController == "Precios" && currentAction == "Index" ? "mode" : "")">
+                                <a asp-controller="Precios" asp-action="Index">
+                                <i class='bx bx-purchase-tag-alt icon'></i>
+                                    <span class="text nav-text">Precios</span>
+                                </a>
+                            </li>
                     }
                     @if (isUser)
                     {
@@ -91,6 +98,15 @@
                                     <span class="text nav-text">Transportista</span>
                                 </a>
                             </li>
+                    }
+                    @if (isTransportista)
+                    {
+                        <li class="nav-link @(currentController == "RepositorioTransportista" && currentAction == "Index" ? "mode" : "")">
+                            <a asp-controller="RepositorioTransportista" asp-action="Index">
+                                <i class='bx bx-car icon'></i>
+                                <span class="text nav-text">RepositorioTransportista</span>
+                            </a>
+                        </li>
                     }
                    
                 </ul>
@@ -142,6 +158,13 @@
             <script type="text/javascript">
                 empresaID = '@userId';
             </script>
+    }
+
+    @if (isTransportista)
+    {
+        <script type="text/javascript">
+            var transportistaID = '@userId'; // Variable para el transportista
+        </script>
     }
 </body>
 </html>

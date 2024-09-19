@@ -175,6 +175,28 @@ function cargarDataPDF() {
     guardarDocumento(file);
 }
 
+
+function vaciarFormulario() {
+    // Limpia el campo de archivo
+    $('#file-upload').val('');
+
+    // Oculta el área de respuesta y reinicia la barra de progreso
+    $('#response').addClass('hidden');
+    $('#file-progress').val(0);
+    $('#file-progress').find('span').text('0');
+
+    // Limpia el texto del nombre del archivo PDF
+    $('#pdf-file-name').text('');
+
+    // Limpia las selecciones de empresa y transportista
+    $('#input_empresa').val('');
+    $('#input_transportista').val('');
+
+    // Limpia el selector de matrículas y el contenedor de matrículas dinámicas
+    $('#select_matriculas').val('');
+    $('#matriculas_container').empty();
+}
+
 async function guardarDocumento(file) {
     var empresa_id = obtenerIdEmpresaSeleccionada("#input_empresa");
     var transportista_id = obtenerIdTransportistaSeleccionada("#input_transportista");
@@ -259,6 +281,8 @@ async function guardarDocumento(file) {
                     text: msg,
                     icon: 'success',
                     confirmButtonText: 'OK',
+                }).then(() => {
+                    vaciarFormulario(); // Vaciar el formulario después del éxito
                 });
             } else {
                 Swal.fire({

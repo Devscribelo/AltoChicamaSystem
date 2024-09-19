@@ -17,6 +17,12 @@ namespace AltoChicamaSystem.Negocio
             return result;
         }
 
+        public Tuple<string, string, List<CMDocumentoResultCliente>> listarDocumentoFiltradoTransportista(int transportista_id, string bandera)
+        {
+            var result = objDato.listarDocumentoFiltradoTransportista(transportista_id, bandera);
+            return result;
+        }
+
     }
 }
 

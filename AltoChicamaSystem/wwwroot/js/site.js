@@ -74,14 +74,19 @@ function loginAdmin() {
             var rpta = data.item1;
             var msg = data.item2;
             if (rpta == "0") {
-                // Redirigir a una página protegida
+                // Redirigir a una página protegida para Admin
                 window.location.href = getDomain() + "/Repositorio";
-                console.log("Inicio de sesión correcto");
+                console.log("Inicio de sesión correcto como Admin");
             }
-            if (rpta == "1") {
-                // Redirigir a una página protegida
+            else if (rpta == "1") {
+                // Redirigir a una página protegida para Usuario
                 window.location.href = getDomain() + "/RepositorioCliente";
-                console.log("Inicio de sesión correcto");
+                console.log("Inicio de sesión correcto como Usuario");
+            }
+            else if (rpta == "3") {
+                // Redirigir a una página protegida para Transportista
+                window.location.href = getDomain() + "/RepositorioTransportista";
+                console.log("Inicio de sesión correcto como Transportista");
             }
             else {
                 Swal.fire({
