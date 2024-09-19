@@ -82,6 +82,7 @@ namespace AltoChicamaSystem.Data.Documento
                     if (rpta == "0" && count >= 2)
                     {
                         documento = new CMDocumentoResultCliente();
+                        documento.documento_id = Convert.ToInt32(sdr["documento_id"]);
                         documento.documento_numero = Convert.ToInt32(sdr["documento_numero"]);
                         documento.documento_titulo = sdr["documento_titulo"].ToString().Trim();
                         documento.empresa_name = sdr["empresa_name"].ToString().Trim();
