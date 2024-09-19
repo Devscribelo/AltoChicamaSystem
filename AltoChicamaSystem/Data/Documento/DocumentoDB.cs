@@ -229,6 +229,42 @@ namespace AltoChicamaSystem.Data.Documento
             return Tuple.Create(rpta, msg);
         }
 
+        public decimal obtenerDeudaEmpresa(int empresa_id, string bandera)
+        {
+            decimal deudaEmpresa = 0; // Valor por defecto en caso de error o no resultados
+
+            using (SqlConnection sqlCon = new SqlConnection(con.obtenerDatosConexion(bandera)))
+            {
+                try
+                {
+                    sqlCon.Open();
+                    using (SqlCommand sqlCmd = new SqlCommand("Sumar_Deudas_Empresa", sqlCon))
+                    {
+                        sqlCmd.CommandType = CommandType.StoredProcedure;
+                        sqlCmd.Parameters.AddWithValue("@empresa_id", empresa_id);
+
+                        using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                        {
+                            if (sdr.Read())
+                            {
+                                // Lee el valor máximo del documento_id
+                                if (sdr["total_deuda"] != DBNull.Value)
+                                {
+                                    deudaEmpresa = Convert.ToDecimal(sdr["total_deuda"]);
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Manejo de errores: considera registrar el error para fines de depuración
+                    Console.WriteLine("Error al obtener el mayor documento ID: " + ex.Message);
+                }
+            }
+            return deudaEmpresa;
+        }
+
 
         public Tuple<string, string, List<DocumentoResult>> listarDocumentoEmpresa(int empresa_id, int estado, string bandera)
         {

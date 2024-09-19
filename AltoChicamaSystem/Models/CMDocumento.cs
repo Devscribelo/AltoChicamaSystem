@@ -13,6 +13,7 @@
         public DateTime fecha_servicio { get; set; }
         public DateTime fecha_pago { get; set; }
         public decimal documento_deuda { get; set; }
+        public decimal total_deuda { get; set; }
     }
 
     public class DocumentoResult
