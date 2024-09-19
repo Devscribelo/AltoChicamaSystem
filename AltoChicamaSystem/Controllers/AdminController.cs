@@ -20,7 +20,7 @@ namespace AltoChicamaSystem.Controllers
         [HttpPost]
         public async Task<ActionResult> LoginAdmin([FromBody] CMAdmin cmadmin)
         {
-            var result = Tuple.Create("1","Error al iniciar sesión",0);
+            var result = Tuple.Create("1", "Error al iniciar sesión", 0);
             try
             {
                 string bandera = conf.GetValue<string>("Bandera");
@@ -52,6 +52,20 @@ namespace AltoChicamaSystem.Controllers
 
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
                     return Ok(result);
+                }
+                if (result.Item1 == "3")  // Inicio de sesión Transportista
+                {
+                    var role = "Transportista";
+                    var claims = new List<Claim> {
+                        new Claim(ClaimTypes.Name, cmadmin.admin_user.ToString()),
+                        new Claim(ClaimTypes.Role, role),
+                        new Claim(ClaimTypes.NameIdentifier, result.Item3.ToString())  // Aquí puedes agregar más claims si es necesario
+                    };
+
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+                    return Ok(result);  // Devuelve la respuesta para transportista
                 }
                 else
                 {
