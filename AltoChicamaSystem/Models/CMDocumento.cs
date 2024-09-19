@@ -10,6 +10,9 @@
         public string documento_status { get; set; } 
         public string documento_matriculas { get; set; }
         public int documento_numero { get; set; }
+        public DateTime fecha_servicio { get; set; }
+        public DateTime fecha_pago { get; set; }
+        public decimal documento_deuda { get; set; }
     }
 
     public class DocumentoResult
@@ -26,6 +29,9 @@
 
         public string documento_matriculas { get; set; }
         public int documento_numero { get; set; }
+        public DateTime fecha_servicio { get; set; }
+        public DateTime fecha_pago { get; set; }
+        public decimal documento_deuda { get; set; }
     }
 
 }

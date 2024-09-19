@@ -180,42 +180,7 @@ function obtenerMayorDocumentoID() {
     });
 }
 
-function Documento_MaxNumero() {
-    var endpoint = "/Repositorio/Documento_MaxNumero"; // Ruta relativa del endpoint
 
-    return new Promise((resolve, reject) => {
-        $.ajax({
-            type: "POST",
-            url: endpoint,
-            headers: {
-                "Content-Type": "application/json"
-            },
-            dataType: "json",
-            success: function (data) {
-                console.log("Respuesta del servidor:", data); // Inspecciona la respuesta completa
-                console.log(data.item3);
-
-                // Asegúrate de que `data.item3` sea el valor que necesitas y conviértelo a string
-                var obtenerdocumentonumero = (parseInt(data.item3) + 1).toString();
-                usarQR(); // Llama a la función usarQR
-
-                // Asigna el valor convertido a los campos de código de empresa
-                document.getElementById('codigoEmpresa').value = obtenerdocumentonumero;
-                document.getElementById('codigoEmpresa1').value = obtenerdocumentonumero;
-
-                // Resuelve la promesa con el valor string
-                resolve(obtenerdocumentonumero);
-            },
-            error: function (xhr, status, error) {
-                console.error('Error:', error);
-                alert('Error fatal: ' + error);
-                reject(error); // Rechaza la promesa en caso de error
-            }
-        });
-    });
-}
-
-Documento_MaxNumero()
 
 
 function abrirEnlaceEnVentana(documentoId) {

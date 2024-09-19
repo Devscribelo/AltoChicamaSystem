@@ -112,6 +112,7 @@ function getListDocumento() {
                 var datosRow = "";
 
                 resolve(dataEmpresa);
+                console.log(dataEmpresa);
 
                 for (var i = 0; i < dataEmpresa.length; i++) {
                     datosRow +=
@@ -122,12 +123,18 @@ function getListDocumento() {
                         "data-transportista_nombre='" + dataEmpresa[i].transportista_nombre + "' " +
                         "data-matriculas='" + dataEmpresa[i].documento_matriculas + "' " +
                         "data-documento_status='" + dataEmpresa[i].documento_status + "'" +
+                        "data-fecha_servicio='" + dataEmpresa[i].documento_status + "'" +
+                        "data-fecha_pago='" + dataEmpresa[i].documento_status + "'" +
+                        "data-documento_deuda='" + dataEmpresa[i].documento_status + "'" +
                         "data-documento_id='" + dataEmpresa[i].documento_id + "'>" +
                         "<td>" + dataEmpresa[i].documento_numero + "</td>" +
                         "<td>" + dataEmpresa[i].documento_titulo + "</td>" +
                         "<td>" + dataEmpresa[i].empresa_name + "</td>" +
                         "<td>" + dataEmpresa[i].transportista_nombre + "</td>" +
                         "<td>" + dataEmpresa[i].documento_matriculas + "</td>" +
+                        "<td>" + dataEmpresa[i].fecha_servicio + "</td>" +
+                        "<td>" + dataEmpresa[i].fecha_pago + "</td>" +
+                        "<td>" + dataEmpresa[i].documento_deuda + "</td>" +
                         "<td>" +
                         "<div class='form-check form-switch'>" +
                         `<input style='width: 46px; margin-top: 4px;' class='form-check-input status3' type='checkbox' id='flexSwitchCheckDefault${i}' ${dataEmpresa[i].documento_status === 'True' ? 'checked' : ''} data-empresa_status='${dataEmpresa[i].documento_id}'>` +
