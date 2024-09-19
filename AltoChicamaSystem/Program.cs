@@ -17,6 +17,7 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
     options.AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
+    options.AddPolicy("TransportistaPolicy", policy => policy.RequireRole("Transportista"));
 });
 
 
