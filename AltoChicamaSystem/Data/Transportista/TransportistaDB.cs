@@ -27,6 +27,8 @@ namespace AltoChicamaSystem.Data.Transportista
                 };
                 sqlCmd.Parameters.AddWithValue("@transportista_ruc", cmTransportista.transportista_ruc.Trim());
                 sqlCmd.Parameters.AddWithValue("@transportista_nombre", cmTransportista.transportista_nombre.Trim());
+                sqlCmd.Parameters.AddWithValue("@transportista_user", cmTransportista.transportista_user.Trim());
+                sqlCmd.Parameters.AddWithValue("@transportista_password", cmTransportista.transportista_password.Trim());
 
                 SqlDataReader sdr = sqlCmd.ExecuteReader();
                 if (sdr.Read())
@@ -64,6 +66,8 @@ namespace AltoChicamaSystem.Data.Transportista
                 sqlCmd.Parameters.AddWithValue("@transportista_id", cmTransportista.transportista_id);
                 sqlCmd.Parameters.AddWithValue("@transportista_nombre", cmTransportista.transportista_nombre.Trim());
                 sqlCmd.Parameters.AddWithValue("@transportista_ruc", cmTransportista.transportista_ruc.Trim());
+                sqlCmd.Parameters.AddWithValue("@transportista_user", cmTransportista.transportista_user.Trim());
+                sqlCmd.Parameters.AddWithValue("@transportista_password", cmTransportista.transportista_password.Trim());
 
                 SqlDataReader sdr = sqlCmd.ExecuteReader();
                 if (sdr.Read())
@@ -116,7 +120,9 @@ namespace AltoChicamaSystem.Data.Transportista
                             {
                                 transportista_id = Convert.ToInt32(sdr["transportista_id"]),
                                 transportista_ruc = sdr["transportista_ruc"].ToString().Trim(),
-                                transportista_nombre = sdr["transportista_nombre"].ToString().Trim()
+                                transportista_nombre = sdr["transportista_nombre"].ToString().Trim(),
+                                transportista_user = sdr["transportista_user"].ToString().Trim(),
+                                transportista_password = sdr["transportista_password"].ToString().Trim()
                             };
                             lst.Add(transportista);
                         }

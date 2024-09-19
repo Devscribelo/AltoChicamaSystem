@@ -55,6 +55,8 @@ function getListTransportista() {
                         "<td>" + dataEmpresa[i].transportista_id + "</td>" +
                         "<td>" + dataEmpresa[i].transportista_ruc + "</td>" +
                         "<td>" + dataEmpresa[i].transportista_nombre + "</td>" +
+                        "<td>" + dataEmpresa[i].transportista_user + "</td>" +
+                        "<td>" + dataEmpresa[i].transportista_password + "</td>" +
                         "<td id='acciones'>" +
                         "<i class='bx bx-edit editar-button icon-circle' id='editar_transportista" + i + "'></i>" +
                         "<i style='margin-left: 9px;' class='bx bx-trash eliminar-button icon-circle red' id='eliminar_transportista" + i + "'></i>" +
@@ -141,7 +143,9 @@ function guardarNewTransportista() {
 
     var dataPost = {
         transportista_nombre: $("#input_transportista_nombre").val(),
-        transportista_ruc: $("#input_transportista_ruc").val()
+        transportista_ruc: $("#input_transportista_ruc").val(),
+        transportista_user: $("#input_transportista_user").val(),
+        transportista_password: $("#input_transportista_password").val()
     };
 
     dataPost = trimJSONFields(dataPost);
@@ -212,6 +216,8 @@ function modalEditarTransportista(rowData) {
     // Seteamos los valores de los inputs con la información de la fila seleccionada
     $("#edit_transportista_nombre").val(rowData.transportista_nombre);
     $("#edit_transportista_ruc").val(rowData.transportista_ruc);
+    $("#edit_transportista_user").val(rowData.transportista_user);
+    $("#edit_transportista_password").val(rowData.transportista_password);
 
     // Mostramos el modal
     $("#modal_editar_transportista").modal("show");
@@ -221,7 +227,9 @@ function guardarEditTransportista(transportista_id) {
     var dataPost = {
         transportista_id: transportista_id.toString(),
         transportista_nombre: $("#edit_transportista_nombre").val(),
-        transportista_ruc: $("#edit_transportista_ruc").val()
+        transportista_ruc: $("#edit_transportista_ruc").val(),
+        transportista_user: $("#edit_transportista_user").val(),
+        transportista_password: $("#edit_transportista_password").val()
     };
 
     dataPost = trimJSONFields(dataPost);

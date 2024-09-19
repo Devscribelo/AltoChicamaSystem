@@ -5,6 +5,8 @@
         public int transportista_id { get; set; }
         public string transportista_ruc { get; set; }
         public string transportista_nombre { get; set; }
+        public string transportista_user { get; set; }
+        public string transportista_password { get; set; }
     }
 
     public class TransportistaResult
@@ -12,5 +14,7 @@
         public int transportista_id { get; set; }
         public string transportista_ruc { get; set; }
         public string transportista_nombre { get; set; }
+        public string transportista_user { get; set; }
+        public string transportista_password { get; set; }
     }
 }
