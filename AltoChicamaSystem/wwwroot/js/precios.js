@@ -169,10 +169,22 @@ function obtenerDeudasEmpresa(transportista_id) {
             dataType: "json",
             success: function (data) {
                 console.log("Respuesta del servidor:", data); // Inspecciona la respuesta completa
-                console.log(data.item3);
-                document.getElementById('input_deuda').value = data.item3;
 
+                if (data && data.item3 !== undefined && data.item4 !== undefined) {
+                    // Asigna la deuda
+                    document.getElementById('input_deuda').value = data.item3;
+
+                    // Asigna el nombre del transportista en el label
+                    document.getElementById('nombre_transportista').innerText = data.item4;
+
+                    // Muestra el div si aún está oculto
+                    document.getElementById('precio_empresa').style.display = 'block';
+                } else {
+                    console.error('Datos no válidos:', data);
+                    alert('Error: datos no válidos recibidos.');
+                }
             },
+
             error: function (xhr, status, error) {
                 console.error('Error:', error);
                 alert('Error fatal: ' + error);
@@ -181,6 +193,7 @@ function obtenerDeudasEmpresa(transportista_id) {
         });
     });
 }
+
 
 function capturarValoresSeleccionados() {
     // Capturar los valores seleccionados

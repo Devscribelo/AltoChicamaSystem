@@ -105,10 +105,9 @@ namespace AltoChicamaSystem.Controllers
             }
         }
 
-        [HttpPost]
         public ActionResult ObtenerDeudaTransportista([FromBody] CMDocumento request)
         {
-            var result = Tuple.Create("1", "Error al obtener la deuda", string.Empty);
+            var result = Tuple.Create("1", "Error al obtener la deuda", string.Empty, string.Empty);
 
             try
             {
@@ -117,20 +116,21 @@ namespace AltoChicamaSystem.Controllers
 
                 if (negocioResult.Item1 == "Exito")
                 {
-                    result = Tuple.Create("0", "Operación exitosa", negocioResult.Item2);
+                    result = Tuple.Create("0", "Operación exitosa", negocioResult.Item2, negocioResult.Item3);
                 }
                 else
                 {
-                    result = Tuple.Create("1", "Error al obtener la deuda", negocioResult.Item2);
+                    result = Tuple.Create("1", "Error al obtener la deuda", negocioResult.Item2, string.Empty);
                 }
                 return Json(result);
             }
             catch (Exception ex)
             {
-                result = Tuple.Create("1", "Excepción: " + ex.Message, string.Empty);
+                result = Tuple.Create("1", "Excepción: " + ex.Message, string.Empty, string.Empty);
                 return Json(result);
             }
         }
+
 
         [HttpPost]
         public ActionResult ObtenerDeudaTotalTransportistas([FromBody] object request)

@@ -229,9 +229,10 @@ namespace AltoChicamaSystem.Data.Documento
             return Tuple.Create(rpta, msg);
         }
 
-        public decimal ObtenerDeudaTransportista(int transportista_id, string bandera)
+        public (decimal, string) ObtenerDeudaTransportista(int transportista_id, string bandera)
         {
             decimal deudaEmpresa = 0; // Valor por defecto en caso de error o no resultados
+            string nombreTransportista = string.Empty;
 
             using (SqlConnection sqlCon = new SqlConnection(con.obtenerDatosConexion(bandera)))
             {
@@ -247,10 +248,14 @@ namespace AltoChicamaSystem.Data.Documento
                         {
                             if (sdr.Read())
                             {
-                                // Lee el valor máximo del documento_id
+                                // Lee el valor total_deuda y transportista_nombre
                                 if (sdr["total_deuda"] != DBNull.Value)
                                 {
                                     deudaEmpresa = Convert.ToDecimal(sdr["total_deuda"]);
+                                }
+                                if (sdr["transportista_nombre"] != DBNull.Value)
+                                {
+                                    nombreTransportista = sdr["transportista_nombre"].ToString();
                                 }
                             }
                         }
@@ -258,12 +263,13 @@ namespace AltoChicamaSystem.Data.Documento
                 }
                 catch (Exception ex)
                 {
-                    // Manejo de errores: considera registrar el error para fines de depuración
-                    Console.WriteLine("Error al obtener el mayor documento ID: " + ex.Message);
+                    // Manejo de errores
+                    Console.WriteLine("Error al obtener la deuda: " + ex.Message);
                 }
             }
-            return deudaEmpresa;
+            return (deudaEmpresa, nombreTransportista);
         }
+
 
         public decimal ObtenerDeudaTotalTransportistas(string bandera)
         {
