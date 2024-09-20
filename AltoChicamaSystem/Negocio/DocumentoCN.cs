@@ -62,6 +62,41 @@ namespace AltoChicamaSystem.Negocio
             }
         }
 
+        public Tuple<string, string> ObtenerDeudaTotalTransportistas(string bandera)
+        {
+            try
+            {
+                // Llama al método en la carpeta Data que ejecuta el procedimiento almacenado
+                decimal totalDeuda = objDato.ObtenerDeudaTotalTransportistas(bandera);
+
+                // Devuelve el resultado como un Tuple
+                return new Tuple<string, string>("Exito", totalDeuda.ToString());
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                return new Tuple<string, string>("Error", ex.Message);
+            }
+        }
+
+        public Tuple<string, string> ObtenerGananciaTotalTransportistas(string bandera)
+        {
+            try
+            {
+                // Llama al método en la carpeta Data que ejecuta el procedimiento almacenado
+                decimal totalDeuda = objDato.ObtenerGananciaTotalTransportistas(bandera);
+
+                // Devuelve el resultado como un Tuple
+                return new Tuple<string, string>("Exito", totalDeuda.ToString());
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                return new Tuple<string, string>("Error", ex.Message);
+            }
+        }
+
+
         public Tuple<string, string> ObtenerMayorDocumentoID(string bandera)
         {
             try

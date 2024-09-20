@@ -2,18 +2,23 @@
     consult = false;
     EmpresaSelect("#input_empresa");
     getListDocumento();
-    // Asignar el event listener fuera de la función getListEmpresa()
+
+    // Llamar a obtenerDeudasEmpresas al cargar la página
+    obtenerDeudasEmpresas();
+    obtenerGananciasEmpresas();
+
+    // Existing event listeners
     $(document).on('change', '.status3', function () {
         var rowData = $(this).closest('tr').data();
         console.log(rowData);
         alterDocumentoStatus(rowData.documento_id);
     });
 
-    // Manejar el evento de clic en el botón "Consultar"
     $("#btnConsultar").click(function () {
         capturarValoresSeleccionados();
     });
 });
+
 
 
 function TransportistaSelect(id_transportista) {
@@ -87,6 +92,65 @@ function obtenerIdEmpresaSeleccionada(empresaSelecionada) {
 
     return valorSeleccionado;  // Retorna el valor (empresa_id) seleccionado
 }
+
+function obtenerDeudasEmpresas() {
+    var endpoint = "/Repositorio/ObtenerDeudaTotalTransportistas";
+
+    $.ajax({
+        type: "POST",
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify({}),
+        dataType: "json",
+        success: function (data) {
+            console.log("Respuesta del servidor:", data);
+
+            if (data && data.item3 !== undefined) {
+                // Usar toFixed(2) para asegurar dos decimales
+                var deudaTotal = parseFloat(data.item3).toFixed(2);
+                $("#input_deuda3").val(deudaTotal);
+                console.log("Valor asignado a input_deuda3:", deudaTotal);
+            } else {
+                console.error("La respuesta del servidor no contiene item3:", data);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('Error al obtener deudas empresas:', error);
+        }
+    });
+}
+
+function obtenerGananciasEmpresas() {
+    var endpoint = "/Repositorio/ObtenerGananciaTotalTransportistas";
+
+    $.ajax({
+        type: "POST",
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify({}),
+        dataType: "json",
+        success: function (data) {
+            console.log("Respuesta del servidor:", data);
+
+            if (data && data.item3 !== undefined) {
+                // Usar toFixed(2) para asegurar dos decimales
+                var deudaTotal = parseFloat(data.item3).toFixed(2);
+                $("#input_deuda2").val(deudaTotal);
+                console.log("Valor asignado a input_deuda3:", deudaTotal);
+            } else {
+                console.error("La respuesta del servidor no contiene item3:", data);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('Error al obtener deudas empresas:', error);
+        }
+    });
+}
+
 
 function obtenerDeudasEmpresa(transportista_id) {
     var dataPost = {
@@ -459,6 +523,8 @@ function alterDocumentoStatus(documento_id) {
             if (rpta == "0") {
                 if (consult != true) {
                     getListDocumento();
+                    obtenerDeudasEmpresas();
+                    obtenerGananciasEmpresas();
                 }
             } else {
                 Swal.fire({

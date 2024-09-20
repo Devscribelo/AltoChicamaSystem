@@ -265,6 +265,75 @@ namespace AltoChicamaSystem.Data.Documento
             return deudaEmpresa;
         }
 
+        public decimal ObtenerDeudaTotalTransportistas(string bandera)
+        {
+            decimal totalDeuda = 0; // Valor por defecto en caso de error o no resultados
+
+            using (SqlConnection sqlCon = new SqlConnection(con.obtenerDatosConexion(bandera)))
+            {
+                try
+                {
+                    sqlCon.Open();
+                    using (SqlCommand sqlCmd = new SqlCommand("Sumar_Total_Deudas_Transportistas", sqlCon))
+                    {
+                        sqlCmd.CommandType = CommandType.StoredProcedure;
+
+                        using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                        {
+                            if (sdr.Read())
+                            {
+                                // Lee el total de deuda
+                                if (sdr["total_deuda"] != DBNull.Value)
+                                {
+                                    totalDeuda = Convert.ToDecimal(sdr["total_deuda"]);
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Manejo de errores
+                    Console.WriteLine("Error al obtener la suma total de deudas: " + ex.Message);
+                }
+            }
+            return totalDeuda;
+        }
+
+        public decimal ObtenerGananciaTotalTransportistas(string bandera)
+        {
+            decimal totalDeuda = 0; // Valor por defecto en caso de error o no resultados
+
+            using (SqlConnection sqlCon = new SqlConnection(con.obtenerDatosConexion(bandera)))
+            {
+                try
+                {
+                    sqlCon.Open();
+                    using (SqlCommand sqlCmd = new SqlCommand("Sumar_Total_Ganancias_Transportistas", sqlCon))
+                    {
+                        sqlCmd.CommandType = CommandType.StoredProcedure;
+
+                        using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                        {
+                            if (sdr.Read())
+                            {
+                                // Lee el total de deuda
+                                if (sdr["total_deuda"] != DBNull.Value)
+                                {
+                                    totalDeuda = Convert.ToDecimal(sdr["total_deuda"]);
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Manejo de errores
+                    Console.WriteLine("Error al obtener la suma total de deudas: " + ex.Message);
+                }
+            }
+            return totalDeuda;
+        }
 
         public Tuple<string, string, List<DocumentoResult>> listarDocumentoEmpresa(int empresa_id, int estado, string bandera)
         {
