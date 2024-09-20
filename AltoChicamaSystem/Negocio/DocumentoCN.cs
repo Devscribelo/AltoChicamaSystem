@@ -29,7 +29,7 @@ namespace AltoChicamaSystem.Negocio
 
         public Tuple<string, string, List<DocumentoResult>> listarDocumentoTransportista(int transportista_id, int estado, string bandera)
         {
-            var result = objDato.listarDocumentoEmpresa(transportista_id, estado, bandera);
+            var result = objDato.listarDocumentoTransportista(transportista_id, estado, bandera);
             return result;
         }
 
