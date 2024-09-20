@@ -238,7 +238,7 @@ namespace AltoChicamaSystem.Data.Documento
                 try
                 {
                     sqlCon.Open();
-                    using (SqlCommand sqlCmd = new SqlCommand("Sumar_Deudas_Empresa", sqlCon))
+                    using (SqlCommand sqlCmd = new SqlCommand("Sumar_Deudas_Transportista", sqlCon))
                     {
                         sqlCmd.CommandType = CommandType.StoredProcedure;
                         sqlCmd.Parameters.AddWithValue("@transportista_id", transportista_id);
