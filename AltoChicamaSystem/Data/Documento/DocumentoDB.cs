@@ -229,7 +229,7 @@ namespace AltoChicamaSystem.Data.Documento
             return Tuple.Create(rpta, msg);
         }
 
-        public decimal obtenerDeudaEmpresa(int empresa_id, string bandera)
+        public decimal ObtenerDeudaTransportista(int transportista_id, string bandera)
         {
             decimal deudaEmpresa = 0; // Valor por defecto en caso de error o no resultados
 
@@ -241,7 +241,7 @@ namespace AltoChicamaSystem.Data.Documento
                     using (SqlCommand sqlCmd = new SqlCommand("Sumar_Deudas_Empresa", sqlCon))
                     {
                         sqlCmd.CommandType = CommandType.StoredProcedure;
-                        sqlCmd.Parameters.AddWithValue("@empresa_id", empresa_id);
+                        sqlCmd.Parameters.AddWithValue("@transportista_id", transportista_id);
 
                         using (SqlDataReader sdr = sqlCmd.ExecuteReader())
                         {
@@ -283,6 +283,68 @@ namespace AltoChicamaSystem.Data.Documento
                 sqlCmd.CommandText = "Documento_List_Empresa";
                 sqlCmd.CommandType = CommandType.StoredProcedure;
                 sqlCmd.Parameters.AddWithValue("@empresa_id", Convert.ToInt32(empresa_id));
+                sqlCmd.Parameters.AddWithValue("@estado", Convert.ToInt32(estado));
+                SqlDataReader sdr = sqlCmd.ExecuteReader();
+
+                while (sdr.Read())
+                {
+                    count++;
+                    if (count == 1)
+                    {
+                        rpta = sdr["Rpta"].ToString();
+                        msg = sdr["Msg"].ToString();
+                        sdr.NextResult();
+                    }
+                    if (rpta == "0" && count >= 2)
+                    {
+                        documento = new DocumentoResult();
+                        documento.documento_id = Convert.ToInt32(sdr["documento_id"]);
+                        documento.documento_titulo = sdr["documento_titulo"].ToString().Trim();
+                        documento.empresa_name = sdr["empresa_name"].ToString().Trim();
+                        documento.transportista_nombre = sdr["transportista_nombre"].ToString().Trim();
+                        documento.documento_status = sdr["documento_status"].ToString().Trim();
+                        documento.documento_numero = Convert.ToInt32(sdr["documento_numero"]);
+                        documento.documento_matriculas = sdr["documento_matriculas"].ToString().Trim();
+                        documento.fecha_servicio = Convert.ToDateTime(sdr["fecha_servicio"]);  // Agregado
+                        documento.fecha_pago = Convert.ToDateTime(sdr["fecha_pago"]);  // Agregado
+                        documento.documento_deuda = Convert.ToDecimal(sdr["documento_deuda"]);  // Agregado
+                        lst.Add(documento);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                lst = new List<DocumentoResult>();
+                msg = ex.Message;
+            }
+            finally
+            {
+                if (sqlCon.State == ConnectionState.Open)
+                {
+                    sqlCon.Close();
+                }
+            }
+            return Tuple.Create(rpta, msg, lst);
+        }
+
+        public Tuple<string, string, List<DocumentoResult>> listarDocumentoTransportista(int transportista_id, int estado, string bandera)
+        {
+            List<DocumentoResult> lst = new List<DocumentoResult>();
+            DocumentoResult documento = new DocumentoResult();
+            SqlConnection sqlCon = new SqlConnection();
+            string rpta = "";
+            string msg = "";
+            int count = 0;
+            try
+            {
+                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                sqlCon.Open();
+                SqlCommand sqlCmd = new SqlCommand();
+                sqlCmd.Connection = sqlCon;
+                sqlCmd.CommandText = "Documento_List_Transportista";
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.Parameters.AddWithValue("@transportista_id", Convert.ToInt32(transportista_id));
                 sqlCmd.Parameters.AddWithValue("@estado", Convert.ToInt32(estado));
                 SqlDataReader sdr = sqlCmd.ExecuteReader();
 

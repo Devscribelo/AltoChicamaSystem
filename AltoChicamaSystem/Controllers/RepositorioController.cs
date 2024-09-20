@@ -106,14 +106,14 @@ namespace AltoChicamaSystem.Controllers
         }
 
         [HttpPost]
-        public ActionResult ObtenerDeudaEmpresa([FromBody] CMDocumento request)
+        public ActionResult ObtenerDeudaTransportista([FromBody] CMDocumento request)
         {
             var result = Tuple.Create("1", "Error al obtener la deuda", string.Empty);
 
             try
             {
                 string bandera = conf.GetValue<string>("Bandera");
-                var negocioResult = objusuarioCN.obtenerDeudaEmpresa(request.empresa_id, bandera);
+                var negocioResult = objusuarioCN.ObtenerDeudaTransportista(request.transportista_id, bandera);
 
                 if (negocioResult.Item1 == "Exito")
                 {
@@ -141,6 +141,30 @@ namespace AltoChicamaSystem.Controllers
             {
                 string bandera = conf.GetValue<string>("Bandera");
                 result = objusuarioCN.listarDocumentoEmpresa(request.empresa_id, request.estado, bandera);
+                if (result.Item1 == "0")  // Verifica si la operación fue exitosa
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch
+            {
+                return BadRequest(result);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult listarDocumentoTransportista([FromBody] DocumentoResult request)
+        {
+            var result = Tuple.Create("1", "Error al listar", new List<DocumentoResult>());
+
+            try
+            {
+                string bandera = conf.GetValue<string>("Bandera");
+                result = objusuarioCN.listarDocumentoTransportista(request.transportista_id, request.estado, bandera);
                 if (result.Item1 == "0")  // Verifica si la operación fue exitosa
                 {
                     return Ok(result);

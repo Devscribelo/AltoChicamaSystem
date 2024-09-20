@@ -27,6 +27,12 @@ namespace AltoChicamaSystem.Negocio
             return result;
         }
 
+        public Tuple<string, string, List<DocumentoResult>> listarDocumentoTransportista(int transportista_id, int estado, string bandera)
+        {
+            var result = objDato.listarDocumentoEmpresa(transportista_id, estado, bandera);
+            return result;
+        }
+
 
         public Tuple<string, string> eliminarDocumento(int documentoId, string bandera)
         {
@@ -39,12 +45,12 @@ namespace AltoChicamaSystem.Negocio
             return result;
         }
 
-        public Tuple<string, string> obtenerDeudaEmpresa(int empresa_id, string bandera)
+        public Tuple<string, string> ObtenerDeudaTransportista(int transportista_id, string bandera)
         {
             try
             {
                 // Llama al método en la carpeta Data que ejecuta el procedimiento almacenado
-                decimal mayorDocumentoID = objDato.obtenerDeudaEmpresa(empresa_id, bandera);
+                decimal mayorDocumentoID = objDato.ObtenerDeudaTransportista(transportista_id, bandera);
 
                 // Devuelve el resultado como un Tuple
                 return new Tuple<string, string>("Exito", mayorDocumentoID.ToString());
