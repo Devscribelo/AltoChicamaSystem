@@ -8,7 +8,6 @@
         public int empresa_id { get; set; }
         public int transportista_id { get; set; }
         public string documento_status { get; set; } 
-        public string documento_matriculas { get; set; }
         public int documento_numero { get; set; }
         public DateTime fecha_servicio { get; set; }
         public DateTime fecha_pago { get; set; }
@@ -27,8 +26,6 @@
         public string empresa_name { get; set; } // Propiedad para almacenar el nombre de la empresa
         public string transportista_nombre { get; set; }
         public string documento_status { get; set; }
-
-        public string documento_matriculas { get; set; }
         public int documento_numero { get; set; }
         public DateTime fecha_servicio { get; set; }
         public DateTime fecha_pago { get; set; }

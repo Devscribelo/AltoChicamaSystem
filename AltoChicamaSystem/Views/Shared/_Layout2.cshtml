@@ -82,6 +82,12 @@
                                     <span class="text nav-text">Precios</span>
                                 </a>
                             </li>
+                            <li class="nav-link @(currentController == "Factura" && currentAction == "Index" ? "mode" : "")">
+                                <a asp-controller="Factura" asp-action="Index">
+                                <i class='bx bxs-spreadsheet icon'></i>
+                                    <span class="text nav-text">Facturas</span>
+                                </a>
+                            </li>
                     }
                     @if (isUser)
                     {

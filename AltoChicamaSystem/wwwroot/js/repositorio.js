@@ -138,7 +138,6 @@ function getListDocumento() {
                         "data-empresa_name='" + dataEmpresa[i].documento_titulo + "' " +
                         "data-empresa_ruc='" + dataEmpresa[i].empresa_name + "' " +
                         "data-transportista_nombre='" + dataEmpresa[i].transportista_nombre + "' " +
-                        "data-matriculas='" + dataEmpresa[i].documento_matriculas + "' " +
                         "data-documento_status='" + dataEmpresa[i].documento_status + "'" +
                         "data-fecha_servicio='" + dataEmpresa[i].fecha_servicio + "'" +
                         "data-fecha_pago='" + dataEmpresa[i].fecha_pago + "'" +
@@ -148,7 +147,6 @@ function getListDocumento() {
                         "<td>" + dataEmpresa[i].documento_titulo + "</td>" +
                         "<td>" + dataEmpresa[i].empresa_name + "</td>" +
                         "<td>" + dataEmpresa[i].transportista_nombre + "</td>" +
-                        "<td>" + dataEmpresa[i].documento_matriculas + "</td>" +
                         "<td>" + fechaServicio + "</td>" +
                         "<td>" + fechaPago + "</td>" +
                         "<td>" + dataEmpresa[i].documento_deuda + "</td>" +
@@ -280,7 +278,6 @@ function getListDocumentoEmpresa(empresa_id, estado) {
                         "data-empresa_name='" + dataEmpresa[i].documento_titulo + "' " +
                         "data-empresa_ruc='" + dataEmpresa[i].empresa_name + "' " +
                         "data-transportista_nombre='" + dataEmpresa[i].transportista_nombre + "' " +
-                        "data-matriculas='" + dataEmpresa[i].documento_matriculas + "' " +
                         "data-documento_status='" + dataEmpresa[i].documento_status + "'" +
                         "data-fecha_servicio='" + dataEmpresa[i].fecha_servicio + "'" +
                         "data-fecha_pago='" + dataEmpresa[i].fecha_pago + "'" +
@@ -290,7 +287,6 @@ function getListDocumentoEmpresa(empresa_id, estado) {
                         "<td>" + dataEmpresa[i].documento_titulo + "</td>" +
                         "<td>" + dataEmpresa[i].empresa_name + "</td>" +
                         "<td>" + dataEmpresa[i].transportista_nombre + "</td>" +
-                        "<td>" + dataEmpresa[i].documento_matriculas + "</td>" +
                         "<td>" + fechaServicio1 + "</td>" +
                         "<td>" + fechaPago1 + "</td>" +
                         "<td>" + dataEmpresa[i].documento_deuda + "</td>" +

@@ -97,15 +97,7 @@
                         <!-- Opciones de empresa -->
                     </select>
                 </div>
-                <div class="input-group mt-3">
-                    <label class="input-group-text" for="select_matriculas">N° Matrículas</label>
-                    <select class="form-select" id="select_matriculas">
-                        <option value="" disabled selected>Seleccione el # de Matrículas...</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                    </select>
-                </div>
-
+                
                 <!-- Contenedor donde se agregan las entradas dinámicamente -->
                 <div id="matriculas_container" class="mt-3"></div>
 
@@ -117,64 +109,7 @@
         <script src="~/config.js"></script>
         <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous"></script>
 
-        <script>
-            document.getElementById('select_matriculas').addEventListener('change', function () {
-                const matriculasContainer = document.getElementById('matriculas_container');
-                const numberOfMatriculas = parseInt(this.value);
 
-                matriculasContainer.innerHTML = '';
-
-                for (let i = 1; i <= numberOfMatriculas; i++) {
-                    const plateDiv = document.createElement('div');
-                    plateDiv.classList.add('plate-container');
-
-                    plateDiv.innerHTML = `
-                            <div class="plate-row">
-                                <div class="plate-title">Matrícula ${i} :</div>
-                                <input type="text" maxlength="1" class="plate-input" id="char${i}_1" autofocus>
-                                <input type="text" maxlength="1" class="plate-input" id="char${i}_2">
-                                <input type="text" maxlength="1" class="plate-input" id="char${i}_3">
-                                <span>-</span>
-                                <input type="text" maxlength="1" class="plate-input" id="num${i}_1">
-                                <input type="text" maxlength="1" class="plate-input" id="num${i}_2">
-                                <input type="text" maxlength="1" class="plate-input" id="num${i}_3">
-                            </div>
-                        `;
-
-                    matriculasContainer.appendChild(plateDiv);
-                }
-
-                function updatePlate(plateIndex) {
-                    const plateInputs = document.querySelectorAll(`#char${plateIndex}_1, #char${plateIndex}_2, #char${plateIndex}_3, #num${plateIndex}_1, #num${plateIndex}_2, #num${plateIndex}_3`);
-                    const plateValue =
-                        Array.from(plateInputs).map(input => input.value.toUpperCase()).join('');
-
-                    // Update the plate value directly in the plate row
-                    const plateRow = document.querySelector(`.plate-container:nth-of-type(${plateIndex}) .plate-row`);
-                    plateRow.querySelectorAll('.plate-input').forEach((input, idx) => {
-                        if (input.id.includes(`char${plateIndex}`) || input.id.includes(`num${plateIndex}`)) {
-                            input.value = plateValue.charAt(idx) || '';
-                        }
-                    });
-                }
-
-                for (let i = 1; i <= numberOfMatriculas; i++) {
-                    const inputs = document.querySelectorAll(`#char${i}_1, #char${i}_2, #char${i}_3, #num${i}_1, #num${i}_2, #num${i}_3`);
-
-                    inputs.forEach(input => {
-                        input.addEventListener('input', function () {
-                            if (this.value.length === 1) {
-                                const nextInput = this.nextElementSibling;
-                                if (nextInput && nextInput.tagName === 'INPUT') {
-                                    nextInput.focus();
-                                }
-                            }
-                            updatePlate(i);
-                        });
-                    });
-                }
-            });
-        </script>
     </section>
 </body>
 </html>
