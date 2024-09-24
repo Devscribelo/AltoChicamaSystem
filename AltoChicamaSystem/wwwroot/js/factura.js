@@ -17,15 +17,20 @@
 });
 
 function guardarNewFactura() {
+    var factura_status = $("#input_factura_status_a").is(':checked') ? $("#input_factura_status_a").val() : $("#input_factura_status_i").val();
+
     var dataPost = {
         factura_monto: $("#input_factura_monto").val(),
         num_factura: $("#input_factura_numfactura").val(),
-        factura_status: factura_status,
+        factura_status: factura_status, // Asegúrate que este valor esté definido antes de usarlo
+        transportista_id: $("#input_transportista_modal").val(),
     };
 
     dataPost = trimJSONFields(dataPost);
 
-    var endpoint = getDomain() + "/Factura/RegistrarFactura";
+    console.log("Datos que se enviarán:", dataPost); // Aquí ves qué datos se están enviando
+
+    var endpoint = getDomain() + "/Factura/regFactura";
 
     $.ajax({
         type: "POST",
@@ -37,7 +42,7 @@ function guardarNewFactura() {
         dataType: "json",
         beforeSend: function (xhr) {
             console.log("Guardando...");
-            $("#btnGuardarEmpresa").attr("disabled", true);
+            $("#btnGuardarFactura").attr("disabled", true);
         },
         success: function (data) {
             var rpta = data.item1;
@@ -52,7 +57,7 @@ function guardarNewFactura() {
                     text: msg,
                 });
             }
-            $("#btnGuardarEmpresa").prop("disabled", false);
+            $("#btnGuardarFactura").prop("disabled", false);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             Swal.fire({
@@ -76,18 +81,16 @@ function TransportistaSelect(id_transportista) {
         },
         dataType: "json",
         beforeSend: function (xhr) {
-            console.log("cargando");
+            console.log("Cargando...");
         },
         success: function (data) {
             var TransportistaSelect = data.item3;
 
             // Limpiar el select y agregar opción por defecto
-            if (id_transportista === "#input_transportista") {
-                $(id_transportista).empty();
-                $(id_transportista).append('<option value="" disabled selected>Seleccione un transportista...</option>');
-            }
+            $(id_transportista).empty();
+            $(id_transportista).append('<option value="" disabled selected>Seleccione un transportista...</option>');
 
-            // Verificar si la data es null, vacía, o contiene solo espacios en blanco
+            // Verificar si la data es válida y no está vacía
             if (TransportistaSelect && TransportistaSelect.length > 0) {
                 // Agregar opciones al select
                 for (var i = 0; i < TransportistaSelect.length; i++) {
@@ -96,12 +99,13 @@ function TransportistaSelect(id_transportista) {
                         '<option value="' + item.transportista_id + '">' + item.transportista_nombre + '</option>'
                     );
                 }
+            } else {
+                console.log("No hay transportistas disponibles.");
             }
-
         },
         error: function (data) {
-            alert('Error fatal ' + data);
-            console.log("failure");
+            alert('Error fatal: ' + data);
+            console.log("Fallo en la solicitud.");
         }
     });
 }
@@ -117,16 +121,23 @@ function obtenerIdTransportistaSeleccionada(id_transportista) {
         console.log("No hay ninguna transportista seleccionada.");
     }
 
-    return valorSeleccionadoTransportista;  // Retorna el valor (empresa_id) seleccionado
+    return valorSeleccionadoTransportista;  
 }
 
-// Llamada inicial para llenar el select de empresas
+// Llamada inicial para llenar el select de transportistas
 TransportistaSelect("#input_transportista");
+TransportistaSelect("#input_transportista_modal");
+TransportistaSelect("#input_transportista_modal_edit");
+
 
 $(document).on('click', '.btnGuardar', function () {
     TransportistaSelect("#input_transportista");
     var transportista_id = $("#input_transportista_id").val();
-    guardarDocumento(transportista_id);
+    guardarNewFactura(transportista_id);
+});
+
+$(document).on('click', '.btnGuardar2', function () {
+    guardarEditFactura(transportista_id);
 });
 
 function obtenerIdEmpresaSeleccionada(empresaSelecionada) {
@@ -284,8 +295,9 @@ function getListFactura() {
                         "data-id_factura='" + dataFactura[i].id_factura + "' " +
                         "data-factura_monto='" + dataFactura[i].factura_monto + "' " +
                         "data-num_factura='" + dataFactura[i].num_factura + "'" +
-                        "data-factura_status='" + dataFactura[i].factura_status + "'>" +
-                        "data-transportista_nombre='" + dataFactura[i].transportista_nombre + "' " +
+                        "data-factura_status='" + dataFactura[i].factura_status + "'" +
+                        "data-transportista_id='" + dataFactura[i].transportista_id + "'" +
+                        "data-transportista_nombre='" + dataFactura[i].transportista_nombre + "'>" +
                         "<td>" + dataFactura[i].id_factura + "</td>" +
                         "<td>" + dataFactura[i].factura_monto + "</td>" +
                         "<td>" + dataFactura[i].num_factura + "</td>" +
@@ -467,22 +479,31 @@ function eliminarFactura(id_factura) {
     });
 }
 
-function modalEditarFactura(rowData) {
-    var id_factura = rowData.id_factura;
-    var num_factura = rowData.num_factura;
+async function modalEditarFactura(rowData) {
+    $("#modal_editar_factura .modal-title").html("Editando Factura: <span style='color: #198754'><strong>" + rowData.num_factura + "</strong></span>");
 
-    $("#modal_editar_factura .modal-title").html("Editando Factura: <span style='color: #198754'><strong>" + num_factura + "</strong></span>");
+    // No es necesario volver a declarar rowData aquí
+    // const rowData = await getListFactura();
+
+    $("#edit_factura_monto").val(rowData.factura_monto);
+    $("#edit_factura_numfactura").val(rowData.num_factura); // Cambié num_factura por rowData.num_factura
+    $("#input_transportista_modal_edit").val(rowData.transportista_id); // Cambié transportista_id por rowData.transportista_id
+
+    var estado = rowData.factura_status;
+    $('#edit_factura_status_a').prop('checked', estado === 'True');
+    $('#edit_factura_status_i').prop('checked', estado === 'False');
 
     $("form").off("submit").one("submit", function (event) {
         event.preventDefault();
-        guardarEditFactura(id_factura);
+        guardarEditFactura(rowData.id_factura); // Cambié id_factura por rowData.id_factura
     });
 
-    $("#edit_factura_monto").val(rowData.factura_monto);
-    $("#edit_factura_numfactura").val(rowData.num_factura);
-
     $("#modal_editar_factura").modal("show");
+
+    console.log(rowData);
 }
+
+
 
 function alterEmpresaFactura(id_factura) {
     var dataPost = {
@@ -527,15 +548,25 @@ function alterEmpresaFactura(id_factura) {
 
 
 function guardarEditFactura(id_factura) {
+
+    var factura_status;
+    if ($('#edit_factura_status_a').is(':checked')) {
+        factura_status = $("#edit_factura_status_a").val();
+    } else {
+        factura_status = $("#edit_factura_status_i").val();
+    }
+
     var dataPost = {
         id_factura: id_factura,
         factura_monto: $("#edit_factura_monto").val(),
         num_factura: $("#edit_factura_numfactura").val(),
+        factura_status: factura_status,
+        transportista_id: $("#input_transportista_modal_edit").val(),
     };
 
     dataPost = trimJSONFields(dataPost);
 
-    var endpoint = getDomain() + "/Factura/ModificarFactura";
+    var endpoint = getDomain() + "/Factura/modFactura";
 
     $.ajax({
         type: "POST",
@@ -547,7 +578,7 @@ function guardarEditFactura(id_factura) {
         dataType: "json",
         beforeSend: function (xhr) {
             console.log("Guardando...");
-            $("#btnGuardarEditEmpresa").attr("disabled", true);
+            $("#btnGuardarEditFactura").attr("disabled", true);
         },
         success: function (data) {
             var rpta = data.item1;
@@ -562,7 +593,7 @@ function guardarEditFactura(id_factura) {
                     text: msg,
                 });
             }
-            $("#btnGuardarEditEmpresa").prop("disabled", false);
+            $("#btnGuardarEditFactura").prop("disabled", false);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             Swal.fire({

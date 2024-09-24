@@ -136,6 +136,13 @@
                                         <input type="text" class="form-control" id="input_factura_numfactura" autocomplete="off" placeholder="Ingrese el número de Factura" maxlength="100">
                                     </div>
 
+                                    <div class="input-group input-group-sm mb-3">
+                                        <label class="input-group-text" for="input_transportista_modal">Transportista</label>
+                                        <select class="form-select" id="input_transportista_modal">
+                                            <!-- Opciones de empresa -->
+                                        </select>
+                                    </div>
+
                                     <!-- Status -->
                                     <div class="form-group" style="margin-right: 144px !important;">
                                         <label id="status" for="radio_status" class="col-form-label">Estado: </label>
@@ -149,7 +156,7 @@
                                         </div>
                                     </div>
 
-                                    <button id="btnGuardarEmpresa" class="btnGuardar" type="submit">Guardar Factura</button>
+                                    <button id="btnGuardarFactura" class="btnGuardar" type="submit">Guardar Factura</button>
                                 </form>
                             </div>
                         </div>
@@ -185,6 +192,14 @@
                                         <input type="text" class="form-control" id="edit_factura_numfactura" autocomplete="off">
                                     </div>
 
+                                    <!-- empresa_correo -->
+                                    <div class="input-group input-group-sm mb-3">
+                                        <label class="input-group-text" for="input_transportista_modal_edit">Transportista</label>
+                                        <select class="form-select" id="input_transportista_modal_edit">
+                                            <!-- Opciones de empresa -->
+                                        </select>
+                                    </div>
+
                                     <!-- Status -->
                                     <div class="form-group" style="margin-right: 144px !important;">
                                         <label id="status" for="radio_status" class="col-form-label">Estado: </label>
@@ -198,7 +213,7 @@
                                         </div>
                                     </div>
 
-                                    <button id="btnGuardarEditEmpresa" class="btnGuardar" type="submit">Actualizar</button>
+                                    <button id="btnGuardarEditFactura" class="btnGuardar2" type="submit">Actualizar</button>
 
                                 </form>
                             </div>

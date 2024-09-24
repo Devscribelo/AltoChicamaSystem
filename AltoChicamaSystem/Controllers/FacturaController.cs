@@ -107,7 +107,7 @@ namespace AltoChicamaSystem.Controllers
         }
 
         [HttpPost]
-        public IActionResult RegistrarFactura([FromBody] CMFactura request)
+        public IActionResult regFactura([FromBody] CMFactura request)
         {
             var result = Tuple.Create("1", "Error al registrar factura");
             try
@@ -136,7 +136,7 @@ namespace AltoChicamaSystem.Controllers
         }
 
         [HttpPost]
-        public IActionResult ModificarFactura([FromBody] CMFactura request)
+        public IActionResult modFactura([FromBody] CMFactura request)
         {
             var result = Tuple.Create("1", "Error al modificar factura");
             try

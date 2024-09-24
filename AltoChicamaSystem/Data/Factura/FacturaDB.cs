@@ -26,6 +26,7 @@ namespace AltoChicamaSystem.Data.Factura
                 sqlCmd.Parameters.AddWithValue("@factura_monto", cmFactura.factura_monto);
                 sqlCmd.Parameters.AddWithValue("@num_factura", cmFactura.num_factura.Trim());
                 sqlCmd.Parameters.AddWithValue("@factura_status", cmFactura.factura_status);
+                sqlCmd.Parameters.AddWithValue("@transportista_id", cmFactura.transportista_id);
 
                 SqlDataReader sdr = sqlCmd.ExecuteReader();
                 if (sdr.Read())
@@ -81,6 +82,7 @@ namespace AltoChicamaSystem.Data.Factura
                                 factura_monto = Convert.ToDecimal(sdr["factura_monto"]),
                                 num_factura = sdr["num_factura"].ToString().Trim(),
                                 factura_status = sdr["factura_status"].ToString().Trim(),
+                                transportista_id = Convert.ToInt32(sdr["transportista_id"]),
                                 transportista_nombre = sdr["transportista_nombre"].ToString().Trim(),
                             };
                             lst.Add(factura);
@@ -186,6 +188,8 @@ namespace AltoChicamaSystem.Data.Factura
                 sqlCmd.Parameters.AddWithValue("@id_factura", cmFactura.id_factura);
                 sqlCmd.Parameters.AddWithValue("@factura_monto", cmFactura.factura_monto);
                 sqlCmd.Parameters.AddWithValue("@num_factura", cmFactura.num_factura.Trim());
+                sqlCmd.Parameters.AddWithValue("@factura_status", cmFactura.factura_status);
+                sqlCmd.Parameters.AddWithValue("@transportista_id", cmFactura.transportista_id);
 
                 SqlDataReader sdr = sqlCmd.ExecuteReader();
                 if (sdr.Read())

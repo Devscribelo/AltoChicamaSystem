@@ -248,6 +248,18 @@ table.dataTable.no-footer {
     border: none;
 }
 
+.btnGuardar2 {
+    display: block;
+    margin: 25px auto 0;
+    color: #fff;
+    background-color: #198754;
+    border-color: #198754;
+    padding: 0.25rem 0.5rem;
+    font-size: .875rem;
+    border-radius: 0.2rem;
+    border: none;
+}
+
 #modal_nueva_empresa{
     justify-content: center;
 }
