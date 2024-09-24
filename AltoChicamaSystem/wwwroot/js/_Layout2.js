@@ -122,8 +122,8 @@ function EmpresaSelect() {
             // Verificar si la data es null, vacía, o contiene solo espacios en blanco
             if (EmpresaSelect && EmpresaSelect.length > 0) {
                 // Agregar opciones al select
-                for (var i = 0; i < empresas.length; i++) {
-                    var item = empresas[i];
+                for (var i = 0; i < EmpresaSelect.length; i++) {
+                    var item = EmpresaSelect[i];
                     $('#input_empresa').append(new Option(item.empresa_name, item.empresa_id));
                 }
             } else {
@@ -292,8 +292,6 @@ function vaciarFormulario() {
 async function guardarDocumento(file) {
     var empresa_id = obtenerIdEmpresaSeleccionada("#input_empresa");
     var transportista_id = obtenerIdTransportistaSeleccionada("#input_transportista");
-}
-
 
     if (!empresa_id) {
         Swal.fire({
@@ -302,7 +300,7 @@ async function guardarDocumento(file) {
             icon: 'error',
             confirmButtonText: 'OK'
         });
-        return;
+        return; // El return está dentro de la función
     }
 
     if (!transportista_id) {
@@ -312,7 +310,7 @@ async function guardarDocumento(file) {
             icon: 'error',
             confirmButtonText: 'OK'
         });
-        return;
+        return; // El return está dentro de la función
     }
 
     // Capturar las fechas y el total

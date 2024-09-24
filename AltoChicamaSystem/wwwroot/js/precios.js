@@ -21,7 +21,7 @@
 
 
 
-function TransportistaSelect(id_transportista) {
+function TransportistaSelect() {
     var endpoint = getDomain() + "/Transportista/TransportistaSelect";
 
     $.ajax({
@@ -33,32 +33,42 @@ function TransportistaSelect(id_transportista) {
         },
         dataType: "json",
         beforeSend: function (xhr) {
-            console.log("cargando");
+            console.log("Cargando transportistas...");
         },
         success: function (data) {
             var TransportistaSelect = data.item3;
 
             // Limpiar el select y agregar opción por defecto
-            if (id_transportista === "#input_transportista") {
-                $(id_transportista).empty();
-                $(id_transportista).append('<option value="" disabled selected>Seleccione un transportista...</option>');
-            }
+            $('#input_transportista').empty();
+            $('#input_transportista').append(new Option("Seleccione un transportista...", "", true, true));
 
             // Verificar si la data es null, vacía, o contiene solo espacios en blanco
             if (TransportistaSelect && TransportistaSelect.length > 0) {
                 // Agregar opciones al select
                 for (var i = 0; i < TransportistaSelect.length; i++) {
                     var item = TransportistaSelect[i];
-                    $(id_transportista).append(
-                        '<option value="' + item.transportista_id + '">' + item.transportista_nombre + '</option>'
-                    );
+                    $('#input_transportista').append(new Option(item.transportista_nombre, item.transportista_id));
                 }
+            } else {
+                console.log("No se encontraron transportistas.");
+                $('#input_transportista').append(new Option("No hay transportistas disponibles", ""));
             }
 
+            // Inicializar o actualizar Select2 usando directamente el ID del select
+            $('#input_transportista').select2({
+                placeholder: "Seleccione un transportista...",
+                allowClear: true,
+                language: "es",
+                dropdownCssClass: 'limit-dropdown' // Añadir la clase para limitar altura
+            });
+
+            // Habilitar el select
+            $('#input_transportista').prop("disabled", false);
+
         },
-        error: function (data) {
-            alert('Error fatal ' + data);
-            console.log("failure");
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Error al cargar transportistas: ' + textStatus);
+            console.error("Error al cargar transportistas:", textStatus, errorThrown);
         }
     });
 }
@@ -222,7 +232,7 @@ function capturarValoresSeleccionados() {
 
 
 function getListDocumento() {
-    const apiUrl = /api/Documento / ObtenerDocumento /;
+    const apiUrl = `/api/Documento / ObtenerDocumento /`;
     //const x = getDomain() + apiUrl;
     endpoint = getDomain() + "/Repositorio/ListaDocumento"
 
@@ -358,7 +368,7 @@ function getListDocumento() {
 
 function getListDocumentoEmpresa(empresa_id, estado) {
 
-    const apiUrl = /api/Documento / ObtenerDocumento /;
+    const apiUrl = `/api/Documento / ObtenerDocumento /`;
     endpoint = getDomain() + "/Repositorio/listarDocumentoEmpresa";
 
     return new Promise((resolve, reject) => {
@@ -403,9 +413,9 @@ function getListDocumentoEmpresa(empresa_id, estado) {
                         "<td>" + dataEmpresa[i].documento_deuda + "</td>" +
                         "<td>" +
                         "<div class='form-check form-switch'>" +
-                        <input style='width: 46px; margin-top: 4px;' class='form-check-input status3' type='checkbox' id='flexSwitchCheckDefault${i}' ${checked} data-empresa_status='${documentoId}'> +
-                            "</div>" +
-                    "</td>" +
+                        "<input style='width: 46px; margin-top: 4px;' class='form-check-input status3' type='checkbox' id='flexSwitchCheckDefault" + i + "' " + checked + " data-empresa_status='" + documentoId + "'>" +
+                        "</div>" +
+                        "</td>";
                         "</tr>";
                 }
 
@@ -495,7 +505,6 @@ function getListDocumentoEmpresa(empresa_id, estado) {
 function getListDocumentoTransportista(transportista_id, estado) {
 
     const apiUrl = `/api/Documento/ObtenerDocumento/`;
-    //const x = getDomain() + apiUrl;
     endpoint = getDomain() + "/Repositorio/listarDocumentoTransportista";
 
     return new Promise((resolve, reject) => {
@@ -511,7 +520,6 @@ function getListDocumentoTransportista(transportista_id, estado) {
             dataType: "json",
             beforeSend: function (xhr) {
                 console.log("cargando");
-                //xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
             },
 
             success: function (data) {
@@ -523,15 +531,17 @@ function getListDocumentoTransportista(transportista_id, estado) {
                 console.log(dataEmpresa);
 
                 for (var i = 0; i < dataEmpresa.length; i++) {
+                    let checked = dataEmpresa[i].documento_status === 'True' ? 'checked' : '';
+                    let documentoId = dataEmpresa[i].documento_id;
+
                     datosRow +=
                         "<tr class='filaTabla' " +
-                        "data-empresa_id='" + dataEmpresa[i].documento_id + "' " +
+                        "data-empresa_id='" + documentoId + "' " +
                         "data-empresa_name='" + dataEmpresa[i].documento_titulo + "' " +
                         "data-empresa_ruc='" + dataEmpresa[i].empresa_name + "' " +
                         "data-transportista_nombre='" + dataEmpresa[i].transportista_nombre + "' " +
                         "data-documento_status='" + dataEmpresa[i].documento_status + "'" +
-                        "data-documento_id='" + dataEmpresa[i].documento_id + "'>" +
-                        "data-documento_precio='" + dataEmpresa[i].documento_deuda + "'>" +
+                        "data-documento_id='" + documentoId + "'>" +
                         "<td>" + dataEmpresa[i].documento_numero + "</td>" +
                         "<td>" + dataEmpresa[i].documento_titulo + "</td>" +
                         "<td>" + dataEmpresa[i].empresa_name + "</td>" +
@@ -539,7 +549,7 @@ function getListDocumentoTransportista(transportista_id, estado) {
                         "<td>" + dataEmpresa[i].documento_deuda + "</td>" +
                         "<td>" +
                         "<div class='form-check form-switch'>" +
-                        `<input style='width: 46px; margin-top: 4px;' class='form-check-input status3' type='checkbox' id='flexSwitchCheckDefault${i}' ${dataEmpresa[i].documento_status === 'True' ? 'checked' : ''} data-empresa_status='${dataEmpresa[i].documento_id}'>` +
+                        "<input style='width: 46px; margin-top: 4px;' class='form-check-input status3' type='checkbox' id='flexSwitchCheckDefault" + i + "' " + checked + " data-empresa_status='" + documentoId + "'>" +
                         "</div>" +
                         "</td>" +
                         "</tr>";
@@ -549,7 +559,7 @@ function getListDocumentoTransportista(transportista_id, estado) {
                     // Inicializar DataTable en la tabla
                     tableEmpresa = $("#table_empresa").DataTable({
                         language: {
-                            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json' // URL de la biblioteca de idioma
+                            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
                         },
                         dom: 'frtip',
                         buttons: [
@@ -557,38 +567,74 @@ function getListDocumentoTransportista(transportista_id, estado) {
                                 extend: 'excel',
                                 className: 'btn_export_Excel',
                                 exportOptions: {
-                                    columns: ':visible:not(:last-child, :nth-last-child(1))' // Oculta la penúltima y la última columna en la exportación a Excel
+                                    columns: ':visible:not(:last-child, :nth-last-child(1))'
                                 }
                             },
                             {
                                 extend: 'pdf',
                                 className: 'btn_export_Pdf',
                                 exportOptions: {
-                                    columns: ':visible:not(:last-child, :nth-last-child(1))' // Oculta la penúltima y la última columna en la exportación a PDF
+                                    columns: ':visible:not(:last-child, :nth-last-child(1))'
                                 }
                             }
                         ],
                         colResize: {
                             tableWidthFixed: 'false'
                         },
-                        colReorder: true // Activa la funcionalidad de reordenamiento de columnas
+                        colReorder: true
                     });
                 }
 
                 tableEmpresa.clear();
                 tableEmpresa.rows.add($(datosRow)).draw();
+
+                // Agregar evento al checkbox
+                $(".status3").on('change', function () {
+                    let documentoId = $(this).attr('data-empresa_status');
+                    let isChecked = $(this).is(':checked');
+
+                    if (isChecked) {
+                        Swal.fire({
+                            title: '¿Cancelar la deuda?',
+                            text: "¿Está seguro de que quiere cancelar la deuda?",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Sí, cancelar',
+                            cancelButtonText: 'No, volver',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                console.log("Deuda cancelada para el documento con ID: " + documentoId);
+                            } else {
+                                $(this).prop('checked', false);
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: '¿Agregar deuda?',
+                            text: "¿Está seguro de que quiere agregar la deuda?",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Sí, agregar',
+                            cancelButtonText: 'No, volver',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                console.log("Deuda agregada para el documento con ID: " + documentoId);
+                            } else {
+                                $(this).prop('checked', true);
+                            }
+                        });
+                    }
+                });
             },
             failure: function (data) {
                 Swal.close();
                 alert('Error fatal ' + data);
-                console.log("failure")
+                console.log("failure");
             }
         });
-
-
     });
-
 }
+
 
 function alterDocumentoStatus(documento_id) {
     var dataPost = {
