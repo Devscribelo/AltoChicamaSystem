@@ -19,4 +19,13 @@
         public string usuario_user { get; set; }
         public string usuario_password { get; set; }
     }
+
+    public class Direccion
+    {
+        public int direccion_id { get; set; }
+        public string direccion { get; set; }
+        public int empresa_id { get; set; }
+
+    }
+
 }
