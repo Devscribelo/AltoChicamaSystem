@@ -104,7 +104,7 @@ function formatDateString(dateString) {
 
 function getListDocumento() {
 
-    const apiUrl = `/api/Documento / ObtenerDocumento /`;
+    const apiUrl = `/api/Documento/ObtenerDocumento/`;
     //const x = getDomain() + apiUrl;
     endpoint = getDomain() + "/Repositorio/ListaDocumento"
 
