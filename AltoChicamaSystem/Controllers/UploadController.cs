@@ -23,7 +23,7 @@ namespace AltoChicamaSystem.Controllers
         }
 
         [HttpPost]
-        public ActionResult RegDocumento(IFormFile documento_pdf, string documento_titulo, int empresa_id, int transportista_id)
+        public ActionResult RegDocumento(IFormFile documento_pdf, string documento_titulo, int empresa_id, int transportista_id, DateTime fecha_servicio, DateTime fecha_pago, decimal documento_deuda)
         {
             var result = Tuple.Create("1", "Error al Registrar");
             try
@@ -41,7 +41,10 @@ namespace AltoChicamaSystem.Controllers
                     documento_titulo = documento_titulo,
                     documento_pdf = fileData,
                     empresa_id = empresa_id,
-                    transportista_id = transportista_id
+                    transportista_id = transportista_id,
+                    fecha_servicio = fecha_servicio,
+                    fecha_pago = fecha_pago,
+                    documento_deuda = documento_deuda
                 };
 
                 string bandera = conf.GetValue<string>("Bandera");

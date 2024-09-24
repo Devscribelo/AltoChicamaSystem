@@ -3,7 +3,10 @@
     Layout = "~/Views/Shared/_Layout2.cshtml";
 }
 
+<link rel="stylesheet" href="~/css/selector.css">
 <link rel="stylesheet" href="~/css/generador.css">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/css/empresa.css">
 
 <section class="home">
 
@@ -11,7 +14,7 @@
         <div class="submit-btn">SELECCIONE UN PDF:</div>
     </div>
 
-    <div class="buttons" style="display: flex; justify-content: center; gap: 10px; margin-top: 71px !important;">
+    <div class="buttons" style="display: flex; justify-content: center; gap: 10px; margin-top: 30px !important;">
         <button id="btnResiduos" onclick="showForm('pdfResiduos')">PDF RESIDUOS SOLIDOS</button>
         <button id="btnAguas" onclick="showForm('pdfAguas')">PDF AGUAS</button>
     </div>
@@ -97,11 +100,6 @@
             </div>
 
             <div class="form-row">
-                <label for="residuos">Dirección de Residuos:</label>
-                <textarea id="residuos" name="residuos" rows="1" required style="width:100% !important; padding: 12px !important;"></textarea>
-            </div>
-
-            <div class="form-row">
                 <label for="nomEmpresa">Nombre de la empresa:</label>
                 <select id="nomEmpresa" name="Nombre de la empresa:"></select>
             </div>
@@ -109,6 +107,48 @@
             <div class="form-row">
                 <label for="ruc">RUC Empresa:</label>
                 <input type="number" id="ruc" name="ruc" required disabled />
+            </div>
+
+            <div class="form-row">
+                <label for="residuos">Dirección de Residuos:</label>
+                <div class="input-group">
+                    <select id="residuos" class="js-example-placeholder-single js-states form-control">
+                        <option></option> <!-- Opción vacía -->
+                    </select>
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal_nueva_empresa">
+                        <i class="bx bx-plus"></i>
+                    </button>
+                </div>
+            </div>
+
+
+            <!-- Modal Nueva Empresa -->
+            <div class="modal" id="modal_nueva_empresa" tabindex="-1">
+                <div class="modal-dialog modal-md modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Registrar Dirección</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form>
+                                        <!-- Campo para ingresar el nombre de la dirección -->
+                                        <div class="input-group input-group-sm">
+                                            <label for="input_direccion" class="form-label" style="margin-right:0 !important; display:center !important; flex-direction: column !important">Dirección:</label>
+                                            <textarea class="form-control" id="input_direccion" rows="3" style="height: 22px;"></textarea>
+                                        </div>
+                                        <!-- Aquí puedes añadir más campos si es necesario -->
+
+                                        <button id="btnGuardarDireccion" class="btnGuardar btn btn-primary" type="button" style="margin-top:10px !important;" onclick="guardarNewDireccion()">Registrar</button>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="firma-container">
@@ -210,7 +250,7 @@
                 <input type="file" id="firma1" name="firma1" accept="image/*" />
             </div>
 
-            <button style="margin-bottom:16px !important;" type="button" onclick="generarYGuardarPDF('pdfAguas')">
+            <button style="margin-bottom:6px !important;" type="button" onclick="generarYGuardarPDF('pdfAguas')">
                 Generar PDF
             </button>
         </form>
@@ -232,6 +272,7 @@
     });
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="~/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>

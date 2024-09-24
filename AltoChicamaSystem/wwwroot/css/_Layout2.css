@@ -355,3 +355,6 @@ p {
     color: $dark-text;
 }
 
+.form-control {
+    padding: .375rem .75rem !important;
+}

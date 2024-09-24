@@ -14,7 +14,7 @@
     border-radius: 8px !important;
     padding: 30px !important;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
-    max-width: 500px !important;
+    max-width: 90% !important;
     width: 100% !important;
     margin-bottom: 30px !important;
 }
@@ -103,6 +103,7 @@ h2 {
     border-radius: 5px !important;
     background-color: #ecf0f1 !important;
     overflow: hidden !important;
+    justify-content:center !important;
 }
 
     .progress span {
@@ -176,3 +177,10 @@ h2 {
         .subscribe .submit-btn:hover {
             background-color: #0d4b1f !important;
         }
+.plate-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    margin-bottom: 10px !important;
+    justify-content: center !important;
+}

@@ -3,6 +3,7 @@
     Layout = "~/Views/Shared/_Layout2.cshtml";
 }
 
+<link rel="stylesheet" href="~/css/selector.css">
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="~/css/empresa.css">
 <link rel="stylesheet" href="~/css/documentos.css">
@@ -18,12 +19,15 @@
 <section class="home">
     <main>
         <div class="row" style="margin:0px">
-            <div class="subscribe">
-                <br>
-                <div class="submit-btn">CONTABILIDAD DE DEUDAS</div>
+
+            <div class="row" style="margin-bottom:10px !important;">
+                <div class="subscribe">
+                    <br>
+                    <div class="submit-btn">CONTABILIDAD DE DEUDAS</div>
+                </div>
             </div>
 
-            <div class="container mt-2">
+            <div class="container mt-3">
                 <div class="row align-items-center">
                     <div class="col-md-7 d-flex justify-content-end">
                         <label class="input-group-text" for="input_transportista">Transportista</label>
@@ -41,7 +45,7 @@
                         </select>
                     </div>
 
-                    <div class="col-md-2 d-flex justify-content-end p-0">
+                    <div class="col-md-2 d-flex justify-content-end">
                         <button id="btnConsultar" class="btn btn-primary me-2 bg-custom">Consultar</button>
                         <button id="btnConsultar2" class="btn btn-primary bg-custom" onClick="window.location.reload(true)">
                             <i class='bx bx-refresh'></i>

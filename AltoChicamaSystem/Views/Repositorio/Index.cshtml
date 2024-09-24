@@ -2,6 +2,7 @@
     ViewData["Title"] = "Repositorio";
     Layout = "~/Views/Shared/_Layout2.cshtml";}
 
+<link rel="stylesheet" href="~/css/selector.css">
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="~/css/empresa.css">
 <link rel="stylesheet" href="~/css/documentos.css">
@@ -24,8 +25,8 @@
                 <div class="row align-items-center">
                     <div class="col-md-7 d-flex justify-content-end">
                         <label class="input-group-text" for="input_empresa">Empresa</label>
-                        <select class="form-select" id="input_empresa">
-                            <!-- Opciones de empresa -->
+                        <select id="input_empresa" class="js-example-placeholder-single js-states form-control">
+                            <option></option> <!-- Opción vacía -->
                         </select>
                     </div>
 
@@ -53,17 +54,17 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="table-responsive">
-                            <table class="table table-sm custom-table" id="table_empresa">
+                            <table style="font-size:96% !important;" class="table table-sm custom-table" id="table_empresa">
                                 <thead style="color: #023E73;">
                                     <tr>
-                                        <th style="text-align: center; vertical-align: middle;">N° de Certificado</th>
-                                        <th style="width: 370.688px;text-align: center; vertical-align: middle;">Nombre del Documento</th>
+                                        <th style="text-align: center; vertical-align: middle; width:5% !important;">N° de Cert.</th>
+                                        <th style="text-align: center; vertical-align: middle; width:15% !important;">Nombre del Documento</th>
                                         <th style="text-align: center; vertical-align: middle;">Nombre de Empresa</th>
-                                        <th style="text-align: center; vertical-align: middle;">Transportista</th>
+                                        <th style="text-align: center; vertical-align: middle; width:8% !important;">Transportista</th>
                                         <th style="text-align: center; vertical-align: middle;">Fecha del Servicio</th>
                                         <th style="text-align: center; vertical-align: middle;">Fecha de Pago</th>
-                                        <th style="text-align: center; vertical-align: middle;">Documento Deuda</th>
-                                        <th style ="text-align: center; vertical-align: middle;width:65px;">Estado</th>
+                                        <th style="text-align: center; vertical-align: middle;width:7% !important;">Doc. Deuda</th>
+                                        <th style="text-align: center; vertical-align: middle;width:65px;">Estado</th>
                                         <th style="text-align: center; vertical-align: middle;">Ver PDF</th>
                                         <th style="text-align: center; vertical-align: middle;">Acciones</th>
                                     </tr>
@@ -77,9 +78,10 @@
         </div>
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous"></script>
     <script type="text/javascript" src="~/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
     <script src="~/js/js_jquery.dataTables.min.js"></script>
     <script src="~/config.js"></script>
-    <script src="~/js/repositorio.js?v=0.0.3.8"></script>
+    <script src="~/js/repositorio.js?v=0.0.3.9"></script>
 </section>

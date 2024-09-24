@@ -30,6 +30,10 @@ document.addEventListener("DOMContentLoaded", () => {
     showForm("pdfResiduos"); // Mostrar por defecto el formulario de residuos sólidos
 });
 
+$(document).ready(function () {
+    // Deshabilitar el select de direcciones al cargar la página
+    $("#residuos").prop("disabled", true);
+});
 function EmpresaSelect(id_grupo) {
     var endpoint = getDomain() + "/Empresa/EmpresaSelect";
 
@@ -53,26 +57,40 @@ function EmpresaSelect(id_grupo) {
                 $(id_grupo).append('<option value="" disabled selected>Seleccione una empresa...</option>');
             }
 
-            // Verificar si la data es null, vacía, o contiene solo espacios en blanco
             if (EmpresaSelect && EmpresaSelect.length > 0) {
-                // Guardar datos de las empresas en una variable accesible
                 var empresas = {};
 
-                // Agregar opciones al select
                 for (var i = 0; i < EmpresaSelect.length; i++) {
                     var item = EmpresaSelect[i];
+
+                    // Modificar el valor para que sea el nombre de la empresa, pero agregar el ID en data-id
                     $(id_grupo).append(
-                        '<option value="' + item.empresa_name + '">' + item.empresa_name + '</option>'
+                        '<option value="' + item.empresa_name + '" data-id="' + item.empresa_id + '">' + item.empresa_name + '</option>'
                     );
-                    empresas[item.empresa_name] = item.empresa_ruc;
+                    empresas[item.empresa_id] = item.empresa_ruc;
                 }
 
-                // Manejar el evento de cambio en el select
+                // Manejar el evento de cambio en el select de empresas
                 $(id_grupo).change(function () {
-                    var selectedEmpresa = $(this).val();
-                    if (empresas[selectedEmpresa]) {
-                        document.getElementById('ruc').value = empresas[selectedEmpresa];
-                        document.getElementById('ruc1').value = empresas[selectedEmpresa];
+                    var selectedEmpresaName = $(this).val(); // Ahora el valor es el nombre
+                    var selectedEmpresaId = $(this).find(':selected').data('id'); // Obtener el ID desde data-id
+
+                    if (empresas[selectedEmpresaId]) {
+                        document.getElementById('ruc').value = empresas[selectedEmpresaId];
+                        document.getElementById('ruc').disabled = false; // Habilitar el RUC
+
+                        // Habilitar el select de direcciones
+                        $("#residuos").prop("disabled", false); // Habilitar el select de direcciones
+
+                        // Setear el título del modal y abrirlo
+                        $("#modal_nueva_empresa .modal-title").html("Registrar Dirección para: <span style='color: #198754'><strong>" + selectedEmpresaName + "</strong></span>");
+                        $("#btnGuardarDireccion").data("empresaId", selectedEmpresaId);
+
+                        // Llamar a la función para cargar direcciones basadas en la empresa seleccionada
+                        cargarDirecciones(selectedEmpresaId);
+                    } else {
+                        document.getElementById('ruc').disabled = true; // Deshabilitar el RUC si no hay empresa seleccionada
+                        $("#residuos").prop("disabled", true); // Deshabilitar el select de direcciones si no hay empresa seleccionada
                     }
                 });
             }
@@ -83,10 +101,145 @@ function EmpresaSelect(id_grupo) {
         }
     });
 }
+// Manejar el envío del formulario con el nombre de la empresa
+$("#miFormulario").on("submit", function (event) {
+    event.preventDefault(); // Evitar el envío por defecto para poder hacer el ajuste
 
+    var empresaNombre = $("#nomEmpresa").val(); // Obtener el valor del select (empresa_name)
+
+    // Crear el objeto de datos con el nombre de la empresa
+    var dataPost = {
+        empresa_nombre: empresaNombre,  // Nombre de la empresa
+        ruc: $("#ruc").val(),
+        direccion: $("#residuos").val() // Dirección seleccionada
+    };
+
+    // Ahora puedes enviar los datos con el nombre de la empresa en lugar del ID
+    $.ajax({
+        type: "POST",
+        url: "/Empresa/ListarEmpresas", // Asegúrate de reemplazar con tu endpoint
+        data: JSON.stringify(dataPost),
+        contentType: "application/json",
+        success: function (response) {
+            // Manejo del éxito
+            console.log("Formulario enviado correctamente");
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            // Manejo de errores
+            console.error("Error al enviar formulario: " + textStatus, errorThrown);
+        }
+    });
+});
+
+function cargarDirecciones(empresa_id) {
+    var endpoint = getDomain() + "/Direccion/DireccionSelect";
+    $.ajax({
+        type: "POST",
+        async: true,
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify({ empresa_id: empresa_id }),
+        dataType: "json",
+        beforeSend: function (xhr) {
+            console.log("Cargando direcciones...");
+        },
+        success: function (data) {
+            console.log(data);
+            var direcciones = data.item3;
+
+            // Limpiar el select
+            $("#residuos").empty();
+
+            // Agregar opción vacía para el placeholder
+            $("#residuos").append(new Option("", ""));
+
+            if (direcciones && direcciones.length > 0) {
+                // Agregar opciones con direcciones
+                for (var i = 0; i < direcciones.length; i++) {
+                    var item = direcciones[i];
+                    $("#residuos").append(new Option(item.direccion, item.direccion));
+                }
+
+                // Inicializar o actualizar Select2
+                $('#residuos').select2({
+                    placeholder: "Seleccione una dirección...",
+                    allowClear: true,
+                    language: "es",
+                    dropdownCssClass: 'limit-dropdown' // Añadir la clase para limitar altura
+                });
+
+                // Habilitar el select
+                $("#residuos").prop("disabled", false);
+            } else {
+                console.log("No se encontraron direcciones para la empresa.");
+                $("#residuos").append(new Option("No hay direcciones disponibles", ""));
+                $("#residuos").prop("disabled", true);
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error('Error al cargar direcciones:', textStatus, errorThrown);
+            alert('Error al cargar direcciones. Por favor, intente nuevamente.');
+        },
+        complete: function () {
+            console.log("Finalizó la carga de direcciones.");
+        }
+    });
+}
 
 EmpresaSelect("#nomEmpresa");
 EmpresaSelect("#nomEmpresa1");
+
+function guardarNewDireccion(empresa_id) {
+
+    var empresa_id = $("#btnGuardarDireccion").data("empresaId"); // Obtener el id de la empresa del botón
+
+    var dataPost = {
+        direccion: $("#input_direccion").val(),
+        empresa_id: empresa_id,
+    };
+
+    dataPost = trimJSONFields(dataPost);
+
+    var endpoint = getDomain() + "/Direccion/RegDireccion";
+
+    $.ajax({
+        type: "POST",
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify(dataPost),
+        dataType: "json",
+        beforeSend: function (xhr) {
+            console.log("Guardando...");
+            $("#btnGuardarDireccion").attr("disabled", true);
+        },
+        success: function (data) {
+            var rpta = data.item1;
+            var msg = data.item2;
+            if (rpta == "0") {
+                getListEmpresa();
+                $("#modal_nueva_empresa").modal("hide");
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Ocurrió un error!',
+                    text: 'La empresa o el usuario ya fueron registrados',
+                });
+            }
+            $("#btnGuardarDireccion").prop("disabled", false);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Ocurrió un error!',
+                text: 'La empresa o el usuario ya fueron registrados',
+            });
+        }
+    });
+}
 
 function TransportistaSelect(id_transportista) {
     var endpoint = getDomain() + "/Transportista/TransportistaSelect";

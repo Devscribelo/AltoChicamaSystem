@@ -1,4 +1,68 @@
-﻿const body = document.querySelector('body'),
+﻿// Función para calcular el total
+function calcularTotal() {
+    var inputToneladas = document.getElementById('input_toneladas');
+    var inputPrecioTonelada = document.getElementById('input_precioTonelada');
+
+    // Verifica que los elementos de toneladas y precio por tonelada existan
+    if (inputToneladas && inputPrecioTonelada) {
+        var toneladas = parseFloat(inputToneladas.value) || 0;
+        var precio = parseFloat(inputPrecioTonelada.value) || 0;
+
+        var totalSinIGV = toneladas * precio;
+        var igv = 0.18; // 18%
+        var totalConIGV = totalSinIGV * (1 + igv);
+
+        // Verifica si los campos para mostrar resultados existen
+        var inputTotal = document.getElementById('input_total');
+        var inputIGV = document.getElementById('input_igv');
+
+        if (inputTotal) {
+            inputTotal.value = totalSinIGV.toFixed(2);
+        }
+
+        if (inputIGV) {
+            inputIGV.value = totalConIGV.toFixed(2);
+        }
+
+        calcularTotalConDetraccion(totalConIGV);
+    }
+}
+
+// Función para calcular el total después de la detracción
+function calcularTotalConDetraccion(totalConIGV) {
+    var inputDetraccion = document.getElementById('input_detraccion');
+
+    if (inputDetraccion) {
+        var detraccion = parseFloat(inputDetraccion.value) || 0;
+        var totalConDetraccion = totalConIGV - detraccion;
+
+        var inputTotalIGV = document.getElementById('input_totalIGV');
+        if (inputTotalIGV) {
+            inputTotalIGV.value = totalConDetraccion.toFixed(2);
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    var inputToneladas = document.getElementById('input_toneladas');
+    var inputPrecioTonelada = document.getElementById('input_precioTonelada');
+    var inputDetraccion = document.getElementById('input_detraccion');
+
+    // Asocia los eventos solo si los elementos existen
+    if (inputToneladas) {
+        inputToneladas.addEventListener('input', calcularTotal);
+    }
+
+    if (inputPrecioTonelada) {
+        inputPrecioTonelada.addEventListener('input', calcularTotal);
+    }
+
+    if (inputDetraccion) {
+        inputDetraccion.addEventListener('input', calcularTotal);
+    }
+});
+
+const body = document.querySelector('body'),
     sidebar = body.querySelector('nav'),
     toggle = body.querySelector(".toggle"), modeText = body.querySelector(".mode-text");
 const form = document.getElementById("file-upload-form");
@@ -34,7 +98,7 @@ form.addEventListener("submit", function (event) {
 });
 
 // Función para llenar el select de empresas
-function EmpresaSelect(id_grupo) {
+function EmpresaSelect() {
     var endpoint = getDomain() + "/Empresa/EmpresaSelect";
 
     $.ajax({
@@ -46,32 +110,42 @@ function EmpresaSelect(id_grupo) {
         },
         dataType: "json",
         beforeSend: function (xhr) {
-            console.log("cargando");
+            console.log("Cargando empresas...");
         },
         success: function (data) {
             var EmpresaSelect = data.item3;
 
             // Limpiar el select y agregar opción por defecto
-            if (id_grupo === "#input_empresa") {
-                $(id_grupo).empty();
-                $(id_grupo).append('<option value="" disabled selected>Seleccione una empresa...</option>');
-            }
+            $('#input_empresa').empty();
+            $('#input_empresa').append(new Option("Seleccione una empresa...", "", true, true));
 
             // Verificar si la data es null, vacía, o contiene solo espacios en blanco
             if (EmpresaSelect && EmpresaSelect.length > 0) {
                 // Agregar opciones al select
-                for (var i = 0; i < EmpresaSelect.length; i++) {
-                    var item = EmpresaSelect[i];
-                    $(id_grupo).append(
-                        '<option value="' + item.empresa_id + '">' + item.empresa_name + '</option>'
-                    );
+                for (var i = 0; i < empresas.length; i++) {
+                    var item = empresas[i];
+                    $('#input_empresa').append(new Option(item.empresa_name, item.empresa_id));
                 }
+            } else {
+                console.log("No se encontraron empresas.");
+                $('#input_empresa').append(new Option("No hay empresas disponibles", ""));
             }
 
+            // Inicializar o actualizar Select2 usando directamente el ID del select
+            $('#input_empresa').select2({
+                placeholder: "Seleccione una empresa...",
+                allowClear: true,
+                language: "es",
+                dropdownCssClass: 'limit-dropdown' // Añadir la clase para limitar altura
+            });
+
+            // Habilitar el select
+            $('#input_empresa').prop("disabled", false);
+
         },
-        error: function (data) {
-            alert('Error fatal ' + data);
-            console.log("failure");
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Error al cargar empresas: ' + textStatus);
+            console.error("Error al cargar empresas:", textStatus, errorThrown);
         }
     });
 }
@@ -177,8 +251,29 @@ function cargarDataPDF() {
 
 
 function vaciarFormulario() {
-    // Limpia el campo de archivo
-    $('#file-upload').val('');
+    // Limpia los campos de fecha
+    $('#input_fechaServicio').val('');
+    $('#input_fechaPago').val('');
+
+    // Limpia el campo de toneladas
+    $('#input_toneladas').val('');
+
+    // Limpia el campo de precio por tonelada
+    $('#input_precioTonelada').val('');
+
+    // Limpia el campo de precio sin IGV
+    $('#input_total').val('');
+
+    // Limpia el campo de precio con IGV
+    $('#input_igv').val('');
+
+    // Limpia el campo de detracción
+    $('#input_detraccion').val('');
+
+    // Limpia el campo de total con IGV
+    $('#input_totalIGV').val('');
+
+    // Resetea el área de respuesta y la barra de progreso si es necesario
 
     // Oculta el área de respuesta y reinicia la barra de progreso
     $('#response').addClass('hidden');
@@ -192,21 +287,12 @@ function vaciarFormulario() {
     $('#input_empresa').val('');
     $('#input_transportista').val('');
 
-    // Limpia el selector de matrículas y el contenedor de matrículas dinámicas
-    $('#select_matriculas').val('');
-    $('#matriculas_container').empty();
 }
 
 async function guardarDocumento(file) {
     var empresa_id = obtenerIdEmpresaSeleccionada("#input_empresa");
     var transportista_id = obtenerIdTransportistaSeleccionada("#input_transportista");
-    var matricula_1 = $("#char1_1").val() + $("#char1_2").val() + $("#char1_3").val() + ' - ' + $("#num1_1").val() + $("#num1_2").val() + $("#num1_3").val();
-    var matricula_2 = $("#char2_1").val() + $("#char2_2").val() + $("#char2_3").val() + ' - ' + $("#num2_1").val() + $("#num2_2").val() + $("#num2_3").val();
-
-    var documento_matriculas = matricula_1;
-    if ($("#char2_1").val() || $("#num2_1").val()) {
-        documento_matriculas += ' , ' + matricula_2;
-    }
+}
 
 
     if (!empresa_id) {
@@ -229,12 +315,21 @@ async function guardarDocumento(file) {
         return;
     }
 
+    // Capturar las fechas y el total
+    var fechaServicio = document.getElementById('input_fechaServicio').value;
+    var fechaPago = document.getElementById('input_fechaPago').value;
+    var totalIGV = document.getElementById('input_totalIGV').value;
+
     var formData = new FormData();
     formData.append('documento_titulo', file.name);
     formData.append('documento_pdf', file);
     formData.append('empresa_id', empresa_id);
     formData.append('transportista_id', transportista_id);
-    formData.append('documento_matriculas', documento_matriculas);
+
+    // Agregar las fechas y el total
+    formData.append('fecha_servicio', fechaServicio);  // @fecha_servicio
+    formData.append('fecha_pago', fechaPago);          // @fecha_pago
+    formData.append('documento_deuda', totalIGV);
 
     // Mostrar los datos que se están enviando
     console.log("Datos enviados a Upload/RegDocumento:");
