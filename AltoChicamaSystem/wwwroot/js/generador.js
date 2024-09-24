@@ -276,7 +276,7 @@ async function generarPDF(formId) {
             const imgAbajo = await loadImage("img/abajo.png");
 
             // Márgenes de 5 mm
-            const margin = 5;
+            const margin = 22;
             const pageWidth = 210; // Ancho total de la página en mm
             const pageHeight = 297; // Alto total de la página en mm
             const contentWidth = pageWidth - 2 * margin;
@@ -350,12 +350,11 @@ async function generarPDF(formId) {
             let textoPredeterminado =
                 "Con Resolución Directoral N° 0367-2020-MINAM/VMGA/DGRS y Actualización de Registro Autoritativo N° 00028-2020-MINAM/VGMA/DGRS, el Ministerio del Ambiente autoriza nuestra Infraestructura de Valorización de Residuos Sólidos Orgánicos, Inorgánicos No Peligrosos y Residuos Reaprovechables provenientes de la Construcción y Demolición";
             let textoYPosition = textYPosition + 10;
-            let textLines = doc.splitTextToSize(
-                textoPredeterminado,
-                contentWidth
-            );
-            textLines.forEach((line, index) => {    
-                doc.text(line, margin, textoYPosition + index * 6);
+            let textLines = doc.splitTextToSize(textoPredeterminado, contentWidth);
+
+            doc.text(textLines, margin, textoYPosition, {
+                align: 'justify',
+                maxWidth: contentWidth
             });
 
             // Texto predeterminado adicional
@@ -444,7 +443,7 @@ async function generarPDF(formId) {
                 let lines = splitTextToLines(data, maxTextWidth, doc);
 
                 // Calcula el inicio Y para centrar el texto verticalmente
-                let lineHeight = 5; // Altura de cada línea de texto
+                let lineHeight = 6; // Altura de cada línea de texto
                 let totalTextHeight = lines.length * lineHeight;
                 let textY =
                     startY + (cellHeight - totalTextHeight) / 2 + lineHeight;
@@ -520,58 +519,61 @@ async function generarPDF(formId) {
                 textoPredeterminado3,
                 contentWidth
             );
-            doc.text(splittedText, margin, infoStartY + 20);
+
+            doc.text(splittedText, margin, infoStartY + 20, {
+                align: 'justify',
+                maxWidth: contentWidth
+            });
 
             // Definir el texto completo
-            let textoCompleto =
-                "La EO-RS ALTO CHICAMA S.R.L.   es una empresa comprometida con el cuidado del medio ambiente y que opera en cumplimiento a lo dispuesto por el D.L. N° 1278, Ley de Gestión Integral de Residuos Sólidos, su modificatoria la Ley N° 1501; su reglamento y modificatoria.";
+            let textoCompleto = "La EO-RS ALTO CHICAMA S.R.L. es una empresa comprometida con el cuidado del medio ambiente y que opera en cumplimiento a lo dispuesto por el D.L. N° 1278, Ley de Gestión Integral de Residuos Sólidos, su modificatoria la Ley N° 1501; su reglamento y modificatoria.";
 
             // Ancho máximo permitido para el texto en la página
             let maxWidth = doc.internal.pageSize.getWidth() - margin * 2;
 
-            // Dividir el texto completo en líneas que se ajusten al ancho máximo
-            let lineasTextoCompleto = doc.splitTextToSize(
-                textoCompleto,
-                maxWidth
-            );
+            // Dividir el texto completo en palabras
+            let palabras = textoCompleto.split(" ");
 
             // Posición inicial donde se agregará el texto
             let yPosition = infoStartY + 40;
 
-            // Agregar las líneas del texto completo
-            lineasTextoCompleto.forEach((linea, index) => {
-                // Configurar el estilo adecuado para la primera línea
-                if (index === 0) {
-                    let textoAdicional = "La ";
-                    let textoNegrita = "EO-RS ALTO CHICAMA S.R.L. ";
-                    let textoResto = linea.substring(
-                        textoAdicional.length + textoNegrita.length
-                    );
+            // Configurar el interlineado
+            let lineHeight = 6;
 
-                    // Agregar el texto adicional
-                    doc.text(textoAdicional, margin, yPosition);
+            // Inicializar variables
+            let linea = "";
+            let yActual = yPosition;
 
-                    // Cambiar a negrita y agregar el nombre de la empresa
-                    doc.setFont("helvetica", "bold");
-                    doc.text(
-                        textoNegrita,
-                        margin + doc.getTextWidth(textoAdicional),
-                        yPosition
-                    );
+            // Iterar sobre las palabras
+            for (let i = 0; i < palabras.length; i++) {
+                let palabraActual = palabras[i];
+                let lineaTemp = linea + (linea ? " " : "") + palabraActual;
 
-                    // Volver a texto regular y agregar el resto del texto
-                    doc.setFont("helvetica", "normal");
-                    doc.text(
-                        textoResto,
-                        margin + doc.getTextWidth(textoAdicional + textoNegrita),
-                        yPosition
-                    );
+                if (doc.getTextWidth(lineaTemp) <= maxWidth) {
+                    linea = lineaTemp;
                 } else {
-                    // Para líneas siguientes, se agrega el texto normal
-                    yPosition += 5; // Ajustar este valor para manejar el espacio entre líneas
-                    doc.text(linea, margin, yPosition);
+                    // Dibujar la línea actual
+                    if (yActual === yPosition) {
+                        // Primera línea, "La EO-RS ALTO CHICAMA S.R.L." en negrita
+                        doc.setFont("helvetica", "bold");
+                        doc.text("La EO-RS ALTO CHICAMA S.R.L.", margin, yActual);
+                        let anchoNegrita = doc.getTextWidth("La EO-RS ALTO CHICAMA S.R.L.");
+                        doc.setFont("helvetica", "normal");
+                        doc.text(linea.substring("La EO-RS ALTO CHICAMA S.R.L.".length), margin + anchoNegrita, yActual);
+                    } else {
+                        doc.text(linea, margin, yActual);
+                    }
+
+                    // Preparar para la siguiente línea
+                    yActual += lineHeight;
+                    linea = palabraActual;
                 }
-            });
+            }
+
+            // Dibujar la última línea si queda algo
+            if (linea) {
+                doc.text(linea, margin, yActual);
+            }
 
             // Firma de la empresa
             doc.addImage(imgData, "PNG", 75, startY + 85, 60, 25);

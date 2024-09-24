@@ -51,12 +51,12 @@ function getListTransportista() {
                         "<tr class='filaTabla' " +
                         "data-transportista_id='" + dataEmpresa[i].transportista_id + "' " +
                         "data-transportista_ruc='" + dataEmpresa[i].transportista_ruc + "' " +
-                        "data-transportista_nombre='" + dataEmpresa[i].transportista_nombre + "'>" +
+                        "data-transportista_nombre='" + dataEmpresa[i].transportista_nombre + "' " +
+                        "data-transportista_user='" + dataEmpresa[i].transportista_user + "' " +
+                        "data-transportista_password='" + dataEmpresa[i].transportista_password + "'>" +
                         "<td>" + dataEmpresa[i].transportista_id + "</td>" +
                         "<td>" + dataEmpresa[i].transportista_ruc + "</td>" +
                         "<td>" + dataEmpresa[i].transportista_nombre + "</td>" +
-                        "<td>" + dataEmpresa[i].transportista_user + "</td>" +
-                        "<td>" + dataEmpresa[i].transportista_password + "</td>" +
                         "<td id='acciones'>" +
                         "<i class='bx bx-edit editar-button icon-circle' id='editar_transportista" + i + "'></i>" +
                         "<i style='margin-left: 9px;' class='bx bx-trash eliminar-button icon-circle red' id='eliminar_transportista" + i + "'></i>" +
@@ -200,28 +200,31 @@ function guardarNewTransportista() {
 }
 
 function modalEditarTransportista(rowData) {
+    console.log(rowData);  // Verifica qué valores contiene
 
-    // Obtenemos el código de la empresa seleccionada desde los datos de la fila
     var transportista_id = rowData.transportista_id;
     var transportista_nombre = rowData.transportista_nombre;
+    var transportista_user = rowData.transportista_user;
+    var transportista_password = rowData.transportista_password;
 
     // Seteamos el título del modal con el código de la empresa
     $("#modal_editar_transportista .modal-title").html("Editando Transportista: <span style='color: #198754'><strong>" + transportista_nombre + "</strong></span>");
 
     $("form").off("submit").one("submit", function (event) {
-        event.preventDefault(); // Evita (recargar la página)
+        event.preventDefault();
         guardarEditTransportista(transportista_id);
     });
 
     // Seteamos los valores de los inputs con la información de la fila seleccionada
-    $("#edit_transportista_nombre").val(rowData.transportista_nombre);
+    $("#edit_transportista_nombre").val(transportista_nombre);
     $("#edit_transportista_ruc").val(rowData.transportista_ruc);
-    $("#edit_transportista_user").val(rowData.transportista_user);
-    $("#edit_transportista_password").val(rowData.transportista_password);
+    $("#edit_transportista_user").val(transportista_user);
+    $("#edit_transportista_password").val(transportista_password);
 
     // Mostramos el modal
     $("#modal_editar_transportista").modal("show");
 }
+
 function guardarEditTransportista(transportista_id) {
 
     var dataPost = {

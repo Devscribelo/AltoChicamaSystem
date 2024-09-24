@@ -20,14 +20,14 @@
         <div class="row" style="margin:0px">
             <div class="subscribe">
                 <br>
-                <div class="submit-btn">DOCUMENTOS</div>
+                <div class="submit-btn">CONTABILIDAD DE DEUDAS</div>
             </div>
 
             <div class="container mt-2">
                 <div class="row align-items-center">
                     <div class="col-md-7 d-flex justify-content-end">
-                        <label class="input-group-text" for="input_empresa">Empresa</label>
-                        <select class="form-select" id="input_empresa">
+                        <label class="input-group-text" for="input_transportista">Transportista</label>
+                        <select class="form-select" id="input_transportista">
                             <!-- Opciones de empresa -->
                         </select>
                     </div>
@@ -74,12 +74,34 @@
                 </div>
             </div>
 
-            <div id="precio_empresa" style="display:none;">
-                <div class="col-md-7 d-flex justify-content-end" style="margin: 0 auto !important; margin-bottom:20px !important">
+            <div class="row mt-3">
+
+                <div class="col-md-3 d-flex justify-content-end" style="margin: 0 auto !important; margin-bottom:20px !important">
+                    <label class="input-group-text" for="input_empresa">Resumen:</label>
+                </div>
+
+                <div class="col-md-4 d-flex justify-content-end" style="margin: 0 auto !important; margin-bottom:20px !important">
+                    <label class="input-group-text" for="input_empresa">Ganancia Total</label>
+                    <input class="" id="input_deuda2" style="padding: 12px !important" disabled />
+                </div>
+
+                <div class="col-md-4 d-flex justify-content-end" style="margin: 0 auto !important; margin-bottom:20px !important">
                     <label class="input-group-text" for="input_empresa">Deuda Total</label>
-                    <input class="" id="input_deuda" style="padding: 12px !important" disabled/>
+                    <input class="" id="input_deuda3" style="padding: 12px !important" disabled />
+                </div>
+
+
+            </div>
+
+            <div id="precio_empresa" style="display:none;">
+                <div class="col-md-4 d-flex justify-content-end" style="margin: 0 auto !important; margin-bottom:20px !important">
+                    <label class="input-group-text" id="label_deuda" for="input_deuda">
+                        Deuda Total del Transportistaﾠ<span id="nombre_transportista" style="font-weight: bold;"></span>ﾠ:
+                    </label>
+                    <input class="" id="input_deuda" style="padding: 12px !important" disabled />
                 </div>
             </div>
+
         </div>
     </main>
 

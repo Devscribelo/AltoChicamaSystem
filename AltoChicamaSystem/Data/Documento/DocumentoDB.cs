@@ -29,7 +29,6 @@ namespace AltoChicamaSystem.Data.Documento
                 sqlCmd.Parameters.AddWithValue("@documento_pdf", cmDocumento.documento_pdf);
                 sqlCmd.Parameters.AddWithValue("@empresa_id", cmDocumento.empresa_id);
                 sqlCmd.Parameters.AddWithValue("@transportista_id", cmDocumento.transportista_id);
-                sqlCmd.Parameters.AddWithValue("@documento_matriculas", cmDocumento.documento_matriculas.Trim());
                 sqlCmd.Parameters.AddWithValue("@fecha_servicio", cmDocumento.fecha_servicio);
                 sqlCmd.Parameters.AddWithValue("@fecha_pago", cmDocumento.fecha_pago);
                 sqlCmd.Parameters.AddWithValue("@documento_deuda", cmDocumento.documento_deuda);  // Agregado
@@ -132,7 +131,6 @@ namespace AltoChicamaSystem.Data.Documento
                         documento.empresa_name = sdr["empresa_name"].ToString().Trim();
                         documento.transportista_nombre = sdr["transportista_nombre"].ToString().Trim();
                         documento.documento_status = sdr["documento_status"].ToString().Trim();
-                        documento.documento_matriculas = sdr["documento_matriculas"].ToString().Trim();
                         documento.documento_numero = Convert.ToInt32(sdr["documento_numero"]);
                         documento.fecha_servicio = Convert.ToDateTime(sdr["fecha_servicio"]);  // Agregado
                         documento.fecha_pago = Convert.ToDateTime(sdr["fecha_pago"]);  // Agregado
@@ -229,28 +227,33 @@ namespace AltoChicamaSystem.Data.Documento
             return Tuple.Create(rpta, msg);
         }
 
-        public decimal obtenerDeudaEmpresa(int empresa_id, string bandera)
+        public (decimal, string) ObtenerDeudaTransportista(int transportista_id, string bandera)
         {
             decimal deudaEmpresa = 0; // Valor por defecto en caso de error o no resultados
+            string nombreTransportista = string.Empty;
 
             using (SqlConnection sqlCon = new SqlConnection(con.obtenerDatosConexion(bandera)))
             {
                 try
                 {
                     sqlCon.Open();
-                    using (SqlCommand sqlCmd = new SqlCommand("Sumar_Deudas_Empresa", sqlCon))
+                    using (SqlCommand sqlCmd = new SqlCommand("Sumar_Deudas_Transportista", sqlCon))
                     {
                         sqlCmd.CommandType = CommandType.StoredProcedure;
-                        sqlCmd.Parameters.AddWithValue("@empresa_id", empresa_id);
+                        sqlCmd.Parameters.AddWithValue("@transportista_id", transportista_id);
 
                         using (SqlDataReader sdr = sqlCmd.ExecuteReader())
                         {
                             if (sdr.Read())
                             {
-                                // Lee el valor máximo del documento_id
+                                // Lee el valor total_deuda y transportista_nombre
                                 if (sdr["total_deuda"] != DBNull.Value)
                                 {
                                     deudaEmpresa = Convert.ToDecimal(sdr["total_deuda"]);
+                                }
+                                if (sdr["transportista_nombre"] != DBNull.Value)
+                                {
+                                    nombreTransportista = sdr["transportista_nombre"].ToString();
                                 }
                             }
                         }
@@ -258,13 +261,83 @@ namespace AltoChicamaSystem.Data.Documento
                 }
                 catch (Exception ex)
                 {
-                    // Manejo de errores: considera registrar el error para fines de depuración
-                    Console.WriteLine("Error al obtener el mayor documento ID: " + ex.Message);
+                    // Manejo de errores
+                    Console.WriteLine("Error al obtener la deuda: " + ex.Message);
                 }
             }
-            return deudaEmpresa;
+            return (deudaEmpresa, nombreTransportista);
         }
 
+
+        public decimal ObtenerDeudaTotalTransportistas(string bandera)
+        {
+            decimal totalDeuda = 0; // Valor por defecto en caso de error o no resultados
+
+            using (SqlConnection sqlCon = new SqlConnection(con.obtenerDatosConexion(bandera)))
+            {
+                try
+                {
+                    sqlCon.Open();
+                    using (SqlCommand sqlCmd = new SqlCommand("Sumar_Total_Deudas_Transportistas", sqlCon))
+                    {
+                        sqlCmd.CommandType = CommandType.StoredProcedure;
+
+                        using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                        {
+                            if (sdr.Read())
+                            {
+                                // Lee el total de deuda
+                                if (sdr["total_deuda"] != DBNull.Value)
+                                {
+                                    totalDeuda = Convert.ToDecimal(sdr["total_deuda"]);
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Manejo de errores
+                    Console.WriteLine("Error al obtener la suma total de deudas: " + ex.Message);
+                }
+            }
+            return totalDeuda;
+        }
+
+        public decimal ObtenerGananciaTotalTransportistas(string bandera)
+        {
+            decimal totalDeuda = 0; // Valor por defecto en caso de error o no resultados
+
+            using (SqlConnection sqlCon = new SqlConnection(con.obtenerDatosConexion(bandera)))
+            {
+                try
+                {
+                    sqlCon.Open();
+                    using (SqlCommand sqlCmd = new SqlCommand("Sumar_Total_Ganancias_Transportistas", sqlCon))
+                    {
+                        sqlCmd.CommandType = CommandType.StoredProcedure;
+
+                        using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                        {
+                            if (sdr.Read())
+                            {
+                                // Lee el total de deuda
+                                if (sdr["total_deuda"] != DBNull.Value)
+                                {
+                                    totalDeuda = Convert.ToDecimal(sdr["total_deuda"]);
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Manejo de errores
+                    Console.WriteLine("Error al obtener la suma total de deudas: " + ex.Message);
+                }
+            }
+            return totalDeuda;
+        }
 
         public Tuple<string, string, List<DocumentoResult>> listarDocumentoEmpresa(int empresa_id, int estado, string bandera)
         {
@@ -304,7 +377,67 @@ namespace AltoChicamaSystem.Data.Documento
                         documento.transportista_nombre = sdr["transportista_nombre"].ToString().Trim();
                         documento.documento_status = sdr["documento_status"].ToString().Trim();
                         documento.documento_numero = Convert.ToInt32(sdr["documento_numero"]);
-                        documento.documento_matriculas = sdr["documento_matriculas"].ToString().Trim();
+                        documento.fecha_servicio = Convert.ToDateTime(sdr["fecha_servicio"]);  // Agregado
+                        documento.fecha_pago = Convert.ToDateTime(sdr["fecha_pago"]);  // Agregado
+                        documento.documento_deuda = Convert.ToDecimal(sdr["documento_deuda"]);  // Agregado
+                        lst.Add(documento);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                lst = new List<DocumentoResult>();
+                msg = ex.Message;
+            }
+            finally
+            {
+                if (sqlCon.State == ConnectionState.Open)
+                {
+                    sqlCon.Close();
+                }
+            }
+            return Tuple.Create(rpta, msg, lst);
+        }
+
+        public Tuple<string, string, List<DocumentoResult>> listarDocumentoTransportista(int transportista_id, int estado, string bandera)
+        {
+            List<DocumentoResult> lst = new List<DocumentoResult>();
+            DocumentoResult documento = new DocumentoResult();
+            SqlConnection sqlCon = new SqlConnection();
+            string rpta = "";
+            string msg = "";
+            int count = 0;
+            try
+            {
+                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                sqlCon.Open();
+                SqlCommand sqlCmd = new SqlCommand();
+                sqlCmd.Connection = sqlCon;
+                sqlCmd.CommandText = "Documento_List_Transportista";
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.Parameters.AddWithValue("@transportista_id", Convert.ToInt32(transportista_id));
+                sqlCmd.Parameters.AddWithValue("@estado", Convert.ToInt32(estado));
+                SqlDataReader sdr = sqlCmd.ExecuteReader();
+
+                while (sdr.Read())
+                {
+                    count++;
+                    if (count == 1)
+                    {
+                        rpta = sdr["Rpta"].ToString();
+                        msg = sdr["Msg"].ToString();
+                        sdr.NextResult();
+                    }
+                    if (rpta == "0" && count >= 2)
+                    {
+                        documento = new DocumentoResult();
+                        documento.documento_id = Convert.ToInt32(sdr["documento_id"]);
+                        documento.documento_titulo = sdr["documento_titulo"].ToString().Trim();
+                        documento.empresa_name = sdr["empresa_name"].ToString().Trim();
+                        documento.transportista_nombre = sdr["transportista_nombre"].ToString().Trim();
+                        documento.documento_status = sdr["documento_status"].ToString().Trim();
+                        documento.documento_numero = Convert.ToInt32(sdr["documento_numero"]);
                         documento.fecha_servicio = Convert.ToDateTime(sdr["fecha_servicio"]);  // Agregado
                         documento.fecha_pago = Convert.ToDateTime(sdr["fecha_pago"]);  // Agregado
                         documento.documento_deuda = Convert.ToDecimal(sdr["documento_deuda"]);  // Agregado
