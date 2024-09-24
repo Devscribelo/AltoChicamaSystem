@@ -79,7 +79,9 @@ namespace AltoChicamaSystem.Data.Factura
                             {
                                 id_factura = Convert.ToInt32(sdr["id_factura"]),
                                 factura_monto = Convert.ToDecimal(sdr["factura_monto"]),
-                                num_factura = sdr["num_factura"].ToString().Trim()
+                                num_factura = sdr["num_factura"].ToString().Trim(),
+                                factura_status = sdr["factura_status"].ToString().Trim(),
+                                transportista_nombre = sdr["transportista_nombre"].ToString().Trim(),
                             };
                             lst.Add(factura);
                         }
@@ -101,6 +103,72 @@ namespace AltoChicamaSystem.Data.Factura
             }
             return Tuple.Create(rpta, msg, lst);
         }
+
+        public Tuple<string, string, List<CMFactura>> listarFacturaTransportista(int transportista_id, int estado, string bandera)
+        {
+            List<CMFactura> lst = new List<CMFactura>();
+            SqlConnection sqlCon = new SqlConnection();
+            string rpta = "";
+            string msg = "";
+            try
+            {
+                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                sqlCon.Open();
+                SqlCommand sqlCmd = new SqlCommand();
+                sqlCmd.Connection = sqlCon;
+                sqlCmd.CommandText = "Factura_List_Transportista";  // Asumiendo que este es el nombre del SP
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+
+                // Añadir parámetros
+                sqlCmd.Parameters.AddWithValue("@transportista_id", Convert.ToInt32(transportista_id));
+                sqlCmd.Parameters.AddWithValue("@estado", Convert.ToInt32(estado));
+
+                using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                {
+                    if (sdr.Read())
+                    {
+                        rpta = sdr["Rpta"].ToString();
+                        msg = sdr["Msg"].ToString();
+                        sdr.NextResult();
+                    }
+
+                    if (rpta == "0")
+                    {
+                        while (sdr.Read())
+                        {
+                            CMFactura factura = new CMFactura
+                            {
+                                id_factura = Convert.ToInt32(sdr["id_factura"]),
+                                factura_monto = Convert.ToDecimal(sdr["factura_monto"]),
+                                num_factura = sdr["num_factura"].ToString().Trim(),
+                                factura_status = sdr["factura_status"].ToString().Trim(),
+                                transportista_nombre = sdr["transportista_nombre"].ToString().Trim(),
+                            };
+                            lst.Add(factura);
+                        }
+                    }
+                    else if (rpta == "1") // Si no hay datos
+                    {
+                        msg = "No hay datos para mostrar"; // Mensaje personalizado
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                lst = new List<CMFactura>();
+                rpta = "1";
+                msg = ex.Message;
+            }
+            finally
+            {
+                if (sqlCon.State == ConnectionState.Open)
+                {
+                    sqlCon.Close();
+                }
+            }
+            return Tuple.Create(rpta, msg, lst);
+        }
+
 
         public Tuple<string, string> modFactura(CMFactura cmFactura, string bandera)
         {

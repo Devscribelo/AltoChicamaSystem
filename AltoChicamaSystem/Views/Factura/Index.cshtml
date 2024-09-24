@@ -52,7 +52,32 @@
                     </div>
                 </div>
 
+                <div class="container mt-2">
+                    <div class="row align-items-center">
+                        <div class="col-md-7 d-flex justify-content-end">
+                            <label class="input-group-text" for="input_transportista">Transportista</label>
+                            <select class="form-select" id="input_transportista">
+                                <!-- Opciones de empresa -->
+                            </select>
+                        </div>
 
+                        <div class="col-md-3 d-flex justify-content-end">
+                            <label class="input-group-text" for="input_estado">Estado</label>
+                            <select class="form-select" id="input_estado">
+                                <option value="" disabled selected>Seleccionar el estado</option>
+                                <option value="1">Pagado</option>
+                                <option value="0">Por Pagar</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-2 d-flex justify-content-end p-0">
+                            <button id="btnConsultar" class="btn btn-primary me-2 bg-custom">Consultar</button>
+                            <button id="btnConsultar2" class="btn btn-primary bg-custom" onClick="window.location.reload(true)">
+                                <i class='bx bx-refresh'></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
                 <div style="padding-bottom: 9px;">
                     <div class="row">
@@ -64,6 +89,7 @@
                                             <th>ID</th>
                                             <th>Monto</th>
                                             <th>Número</th>
+                                            <th>Transportista</th>
                                             <th style="width:65px;">Estado</th>
                                             <th>Acciones</th>
                                         </tr>

@@ -46,6 +46,67 @@ namespace AltoChicamaSystem.Controllers
         }
 
         [HttpPost]
+        public ActionResult listarFacturaTransportista([FromBody] CMFactura request)
+        {
+            var result = Tuple.Create("1", "Error al listar", new List<CMFactura>());
+
+            try
+            {
+                string bandera = conf.GetValue<string>("Bandera");
+                result = objFacturaCN.listarFacturaTransportista(request.transportista_id, request.estado, bandera);
+
+                if (result.Item1 == "0")  // Verifica si la operación fue exitosa
+                {
+                    return Ok(result);
+                }
+                else if (result.Item1 == "1") // No hay datos
+                {
+                    return NotFound(new { Rpta = result.Item1, Msg = result.Item2 });
+                }
+                else // Para cualquier otro error
+                {
+                    return BadRequest(new { Rpta = result.Item1, Msg = result.Item2 });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Rpta = "1", Msg = ex.Message });
+            }
+        }
+
+
+
+        [HttpPost]
+        public IActionResult AlterFacturaStatus([FromBody] CMFactura request)
+        {
+            var result = Tuple.Create("1", "Error al Alterar Estado");
+
+            try
+            {
+                string bandera = conf.GetValue<string>("Bandera");
+
+                // Usar empresa_id del modelo CMEmpresa
+                result = objFacturaCN.alterFacturaStatus(request.id_factura, bandera);
+
+                if (result.Item1 == "0")  // Verifica si la operación fue exitosa
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (optional)
+                // logger.LogError(ex, "An error occurred while altering the company status.");
+
+                return BadRequest(result);
+            }
+        }
+
+        [HttpPost]
         public IActionResult RegistrarFactura([FromBody] CMFactura request)
         {
             var result = Tuple.Create("1", "Error al registrar factura");
@@ -132,39 +193,5 @@ namespace AltoChicamaSystem.Controllers
             }
         }
 
-        [HttpPost]
-        public IActionResult AlterFacturaStatus([FromBody] CMFactura request)
-        {
-            var result = Tuple.Create("1", "Error al Alterar Estado de la Factura");
-
-            try
-            {
-                if (request == null || request.id_factura <= 0)
-                {
-                    return BadRequest(Tuple.Create("1", "ID de factura inválido"));
-                }
-
-                string bandera = conf.GetValue<string>("bandera");
-
-                // Usar id_factura del modelo CMFactura
-                result = objFacturaCN.alterFacturaStatus(request.id_factura, bandera);
-
-                if (result.Item1 == "0")  // Verifica si la operación fue exitosa
-                {
-                    return Ok(result);
-                }
-                else
-                {
-                    return BadRequest(result);
-                }
-            }
-            catch (Exception ex)
-            {
-                // Log the exception (optional)
-                // logger.LogError(ex, "An error occurred while altering the invoice status.");
-
-                return StatusCode(500, Tuple.Create("1", $"Error interno: {ex.Message}"));
-            }
-        }
     }
 }

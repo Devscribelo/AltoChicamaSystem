@@ -18,6 +18,12 @@ namespace AltoChicamaSystem.Negocio
             return result;
         }
 
+        public Tuple<string, string, List<CMFactura>> listarFacturaTransportista(int transportista_id, int estado, string bandera)
+        {
+            var result = objDato.listarFacturaTransportista(transportista_id, estado, bandera);
+            return result;
+        }
+
         public Tuple<string, string> modFactura(CMFactura cmFactura, string bandera)
         {
             return objDato.modFactura(cmFactura, bandera);
