@@ -27,5 +27,11 @@ namespace AltoChicamaSystem.Negocio
         {
             return objDato.delFactura(id_factura, bandera);
         }
+
+        public Tuple<string, string> alterFacturaStatus(int id_factura, string bandera)
+        {
+            var result = objDato.alterFacturaStatus(id_factura, bandera);
+            return result;
+        }
     }
 }

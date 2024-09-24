@@ -7,6 +7,7 @@ function guardarNewFactura() {
     var dataPost = {
         factura_monto: $("#input_factura_monto").val(),
         num_factura: $("#input_factura_numfactura").val(),
+        factura_status: factura_status,
     };
 
     dataPost = trimJSONFields(dataPost);
@@ -71,7 +72,8 @@ function getListFactura() {
                         "<tr class='filaTabla' " +
                         "data-id_factura='" + dataFactura[i].id_factura + "' " +
                         "data-factura_monto='" + dataFactura[i].factura_monto + "' " +
-                        "data-num_factura='" + dataFactura[i].num_factura + "'>" +
+                        "data-num_factura='" + dataFactura[i].num_factura + "'" +
+                        "data-factura_status='" + dataFactura[i].factura_status + "'>" +
                         "<td>" + dataFactura[i].id_factura + "</td>" +
                         "<td>" + dataFactura[i].factura_monto + "</td>" +
                         "<td>" + dataFactura[i].num_factura + "</td>" +
@@ -223,6 +225,48 @@ function modalEditarFactura(rowData) {
 
     $("#modal_editar_factura").modal("show");
 }
+
+function alterEmpresaFactura(id_factura) {
+    var dataPost = {
+        id_factura: id_factura
+    };
+
+    var endpoint = getDomain() + "/Factura/AlterFacturaStatus";
+
+    $.ajax({
+        type: "POST",
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify(dataPost),
+        dataType: "json",
+        beforeSend: function () {
+            console.log("Actualizando estado...");
+        },
+        success: function (data) {
+            var rpta = data.item1;
+            var msg = data.item2;
+            if (rpta == "0") {
+                getListEmpresa();
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: msg,
+                });
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
+                alert("Ocurrió un fallo: " + jqXHR.responseJSON.message);
+            } else {
+                alert("Ocurrió un fallo: " + errorThrown);
+            }
+        }
+    });
+}
+
 
 function guardarEditFactura(id_factura) {
     var dataPost = {

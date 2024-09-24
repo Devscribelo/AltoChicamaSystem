@@ -131,5 +131,40 @@ namespace AltoChicamaSystem.Controllers
                 return StatusCode(500, Tuple.Create("1", $"Error interno: {ex.Message}"));
             }
         }
+
+        [HttpPost]
+        public IActionResult AlterFacturaStatus([FromBody] CMFactura request)
+        {
+            var result = Tuple.Create("1", "Error al Alterar Estado de la Factura");
+
+            try
+            {
+                if (request == null || request.id_factura <= 0)
+                {
+                    return BadRequest(Tuple.Create("1", "ID de factura inválido"));
+                }
+
+                string bandera = conf.GetValue<string>("bandera");
+
+                // Usar id_factura del modelo CMFactura
+                result = objFacturaCN.alterFacturaStatus(request.id_factura, bandera);
+
+                if (result.Item1 == "0")  // Verifica si la operación fue exitosa
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (optional)
+                // logger.LogError(ex, "An error occurred while altering the invoice status.");
+
+                return StatusCode(500, Tuple.Create("1", $"Error interno: {ex.Message}"));
+            }
+        }
     }
 }

@@ -64,6 +64,7 @@
                                             <th>ID</th>
                                             <th>Monto</th>
                                             <th>Número</th>
+                                            <th style="width:65px;">Estado</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -109,7 +110,20 @@
                                         <input type="text" class="form-control" id="input_factura_numfactura" autocomplete="off" placeholder="Ingrese el número de Factura" maxlength="100">
                                     </div>
 
-                                    <button id="btnGuardarEmpresa" class="btnGuardar" type="submit">Guardar Empresa</button>
+                                    <!-- Status -->
+                                    <div class="form-group" style="margin-right: 144px !important;">
+                                        <label id="status" for="radio_status" class="col-form-label">Estado: </label>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="radio_factura_status" id="input_factura_status_a" value="1" checked>
+                                            <label class="form-check-label" for="input_factura_status_a">Activo</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="radio_factura_status" id="input_factura_status_i" value="0">
+                                            <label class="form-check-label" for="input_factura_status_i">Inactivo</label>
+                                        </div>
+                                    </div>
+
+                                    <button id="btnGuardarEmpresa" class="btnGuardar" type="submit">Guardar Factura</button>
                                 </form>
                             </div>
                         </div>
@@ -143,6 +157,19 @@
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Número de Factura  </span>
                                         <input type="text" class="form-control" id="edit_factura_numfactura" autocomplete="off">
+                                    </div>
+
+                                    <!-- Status -->
+                                    <div class="form-group" style="margin-right: 144px !important;">
+                                        <label id="status" for="radio_status" class="col-form-label">Estado: </label>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="radio_factura_status" id="edit_factura_status_a" value="1">
+                                            <label class="form-check-label" for="edit_factura_status_a">Activo</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="radio_factura_status" id="edit_factura_status_i" value="0">
+                                            <label class="form-check-label" for="edit_factura_status_i">Inactivo</label>
+                                        </div>
                                     </div>
 
                                     <button id="btnGuardarEditEmpresa" class="btnGuardar" type="submit">Actualizar</button>

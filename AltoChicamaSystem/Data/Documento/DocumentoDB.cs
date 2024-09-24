@@ -29,7 +29,6 @@ namespace AltoChicamaSystem.Data.Documento
                 sqlCmd.Parameters.AddWithValue("@documento_pdf", cmDocumento.documento_pdf);
                 sqlCmd.Parameters.AddWithValue("@empresa_id", cmDocumento.empresa_id);
                 sqlCmd.Parameters.AddWithValue("@transportista_id", cmDocumento.transportista_id);
-                sqlCmd.Parameters.AddWithValue("@documento_matriculas", cmDocumento.documento_matriculas.Trim());
                 sqlCmd.Parameters.AddWithValue("@fecha_servicio", cmDocumento.fecha_servicio);
                 sqlCmd.Parameters.AddWithValue("@fecha_pago", cmDocumento.fecha_pago);
                 sqlCmd.Parameters.AddWithValue("@documento_deuda", cmDocumento.documento_deuda);  // Agregado
@@ -132,7 +131,6 @@ namespace AltoChicamaSystem.Data.Documento
                         documento.empresa_name = sdr["empresa_name"].ToString().Trim();
                         documento.transportista_nombre = sdr["transportista_nombre"].ToString().Trim();
                         documento.documento_status = sdr["documento_status"].ToString().Trim();
-                        documento.documento_matriculas = sdr["documento_matriculas"].ToString().Trim();
                         documento.documento_numero = Convert.ToInt32(sdr["documento_numero"]);
                         documento.fecha_servicio = Convert.ToDateTime(sdr["fecha_servicio"]);  // Agregado
                         documento.fecha_pago = Convert.ToDateTime(sdr["fecha_pago"]);  // Agregado
@@ -379,7 +377,6 @@ namespace AltoChicamaSystem.Data.Documento
                         documento.transportista_nombre = sdr["transportista_nombre"].ToString().Trim();
                         documento.documento_status = sdr["documento_status"].ToString().Trim();
                         documento.documento_numero = Convert.ToInt32(sdr["documento_numero"]);
-                        documento.documento_matriculas = sdr["documento_matriculas"].ToString().Trim();
                         documento.fecha_servicio = Convert.ToDateTime(sdr["fecha_servicio"]);  // Agregado
                         documento.fecha_pago = Convert.ToDateTime(sdr["fecha_pago"]);  // Agregado
                         documento.documento_deuda = Convert.ToDecimal(sdr["documento_deuda"]);  // Agregado
@@ -441,7 +438,6 @@ namespace AltoChicamaSystem.Data.Documento
                         documento.transportista_nombre = sdr["transportista_nombre"].ToString().Trim();
                         documento.documento_status = sdr["documento_status"].ToString().Trim();
                         documento.documento_numero = Convert.ToInt32(sdr["documento_numero"]);
-                        documento.documento_matriculas = sdr["documento_matriculas"].ToString().Trim();
                         documento.fecha_servicio = Convert.ToDateTime(sdr["fecha_servicio"]);  // Agregado
                         documento.fecha_pago = Convert.ToDateTime(sdr["fecha_pago"]);  // Agregado
                         documento.documento_deuda = Convert.ToDecimal(sdr["documento_deuda"]);  // Agregado

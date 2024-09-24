@@ -25,6 +25,7 @@ namespace AltoChicamaSystem.Data.Factura
                 sqlCmd.CommandType = CommandType.StoredProcedure;
                 sqlCmd.Parameters.AddWithValue("@factura_monto", cmFactura.factura_monto);
                 sqlCmd.Parameters.AddWithValue("@num_factura", cmFactura.num_factura.Trim());
+                sqlCmd.Parameters.AddWithValue("@factura_status", cmFactura.factura_status);
 
                 SqlDataReader sdr = sqlCmd.ExecuteReader();
                 if (sdr.Read())
@@ -172,6 +173,41 @@ namespace AltoChicamaSystem.Data.Factura
                     sqlCon.Close();
                 }
             }
+            return Tuple.Create(rpta, msg);
+        }
+
+        public Tuple<string, string> alterFacturaStatus(int id_factura, string bandera)
+        {
+            string rpta = "";
+            string msg = "";
+
+            try
+            {
+                using (SqlConnection sqlCon = new SqlConnection(con.obtenerDatosConexion(bandera)))
+                {
+                    sqlCon.Open();
+                    using (SqlCommand sqlCmd = new SqlCommand("Factura_alter_status", sqlCon))
+                    {
+                        sqlCmd.CommandType = CommandType.StoredProcedure;
+                        sqlCmd.Parameters.AddWithValue("@id_factura", id_factura);
+
+                        using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                        {
+                            if (sdr.Read())
+                            {
+                                rpta = sdr["Rpta"].ToString();
+                                msg = sdr["Msg"].ToString();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                rpta = "1"; // Indicar que hubo un error
+                msg = ex.Message;
+            }
+
             return Tuple.Create(rpta, msg);
         }
     }
