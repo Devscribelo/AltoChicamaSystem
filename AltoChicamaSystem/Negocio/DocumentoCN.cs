@@ -27,6 +27,12 @@ namespace AltoChicamaSystem.Negocio
             return result;
         }
 
+        public Tuple<string, string, List<DocumentoResult>> listarDocumentoTransportista(int transportista_id, int estado, string bandera)
+        {
+            var result = objDato.listarDocumentoTransportista(transportista_id, estado, bandera);
+            return result;
+        }
+
 
         public Tuple<string, string> eliminarDocumento(int documentoId, string bandera)
         {
@@ -39,15 +45,33 @@ namespace AltoChicamaSystem.Negocio
             return result;
         }
 
-        public Tuple<string, string> obtenerDeudaEmpresa(int empresa_id, string bandera)
+        public Tuple<string, string, string> ObtenerDeudaTransportista(int transportista_id, string bandera)
         {
             try
             {
                 // Llama al método en la carpeta Data que ejecuta el procedimiento almacenado
-                decimal mayorDocumentoID = objDato.obtenerDeudaEmpresa(empresa_id, bandera);
+                var (deuda, nombre) = objDato.ObtenerDeudaTransportista(transportista_id, bandera);
 
                 // Devuelve el resultado como un Tuple
-                return new Tuple<string, string>("Exito", mayorDocumentoID.ToString());
+                return new Tuple<string, string, string>("Exito", deuda.ToString(), nombre);
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                return new Tuple<string, string, string>("Error", ex.Message, string.Empty);
+            }
+        }
+
+
+        public Tuple<string, string> ObtenerDeudaTotalTransportistas(string bandera)
+        {
+            try
+            {
+                // Llama al método en la carpeta Data que ejecuta el procedimiento almacenado
+                decimal totalDeuda = objDato.ObtenerDeudaTotalTransportistas(bandera);
+
+                // Devuelve el resultado como un Tuple
+                return new Tuple<string, string>("Exito", totalDeuda.ToString());
             }
             catch (Exception ex)
             {
@@ -55,6 +79,24 @@ namespace AltoChicamaSystem.Negocio
                 return new Tuple<string, string>("Error", ex.Message);
             }
         }
+
+        public Tuple<string, string> ObtenerGananciaTotalTransportistas(string bandera)
+        {
+            try
+            {
+                // Llama al método en la carpeta Data que ejecuta el procedimiento almacenado
+                decimal totalDeuda = objDato.ObtenerGananciaTotalTransportistas(bandera);
+
+                // Devuelve el resultado como un Tuple
+                return new Tuple<string, string>("Exito", totalDeuda.ToString());
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                return new Tuple<string, string>("Error", ex.Message);
+            }
+        }
+
 
         public Tuple<string, string> ObtenerMayorDocumentoID(string bandera)
         {
