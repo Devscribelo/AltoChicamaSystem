@@ -71,6 +71,20 @@ button.select2-selection__clear {
         padding-left: 12px !important;
     }
 
+#input_transportista + .select2-container--default .select2-selection--single {
+    background-color: #fff !important;
+    border: 1px solid #aaa !important;
+    border-radius: 1px !important;
+    height: 38px !important;
+}
+
+
+    #input_transportista + .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #444;
+        line-height: 37px !important;
+        text-align: left;
+        padding-left: 12px !important;
+    }
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
     color: #444;
@@ -99,7 +113,8 @@ button.select2-selection__clear {
 }
 
 input:focus, textarea:focus, select:focus {
-    border-color: #0d4b1f !important;
+    outline: none !important;
+    border-color: initial !important; /* O utiliza el color por defecto que prefieras */
 }
 
 /*.select2-container--open .select2-dropdown {
