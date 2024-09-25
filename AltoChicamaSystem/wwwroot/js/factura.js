@@ -346,14 +346,14 @@ function getListFactura() {
                                 extend: 'excel',
                                 className: 'btn_export_Excel',
                                 exportOptions: {
-                                    columns: ':visible:not(:last-child)'
+                                    columns: ':visible:not(:last-child, :nth-last-child(2))' // Oculta la penúltima y la última columna en la exportación a Excel
                                 }
                             },
                             {
                                 extend: 'pdf',
                                 className: 'btn_export_Pdf',
                                 exportOptions: {
-                                    columns: ':visible:not(:last-child)'
+                                    columns: ':visible:not(:last-child, :nth-last-child(2))' // Oculta la penúltima y la última columna en la exportación a Excel
                                 }
                             }
                         ],
