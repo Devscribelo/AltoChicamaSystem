@@ -69,7 +69,7 @@ function guardarNewFactura() {
     });
 }
 
-function TransportistaSelect() {
+function TransportistaSelect(id_transportista) {
     var endpoint = getDomain() + "/Transportista/TransportistaSelect";
 
     $.ajax({
@@ -87,15 +87,17 @@ function TransportistaSelect() {
             var TransportistaSelect = data.item3;
 
             // Limpiar el select y agregar opción por defecto
-            $('#input_transportista').empty();
-            $('#input_transportista').append(new Option("Seleccione un transportista...", "", true, true));
+            $(id_transportista).empty();
+            $(id_transportista).append('<option value="" disabled selected>Seleccione un transportista...</option>');
 
             // Verificar si la data es null, vacía, o contiene solo espacios en blanco
             if (TransportistaSelect && TransportistaSelect.length > 0) {
                 // Agregar opciones al select
                 for (var i = 0; i < TransportistaSelect.length; i++) {
                     var item = TransportistaSelect[i];
-                    $('#input_transportista').append(new Option(item.transportista_nombre, item.transportista_id));
+                    $(id_transportista).append(
+                        '<option value="' + item.transportista_id + '">' + item.transportista_nombre + '</option>'
+                    );
                 }
             } else {
                 console.log("No se encontraron transportistas.");
