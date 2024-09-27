@@ -130,32 +130,32 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-12">
-
                                 <form>
-                                    
-                                    <!-- empresa ruc -->
+                                    <!-- Monto -->
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Monto</span>
                                         <input type="text" class="form-control" id="input_factura_monto" required autocomplete="off"
                                                inputmode="decimal" placeholder="Ingrese el Monto">
                                     </div>
 
-                                    <!-- empresa_correo -->
+                                    <!-- Número de Factura -->
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Número de Factura</span>
                                         <input type="text" class="form-control" id="input_factura_numfactura" autocomplete="off" placeholder="Ingrese el número de Factura" maxlength="100">
                                     </div>
 
-                                    <div class="input-group input-group-sm mb-3">
-                                        <label class="input-group-text" for="input_transportista_modal">Transportista</label>
-                                        <select class="form-select" id="input_transportista_modal">
+                                    <!-- Transportista -->
+                                    <div class="input-group input-group-sm mb-3 flex-column">
+                                        <label class="input-group-text w-100" for="input_transportista_modal">Transportista</label>
+                                        <select class="form-select w-100" id="input_transportista_modal">
                                             <!-- Opciones de empresa -->
                                         </select>
                                     </div>
 
-                                    <div class="input-group input-group-sm mb-3">
-                                        <label class="input-group-text" for="input_guias_modal">Guias</label>
-                                        <select class="js-example-basic-multiple form-select" name="estados[]" multiple="multiple" id="input_guias_modal">
+                                    <!-- Guías -->
+                                    <div class="input-group input-group-sm mb-3 flex-column">
+                                        <label class="input-group-text w-100" for="input_guias_modal">Guías</label>
+                                        <select class="js-example-basic-multiple form-select w-100" name="estados[]" multiple="multiple" id="input_guias_modal">
                                             <option value="value">001</option>
                                             <option value="value">002</option>
                                             <option value="value">003</option>
@@ -243,6 +243,26 @@
         </div>
 
     </section>
+
+    <style>
+        .input-group-sm > .input-group-text {
+            min-width: 120px; /* Ajusta este valor según sea necesario */
+        }
+
+        .select2-container {
+            width: 100% !important;
+        }
+
+        .modal-body .input-group-sm {
+            margin-bottom: 1rem;
+        }
+
+            .modal-body .input-group-sm > .input-group-text,
+            .modal-body .input-group-sm > .form-control,
+            .modal-body .input-group-sm > .form-select {
+                width: 100%;
+            }
+    </style>
 
     <script>
         // Función para aplicar la lógica de validación a un campo de monto

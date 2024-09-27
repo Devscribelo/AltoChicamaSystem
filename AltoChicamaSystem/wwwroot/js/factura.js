@@ -552,20 +552,23 @@ function eliminarFactura(id_factura) {
 async function modalEditarFactura(rowData) {
     $("#modal_editar_factura .modal-title").html("Editando Factura: <span style='color: #198754'><strong>" + rowData.num_factura + "</strong></span>");
 
-    // No es necesario volver a declarar rowData aquí
-    // const rowData = await getListFactura();
-
     $("#edit_factura_monto").val(rowData.factura_monto);
-    $("#edit_factura_numfactura").val(rowData.num_factura); // Cambié num_factura por rowData.num_factura
-    $("#input_transportista_modal_edit").val(rowData.transportista_id); // Cambié transportista_id por rowData.transportista_id
+    $("#edit_factura_numfactura").val(rowData.num_factura);
 
     var estado = rowData.factura_status;
     $('#edit_factura_status_a').prop('checked', estado === 'True');
     $('#edit_factura_status_i').prop('checked', estado === 'False');
 
+    // Cargar los transportistas después de que el modal se haya mostrado
+    $("#modal_editar_factura").on('shown.bs.modal', function () {
+        TransportistaSelect2("#input_transportista_modal_edit");
+        // Establecer el valor del transportista después de cargar las opciones
+        $("#input_transportista_modal_edit").val(rowData.transportista_id).trigger('change');
+    });
+
     $("form").off("submit").one("submit", function (event) {
         event.preventDefault();
-        guardarEditFactura(rowData.id_factura); // Cambié id_factura por rowData.id_factura
+        guardarEditFactura(rowData.id_factura);
     });
 
     $("#modal_editar_factura").modal("show");
