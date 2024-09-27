@@ -27,6 +27,7 @@ namespace AltoChicamaSystem.Data.Factura
                 sqlCmd.Parameters.AddWithValue("@num_factura", cmFactura.num_factura.Trim());
                 sqlCmd.Parameters.AddWithValue("@factura_status", cmFactura.factura_status);
                 sqlCmd.Parameters.AddWithValue("@transportista_id", cmFactura.transportista_id);
+                sqlCmd.Parameters.AddWithValue("@guias_ids", cmFactura.guias_ids.Trim());
 
                 SqlDataReader sdr = sqlCmd.ExecuteReader();
                 if (sdr.Read())

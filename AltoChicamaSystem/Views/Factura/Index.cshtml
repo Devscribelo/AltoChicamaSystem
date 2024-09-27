@@ -112,13 +112,6 @@
             </div>
         </main>
 
-        <!-- JS Personalizado -->
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-        <script type="text/javascript" src="~/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-        <script src="~/js/js_jquery.dataTables.min.js"></script>
-        <script src="~/config.js"></script>
-        <script src="~/js/factura.js?v=0.0.0.5"></script>
-
         <!-- Modal Nueva Factura -->
         <div class="modal" id="modal_nueva_factura" tabindex="-1">
             <div class="modal-dialog modal-md modal-dialog-centered">
@@ -156,9 +149,7 @@
                                     <div class="input-group input-group-sm mb-3 flex-column">
                                         <label class="input-group-text w-100" for="input_guias_modal">Guías</label>
                                         <select class="js-example-basic-multiple form-select w-100" name="estados[]" multiple="multiple" id="input_guias_modal">
-                                            <option value="value">001</option>
-                                            <option value="value">002</option>
-                                            <option value="value">003</option>
+                                            <!-- Opciones de guia -->
                                         </select>
                                     </div>
 
@@ -263,7 +254,12 @@
                 width: 100%;
             }
     </style>
-
+    <!-- JS Personalizado -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+    <script src="~/js/js_jquery.dataTables.min.js"></script>
+    <script src="~/config.js"></script>
+    <script src="~/js/factura.js?v=0.0.0.5"></script>
     <script>
         // Función para aplicar la lógica de validación a un campo de monto
             function aplicarValidacionMonto(elementId) {

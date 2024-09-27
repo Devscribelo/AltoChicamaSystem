@@ -15,15 +15,30 @@
         getListFacturaTransportista(transportistaId, facturaStatus);
     });
 });
+function mostrarGuiasSeleccionadas() {
+    var guiasSeleccionadas = $("#input_guias_modal").select2('data');
+    var guias = "";
+    guiasSeleccionadas.forEach(function (guia) {
+        if (guias == "") {
+            guias = guia.id;
+        }
+        else {
+            guias = guias + "," + guia.id;
+        }
+    });
+    return (guias);
+}
 
 function guardarNewFactura() {
     var factura_status = $("#input_factura_status_a").is(':checked') ? $("#input_factura_status_a").val() : $("#input_factura_status_i").val();
+    var guias = mostrarGuiasSeleccionadas();
 
     var dataPost = {
         factura_monto: $("#input_factura_monto").val(),
         num_factura: $("#input_factura_numfactura").val(),
         factura_status: factura_status, // Asegúrate que este valor esté definido antes de usarlo
         transportista_id: $("#input_transportista_modal").val(),
+        guias_ids: guias.toString()
     };
 
     dataPost = trimJSONFields(dataPost);
@@ -50,6 +65,7 @@ function guardarNewFactura() {
             if (rpta == "0") {
                 getListFactura();
                 $("#modal_nueva_factura").modal("hide");
+                GuiaSelect("#input_guias_modal");
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -175,6 +191,8 @@ function TransportistaSelect2(selectId) {
     });
 }
 
+
+
 function obtenerIdTransportistaSeleccionada(id_transportista) {
     // Obtener el valor de la opción seleccionada en el select
     var valorSeleccionadoTransportista = $(id_transportista).val();
@@ -188,6 +206,58 @@ function obtenerIdTransportistaSeleccionada(id_transportista) {
 
     return valorSeleccionadoTransportista;  
 }
+
+function GuiaSelect(selectId) {
+    var endpoint = getDomain() + "/Guia/GuiaSelect";
+
+    $.ajax({
+        type: "GET",
+        async: true,
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        dataType: "json",
+        beforeSend: function (xhr) {
+            console.log("Cargando guías...");
+        },
+        success: function (data) {
+            var GuiaSelect = data.item3;
+
+            // Limpiar el select y agregar opción por defecto
+            $(selectId).empty();
+
+            // Verificar si la data es null, vacía, o contiene solo espacios en blanco
+            if (GuiaSelect && GuiaSelect.length > 0) {
+                // Agregar opciones al select
+                for (var i = 0; i < GuiaSelect.length; i++) {
+                    var item = GuiaSelect[i];
+                    $(selectId).append(new Option(item.guia_numero, item.guia_id));
+                }
+            } else {
+                console.log("No se encontraron guías.");
+                $(selectId).append(new Option("No hay guías disponibles", ""));
+            }
+
+            // Inicializar o actualizar Select2
+            $(selectId).select2({
+                allowClear: true,
+                language: "es",
+                dropdownCssClass: 'limit-dropdown', // Añadir la clase para limitar altura
+                dropdownParent: $(selectId).closest('.modal-body') // Asegura que el dropdown se muestre correctamente en el modal
+            });
+
+            // Habilitar el select
+            $(selectId).prop("disabled", false);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Error al cargar guías: ' + textStatus);
+            console.error("Error al cargar guías:", textStatus, errorThrown);
+        }
+    });
+}
+
+GuiaSelect("#input_guias_modal");
 
 // Llamada inicial para llenar el select de transportistas
 TransportistaSelect2("#input_transportista");
@@ -334,9 +404,6 @@ function getListFacturaTransportista(transportista_id, estado) {
         });
     });
 }
-
-
-
 
 function getListFactura() {
     var endpoint = getDomain() + "/Factura/ListaFactura";
