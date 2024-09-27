@@ -24,7 +24,14 @@
 
     <!-- JS Personalizado -->
     <script src="~/config.js"></script>
-
+    <style>
+        .select2-container {
+            z-index: 9999;
+        }
+        .select2-drop-mask {
+            z-index: 9998;
+        }
+    </style>
 
 </head>
 
@@ -146,6 +153,18 @@
                                         <label class="input-group-text" for="input_transportista_modal">Transportista</label>
                                         <select class="form-select" id="input_transportista_modal">
                                             <!-- Opciones de empresa -->
+                                        </select>
+                                    </div>
+
+                                    <div class="input-group input-group-sm mb-3">
+                                        <label class="input-group-text" for="input_guias_modal">Guias</label>
+                                        <select class="js-example-basic-multiple form-select" name="estados[]" multiple="multiple" id="input_guias_modal">
+                                            <option value="value">001</option>
+                                            <option value="value">002</option>
+                                            <option value="value">003</option>
+                                            <option value="value">004</option>
+                                            <option value="value">005</option>
+                                            <option value="value">006</option>
                                         </select>
                                     </div>
 
