@@ -266,8 +266,8 @@ table.dataTable.no-footer {
 .modal-dialog {
     width: 100%;
 }
-.modal-content {
-    padding: 1rem !important;
+.modal-content * {
+    padding: 4px !important; /* Ajusta el valor seg�n lo necesites */
 }
 
 
