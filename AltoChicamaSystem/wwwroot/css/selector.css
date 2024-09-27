@@ -126,3 +126,46 @@ input:focus, textarea:focus, select:focus {
     top: auto !important;
     bottom: 100% !important;
 }*/
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__display {
+    cursor: default;
+    padding-left: 15px !important;
+    padding-right: 5px !important;
+}
+
+.select2-container--default .select2-selection--multiple.select2-selection--clearable {
+    padding-top: 6px !important;
+    padding-bottom: 5px !important;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__clear {
+    cursor: pointer !important;
+    font-weight: bold !important;
+    height: 23px !important;
+    margin-right: 10px !important;
+    margin-top: 2px !important;
+    position: absolute !important;
+    right: 0;
+    padding: 1px !important;
+}
+
+.select2-container--default .select2-selection--multiple {
+    background-color: white !important;
+    border: 1px solid #aaa !important;
+    border-radius: 0px !important;
+    cursor: text !important;
+    padding-bottom: 10px !important;
+    padding-right: 10px !important;
+    position: relative;
+    padding-left: 10px !important;
+}
+
+.select2-container--default .select2-search--inline .select2-search__field {
+    background: transparent;
+    border: none;
+    outline: 0;
+    box-shadow: none;
+    -webkit-appearance: textfield;
+    height: 21px !important;
+    margin-bottom: -4px !important;
+}

@@ -270,9 +270,6 @@ table.dataTable.no-footer {
     padding: 1rem !important;
 }
 
-.modal-content * {
-    padding: 4px !important; /* Ajusta el valor seg�n lo necesites */
-}
 
 /* Estilo para el filtro generado por DataTables */
 .dataTables_filter {
