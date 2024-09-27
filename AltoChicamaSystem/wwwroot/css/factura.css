@@ -1,0 +1,637 @@
+﻿* {
+    margin: 0 !important;
+    padding: 0px !important;
+    box-sizing: border-box !important;
+    font-family: 'Poppins', sans-serif !important;
+}
+
+.subscribe {
+    margin-top: 10px !important;
+    position: relative !important;
+    height: 49px !important;
+    width: 100% !important;
+    padding: 20px !important;
+    background-color: #FFF !important;
+    border-radius: 4px !important;
+    color: #333 !important;
+}
+
+    .subscribe p {
+        text-align: center !important;
+        font-size: 22px !important;
+        font-weight: bold !important;
+        letter-spacing: 4px !important;
+    }
+
+    .subscribe .submit-btn {
+        position: absolute !important;
+        border-bottom-right-radius: 0 !important;
+        border-top-right-radius: 0 !important;
+        background-color: #0d4b1f !important;
+        color: #FFF !important;
+        padding: 12px 25px !important;
+        display: inline-block !important;
+        font-size: 15px !important;
+        font-weight: bold !important;
+        letter-spacing: 5px !important;
+        left: 50% !important; /* Centro horizontal */
+        transform: translateX(-50%) !important; /* Ajuste para centrar */
+        bottom: -19px !important;
+        cursor: pointer !important;
+        transition: all .25s ease !important;
+    }
+
+        .subscribe .submit-btn:hover {
+            background-color: #0d4b1f !important;
+        }
+
+
+
+
+.border-bottom {
+    border-bottom: 1px solid #000 !important;
+}
+
+/* Estilo general para los inputs y el bot�n en el modal */
+.modal-content form .input-group {
+    margin-bottom: 15px; /* Espacio entre los grupos de input */
+}
+
+    .modal-content form .input-group .form-control {
+        padding: 10px; /* Espacio interno en los inputs */
+        border-radius: 5px; /* Esquinas redondeadas en los inputs */
+    }
+
+    .modal-content form .input-group .input-group-text {
+        padding: 10px 15px; /* Espacio interno en los textos del grupo */
+        border-radius: 5px 0 0 5px; /* Redondea solo el borde izquierdo */
+    }
+
+.modal-content form .btnGuardar {
+    display: block;
+    width: 100%; /* Bot�n de tama�o completo */
+    padding: 10px 15px; /* Espacio interno en el bot�n */
+    background-color: #198754 !important; /* Color de fondo del bot�n */
+    color: #fff; /* Color del texto del bot�n */
+    border: none; /* Sin bordes */
+    border-radius: 5px; /* Esquinas redondeadas */
+    font-size: 16px; /* Tama�o de fuente */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el bot�n */
+    transition: background-color 0.3s ease; /* Animaci�n suave al hacer hover */
+}
+
+    .modal-content form .btnGuardar:hover {
+        background-color: #198754; /* Color de fondo al pasar el cursor */
+    }
+
+@media (min-width: 576px) {
+    .modal-dialog {
+        max-width: 500px !important;
+        margin: 1.75rem auto !important;
+    }
+}
+
+.form-check-container {
+    display: flex !important;
+    align-items: center !important;
+}
+
+
+@font-face {
+    font-family: 'Material Symbols Outlined';
+    font-style: normal;
+    font-weight: 400;
+    src: url('https://fonts.gstatic.com/s/materialsymbolsoutlined/v205/kJF1BvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzByHX9rA6RzaxHMPdY43zj-jCxv3fzvRNU22ZXGJpEpjC_1n-q_4MrImHCIJIZrDCvHOej.woff2') format('woff2');
+}
+
+.dataTables_filter {
+    padding-top: 22px !important;
+    padding-bottom: 20px !important;
+}
+
+/* Clase para usar Material Symbols Outlined */
+.material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px; /* Ajusta el tama�o seg�n sea necesario */
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+}
+
+.material-icons {
+    font-family: 'Material Icons' !important;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px; /* Ajusta el tama�o seg�n sea necesario */
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+}
+
+
+
+.btn_firstrow {
+    padding: 4px;
+    display: inline-flex;
+    background-color: cornflowerblue;
+    border-color: cornflowerblue;
+}
+
+.invalid {
+    border-color: red;
+}
+
+#acciones {
+    font-size: 19px !important;
+}
+
+
+.custom-table td, .custom-table th {
+    padding: 4px 10px !important;
+}
+
+.custom-table thead th {
+    background-color: #f8f9fa !important;
+    color: #000 !important;
+}
+
+.custom-table {
+    border-collapse: separate !important;
+    border-spacing: 3px !important;
+    border-radius: 8px; /* Ajusta el valor seg�n tus necesidades */
+    overflow: hidden; /* Asegura que el radio se aplique a las esquinas */
+}
+
+    .custom-table th,
+    .custom-table td {
+        border: 1px solid #ddd; /* Estilo de borde para celdas */
+        border-radius: 4px; /* Ajusta el valor seg�n tus necesidades */
+    }
+
+    .custom-table td, .custom-table th {
+        border: 1px solid #dee2e6 !important;
+    }
+
+
+.dataTables_wrapper .dataTables_info {
+    clear: both;
+    float: left;
+    font-size: 13px !important;
+    padding-top: 0.155em !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+    cursor: default;
+    color: #000 !important;
+    border: 1px solid transparent;
+    background: transparent;
+    box-shadow: none;
+    padding-top: 4px !important;
+    font-size: 13px !important;
+}
+
+table.dataTable.no-footer {
+    border-bottom: none !important;
+}
+
+#status {
+    padding-right: 2rem;
+    margin-left: 9px;
+}
+
+.form-check.form-switch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.form-check-input[type=checkbox] {
+    border-radius: 0.25em !important;
+    margin-top: 7px !important;
+    width: 51px !important;
+}
+
+.form-check-input:checked {
+    background-color: #0d4b1f;
+    border-color: #0d4b1f;
+}
+
+.form-check .form-check-input {
+    /* float: left !important; */
+    margin-top: 0.4em !important;
+}
+
+.btnGuardar {
+    display: block;
+    margin: 25px auto 0;
+    color: #fff;
+    background-color: #198754;
+    border-color: #198754;
+    padding: 0.25rem 0.5rem;
+    font-size: .875rem;
+    border-radius: 0.2rem;
+    border: none;
+}
+
+.btnGuardar2 {
+    display: block;
+    margin: 25px auto 0;
+    color: #fff;
+    background-color: #198754;
+    border-color: #198754;
+    padding: 0.25rem 0.5rem;
+    font-size: .875rem;
+    border-radius: 0.2rem;
+    border: none;
+}
+
+#modal_nueva_empresa {
+    justify-content: center;
+}
+
+.modal-dialog {
+    width: 100%;
+}
+
+.modal-content {
+    padding: 1rem !important;
+}
+
+    /* Estilo para el filtro generado por DataTables */
+    .dataTables_filter {
+    display: flex !important;
+    align-items: center !important;
+    position: relative !important;
+    max-width: 264px !important;
+}
+
+    .dataTables_filter input[type="search"] {
+        height: 25px !important;
+        line-height: 28px !important;
+        padding: 0 1rem !important;
+        padding-left: 0.5rem !important; /* Ajustado para hacer menos espacio a la izquierda */
+        width: 100% !important;
+        border: 2px solid transparent !important;
+        border-radius: 8px !important;
+        outline: none !important;
+        background-color: #D9E8D8 !important;
+        color: #0d0c22 !important;
+        box-shadow: 0 0 5px #C1D9BF, 0 0 0 4px #f5f5f5eb !important;
+        transition: .3s ease !important;
+    }
+
+        .dataTables_filter input[type="search"]::placeholder {
+            color: #777 !important;
+        }
+
+    /* Ajusta el margen del label para que la palabra "Buscar" est� m�s a la izquierda */
+    .dataTables_filter label {
+        display: flex;
+        align-items: center;
+        margin: 0;
+        margin-right: 0.5rem; /* Reduce el margen derecho del label */
+    }
+
+    .dataTables_filter .dataTables_filter_label {
+        margin-right: 0; /* Asegura que no haya margen adicional */
+    }
+
+.dataTables_wrapper .dataTables_filter {
+    float: right;
+    text-align: left;
+    margin-right: 14px !important;
+}
+
+    .dataTables_wrapper .dataTables_filter input {
+        margin-left: 1.05em !important;
+    }
+
+#contenedorBotones {
+    display: flex; /* Utiliza Flexbox para alinear los botones en una fila */
+    gap: 24px;
+    align-items: center; /* Alinea verticalmente los botones en el centro */
+    flex-wrap: wrap; /* Permite que los botones se envuelvan en una nueva fila si no caben en una sola fila */
+}
+
+@media (max-width: 480px) {
+    .justify-content-xs-center {
+        justify-content: center !important;
+    }
+}
+
+/* Estilos espec�ficos para los botones */
+#btnExportExcel, #btnExportPdf {
+    position: relative;
+    width: 144px;
+    height: 35px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border: 1px solid #17795E !important;
+    background-color: #209978 !important;
+    overflow: hidden;
+    margin-left: -52px !important;
+    font-size: 10px !important;
+}
+
+    #btnExportExcel, #btnExportPdf, #btnExportExcel .button__icon, #btnExportExcel .button__text, #btnExportPdf .button__icon, #btnExportPdf .button__text {
+        transition: all 0.3s;
+    }
+
+        #btnExportExcel .button__text, #btnExportPdf .button__text {
+            transform: translateX(22px) !important;
+            color: #fff !important;
+            font-weight: 600 !important;
+        }
+
+        #btnExportExcel .button__icon {
+            position: absolute;
+            transform: translateX(109px) !important;
+            height: 100% !important;
+            width: 39px !important;
+            background-color: #17795E !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #btnExportPdf .button__icon {
+            position: absolute;
+            transform: translateX(109px) !important;
+            height: 100% !important;
+            width: 39px !important;
+            background-color: #9a1508 !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #btnExportExcel .svg, #btnExportPdf .svg {
+            width: 20px !important;
+            fill: #fff !important;
+        }
+
+        #btnExportExcel:hover, #btnExportPdf:hover {
+            background: #0d4b1f !important;
+        }
+
+        #btnExportPdf:hover {
+            background: #e74c3c !important;
+        }
+
+            #btnExportExcel:hover .button__text, #btnExportPdf:hover .button__text {
+                color: transparent !important;
+            }
+
+            #btnExportExcel:hover .button__icon, #btnExportPdf:hover .button__icon {
+                width: 148px !important;
+                transform: translateX(0) !important;
+            }
+
+        #btnExportExcel:active .button__icon {
+            background-color: #146c54 !important;
+        }
+
+        #btnExportPdf:active .button__icon {
+            background-color: #9a1508 !important;
+        }
+
+        #btnExportExcel:active {
+            border: 1px solid #146c54 !important;
+        }
+
+        #btnExportPdf:active {
+            border: 1px solid #e74c3c !important;
+        }
+
+#btnExportExcel {
+    border: 1px solid #0d4b1f !important;
+    background-color: #0d4b1f !important; /* Color de fondo verde para Excel */
+}
+
+#btnExportPdf {
+    border: 1px solid #c0392b !important;
+    background-color: #e74c3c !important; /* Color de fondo rojo para PDF */
+}
+
+/* Consultas de medios para pantallas peque�as */
+@media (max-width: 768px) {
+    #contenedorBotones {
+        gap: 1px; /* Ajuste del espacio entre botones para tabletas */
+        margin-top: 10px !important;
+        justify-content: center !important;
+    }
+
+    #btnExportExcel, #btnExportPdf {
+        width: 127px;
+        height: 30px;
+        font-size: 8px !important;
+        margin-left: 0 !important;
+    }
+
+        #btnExportExcel .button__icon, #btnExportPdf .button__icon {
+            width: 30px !important;
+            transform: translateX(95px) !important;
+        }
+
+        #btnExportExcel .button__text, #btnExportPdf .button__text {
+            transform: translateX(20px) !important;
+        }
+}
+
+@media (max-width: 480px) {
+    #contenedorBotones {
+        gap: 1px; /* Ajuste del espacio entre botones para m�viles */
+        margin-top: 10px !important;
+        justify-content: center !important;
+    }
+
+    #btnExportExcel, #btnExportPdf {
+        width: 100px;
+        height: 25px;
+        font-size: 7px !important;
+    }
+
+        #btnExportExcel .button__icon, #btnExportPdf .button__icon {
+            width: 25px !important;
+            transform: translateX(73px) !important;
+        }
+
+        #btnExportExcel .button__text, #btnExportPdf .button__text {
+            transform: translateX(15px) !important;
+        }
+}
+
+
+
+
+#btnAgregar, #btnActualizar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+    text-decoration: none !important;
+    color: #ffffff !important;
+    font-size: 17px !important;
+    border-radius: 5px !important;
+    width: 160px !important;
+    height: 40px !important;
+    border: 1px solid #17795E !important;
+    position: relative !important;
+    transition: 0.3s !important;
+    background-color: #17795E !important;
+    font-weight: 600 !important;
+}
+
+    #btnAgregar::before, #btnActualizar::before {
+        content: "add" !important; /* Default content */
+        display: block !important;
+        font-size: 13px !important;
+        background-color: #17795E !important;
+        color: #ffffff !important;
+        border-radius: 3px !important;
+        padding: 3px 5px !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        transform: translate(-5px, -30%) !important;
+        transition: .3s !important;
+    }
+
+    #btnActualizar::before {
+        content: "sync" !important;
+    }
+
+    #btnAgregar:hover::before, #btnActualizar:hover::before {
+        transform: translate(-5px, -50%) !important;
+    }
+
+
+
+/* From Uiverse.io by JaydipPrajapati1910 */
+#btnAgregar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: left !important;
+    line-height: 1 !important;
+    text-decoration: none !important;
+    color: #0d4b1f !important;
+    font-size: 15px !important;
+    border-radius: 0px !important;
+    width: 110px !important;
+    height: 37px !important;
+    border: 1px solid #0d4b1f !important;
+    position: relative !important;
+    transition: 0.3s !important;
+    background-color: #ffffff !important;
+    font-weight: 600 !important;
+    margin-right: 10px !important; /* Ajusta el valor seg�n el espacio que desees */
+}
+
+    #btnAgregar::before {
+        content: "+" !important; /* Icono de a�adir */
+        display: block !important;
+        font-size: 20px !important; /* Ajusta el tama�o del �cono si es necesario */
+        background-color: #0d4b1f !important;
+        color: #fff !important;
+        border-radius: 50% !important; /* Forma circular */
+        width: 20px !important; /* Ajusta el tama�o del �cono si es necesario */
+        height: 20px !important; /* Ajusta el tama�o del �cono si es necesario */
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        transform: translate(-5px, -50%) !important;
+        transition: .3s !important;
+    }
+
+    #btnAgregar:hover::before {
+        transform: translate(-5px, -70%) !important; /* Ajusta el movimiento en hover si es necesario */
+    }
+
+#btnActualizar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: left !important;
+    line-height: 1 !important;
+    text-decoration: none !important;
+    color: #0a58ca !important; /* Cambia el color si es necesario */
+    font-size: 15px !important;
+    border-radius: 0px !important;
+    width: 110px !important;
+    height: 37px !important;
+    border: 1px solid #0a58ca !important; /* Cambia el color si es necesario */
+    position: relative !important;
+    transition: 0.3s !important;
+    background-color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+    #btnActualizar::before {
+        content: "O" !important; /* Icono de refrescar */
+        display: block !important;
+        font-size: 20px !important; /* Ajusta el tama�o del �cono si es necesario */
+        background-color: #0a58ca !important; /* Cambia el color si es necesario */
+        color: #fff !important;
+        border-radius: 50% !important; /* Forma circular */
+        width: 20px !important; /* Ajusta el tama�o del �cono si es necesario */
+        height: 20px !important; /* Ajusta el tama�o del �cono si es necesario */
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        transform: translate(-5px, -50%) !important;
+        transition: .3s !important;
+    }
+
+    #btnActualizar:hover::before {
+        transform: translate(-5px, -70%) !important; /* Ajusta el movimiento en hover si es necesario */
+    }
+
+.icon-circle {
+    display: inline-flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 29px !important;
+    height: 29px !important;
+    border-radius: 50% !important;
+    background-color: #f0f0f0 !important; /* Fondo gris claro para todos los �conos */
+    color: #02409c !important; /* Color de �cono por defecto */
+    font-size: 18px !important;
+    margin: 0 5px !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important; /* Sombra sutil */
+}
+
+    .icon-circle.red {
+        background-color: #f0f0f0 !important; /* Fondo gris claro para el �cono de eliminar */
+        color: red !important; /* Color del �cono de eliminar */
+    }
+
+    .icon-circle.edit {
+        color: #FAA716 !important; /* Color del �cono de editar */
+    }
+
+    .icon-circle:hover {
+        transform: scale(1.1) !important; /* Efecto de zoom al pasar el cursor */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3) !important; /* Sombra m�s pronunciada al pasar el cursor */
+    }
