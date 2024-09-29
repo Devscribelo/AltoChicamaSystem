@@ -15,7 +15,7 @@
     <!-- CSS personalizado -->
     <link rel="stylesheet" href="~/css/selector.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="~/css/empresa.css">
+    <link rel="stylesheet" href="~/css/factura.css">
     <link rel="stylesheet" href="~/css/documentos.css">
     <link rel="stylesheet" href="~/css/alert.css">
 
@@ -24,7 +24,11 @@
 
     <!-- JS Personalizado -->
     <script src="~/config.js"></script>
-
+    <style>
+        .select2-dropdown {
+            z-index: 9999;
+        }
+    </style>
 
 </head>
 
@@ -108,13 +112,6 @@
             </div>
         </main>
 
-        <!-- JS Personalizado -->
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-        <script type="text/javascript" src="~/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-        <script src="~/js/js_jquery.dataTables.min.js"></script>
-        <script src="~/config.js"></script>
-        <script src="~/js/factura.js?v=0.0.0.5"></script>
-
         <!-- Modal Nueva Factura -->
         <div class="modal" id="modal_nueva_factura" tabindex="-1">
             <div class="modal-dialog modal-md modal-dialog-centered">
@@ -126,38 +123,45 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-12">
-
                                 <form>
-                                    
-                                    <!-- empresa ruc -->
+                                    <!-- Monto -->
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Monto</span>
                                         <input type="text" class="form-control" id="input_factura_monto" required autocomplete="off"
                                                inputmode="decimal" placeholder="Ingrese el Monto">
                                     </div>
 
-                                    <!-- empresa_correo -->
+                                    <!-- Número de Factura -->
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Número de Factura</span>
                                         <input type="text" class="form-control" id="input_factura_numfactura" autocomplete="off" placeholder="Ingrese el número de Factura" maxlength="100">
                                     </div>
 
-                                    <div class="input-group input-group-sm mb-3">
-                                        <label class="input-group-text" for="input_transportista_modal">Transportista</label>
-                                        <select class="form-select" id="input_transportista_modal">
+                                    <!-- Transportista -->
+                                    <div class="input-group input-group-sm mb-3 flex-column">
+                                        <label class="input-group-text w-100" for="input_transportista_modal">Transportista</label>
+                                        <select class="form-select w-100" id="input_transportista_modal">
                                             <!-- Opciones de empresa -->
                                         </select>
                                     </div>
 
+                                    <!-- Guías -->
+                                    <div class="input-group input-group-sm mb-3 flex-column">
+                                        <label class="input-group-text w-100" for="input_guias_modal">Guías</label>
+                                        <select class="js-example-basic-multiple form-select w-100" name="estados[]" multiple="multiple" id="input_guias_modal">
+                                            <!-- Opciones de guia -->
+                                        </select>
+                                    </div>
+
                                     <!-- Status -->
-                                    <div class="form-group" style="margin-right: 144px !important;">
+                                    <div class="form-group" style="margin-right: 246px !important; margin-bottom: 10px !important;">
                                         <label id="status" for="radio_status" class="col-form-label">Estado: </label>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="radio_factura_status" id="input_factura_status_a" value="1" checked>
+                                            <input class="form-check-input" style="margin-top: 4px !important;margin-right:2px !important;" type="radio" name="radio_factura_status" id="input_factura_status_a" value="1" checked>
                                             <label class="form-check-label" for="input_factura_status_a">Activo</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="radio_factura_status" id="input_factura_status_i" value="0">
+                                            <input class="form-check-input" style="margin-top: 4px !important;margin-right:2px !important;" type="radio" name="radio_factura_status" id="input_factura_status_i" value="0">
                                             <label class="form-check-label" for="input_factura_status_i">Inactivo</label>
                                         </div>
                                     </div>
@@ -207,14 +211,14 @@
                                     </div>
 
                                     <!-- Status -->
-                                    <div class="form-group" style="margin-right: 144px !important;">
+                                    <div class="form-group" style="margin-right: 246px !important; margin-bottom: 10px !important;">
                                         <label id="status" for="radio_status" class="col-form-label">Estado: </label>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="radio_factura_status" id="edit_factura_status_a" value="1">
+                                            <input class="form-check-input" style="margin-top: 4px !important;margin-right:2px !important;" type="radio" name="radio_factura_status" id="edit_factura_status_a" value="1">
                                             <label class="form-check-label" for="edit_factura_status_a">Activo</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="radio_factura_status" id="edit_factura_status_i" value="0">
+                                            <input class="form-check-input" style="margin-top: 4px !important;margin-right:2px !important;" type="radio" name="radio_factura_status" id="edit_factura_status_i" value="0">
                                             <label class="form-check-label" for="edit_factura_status_i">Inactivo</label>
                                         </div>
                                     </div>
@@ -231,6 +235,31 @@
 
     </section>
 
+    <style>
+        .input-group-sm > .input-group-text {
+            min-width: 120px; /* Ajusta este valor según sea necesario */
+        }
+
+        .select2-container {
+            width: 100% !important;
+        }
+
+        .modal-body .input-group-sm {
+            margin-bottom: 1rem;
+        }
+
+            .modal-body .input-group-sm > .input-group-text,
+            .modal-body .input-group-sm > .form-control,
+            .modal-body .input-group-sm > .form-select {
+                width: 100%;
+            }
+    </style>
+    <!-- JS Personalizado -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+    <script src="~/js/js_jquery.dataTables.min.js"></script>
+    <script src="~/config.js"></script>
+    <script src="~/js/factura.js?v=0.0.0.5"></script>
     <script>
         // Función para aplicar la lógica de validación a un campo de monto
             function aplicarValidacionMonto(elementId) {

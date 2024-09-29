@@ -1,4 +1,4 @@
-* {
+﻿* {
     margin: 0 !important;
     padding: 0px !important;
     box-sizing: border-box !important;
@@ -70,7 +70,7 @@
 .modal-content form .btnGuardar {
     display: block;
     width: 100%; /* Bot�n de tama�o completo */
-    padding: 10px 15px; /* Espacio interno en el bot�n */
+    padding: 7px 8px !important; /* Espacio interno en el bot�n */
     background-color: #198754 !important; /* Color de fondo del bot�n */
     color: #fff; /* Color del texto del bot�n */
     border: none; /* Sin bordes */
@@ -164,7 +164,7 @@
     padding: 4px 10px !important;
 }
 
-.custom-table thead th {    
+.custom-table thead th {
     background-color: #f8f9fa !important;
     color: #000 !important;
 }
@@ -249,30 +249,32 @@ table.dataTable.no-footer {
 }
 
 .btnGuardar2 {
-    display: block;
-    margin: 25px auto 0;
-    color: #fff;
-    background-color: #198754;
-    border-color: #198754;
-    padding: 0.25rem 0.5rem;
-    font-size: .875rem;
-    border-radius: 0.2rem;
+    display: block !important;
+    margin: 25px auto 0 !important;
+    color: #fff !important;
+    background-color: #198754 !important;
+    border-color: #198754 !important;
+    padding: 0.25rem 0.5rem !important;
+    font-size: 16px !important;
+    border-radius: 0.2rem !important;
     border: none;
+    width: 100% !important;
 }
 
-#modal_nueva_empresa{
+#modal_nueva_empresa {
     justify-content: center;
 }
+
 .modal-dialog {
     width: 100%;
 }
-.modal-content * {
-    padding: 4px !important; /* Ajusta el valor seg�n lo necesites */
+
+.modal-content {
+    padding: 1rem !important;
 }
 
-
-/* Estilo para el filtro generado por DataTables */
-.dataTables_filter {
+    /* Estilo para el filtro generado por DataTables */
+    .dataTables_filter {
     display: flex !important;
     align-items: center !important;
     position: relative !important;
@@ -346,7 +348,6 @@ table.dataTable.no-footer {
     overflow: hidden;
     margin-left: -52px !important;
     font-size: 10px !important;
-
 }
 
     #btnExportExcel, #btnExportPdf, #btnExportExcel .button__icon, #btnExportExcel .button__text, #btnExportPdf .button__icon, #btnExportPdf .button__text {

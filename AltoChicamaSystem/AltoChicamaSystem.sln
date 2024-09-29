@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AltoChicamaSystem", "AltoChicamaSystem.csproj", "{B262EC95-5C23-418F-B6A4-34D3D18DF8A5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B262EC95-5C23-418F-B6A4-34D3D18DF8A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B262EC95-5C23-418F-B6A4-34D3D18DF8A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B262EC95-5C23-418F-B6A4-34D3D18DF8A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B262EC95-5C23-418F-B6A4-34D3D18DF8A5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DF25BBAA-15D6-404E-80ED-CF1160F9B1AB}
+	EndGlobalSection
+EndGlobal

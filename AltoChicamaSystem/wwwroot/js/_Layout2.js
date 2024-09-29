@@ -299,9 +299,12 @@ function vaciarFormulario() {
 
 }
 
-async function guardarDocumento(file) {
-    var empresa_id = obtenerIdEmpresaSeleccionada("#input_empresa");
-    var transportista_id = obtenerIdTransportistaSeleccionada("#input_transportista");
+async function guardarDocumento(pdf) {
+    //const pdf = new File([contenido], "certificado_de_valorizacion.pdf", { type: "application/pdf" });
+    //var empresa_id = obtenerIdEmpresaSeleccionada("#input_empresa");
+    var empresa_id = 1048;
+    //var transportista_id = obtenerIdTransportistaSeleccionada("#input_transportista");
+    var transportista_id = 1014;
 
     if (!empresa_id) {
         Swal.fire({
@@ -324,13 +327,17 @@ async function guardarDocumento(file) {
     }
 
     // Capturar las fechas y el total
-    var fechaServicio = document.getElementById('input_fechaServicio').value;
-    var fechaPago = document.getElementById('input_fechaPago').value;
-    var totalIGV = document.getElementById('input_totalIGV').value;
+    //var fechaServicio = document.getElementById('input_fechaServicio').value;
+    var fechaServicio = "20-01-2024";
+    //var fechaPago = document.getElementById('input_fechaPago').value;
+    var fechaPago = "22-01-2024";
+    //var totalIGV = document.getElementById('input_totalIGV').value;
+    var totalIGV = 1000;
+
 
     var formData = new FormData();
-    formData.append('documento_titulo', file.name);
-    formData.append('documento_pdf', file);
+    formData.append('documento_titulo', "V001-CERTIFICADO-VALORIZACION");
+    formData.append('documento_pdf', pdf);
     formData.append('empresa_id', empresa_id);
     formData.append('transportista_id', transportista_id);
 
@@ -350,7 +357,7 @@ async function guardarDocumento(file) {
     // Mostrar la barra de progreso
     var progressBar = document.getElementById('file-progress');
     var responseContainer = document.getElementById('response');
-    responseContainer.classList.remove('hidden');
+    //responseContainer.classList.remove('hidden');
 
     $.ajax({
         type: "POST",
@@ -362,13 +369,13 @@ async function guardarDocumento(file) {
             var xhr = new window.XMLHttpRequest();
 
             // Progreso de carga
-            xhr.upload.addEventListener("progress", function (evt) {
-                if (evt.lengthComputable) {
-                    var percentComplete = evt.loaded / evt.total * 100;
-                    progressBar.value = percentComplete;
-                    progressBar.getElementsByTagName('span')[0].innerHTML = Math.round(percentComplete);
-                }
-            }, false);
+            //xhr.upload.addEventListener("progress", function (evt) {
+              //  if (evt.lengthComputable) {
+                //    var percentComplete = evt.loaded / evt.total * 100;
+                  //  progressBar.value = percentComplete;
+                    //progressBar.getElementsByTagName('span')[0].innerHTML = Math.round(percentComplete);
+                //}
+            //}, false);
 
             return xhr;
         },
@@ -409,8 +416,8 @@ async function guardarDocumento(file) {
         },
         complete: function () {
             // Ocultar la barra de progreso después de la carga
-            responseContainer.classList.add('hidden');
-            progressBar.value = 0;
+            //responseContainer.classList.add('hidden');
+            //progressBar.value = 0;
         }
     });
 }

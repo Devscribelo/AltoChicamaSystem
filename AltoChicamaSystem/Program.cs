@@ -6,11 +6,27 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(option =>
+    .AddCookie(options =>
     {
-        option.LoginPath = "/";
-        option.ExpireTimeSpan = TimeSpan.FromMinutes(20);
-        option.AccessDeniedPath = "/";
+        options.LoginPath = "/";
+        options.AccessDeniedPath = "/";
+        options.Events = new CookieAuthenticationEvents
+        {
+            OnValidatePrincipal = async context =>
+            {
+                if (context.Principal.IsInRole("Admin"))
+                {
+                    // Para administradores, establecer una fecha de expiración muy lejana
+                    context.Properties.ExpiresUtc = DateTimeOffset.UtcNow.AddYears(100);
+                }
+                else
+                {
+                    // Para otros usuarios, mantener la expiración de 20 minutos
+                    context.Properties.ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(20);
+                }
+                context.ShouldRenew = true;
+            }
+        };
     });
 
 builder.Services.AddAuthorization(options =>

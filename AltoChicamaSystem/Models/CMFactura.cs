@@ -9,6 +9,7 @@
         public int transportista_id { get; set; }
         public string transportista_nombre { get; set; }
         public int estado { get; set; }
+        public string guias_ids { get; set; }
 
     }
 }

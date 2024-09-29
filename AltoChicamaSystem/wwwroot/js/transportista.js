@@ -126,7 +126,8 @@ function vaciarFormEmpresa() {
     $('#modal_nuevo_transportista input[type="checkbox"]').prop('checked', false);
     $('#modal_nuevo_transportista textarea').val('');
     $('#modal_nuevo_transportista select').val('');
-    $('#modal_nuevo_transportista input[type="email"]').val(''); // Limpia el campo de correo electrónico
+    $('#modal_nuevo_transportista input[type="email"]').val(''); 
+    $('#modal_nuevo_transportista input[type="password"]').val(''); 
 }
 
 function modalNuevoTransportista() {
@@ -291,7 +292,7 @@ function modalConfirmacionEliminarTransportista(data) {
             cancelButton: 'btn btn-danger'
         },
         buttonsStyling: false
-    })
+    });
 
     swalWithBootstrapButtons.fire({
         title: 'Estas segur@? ',
@@ -303,24 +304,31 @@ function modalConfirmacionEliminarTransportista(data) {
         reverseButtons: true
     }).then((result) => {
         if (result.isConfirmed) {
-            eliminarTransportista(data),
-                swalWithBootstrapButtons.fire(
-                    'Eliminado!',
-                    'El transportista fue eliminado.',
-                    'success'
-                )
-        } else if (
-            /* Read more about handling dismissals below */
-            result.dismiss === Swal.DismissReason.cancel
-        ) {
+            eliminarTransportista(data);
             swalWithBootstrapButtons.fire(
-                'Cancelado',
-                'El transportista y sus documentos siguen almacenados',
-                'error'
-            )
+                'Eliminado!',
+                'El transportista fue eliminado.',
+                'success'
+            );
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            swalWithBootstrapButtons.fire({
+                title: 'Cancelado',
+                text: 'El transportista y sus documentos siguen almacenados',
+                icon: 'error',
+                showCancelButton: true,
+                confirmButtonText: 'Ok',
+                cancelButtonText: 'Cancelar',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.cancel) {
+                    // Vuelve a mostrar el primer modal si hace clic en "Volver a confirmar"
+                    modalConfirmacionEliminarTransportista(data);
+                }
+            });
         }
-    })
+    });
 }
+
 function eliminarTransportista(data) {
     var transportista_id = data.toString();
 
