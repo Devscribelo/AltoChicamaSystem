@@ -411,8 +411,6 @@ async function guardarDocumento(pdf) {
                 icon: 'error',
                 confirmButtonText: 'OK',
             });
-            responseContainer.classList.add('hidden');
-            progressBar.value = 0;
         },
         complete: function () {
             // Ocultar la barra de progreso después de la carga

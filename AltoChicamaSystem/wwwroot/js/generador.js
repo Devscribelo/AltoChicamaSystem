@@ -453,19 +453,76 @@ function consistenciaDatosNew() {
     });
 
 }
+
+// Obtiene el elemento del DOM correspondiente al select y al campo de entrada
+const selectTransportista = document.getElementById('input_transportista');
+const inputAbreviacion = document.getElementById('abreviacion');
+
+// Bandera para saber si se está modificando manualmente
+let editandoManual = false;
+
+// Deshabilita el campo de abreviación inicialmente
+inputAbreviacion.disabled = true;
+
+// Función que maneja la selección y genera la abreviación
+function actualizarAbreviacion() {
+    const seleccion = selectTransportista.value; // Obtiene el valor seleccionado
+    if (seleccion) {
+        inputAbreviacion.disabled = false; // Habilita el campo cuando se selecciona una empresa
+        // Verifica si la longitud es mayor a 21 caracteres
+        if (!editandoManual) {
+            if (seleccion.length > 21) {
+                // Generar abreviación si el nombre es largo
+                const abreviacion = abreviar(seleccion);
+                inputAbreviacion.value = abreviacion; // Muestra la abreviación
+            } else {
+                // Muestra el nombre completo si la longitud es 21 o menos
+                inputAbreviacion.value = seleccion;
+            }
+        }
+    } else {
+        inputAbreviacion.value = ''; // Limpia el campo si no hay selección
+        inputAbreviacion.disabled = true; // Deshabilita el campo si no se selecciona nada
+    }
+}
+
+// Función para abreviar el nombre de la 
+
+function abreviar(nombre) {
+    const palabras = nombre.split(' '); // Divide el nombre en palabras
+    return palabras.map(p => p.charAt(0).toUpperCase()).join(''); // Retorna las iniciales en mayúscula
+}
+
+// Llama a la función al cargar la página para asegurarse de que esté actualizada
+actualizarAbreviacion();
+
+// Agrega un evento para detectar cambios en el select
+selectTransportista.addEventListener('change', function () {
+    editandoManual = false; // Si se selecciona otra empresa, no es edición manual
+    actualizarAbreviacion();
+});
+
+// Agrega un evento de entrada para permitir la edición y limitar a 21 caracteres
+inputAbreviacion.addEventListener('input', function () {
+    editandoManual = true; // Indica que el usuario está editando manualmente
+    if (inputAbreviacion.value.length > 21) {
+        inputAbreviacion.value = inputAbreviacion.value.slice(0, 21); // Limita a 21 caracteres
+    }
+});
+
 async function generarPDF(formId) {
     const { jsPDF } = window.jspdf;
     
     if (formId === "pdfResiduos") {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             let residuos = document.getElementById("residuos").value;
             let numeroGuia = document.getElementById("numeroGuia").value;
-            let empresa = document.getElementById("id_transportista").value;
+            let empresa = document.getElementById("input_transportista").value;
             let tipoResiduoTitulo = document.getElementById("tipoResiduoTitulo").value;
             let toneladas = document.getElementById("toneladas").value;
             let nomEmpresa = document.getElementById("nomEmpresa").value;
 
-            if (!residuos || !numeroGuia || !id_transportista || !tipoResiduoTitulo || !toneladas || !nomEmpresa) {
+            if (!residuos || !numeroGuia || !empresa || !tipoResiduoTitulo || !toneladas || !nomEmpresa) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Ocurrió un error!',
@@ -726,36 +783,18 @@ async function generarPDF(formId) {
 
             let rucValue = `RUC: ${document.getElementById("ruc").value}`;
 
-            // Márgenes de 5 mm
-            const margin = 22;
-            const pageWidth = 210; // Ancho total de la página en mm
-            const pageHeight = 297; // Alto total de la página en mm
-            const contentWidth = pageWidth - 2 * margin;
+            // Dibuja la primera celda (nombre de la empresa)
+            doc.rect(margin, infoStartY, infoCellWidthLeft, infoCellHeight);
 
-            // Ajustar altura de imágenes
-            const alturaArriba = 39; // Altura en mm para la imagen de encabezado
-            const alturaAbajo = 39; // Altura en mm para la imagen de pie de página
+            // Ajustar el estilo de fuente a negrita para el nombre de la empresa
+            doc.setFont(undefined, "bold");
 
             // Calcular el ancho del texto y centrarlo
             let textWidthEmpresa = doc.getTextWidth(nomEmpresa);
             let textXEmpresa = margin + (infoCellWidthLeft - textWidthEmpresa) / 2;
             doc.text(nomEmpresa, textXEmpresa, infoStartY + 6.2);
 
-            // Encabezado y pie de página
-            doc.addImage(imgArriba, "PNG", 0, 0, anchoArriba, alturaArriba); // Encabezado
-            doc.addImage(
-                imgAbajo,
-                "PNG",
-                0,
-                doc.internal.pageSize.height - alturaAbajo,
-                anchoAbajo,
-                alturaAbajo
-            ); // Pie de página
-            // Título
-            doc.setFontSize(18);
-            doc.setTextColor(0, 100, 0);
-            doc.setFont(undefined, "bold");
-            doc.text("CERTIFICADO", pageWidth / 2, 50, null, null, "center");
+            // Restaurar el estilo de fuente normal para el resto del texto
             doc.setFont(undefined, "normal");
 
             // Dibuja la segunda celda (RUC) a la derecha de la primera
@@ -767,16 +806,17 @@ async function generarPDF(formId) {
             doc.text(rucValue, textXRuc, infoStartY + 6.2);
 
 
-            // Obtener el texto y el tamaño del texto
-            const texto = document.getElementById("opcion").value;
+            // Agregar el texto predeterminado con los datos de la empresa y el RUC
             doc.setFontSize(11);
+            let nombreEmpresa = document.getElementById("nomEmpresa").value;
+            let ruct = document.getElementById("ruct").value;
 
-            // Obtener el ancho del texto usando doc.getTextWidth()
-            const anchoTexto = doc.getTextWidth(texto);
+            let textoPredeterminado3 = `Transportados por la empresa ${nombreEmpresa} con RUC: ${ruct} hacia la Infraestructura de Valorización Alto Chicama, ubicada en la Panamericana Norte Km 594, Sector La Soledad – Chicama – Ascope – La Libertad; para su valorización.`;
 
-            // Calcular la posición centrada
-            const anchoPagina = doc.internal.pageSize.getWidth(); // Ancho de la página
-            const posicionCentradaX = (anchoPagina - anchoTexto) / 2; // posición centrada
+            let splittedText = doc.splitTextToSize(
+                textoPredeterminado3,
+                contentWidth
+            );
 
             doc.text(splittedText, margin, infoStartY + 18, {
                 align: 'justify',
@@ -856,20 +896,7 @@ async function generarPDF(formId) {
             // Firma de la empresa
             doc.addImage(imgFirma, "PNG", 75, startY + 102, 51, 26);
 
-            // Encabezados en negrita
-            doc.setFont(undefined, "bold");
-            headers.forEach((header, index) => {
-                doc.rect(
-                    margin + index * cellWidth,
-                    startY,
-                    cellWidth,
-                    cellHeight
-                );
-                let headerX = margin + index * cellWidth + cellWidth / 2;
-                let headerY = startY + cellHeight / 2.5;
-                doc.text(header, headerX, headerY, null, null, "center");
-            });
-            doc.setFont(undefined, "normal");
+            // Leer la imagen del QR
 
             // Agregar la imagen del QR
             doc.addImage(imgQR12, "PNG", 162, startY + 122, 25, 25); // Ajusta las coordenadas y tamaño según sea necesario
@@ -952,8 +979,7 @@ async function generarPDF(formId) {
             doc.text("914 105 601 | 913 036 413", textLeft, textBottom + 15);
             const pdfData = doc.output('blob');
             resolve(pdfData);
-            reader.onerror = reject;
-            reader.readAsDataURL(file); // AQUÍ CREA CANICAS
+            //reader.readAsDataURL(file); // AQUÍ CREA CANICAS
         });
         
 
@@ -1350,19 +1376,6 @@ async function generarYGuardarPDF(formId) {
         // Convertir el Blob a una cadena base64
         const reader = new FileReader();
         reader.readAsDataURL(pdfBlob);
-
-        //return new Promise((resolve, reject) => {
-            //reader.onloadend = function () {
-              //  const base64data = reader.result;
-                // Eliminar el prefijo de datos URI
-                //const base64Content = base64data.split(',')[1];
-                //console.log("PDF generado con éxito");
-                //resolve(base64Content);
-                //console.log(base64Content);                                  
-                //guardarDocumento(base64Content);
-            //}
-            //reader.onerror = reject;
-        //});
     } catch (error) {
         console.error("Error al generar el PDF:", error);
         throw error;
