@@ -3,11 +3,28 @@
     Layout = "~/Views/Shared/_Layout2.cshtml";
 }
 
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+
 <link rel="stylesheet" href="~/css/selector.css">
-<link rel="stylesheet" href="~/css/generador.css">
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/css/generador.css">
 <link rel="stylesheet" href="~/css/empresa.css">
 
+<!-- JS Libraries -->
+<script src="~/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+
+<!-- JS Personalizado -->
+<script src="~/config.js"></script>
+</head>
+
+<body>
 <section class="home">
 
     <div class="subscribe">
@@ -32,7 +49,7 @@
 
             <div class="form-row">
                 <label class="codigoEmpresa" for="codigoEmpresa">Número de Certificado:</label>
-                <input type="text" id="codigoEmpresa" name="codigoEmpresa" required />
+                <input type="text" id="codigoEmpresa" name="codigoEmpresa" required oninput="consistenciaDatosNew();">
             </div>
 
             <div class="form-row">
@@ -66,14 +83,23 @@
                 <input type="text" id="numeroGuia" name="numeroGuia" required />
             </div>
 
+
             <div class="form-row">
-                <label for="empresa">Empresa Transportista:</label>
-                <select id="empresa" name="empresa" required>
+                <label class="input-group-text" for="input_transportista">Transportista</label>
+                <select id="input_transportista" name="input_transportista" class="js-example-placeholder-single js-states form-control" required onchange="actualizarAbreviacion()">
+                    <option></option> <!-- Opción vacía -->
                 </select>
+
             </div>
+
             <div class="form-row">
                 <label for="ruct">RUC Transportista:</label>
                 <input type="number" id="ruct" name="ruct" required disabled />
+            </div>
+
+            <div class="form-row">
+                <label for="abreviacion">Abreviación:</label>
+                <input type="text" id="abreviacion" name="abreviacion" value="" oninput="actualizarAbreviacion()" />
             </div>
 
             <div class="form-row">
@@ -151,12 +177,9 @@
                 </div>
             </div>
 
-            <div class="firma-container">
-                <label for="firma">Firma de la empresa (imagen):</label>
-                <input type="file" id="firma" name="firma" accept="image/*" />
-            </div>
 
-            <button style="margin-bottom:16px !important;" type="button" onclick="generarYGuardarPDF('pdfResiduos')">
+
+            <button style="margin-bottom:16px !important;" type="button" onclick="generarPDF('pdfResiduos')">
                 Generar PDF
             </button>
         </form>
@@ -203,6 +226,7 @@
                 <select id="empresa1" name="empresa1" required>
                 </select>
             </div>
+
             <div class="form-row">
                 <label for="ruct1">RUC Transportista:</label>
                 <input type="number" id="ruct1" name="ruct1" required disabled />
@@ -250,7 +274,7 @@
                 <input type="file" id="firma1" name="firma1" accept="image/*" />
             </div>
 
-            <button style="margin-bottom:6px !important;" type="button" onclick="generarYGuardarPDF('pdfAguas')">
+            <button style="margin-bottom:6px !important;" type="button" onclick="generarPDF('pdfAguas')">
                 Generar PDF
             </button>
         </form>
@@ -258,9 +282,7 @@
 </section>
 
 <script>
-    document.getElementById('toneladas').addEventListener('input', function (e) {
-        this.value = this.value.replace(/\D/g, '').substring(0, 11);
-    });
+
     document.getElementById('metros3').addEventListener('input', function (e) {
         this.value = this.value.replace(/\D/g, '').substring(0, 11);
     });
@@ -271,12 +293,16 @@
         this.value = this.value.replace(/\D/g, '').substring(0, 11);
     });
 </script>
-
+<!-- JS Personalizado -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script type="text/javascript" src="~/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="~/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="~/config.js"></script>
 <script src="~/js/generador.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+</body>
+</html>
+
