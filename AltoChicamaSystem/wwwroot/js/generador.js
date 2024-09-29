@@ -241,7 +241,7 @@ function guardarNewDireccion(empresa_id) {
     });
 }
 
-function TransportistaSelect(id_transportista) {
+function TransportistaSelect() {
     var endpoint = getDomain() + "/Transportista/TransportistaSelect";
 
     $.ajax({
@@ -253,16 +253,14 @@ function TransportistaSelect(id_transportista) {
         },
         dataType: "json",
         beforeSend: function (xhr) {
-            console.log("cargando");
+            console.log("Cargando transportistas...");
         },
         success: function (data) {
             var TransportistaSelect = data.item3;
 
             // Limpiar el select y agregar opción por defecto
-            if (id_transportista === "#empresa" || id_transportista === "#empresa1") {
-                $(id_transportista).empty();
-                $(id_transportista).append('<option value="" disabled selected>Seleccione un transportista...</option>');
-            }
+            $('#input_transportista').empty();
+            $('#input_transportista').append(new Option("Seleccione un transportista...", "", true, true));
 
             // Verificar si la data es null, vacía, o contiene solo espacios en blanco
             if (TransportistaSelect && TransportistaSelect.length > 0) {
@@ -272,25 +270,38 @@ function TransportistaSelect(id_transportista) {
                 // Agregar opciones al select
                 for (var i = 0; i < TransportistaSelect.length; i++) {
                     var item = TransportistaSelect[i];
-                    $(id_transportista).append(
-                        '<option value="' + item.transportista_nombre + '">' + item.transportista_nombre + '</option>'
-                    );
+                    $('#input_transportista').append(new Option(item.transportista_nombre, item.transportista_nombre));
                     transportistas[item.transportista_nombre] = item.transportista_ruc;
                 }
 
                 // Manejar el evento de cambio en el select
-                $(id_transportista).change(function () {
+                $('#input_transportista').change(function () {
                     var selectedTransportista = $(this).val();
                     if (transportistas[selectedTransportista]) {
                         document.getElementById('ruct').value = transportistas[selectedTransportista];
                         document.getElementById('ruct1').value = transportistas[selectedTransportista];
                     }
                 });
+            } else {
+                console.log("No se encontraron transportistas.");
+                $('#input_transportista').append(new Option("No hay transportistas disponibles", ""));
             }
+
+            // Inicializar o actualizar Select2 usando directamente el ID del select
+            $('#input_transportista').select2({
+                placeholder: "Seleccione un transportista...",
+                allowClear: true,
+                language: "es",
+                dropdownCssClass: 'limit-dropdown' // Añadir la clase para limitar altura
+            });
+
+            // Habilitar el select
+            $('#input_transportista').prop("disabled", false);
+
         },
-        error: function (data) {
-            alert('Error fatal ' + data);
-            console.log("failure");
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Error al cargar transportistas: ' + textStatus);
+            console.error("Error al cargar transportistas:", textStatus, errorThrown);
         }
     });
 }
@@ -395,6 +406,53 @@ async function usarQR() {
     }
 }
 obtenerMayorDocumentoID();
+
+
+function consistenciaDatosNew() {
+    $('#numeroGuia').on('keypress', function (event) {
+        var keyCode = event.keyCode || event.which;
+        var keyValue = String.fromCharCode(keyCode);
+
+        // Permitir solo letras, números y hasta 25 caracteres
+        if (!/[a-zA-Z0-9]/.test(keyValue) || $(this).val().length >= 25) {
+            event.preventDefault();
+        }
+    });
+
+    $('#tipoRCD').on('keypress', function (event) {
+        var keyCode = event.keyCode || event.which;
+        var keyValue = String.fromCharCode(keyCode);
+
+        // Permitir solo letras, números y hasta 29 caracteres
+        if (!/[a-zA-Z0-9]/.test(keyValue) || $(this).val().length >= 29) {
+            event.preventDefault();
+        }
+    });
+
+    $('#toneladas').on('keypress', function (event) {
+        var keyCode = event.keyCode || event.which;
+        var keyValue = String.fromCharCode(keyCode);
+        var currentValue = $(this).val();
+
+        // Permitir solo números, punto y coma
+        if (!/[0-9.,]/.test(keyValue)) {
+            event.preventDefault();
+            return; // Salir si el carácter no es válido
+        }
+
+        // No permitir más de un punto o coma en el campo
+        if ((keyValue === '.' && currentValue.includes('.')) || (keyValue === ',' && currentValue.includes(','))) {
+            event.preventDefault();
+            return; // Salir si ya existe un separador del mismo tipo
+        }
+
+        // Limitar la cantidad de caracteres a 7
+        if (currentValue.length >= 7) {
+            event.preventDefault();
+        }
+    });
+
+}
 async function generarPDF(formId) {
     const { jsPDF } = window.jspdf;
     
