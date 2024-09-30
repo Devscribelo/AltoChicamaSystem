@@ -178,7 +178,7 @@ function TransportistaSelect(id_transportista) {
         },
         dataType: "json",
         beforeSend: function (xhr) {
-            console.log("cargando");
+            console.log("Cargando transportistas...");
         },
         success: function (data) {
             var TransportistaSelect = data.item3;
@@ -200,6 +200,16 @@ function TransportistaSelect(id_transportista) {
                 }
             }
 
+            // Inicializar o actualizar Select2 usando directamente el ID del select
+            $(id_transportista).select2({
+                placeholder: "Seleccione un transportista...",
+                allowClear: true,
+                language: "es",
+                dropdownCssClass: 'limit-dropdown' // Añadir la clase para limitar altura
+            });
+
+            // Habilitar el select
+            $(id_transportista).prop("disabled", false);
         },
         error: function (data) {
             alert('Error fatal ' + data);
@@ -401,8 +411,6 @@ async function guardarDocumento(pdf) {
                 icon: 'error',
                 confirmButtonText: 'OK',
             });
-            responseContainer.classList.add('hidden');
-            progressBar.value = 0;
         },
         complete: function () {
             // Ocultar la barra de progreso después de la carga
