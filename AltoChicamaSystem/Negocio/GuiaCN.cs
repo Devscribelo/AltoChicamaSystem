@@ -11,5 +11,9 @@ namespace AltoChicamaSystem.Negocio
             var result = objDato.GuiaSelect(bandera);
             return result;
         }
+        public Tuple<string, string, List<GuiaResult>> listarGuiaFiltro(int factura_id, string bandera)
+        {
+            return objDato.listarGuiaFiltro(factura_id, bandera);
+        }
     }
 }

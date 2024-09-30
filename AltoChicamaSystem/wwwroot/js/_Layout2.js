@@ -65,8 +65,6 @@ document.addEventListener('DOMContentLoaded', function () {
 const body = document.querySelector('body'),
     sidebar = body.querySelector('nav'),
     toggle = body.querySelector(".toggle"), modeText = body.querySelector(".mode-text");
-const form = document.getElementById("file-upload-form");
-const fileInput = document.getElementById("file-upload");
 const pdfPreview = document.getElementById("pdf-preview");
 const pdfFileName = document.getElementById("pdf-file-name");
 const notPdf = document.getElementById("notpdf");
@@ -78,24 +76,6 @@ toggle.addEventListener("click", () => {
     sidebar.classList.toggle("close");
 })
 
-fileInput.addEventListener("change", function (event) {
-    const file = event.target.files[0];
-    if (file && file.type === "application/pdf") {
-        pdfPreview.classList.remove("hidden");
-        pdfFileName.textContent = file.name;
-        notPdf.classList.add("hidden");
-    } else {
-        pdfPreview.classList.add("hidden");
-        notPdf.classList.remove("hidden");
-    }
-});
-
-
-
-form.addEventListener("submit", function (event) {
-    event.preventDefault();
-    cargarDataPDF();
-});
 
 // Función para llenar el select de empresas
 function EmpresaSelect() {

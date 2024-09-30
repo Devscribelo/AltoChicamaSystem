@@ -41,5 +41,32 @@ namespace AltoChicamaSystem.Controllers
                 return BadRequest(result);
             }
         }
+
+        [HttpPost]
+        public ActionResult ListarGuiaFiltro([FromBody] GuiaResult request) {
+            try
+            {
+                if (request == null || request.id_factura <= 0)
+                {
+                    return BadRequest(Tuple.Create("1", "ID de factura inválido", new List<GuiaResult>()));
+                }
+
+                string bandera = conf.GetValue<string>("Bandera");
+                var result = objusuarioCN.listarGuiaFiltro(request.id_factura, bandera);
+
+                if (result.Item1 == "0")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, Tuple.Create("1", $"Error interno: {ex.Message}", new List<GuiaResult>()));
+            }
+        }
     }
 }

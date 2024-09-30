@@ -15,6 +15,12 @@
         getListFacturaTransportista(transportistaId, facturaStatus);
     });
 });
+
+function modalDetalleFactura(id_factura) {
+    $("#modal_detalles_guia").modal("show").css('display', 'flex');
+    getListFacturaDetail(id_factura);
+}
+
 function mostrarGuiasSeleccionadas() {
     var guiasSeleccionadas = $("#input_guias_modal").select2('data');
     var guias = "";
@@ -433,8 +439,8 @@ function getListFactura() {
                         "data-transportista_id='" + dataFactura[i].transportista_id + "'" +
                         "data-transportista_nombre='" + dataFactura[i].transportista_nombre + "'>" +
                         "<td>" + dataFactura[i].id_factura + "</td>" +
-                        "<td>" + dataFactura[i].factura_monto + "</td>" +
                         "<td>" + dataFactura[i].num_factura + "</td>" +
+                        "<td>" + dataFactura[i].factura_monto + "</td>" +
                         "<td>" + dataFactura[i].transportista_nombre + "</td>" +
                         "<td>" +
                         "<div class='form-check form-switch'>" +
@@ -442,12 +448,12 @@ function getListFactura() {
                         "</div>" +
                         "</td>" +
                         "<td id='acciones'>" +
+                        `<i class='bx bx-detail detalle-factura icon-circle' id='detalle_factura" + i + "' onclick='modalDetalleFactura(${dataFactura[i].id_factura})'></i>` +
                         "<i class='bx bx-edit editar-button icon-circle' id='editar_factura" + i + "'></i>" +
                         "<i style='margin-left: 9px;' class='bx bx-trash eliminar-button icon-circle red' id='eliminar_factura" + i + "'></i>" +
                         "</td>" +
                         "</tr>";
                 }
-
                 $(document).on('click', '.editar-button', function () {
                     var rowData = $(this).closest('tr').data();
                     modalEditarFactura(rowData);
@@ -458,7 +464,7 @@ function getListFactura() {
                     modalConfirmacionEliminar(rowData.id_factura);
                 });
 
-                if (!$("#table_empresa").hasClass("dataTable")) {
+                if (!$("#tb_empresa").hasClass("dataTable")) {
                     tableFactura = $("#table_empresa").DataTable({
                         language: {
                             url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
@@ -494,6 +500,116 @@ function getListFactura() {
                 Swal.close();
                 alert('Error fatal ' + data);
                 console.log("failure");
+            }
+        });
+    });
+}
+function formatearFecha(fechaString) {
+    if (!fechaString) return '';
+
+    // Dividir la fecha y hora
+    const [fecha, hora] = fechaString.split(' ');
+
+    // Dividir la fecha en día, mes y año
+    const [dia, mes, anio] = fecha.split('/');
+
+    // Verificar si tenemos todas las partes necesarias
+    if (dia && mes && anio) {
+        return `${dia.padStart(2, '0')}/${mes.padStart(2, '0')}/${anio}`;
+    }
+
+    console.error('Formato de fecha inesperado:', fechaString);
+    return 'Fecha inválida';
+}
+
+function getListFacturaDetail(id_factura) {
+    return new Promise((resolve, reject) => {
+
+        const endpoint = getDomain() + "/Guia/ListarGuiaFiltro";
+
+        $.ajax({
+            type: "POST",
+            async: true,
+            url: endpoint,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify({ id_factura: id_factura }), // Serializa los datos a JSON
+            dataType: "json",
+            beforeSend: function (xhr) {
+                console.log("cargando");
+            },
+            success: function (data) {
+                console.log(data);
+                var dataFactura = data.item3; 
+                var datosRow = "";
+
+                if (data.Item1 === "1") {
+                    datosRow += "<tr><td colspan='6' style='text-align:center;'>No hay datos para mostrar</td></tr>";
+                } else {
+                    for (var i = 0; i < dataFactura.length; i++) {
+                        datosRow +=
+                            "<tr class='filaTabla' " +
+                            "data-id_guia='" + dataFactura[i].guia_id + "' " +
+                            "data-guia_numero='" + dataFactura[i].guia_numero + "' " +
+                            "data-guia_descarga='" + dataFactura[i].guia_descarga + "'" +
+                            "data-guia_cantidad='" + dataFactura[i].guia_cantidad + "'" +
+                            "data-guia_unidad='" + dataFactura[i].guia_unidad + "' " +
+                            "data-guia_costo='" + dataFactura[i].guia_costo + "' " +
+                            "data-guia_fecha_servicio='" + formatearFecha(dataFactura[i].guia_fecha_servicio) + "' " +
+                            "data-transportista_nombre='" + dataFactura[i].transportista_nombre + "'>" +
+                            "<td>" + dataFactura[i].guia_id + "</td>" +
+                            "<td>" + dataFactura[i].guia_numero + "</td>" +
+                            "<td>" + dataFactura[i].guia_descarga + "</td>" +
+                            "<td>" + dataFactura[i].guia_cantidad + "</td>" +
+                            "<td>" + dataFactura[i].guia_unidad + "</td>" +
+                            "<td>" + dataFactura[i].guia_costo + "</td>" +
+                            "<td>" + formatearFecha(dataFactura[i].guia_fecha_servicio) + "</td>" +
+                            "<td>" + dataFactura[i].transportista_nombre + "</td>"
+                    }
+
+                }
+
+                // Inicializar la tabla si aún no está configurada
+                if (!$("#table_detalles_factura").hasClass("dataTable")) {
+                    tableFactura = $("#table_detalles_factura").DataTable({
+                        language: {
+                            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                        },
+                        dom: 'frtip',
+                        buttons: [
+                            {
+                                extend: 'excel',
+                                className: 'btn_export_Excel',
+                                exportOptions: {
+                                    columns: ':visible:not(:last-child, :nth-last-child(1))'
+                                }
+                            },
+                            {
+                                extend: 'pdf',
+                                className: 'btn_export_Pdf',
+                                exportOptions: {
+                                    columns: ':visible:not(:last-child, :nth-last-child(1))'
+                                }
+                            }
+                        ],
+                        colResize: {
+                            tableWidthFixed: 'false'
+                        },
+                        colReorder: true,
+                        searching: false
+                    });
+                }
+
+                // Limpiar la tabla y agregar las filas
+                tableFactura.clear();
+                tableFactura.rows.add($(datosRow)).draw();
+
+                resolve(data); // Resuelve la promesa con la respuesta complet
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                Swal.close();
+                console.log("failure: " + textStatus + " - " + errorThrown);
             }
         });
     });

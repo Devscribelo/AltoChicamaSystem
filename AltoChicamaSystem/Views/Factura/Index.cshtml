@@ -96,8 +96,8 @@
                                     <thead style="color: #023E73;">
                                         <tr>
                                             <th>ID</th>
+                                            <th>Número de Factura</th>
                                             <th>Monto</th>
-                                            <th>Número</th>
                                             <th>Transportista</th>
                                             <th style="width:65px;">Estado</th>
                                             <th>Acciones</th>
@@ -111,6 +111,37 @@
                 </div>
             </div>
         </main>
+
+        <!-- Modal Detalles de Factura -->
+        <div class="modal" id="modal_detalles_guia" tabindex="-1">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Detalles de Factura</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm custom-table" id="table_detalles_factura">
+                                <thead style="color: #023E73;">
+                                    <tr>
+                                        <th>guia_id</th>
+                                        <th>guia_numero</th>
+                                        <th>guia_descarga</th>
+                                        <th>guia_cantidad</th>
+                                        <th>guia_unidad</th>
+                                        <th>guia_costo</th>
+                                        <th>Fecha Servicio</th>
+                                        <th>transportista_nombre</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tb_detalles_factura"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Modal Nueva Factura -->
         <div class="modal" id="modal_nueva_factura" tabindex="-1">
