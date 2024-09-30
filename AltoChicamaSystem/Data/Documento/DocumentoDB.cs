@@ -12,7 +12,7 @@ namespace AltoChicamaSystem.Data.Documento
 
         public Tuple<string, string> regDocumento(CMDocumento cmDocumento, string bandera)
         {
-            string rpta = "1";  // Valor por defecto en caso de error
+            string rpta = "1";
             string msg = "Error al Registrar";
             SqlConnection sqlCon = new SqlConnection();
             try
@@ -28,11 +28,9 @@ namespace AltoChicamaSystem.Data.Documento
                 sqlCmd.Parameters.AddWithValue("@documento_titulo", cmDocumento.documento_titulo.Trim());
                 sqlCmd.Parameters.AddWithValue("@documento_pdf", cmDocumento.documento_pdf);
                 sqlCmd.Parameters.AddWithValue("@empresa_id", cmDocumento.empresa_id);
-                sqlCmd.Parameters.AddWithValue("@transportista_id", cmDocumento.transportista_id);
-                sqlCmd.Parameters.AddWithValue("@fecha_servicio", cmDocumento.fecha_servicio);
-                sqlCmd.Parameters.AddWithValue("@fecha_pago", cmDocumento.fecha_pago);
-                sqlCmd.Parameters.AddWithValue("@documento_deuda", cmDocumento.documento_deuda);  // Agregado
-                //sqlCmd.Parameters.AddWithValue("@documento_status", cmDocumento.documento_status);
+                sqlCmd.Parameters.AddWithValue("@documento_status", cmDocumento.documento_status);
+                sqlCmd.Parameters.AddWithValue("@documento_numero", cmDocumento.documento_numero);
+                sqlCmd.Parameters.AddWithValue("@guia_id", cmDocumento.guia_id);
 
                 SqlDataReader sdr = sqlCmd.ExecuteReader();
                 if (sdr.Read())
@@ -132,9 +130,7 @@ namespace AltoChicamaSystem.Data.Documento
                         documento.transportista_nombre = sdr["transportista_nombre"].ToString().Trim();
                         documento.documento_status = sdr["documento_status"].ToString().Trim();
                         documento.documento_numero = Convert.ToInt32(sdr["documento_numero"]);
-                        documento.fecha_servicio = Convert.ToDateTime(sdr["fecha_servicio"]);  // Agregado
-                        documento.fecha_pago = Convert.ToDateTime(sdr["fecha_pago"]);  // Agregado
-                        documento.documento_deuda = Convert.ToDecimal(sdr["documento_deuda"]);  // Agregado
+                        documento.guia_numero = sdr["guia_numero"].ToString().Trim();
                         lst.Add(documento);
                     }
                 }
@@ -192,40 +188,7 @@ namespace AltoChicamaSystem.Data.Documento
             return Tuple.Create(rpta, msg);
         }
 
-        public Tuple<string, string> alterDocumentoStatus(int documento_id, string bandera)
-        {
-            string rpta = "";
-            string msg = "";
-
-            try
-            {
-                using (SqlConnection sqlCon = new SqlConnection(con.obtenerDatosConexion(bandera)))
-                {
-                    sqlCon.Open();
-                    using (SqlCommand sqlCmd = new SqlCommand("Documento_alter_status", sqlCon))
-                    {
-                        sqlCmd.CommandType = CommandType.StoredProcedure;
-                        sqlCmd.Parameters.AddWithValue("@documento_id", documento_id);
-
-                        using (SqlDataReader sdr = sqlCmd.ExecuteReader())
-                        {
-                            if (sdr.Read())
-                            {
-                                rpta = sdr["Rpta"].ToString();
-                                msg = sdr["Msg"].ToString();
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                rpta = "1"; // Indicar que hubo un error
-                msg = ex.Message;
-            }
-
-            return Tuple.Create(rpta, msg);
-        }
+        
 
         public (decimal, string) ObtenerDeudaTransportista(int transportista_id, string bandera)
         {
@@ -339,7 +302,7 @@ namespace AltoChicamaSystem.Data.Documento
             return totalDeuda;
         }
 
-        public Tuple<string, string, List<DocumentoResult>> listarDocumentoEmpresa(int empresa_id, int estado, string bandera)
+        public Tuple<string, string, List<DocumentoResult>> listarDocumentoEmpresa(int empresa_id, bool? estado, string bandera)
         {
             List<DocumentoResult> lst = new List<DocumentoResult>();
             DocumentoResult documento = new DocumentoResult();
@@ -355,8 +318,8 @@ namespace AltoChicamaSystem.Data.Documento
                 sqlCmd.Connection = sqlCon;
                 sqlCmd.CommandText = "Documento_List_Empresa";
                 sqlCmd.CommandType = CommandType.StoredProcedure;
-                sqlCmd.Parameters.AddWithValue("@empresa_id", Convert.ToInt32(empresa_id));
-                sqlCmd.Parameters.AddWithValue("@estado", Convert.ToInt32(estado));
+                sqlCmd.Parameters.AddWithValue("@empresa_id", empresa_id);
+                sqlCmd.Parameters.AddWithValue("@estado", (object)estado ?? DBNull.Value);
                 SqlDataReader sdr = sqlCmd.ExecuteReader();
 
                 while (sdr.Read())
@@ -377,12 +340,9 @@ namespace AltoChicamaSystem.Data.Documento
                         documento.transportista_nombre = sdr["transportista_nombre"].ToString().Trim();
                         documento.documento_status = sdr["documento_status"].ToString().Trim();
                         documento.documento_numero = Convert.ToInt32(sdr["documento_numero"]);
-                        documento.fecha_servicio = Convert.ToDateTime(sdr["fecha_servicio"]);  // Agregado
-                        documento.fecha_pago = Convert.ToDateTime(sdr["fecha_pago"]);  // Agregado
-                        documento.documento_deuda = Convert.ToDecimal(sdr["documento_deuda"]);  // Agregado
+                        documento.guia_numero = sdr["guia_numero"].ToString().Trim();
                         lst.Add(documento);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -400,7 +360,7 @@ namespace AltoChicamaSystem.Data.Documento
             return Tuple.Create(rpta, msg, lst);
         }
 
-        public Tuple<string, string, List<DocumentoResult>> listarDocumentoTransportista(int transportista_id, int estado, string bandera)
+        public Tuple<string, string, List<DocumentoResult>> listarDocumentoTransportista(int transportista_id, string bandera)
         {
             List<DocumentoResult> lst = new List<DocumentoResult>();
             DocumentoResult documento = new DocumentoResult();
@@ -416,8 +376,7 @@ namespace AltoChicamaSystem.Data.Documento
                 sqlCmd.Connection = sqlCon;
                 sqlCmd.CommandText = "Documento_List_Transportista";
                 sqlCmd.CommandType = CommandType.StoredProcedure;
-                sqlCmd.Parameters.AddWithValue("@transportista_id", Convert.ToInt32(transportista_id));
-                sqlCmd.Parameters.AddWithValue("@estado", Convert.ToInt32(estado));
+                sqlCmd.Parameters.AddWithValue("@transportista_id", transportista_id);
                 SqlDataReader sdr = sqlCmd.ExecuteReader();
 
                 while (sdr.Read())
@@ -433,17 +392,14 @@ namespace AltoChicamaSystem.Data.Documento
                     {
                         documento = new DocumentoResult();
                         documento.documento_id = Convert.ToInt32(sdr["documento_id"]);
+                        documento.documento_numero = Convert.ToInt32(sdr["documento_numero"]);
                         documento.documento_titulo = sdr["documento_titulo"].ToString().Trim();
                         documento.empresa_name = sdr["empresa_name"].ToString().Trim();
-                        documento.transportista_nombre = sdr["transportista_nombre"].ToString().Trim();
                         documento.documento_status = sdr["documento_status"].ToString().Trim();
-                        documento.documento_numero = Convert.ToInt32(sdr["documento_numero"]);
-                        documento.fecha_servicio = Convert.ToDateTime(sdr["fecha_servicio"]);  // Agregado
-                        documento.fecha_pago = Convert.ToDateTime(sdr["fecha_pago"]);  // Agregado
-                        documento.documento_deuda = Convert.ToDecimal(sdr["documento_deuda"]);  // Agregado
+                        documento.transportista_nombre = sdr["transportista_nombre"].ToString().Trim();
+                        documento.guia_numero = sdr["guia_numero"].ToString().Trim();
                         lst.Add(documento);
                     }
-
                 }
             }
             catch (Exception ex)

@@ -1,8 +1,9 @@
 ﻿using AltoChicamaSystem.Models;
 using AltoChicamaSystem.Negocio;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 
 namespace AltoChicamaSystem.Controllers
 {
@@ -11,10 +12,12 @@ namespace AltoChicamaSystem.Controllers
     {
         private readonly DocumentoCN objusuarioCN = new DocumentoCN();
         private readonly IConfiguration conf;
+
         public RepositorioController(IConfiguration config)
         {
             conf = config;
         }
+
         // GET: RepositorioController
         public ActionResult Index()
         {
@@ -24,11 +27,10 @@ namespace AltoChicamaSystem.Controllers
         [HttpGet]
         public ActionResult ListaDocumento()
         {
-            var result = Tuple.Create("1", "Error al listar Empresa", new List<DocumentoResult>());
             try
             {
                 string bandera = conf.GetValue<string>("bandera");
-                result = objusuarioCN.listarDocumento(bandera);
+                var result = objusuarioCN.listarDocumento(bandera);
 
                 if (result.Item1 == "0")
                 {
@@ -39,16 +41,15 @@ namespace AltoChicamaSystem.Controllers
                     return BadRequest(result);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest(result);
+                return BadRequest(Tuple.Create("1", $"Error: {ex.Message}", new List<DocumentoResult>()));
             }
         }
 
         [HttpPost]
         public IActionResult EliminarDocumento([FromBody] CMDocumento request)
         {
-            var result = Tuple.Create("1", "Error al eliminar documento");
             try
             {
                 if (request == null || request.documento_id <= 0)
@@ -57,7 +58,7 @@ namespace AltoChicamaSystem.Controllers
                 }
 
                 string bandera = conf.GetValue<string>("bandera");
-                result = objusuarioCN.eliminarDocumento(request.documento_id, bandera);
+                var result = objusuarioCN.eliminarDocumento(request.documento_id, bandera);
 
                 if (result.Item1 == "0")
                 {
@@ -70,133 +71,99 @@ namespace AltoChicamaSystem.Controllers
             }
             catch (Exception ex)
             {
-                // Incluye detalles del error en la respuesta
                 return StatusCode(500, Tuple.Create("1", $"Error interno: {ex.Message}"));
             }
         }
 
         [HttpPost]
-        public IActionResult AlterDocumentoStatus([FromBody] CMDocumento request)
-        {
-            var result = Tuple.Create("1", "Error al Alterar Estado");
-
-            try
-            {
-                string bandera = conf.GetValue<string>("Bandera");
-
-                // Usar empresa_id del modelo CMEmpresa
-                result = objusuarioCN.alterDocumentoStatus(request.documento_id, bandera);
-
-                if (result.Item1 == "0")  // Verifica si la operación fue exitosa
-                {
-                    return Ok(result);
-                }
-                else
-                {
-                    return BadRequest(result);
-                }
-            }
-            catch (Exception ex)
-            {
-                // Log the exception (optional)
-                // logger.LogError(ex, "An error occurred while altering the company status.");
-
-                return BadRequest(result);
-            }
-        }
-
         public ActionResult ObtenerDeudaTransportista([FromBody] CMDocumento request)
         {
-            var result = Tuple.Create("1", "Error al obtener la deuda", string.Empty, string.Empty);
-
             try
             {
-                string bandera = conf.GetValue<string>("Bandera");
-                var negocioResult = objusuarioCN.ObtenerDeudaTransportista(request.transportista_id, bandera);
-
-                if (negocioResult.Item1 == "Exito")
+                if (request == null || request.empresa_id <= 0)
                 {
-                    result = Tuple.Create("0", "Operación exitosa", negocioResult.Item2, negocioResult.Item3);
+                    return BadRequest(Tuple.Create("1", "ID de empresa inválido", string.Empty, string.Empty));
+                }
+
+                string bandera = conf.GetValue<string>("Bandera");
+                var result = objusuarioCN.ObtenerDeudaTransportista(request.empresa_id, bandera);
+
+                if (result.Item1 == "Exito")
+                {
+                    return Ok(Tuple.Create("0", "Operación exitosa", result.Item2, result.Item3));
                 }
                 else
                 {
-                    result = Tuple.Create("1", "Error al obtener la deuda", negocioResult.Item2, string.Empty);
+                    return BadRequest(Tuple.Create("1", "Error al obtener la deuda", result.Item2, string.Empty));
                 }
-                return Json(result);
             }
             catch (Exception ex)
             {
-                result = Tuple.Create("1", "Excepción: " + ex.Message, string.Empty, string.Empty);
-                return Json(result);
-            }
-        }
-
-
-        [HttpPost]
-        public ActionResult ObtenerDeudaTotalTransportistas([FromBody] object request)
-        {
-            var result = Tuple.Create("1", "Error al obtener la deuda", string.Empty);
-
-            try
-            {
-                string bandera = conf.GetValue<string>("Bandera");
-                var negocioResult = objusuarioCN.ObtenerDeudaTotalTransportistas(bandera);
-
-                if (negocioResult.Item1 == "Exito")
-                {
-                    result = Tuple.Create("0", "Operación exitosa", negocioResult.Item2);
-                }
-                else
-                {
-                    result = Tuple.Create("1", "Error al obtener la deuda", negocioResult.Item2);
-                }
-                return Json(result);
-            }
-            catch (Exception ex)
-            {
-                result = Tuple.Create("1", "Excepción: " + ex.Message, string.Empty);
-                return Json(result);
+                return StatusCode(500, Tuple.Create("1", $"Excepción: {ex.Message}", string.Empty, string.Empty));
             }
         }
 
         [HttpPost]
-        public ActionResult ObtenerGananciaTotalTransportistas([FromBody] object request)
+        public ActionResult ObtenerDeudaTotalTransportistas()
         {
-            var result = Tuple.Create("1", "Error al obtener la deuda", string.Empty);
-
             try
             {
                 string bandera = conf.GetValue<string>("Bandera");
-                var negocioResult = objusuarioCN.ObtenerGananciaTotalTransportistas(bandera);
+                var result = objusuarioCN.ObtenerDeudaTotalTransportistas(bandera);
 
-                if (negocioResult.Item1 == "Exito")
+                if (result.Item1 == "Exito")
                 {
-                    result = Tuple.Create("0", "Operación exitosa", negocioResult.Item2);
+                    return Ok(Tuple.Create("0", "Operación exitosa", result.Item2));
                 }
                 else
                 {
-                    result = Tuple.Create("1", "Error al obtener la deuda", negocioResult.Item2);
+                    return BadRequest(Tuple.Create("1", "Error al obtener la deuda total", result.Item2));
                 }
-                return Json(result);
             }
             catch (Exception ex)
             {
-                result = Tuple.Create("1", "Excepción: " + ex.Message, string.Empty);
-                return Json(result);
+                return StatusCode(500, Tuple.Create("1", $"Excepción: {ex.Message}", string.Empty));
             }
         }
 
+        [HttpPost]
+        public ActionResult ObtenerGananciaTotalTransportistas()
+        {
+            try
+            {
+                string bandera = conf.GetValue<string>("Bandera");
+                var result = objusuarioCN.ObtenerGananciaTotalTransportistas(bandera);
+
+                if (result.Item1 == "Exito")
+                {
+                    return Ok(Tuple.Create("0", "Operación exitosa", result.Item2));
+                }
+                else
+                {
+                    return BadRequest(Tuple.Create("1", "Error al obtener la ganancia total", result.Item2));
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, Tuple.Create("1", $"Excepción: {ex.Message}", string.Empty));
+            }
+        }
 
         [HttpPost]
         public ActionResult listarDocumentoEmpresa([FromBody] DocumentoResult request)
         {
-            var result = Tuple.Create("1", "Error al listar", new List<DocumentoResult>());
-
             try
             {
+                if (request == null || request.empresa_id <= 0)
+                {
+                    return BadRequest(Tuple.Create("1", "ID de empresa inválido", new List<DocumentoResult>()));
+                }
+
                 string bandera = conf.GetValue<string>("Bandera");
-                result = objusuarioCN.listarDocumentoEmpresa(request.empresa_id, request.estado, bandera);
-                if (result.Item1 == "0")  // Verifica si la operación fue exitosa
+                bool? estado = request.documento_status == "1";
+                var result = objusuarioCN.listarDocumentoEmpresa(request.empresa_id, estado, bandera);
+
+                if (result.Item1 == "0")
                 {
                     return Ok(result);
                 }
@@ -205,22 +172,26 @@ namespace AltoChicamaSystem.Controllers
                     return BadRequest(result);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest(result);
+                return BadRequest(Tuple.Create("1", $"Error: {ex.Message}", new List<DocumentoResult>()));
             }
         }
 
         [HttpPost]
         public ActionResult listarDocumentoTransportista([FromBody] DocumentoResult request)
         {
-            var result = Tuple.Create("1", "Error al listar", new List<DocumentoResult>());
-
             try
             {
+                if (request == null || request.guia_id <= 0)
+                {
+                    return BadRequest(Tuple.Create("1", "ID de guía inválido", new List<DocumentoResult>()));
+                }
+
                 string bandera = conf.GetValue<string>("Bandera");
-                result = objusuarioCN.listarDocumentoTransportista(request.transportista_id, request.estado, bandera);
-                if (result.Item1 == "0")  // Verifica si la operación fue exitosa
+                var result = objusuarioCN.listarDocumentoTransportista(request.guia_id, bandera);
+
+                if (result.Item1 == "0")
                 {
                     return Ok(result);
                 }
@@ -229,67 +200,56 @@ namespace AltoChicamaSystem.Controllers
                     return BadRequest(result);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest(result);
+                return BadRequest(Tuple.Create("1", $"Error: {ex.Message}", new List<DocumentoResult>()));
             }
         }
 
         [HttpPost]
         public ActionResult ObtenerMayorDocumentoID()
         {
-            var result = Tuple.Create("1", "Error al obtener el mayor documento ID", string.Empty);
-
             try
             {
                 string bandera = conf.GetValue<string>("Bandera");
-                var negocioResult = objusuarioCN.ObtenerMayorDocumentoID(bandera);
+                var result = objusuarioCN.ObtenerMayorDocumentoID(bandera);
 
-                if (negocioResult.Item1 == "Exito")
+                if (result.Item1 == "Exito")
                 {
-                    result = Tuple.Create("0", "Operación exitosa", negocioResult.Item2);
+                    return Ok(Tuple.Create("0", "Operación exitosa", result.Item2));
                 }
                 else
                 {
-                    result = Tuple.Create("1", "Error al obtener el mayor documento ID", negocioResult.Item2);
+                    return BadRequest(Tuple.Create("1", "Error al obtener el mayor documento ID", result.Item2));
                 }
-                return Json(result);
             }
             catch (Exception ex)
             {
-                result = Tuple.Create("1", "Excepción: " + ex.Message, string.Empty);
-                return Json(result);
+                return StatusCode(500, Tuple.Create("1", $"Excepción: {ex.Message}", string.Empty));
             }
         }
 
         [HttpPost]
         public ActionResult Documento_MaxNumero()
         {
-            var result = Tuple.Create("1", "Error al obtener el mayor numero de Documento", string.Empty);
-
             try
             {
                 string bandera = conf.GetValue<string>("Bandera");
-                var negocioResult = objusuarioCN.Documento_MaxNumero(bandera);
+                var result = objusuarioCN.Documento_MaxNumero(bandera);
 
-                if (negocioResult.Item1 == "Exito")
+                if (result.Item1 == "Exito")
                 {
-                    result = Tuple.Create("0", "Operación exitosa", negocioResult.Item2);
+                    return Ok(Tuple.Create("0", "Operación exitosa", result.Item2));
                 }
                 else
                 {
-                    result = Tuple.Create("1", "Error al obtener el mayor documento ID", negocioResult.Item2);
+                    return BadRequest(Tuple.Create("1", "Error al obtener el mayor número de Documento", result.Item2));
                 }
-                return Json(result);
             }
             catch (Exception ex)
             {
-                result = Tuple.Create("1", "Excepción: " + ex.Message, string.Empty);
-                return Json(result);
+                return StatusCode(500, Tuple.Create("1", $"Excepción: {ex.Message}", string.Empty));
             }
         }
-
-
-
     }
 }

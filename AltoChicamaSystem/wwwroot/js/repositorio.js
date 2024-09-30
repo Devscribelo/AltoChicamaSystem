@@ -1,234 +1,182 @@
 ﻿var consult = false;
+var tableEmpresa;
+
 $(document).ready(function () {
     consult = false;
     EmpresaSelect("#input_empresa");
     getListDocumento();
-    // Asignar el event listener fuera de la función getListEmpresa()
+
     $(document).on('change', '.status3', function () {
-        var rowData = $(this).closest('tr').data();
-        console.log(rowData);
-        alterDocumentoStatus(rowData.documento_id);
+        var documentoId = $(this).data('empresa_status');
+        alterDocumentoStatus(documentoId);
     });
 
-    // Manejar el evento de clic en el botón "Consultar"
     $("#btnConsultar").click(function () {
         capturarValoresSeleccionados();
     });
 });
-
-
 
 function EmpresaSelect(empresaSelecionada) {
     var endpoint = getDomain() + "/Empresa/EmpresaSelect";
 
     $.ajax({
         type: "GET",
-        async: true,
         url: endpoint,
-        headers: {
-            "Content-Type": "application/json"
-        },
         dataType: "json",
-        beforeSend: function (xhr) {
-            console.log("cargando");
-        },
         success: function (data) {
             var EmpresaSelect = data.item3;
 
-            // Limpiar el select y agregar opción por defecto
-            if (empresaSelecionada === "#input_empresa") {
-                $(empresaSelecionada).empty();
-                $(empresaSelecionada).append('<option value="" disabled selected>Seleccione una empresa...</option>');
-            }
+            $(empresaSelecionada).empty().append('<option value="" disabled selected>Seleccione una empresa...</option>');
 
-            // Verificar si la data es null, vacía, o contiene solo espacios en blanco
             if (EmpresaSelect && EmpresaSelect.length > 0) {
-                // Agregar opciones al select
-                for (var i = 0; i < EmpresaSelect.length; i++) {
-                    var item = EmpresaSelect[i];
+                EmpresaSelect.forEach(function (item) {
                     $(empresaSelecionada).append(
-                        '<option value="' + item.empresa_id + '">' + item.empresa_name + '</option>'
+                        $('<option>', {
+                            value: item.empresa_id,
+                            text: item.empresa_name
+                        })
                     );
-                }
+                });
             }
-
         },
-        error: function (data) {
-            alert('Error fatal ' + data);
-            console.log("failure");
+        error: function (xhr, status, error) {
+            console.error('Error en EmpresaSelect:', error);
+            Swal.fire('Error', 'No se pudo cargar la lista de empresas', 'error');
         }
     });
 }
 
 function obtenerIdEmpresaSeleccionada(empresaSelecionada) {
-    // Obtener el valor de la opción seleccionada en el select
-    var valorSeleccionado = $(empresaSelecionada).val();
-
-    return valorSeleccionado;  // Retorna el valor (empresa_id) seleccionado
+    return $(empresaSelecionada).val();
 }
 
-
 function copiarTexto(texto) {
-    // Crear un elemento de texto temporal
-    const tempInput = document.createElement('input');
-    // Establecer el valor del elemento de texto al texto a copiar
-    tempInput.value = texto;
-    // Agregar el elemento al DOM
-    document.body.appendChild(tempInput);
-    // Seleccionar el texto del elemento
-    tempInput.select();
-    // Copiar el texto seleccionado al portapapeles
-    document.execCommand('copy');
-    // Eliminar el elemento del DOM
-    document.body.removeChild(tempInput);
-    Swal.fire({
-        title: 'Enlace copiado con éxito',
-        icon: 'success',
-        confirmButtonText: 'OK',
+    navigator.clipboard.writeText(texto).then(function () {
+        Swal.fire({
+            title: 'Enlace copiado con éxito',
+            icon: 'success',
+            confirmButtonText: 'OK',
+        });
+    }).catch(function (err) {
+        console.error('Error al copiar texto: ', err);
+        Swal.fire('Error', 'No se pudo copiar el enlace', 'error');
     });
 }
 
 function formatDateString(dateString) {
     if (dateString) {
-        // Asume que el formato de entrada es 'YYYY-MM-DDTHH:MM:SS'
-        var dateParts = dateString.split('T')[0].split('-');
-        var day = dateParts[2];
-        var month = dateParts[1];
-        var year = dateParts[0];
-        return `${day}-${month}-${year}`;
+        var date = new Date(dateString);
+        return date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
     }
     return '';
 }
 
-
-
 function getListDocumento() {
+    var endpoint = getDomain() + "/Repositorio/ListaDocumento";
 
-    const apiUrl = `/api/Documento/ObtenerDocumento/`;
-    //const x = getDomain() + apiUrl;
-    endpoint = getDomain() + "/Repositorio/ListaDocumento"
-
-    return new Promise((resolve, reject) => {
-
-        $.ajax({
-            type: "GET",
-            async: true,
-            url: endpoint,
-            headers: {
-                "Content-Type": "application/json"
-            },
-
-            dataType: "json",
-            beforeSend: function (xhr) {
-                console.log("cargando");
-            },
-
-            success: function (data) {
-                var dataEmpresa = data.item3;
-                var datosRow = "";
-
-                resolve(dataEmpresa);
-                console.log(dataEmpresa);
-
-                for (var i = 0; i < dataEmpresa.length; i++) {
-                    var fechaServicio = formatDateString(dataEmpresa[i].fecha_servicio);
-                    var fechaPago = formatDateString(dataEmpresa[i].fecha_pago);
-
-                    datosRow +=
-                        "<tr class='filaTabla' " +
-                        "data-empresa_id='" + dataEmpresa[i].documento_id + "' " +
-                        "data-empresa_name='" + dataEmpresa[i].documento_titulo + "' " +
-                        "data-empresa_ruc='" + dataEmpresa[i].empresa_name + "' " +
-                        "data-transportista_nombre='" + dataEmpresa[i].transportista_nombre + "' " +
-                        "data-documento_status='" + dataEmpresa[i].documento_status + "'" +
-                        "data-fecha_servicio='" + dataEmpresa[i].fecha_servicio + "'" +
-                        "data-fecha_pago='" + dataEmpresa[i].fecha_pago + "'" +
-                        "data-documento_deuda='" + dataEmpresa[i].documento_deuda + "'" +
-                        "data-documento_id='" + dataEmpresa[i].documento_id + "'>" +
-                        "<td>" + dataEmpresa[i].documento_numero + "</td>" +
-                        "<td>" + dataEmpresa[i].documento_titulo + "</td>" +
-                        "<td>" + dataEmpresa[i].empresa_name + "</td>" +
-                        "<td>" + dataEmpresa[i].transportista_nombre + "</td>" +
-                        "<td>" + fechaServicio + "</td>" +
-                        "<td>" + fechaPago + "</td>" +
-                        "<td>" + dataEmpresa[i].documento_deuda + "</td>" +
-                        "<td>" +
-                        "<div class='form-check form-switch'>" +
-                        `<input style='width: 46px; margin-top: 4px;' class='form-check-input status3' type='checkbox' id='flexSwitchCheckDefault${i}' ${dataEmpresa[i].documento_status === 'True' ? 'checked' : ''} data-empresa_status='${dataEmpresa[i].documento_id}'>` +
-                        "</div>" +
-                        "</td>" +
-                        "<td>" +
-                        "<a href='#' onclick='mostrarPDFEnModal(" + dataEmpresa[i].documento_id + ")'>" +
-                        "<span class='icon-circle pdf-icon'><i class=\"bx bxs-file-pdf\"></i></span>" +
-                        "</a>" +
-                        "</td>" +
-                        "<td>" +
-                        "<div>" +
-                        "<a href='#' onclick='eliminarDocumento(" + dataEmpresa[i].documento_id + ")'>" +
-                        "<span class='icon-circle red'><i class=\"bx bxs-trash\"></i></span>" +
-                        "</a>" +
-                        "<a href='" + apiUrl + dataEmpresa[i].documento_id + "'>" +
-                        "<span class='icon-circle green'><i class=\"bx bxs-download\"></i></span>" +
-                        "</a>" +
-                        "<a href='#' onclick=\"copiarTexto('" + getDomain() + abrirEnlaceEnVentana(dataEmpresa[i].documento_id) + "')\">" +
-                        "<span class='icon-circle black'><i class=\"bx bxs-share-alt\"></i></span>" +
-                        "</a>" +
-                        "</div>" +
-                        "</td>" +
-                        "</tr>";
-                }
-
-                if (!$("#table_empresa").hasClass("dataTable")) {
-                    tableEmpresa = $("#table_empresa").DataTable({
-                        language: {
-                            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
-                        },
-                        dom: 'frtip',
-                        buttons: [
-                            {
-                                extend: 'excel',
-                                className: 'btn_export_Excel',
-                                exportOptions: {
-                                    columns: ':visible:not(:last-child, :nth-last-child(1))'
-                                }
-                            },
-                            {
-                                extend: 'pdf',
-                                className: 'btn_export_Pdf',
-                                exportOptions: {
-                                    columns: ':visible:not(:last-child, :nth-last-child(1))'
-                                }
-                            }
-                        ],
-                        colResize: {
-                            tableWidthFixed: 'false'
-                        },
-                        colReorder: true
-                    });
-                }
-
-                tableEmpresa.clear();
-                tableEmpresa.rows.add($(datosRow)).draw();
-            },
-            failure: function (data) {
-                Swal.close();
-                alert('Error fatal ' + data);
-                console.log("failure")
+    $.ajax({
+        type: "GET",
+        url: endpoint,
+        dataType: "json",
+        success: function (data) {
+            if (data.item1 === "0") {
+                actualizarTablaDocumentos(data.item3);
+            } else {
+                Swal.fire('Error', data.item2, 'error');
             }
-        });
+        },
+        error: function (xhr, status, error) {
+            console.error('Error en getListDocumento:', error);
+            Swal.fire('Error', 'No se pudo cargar la lista de documentos', 'error');
+        }
     });
 }
 
+function actualizarTablaDocumentos(dataEmpresa) {
+    var datosRow = dataEmpresa.map(function (doc) {
+        return crearFilaDocumento(doc);
+    }).join('');
 
+    if (!$.fn.DataTable.isDataTable("#table_empresa")) {
+        inicializarTablaDocumentos();
+    }
+
+    tableEmpresa.clear().rows.add($(datosRow)).draw();
+}
+
+function crearFilaDocumento(doc) {
+    var fechaServicio = formatDateString(doc.fecha_servicio);
+    var fechaPago = formatDateString(doc.fecha_pago);
+
+    return `<tr class='filaTabla' data-documento_id='${doc.documento_id}'>
+        <td>${doc.documento_numero}</td>
+        <td>${doc.documento_titulo}</td>
+        <td>${doc.empresa_name}</td>
+        <td>${doc.transportista_nombre}</td>
+        <td>${fechaServicio}</td>
+        <td>${fechaPago}</td>
+        <td>${doc.documento_deuda}</td>
+        <td>
+            <div class='form-check form-switch'>
+                <input style='width: 46px; margin-top: 4px;' class='form-check-input status3' type='checkbox' 
+                       ${doc.documento_status === 'True' ? 'checked' : ''} data-empresa_status='${doc.documento_id}'>
+            </div>
+        </td>
+        <td>
+            <a href='#' onclick='mostrarPDFEnModal(${doc.documento_id})'>
+                <span class='icon-circle pdf-icon'><i class="bx bxs-file-pdf"></i></span>
+            </a>
+        </td>
+        <td>
+            <div>
+                <a href='#' onclick='eliminarDocumento(${doc.documento_id})'>
+                    <span class='icon-circle red'><i class="bx bxs-trash"></i></span>
+                </a>
+                <a href='/api/Documento/ObtenerDocumento/${doc.documento_id}'>
+                    <span class='icon-circle green'><i class="bx bxs-download"></i></span>
+                </a>
+                <a href='#' onclick="copiarTexto('${getDomain()}${abrirEnlaceEnVentana(doc.documento_id)}')">
+                    <span class='icon-circle black'><i class="bx bxs-share-alt"></i></span>
+                </a>
+            </div>
+        </td>
+    </tr>`;
+}
+
+function inicializarTablaDocumentos() {
+    tableEmpresa = $("#table_empresa").DataTable({
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+        },
+        dom: 'frtip',
+        buttons: [
+            {
+                extend: 'excel',
+                className: 'btn_export_Excel',
+                exportOptions: {
+                    columns: ':visible:not(:last-child, :nth-last-child(1))'
+                }
+            },
+            {
+                extend: 'pdf',
+                className: 'btn_export_Pdf',
+                exportOptions: {
+                    columns: ':visible:not(:last-child, :nth-last-child(1))'
+                }
+            }
+        ],
+        colResize: {
+            tableWidthFixed: false
+        },
+        colReorder: true
+    });
+}
 
 function capturarValoresSeleccionados() {
-    // Capturar los valores seleccionados
     var empresa_id = obtenerIdEmpresaSeleccionada("#input_empresa");
     var estado = $("#input_estado").val();
 
-    // Validar que ambos valores estén seleccionados
     if (empresa_id && estado !== null) {
-        // Llamar a la función para enviar los datos
         getListDocumentoEmpresa(empresa_id, estado);
     } else {
         Swal.fire({
@@ -239,175 +187,59 @@ function capturarValoresSeleccionados() {
     }
 }
 
-
 function getListDocumentoEmpresa(empresa_id, estado) {
+    var endpoint = getDomain() + "/Repositorio/listarDocumentoEmpresa";
 
-    const apiUrl = `/api/Documento/ObtenerDocumento/`;
-    //const x = getDomain() + apiUrl;
-    endpoint = getDomain() + "/Repositorio/listarDocumentoEmpresa";
-
-    return new Promise((resolve, reject) => {
-
-        $.ajax({
-            type: "POST",
-            async: true,
-            url: endpoint,
-            headers: {
-                "Content-Type": "application/json"
-            },
-            data: JSON.stringify({ empresa_id: empresa_id, estado: estado }), // Serializa ambos parámetros como un objeto
-            dataType: "json",
-            beforeSend: function (xhr) {
-                console.log("cargando");
-                //xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
-            },
-
-            success: function (data) {
-                var dataEmpresa = data.item3;
-                var datosRow = "";
+    $.ajax({
+        type: "POST",
+        url: endpoint,
+        contentType: "application/json",
+        data: JSON.stringify({ empresa_id: empresa_id, documento_status: estado }),
+        dataType: "json",
+        success: function (data) {
+            if (data.item1 === "0") {
                 consult = true;
-
-                resolve(dataEmpresa);
-                console.log(dataEmpresa);
-
-                for (var i = 0; i < dataEmpresa.length; i++) {
-                    var fechaServicio1 = formatDateString(dataEmpresa[i].fecha_servicio);
-                    var fechaPago1 = formatDateString(dataEmpresa[i].fecha_pago);
-
-                    datosRow +=
-                        "<tr class='filaTabla' " +
-                        "data-empresa_id='" + dataEmpresa[i].documento_id + "' " +
-                        "data-empresa_name='" + dataEmpresa[i].documento_titulo + "' " +
-                        "data-empresa_ruc='" + dataEmpresa[i].empresa_name + "' " +
-                        "data-transportista_nombre='" + dataEmpresa[i].transportista_nombre + "' " +
-                        "data-documento_status='" + dataEmpresa[i].documento_status + "'" +
-                        "data-fecha_servicio='" + dataEmpresa[i].fecha_servicio + "'" +
-                        "data-fecha_pago='" + dataEmpresa[i].fecha_pago + "'" +
-                        "data-documento_deuda='" + dataEmpresa[i].documento_deuda + "'" +
-                        "data-documento_id='" + dataEmpresa[i].documento_id + "'>" +
-                        "<td>" + dataEmpresa[i].documento_numero + "</td>" +
-                        "<td>" + dataEmpresa[i].documento_titulo + "</td>" +
-                        "<td>" + dataEmpresa[i].empresa_name + "</td>" +
-                        "<td>" + dataEmpresa[i].transportista_nombre + "</td>" +
-                        "<td>" + fechaServicio1 + "</td>" +
-                        "<td>" + fechaPago1 + "</td>" +
-                        "<td>" + dataEmpresa[i].documento_deuda + "</td>" +
-                        "<td>" +
-                        "<div class='form-check form-switch'>" +
-                        `<input style='width: 46px; margin-top: 4px;' class='form-check-input status3' type='checkbox' id='flexSwitchCheckDefault${i}' ${dataEmpresa[i].documento_status === 'True' ? 'checked' : ''} data-empresa_status='${dataEmpresa[i].documento_id}'>` +
-                        "</div>" +
-                        "</td>" +
-                        "<td>" +
-                        "<a href='#' onclick='mostrarPDFEnModal(" + dataEmpresa[i].documento_id + ")'>" +
-                        "<span class='icon-circle pdf-icon'><i class=\"bx bxs-file-pdf\"></i></span>" +
-                        "</a>" +
-                        "</td>" +
-                        "<td>" +
-                        "<div>" +
-                        "<a href='#' onclick='eliminarDocumento(" + dataEmpresa[i].documento_id + ")'>" +
-                        "<span class='icon-circle red'><i class=\"bx bxs-trash\"></i></span>" +
-                        "</a>" +
-                        "<a href='" + apiUrl + dataEmpresa[i].documento_id + "'>" +
-                        "<span class='icon-circle green'><i class=\"bx bxs-download\"></i></span>" +
-                        "</a>" +
-                        "<a href='#' onclick=\"copiarTexto('" + getDomain() + abrirEnlaceEnVentana(dataEmpresa[i].documento_id) + "')\">" +
-                        "<span class='icon-circle black'><i class=\"bx bxs-share-alt\"></i></span>" +
-                        "</a>" +
-                        "</div>" +
-                        "</td>" +
-                        "</tr>";
-                }
-
-
-
-
-                if (!$("#table_empresa").hasClass("dataTable")) {
-                    // Inicializar DataTable en la tabla
-                    tableEmpresa = $("#table_empresa").DataTable({
-                        language: {
-                            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json' // URL de la biblioteca de idioma
-                        },
-                        dom: 'frtip',
-                        buttons: [
-                            {
-                                extend: 'excel',
-                                className: 'btn_export_Excel',
-                                exportOptions: {
-                                    columns: ':visible:not(:last-child, :nth-last-child(1))' // Oculta la penúltima y la última columna en la exportación a Excel
-                                }
-                            },
-                            {
-                                extend: 'pdf',
-                                className: 'btn_export_Pdf',
-                                exportOptions: {
-                                    columns: ':visible:not(:last-child, :nth-last-child(1))' // Oculta la penúltima y la última columna en la exportación a PDF
-                                }
-                            }
-                        ],
-                        colResize: {
-                            tableWidthFixed: 'false'
-                        },
-                        colReorder: true // Activa la funcionalidad de reordenamiento de columnas
-                    });
-                }
-
-                tableEmpresa.clear();
-                tableEmpresa.rows.add($(datosRow)).draw();
-            },
-            failure: function (data) {
-                Swal.close();
-                alert('Error fatal ' + data);
-                console.log("failure")
+                actualizarTablaDocumentos(data.item3);
+            } else {
+                Swal.fire('Error', data.item2, 'error');
             }
-        });
-
-
+        },
+        error: function (xhr, status, error) {
+            console.error('Error en getListDocumentoEmpresa:', error);
+            Swal.fire('Error', 'No se pudo obtener la lista de documentos filtrada', 'error');
+        }
     });
-
 }
 
 function alterDocumentoStatus(documento_id) {
-    var dataPost = {
-        documento_id: documento_id
-    };
-
     var endpoint = getDomain() + "/Repositorio/alterDocumentoStatus";
 
     $.ajax({
         type: "POST",
         url: endpoint,
-        headers: {
-            "Content-Type": "application/json"
-        },
-        data: JSON.stringify(dataPost),
+        contentType: "application/json",
+        data: JSON.stringify({ documento_id: documento_id }),
         dataType: "json",
-        beforeSend: function () {
-            console.log("Actualizando estado...");
-        },
         success: function (data) {
-            var rpta = data.item1;
-            var msg = data.item2;
-            if (rpta == "0") {
-                if (consult != true) {
+            if (data.item1 === "0") {
+                if (!consult) {
                     getListDocumento();
                 }
             } else {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: msg,
+                    text: data.item2,
                 });
             }
         },
-        error: function (jqXHR, textStatus, errorThrown) {
-            if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
-                alert("Ocurrió un fallo: " + jqXHR.responseJSON.message);
-            } else {
-                alert("Ocurrió un fallo: " + errorThrown);
-            }
+        error: function (xhr, status, error) {
+            console.error('Error en alterDocumentoStatus:', error);
+            Swal.fire('Error', 'No se pudo actualizar el estado del documento', 'error');
         }
     });
 }
+
 function eliminarDocumento(documento_id) {
     var endpoint = getDomain() + "/Repositorio/EliminarDocumento";
 
@@ -424,21 +256,18 @@ function eliminarDocumento(documento_id) {
             $.ajax({
                 type: "POST",
                 url: endpoint,
-                data: JSON.stringify({ documento_id: documento_id }),  // Asegúrate de que el nombre del parámetro sea correcto
                 contentType: "application/json",
+                data: JSON.stringify({ documento_id: documento_id }),
                 success: function (response) {
                     if (response.item1 === "0") {
-                        Swal.fire(
-                            'Eliminado!',
-                            response.item2,
-                            'success'
-                        );
-                        getListDocumento(); // Recarga la lista de documentos
+                        Swal.fire('Eliminado!', response.item2, 'success');
+                        getListDocumento();
                     } else {
                         Swal.fire('Error!', response.item2, 'error');
                     }
                 },
                 error: function (xhr, status, error) {
+                    console.error('Error en eliminarDocumento:', error);
                     Swal.fire('Error!', 'Hubo un problema al eliminar el documento.', 'error');
                 }
             });

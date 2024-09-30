@@ -9,9 +9,9 @@ namespace AltoChicamaSystem.Data.Documento
     {
         private ConexionDB con = new ConexionDB();
 
-        public CMDocumento ObtenerDocumentoPorId(int documentoId, string bandera)
+        public CMDocumentoCliente ObtenerDocumentoPorId(int documentoId, string bandera)
         {
-            CMDocumento documento = null;
+            CMDocumentoCliente documento = null;
             SqlConnection sqlCon = new SqlConnection();
             try
             {
@@ -28,11 +28,15 @@ namespace AltoChicamaSystem.Data.Documento
                 SqlDataReader sdr = sqlCmd.ExecuteReader();
                 if (sdr.Read())
                 {
-                    documento = new CMDocumento
+                    documento = new CMDocumentoCliente
                     {
                         documento_id = Convert.ToInt32(sdr["documento_id"]),
                         documento_titulo = sdr["documento_titulo"].ToString(),
-                        documento_pdf = (byte[])sdr["documento_pdf"]
+                        documento_pdf = (byte[])sdr["documento_pdf"],
+                        empresa_id = Convert.ToInt32(sdr["empresa_id"]),
+                        documento_status = sdr["documento_status"].ToString(),
+                        documento_numero = Convert.ToInt32(sdr["documento_numero"]),
+                        guia_id = Convert.ToInt32(sdr["guia_id"])
                     };
                 }
             }
@@ -67,7 +71,7 @@ namespace AltoChicamaSystem.Data.Documento
                 sqlCmd.Connection = sqlCon;
                 sqlCmd.CommandText = "Documento_List_Empresa_Filtro";
                 sqlCmd.CommandType = CommandType.StoredProcedure;
-                sqlCmd.Parameters.AddWithValue("@empresa_id", Convert.ToInt32(empresa_id));
+                sqlCmd.Parameters.AddWithValue("@empresa_id", empresa_id);
                 SqlDataReader sdr = sqlCmd.ExecuteReader();
 
                 while (sdr.Read())
@@ -86,9 +90,11 @@ namespace AltoChicamaSystem.Data.Documento
                         documento.documento_numero = Convert.ToInt32(sdr["documento_numero"]);
                         documento.documento_titulo = sdr["documento_titulo"].ToString().Trim();
                         documento.empresa_name = sdr["empresa_name"].ToString().Trim();
+                        documento.documento_status = sdr["documento_status"].ToString();
+                        documento.transportista_nombre = sdr["transportista_nombre"].ToString().Trim();
+                        documento.guia_numero = sdr["guia_numero"].ToString().Trim();
                         lst.Add(documento);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -121,9 +127,9 @@ namespace AltoChicamaSystem.Data.Documento
                 sqlCon.Open();
                 SqlCommand sqlCmd = new SqlCommand();
                 sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Documento_List_Transportista_Filtro";  // Usar el procedimiento correcto
+                sqlCmd.CommandText = "Documento_List_Transportista_Filtro";
                 sqlCmd.CommandType = CommandType.StoredProcedure;
-                sqlCmd.Parameters.AddWithValue("@transportista_id", transportista_id);  // Cambiado a transportista_id
+                sqlCmd.Parameters.AddWithValue("@transportista_id", transportista_id);
                 SqlDataReader sdr = sqlCmd.ExecuteReader();
 
                 while (sdr.Read())
@@ -142,6 +148,9 @@ namespace AltoChicamaSystem.Data.Documento
                         documento.documento_numero = Convert.ToInt32(sdr["documento_numero"]);
                         documento.documento_titulo = sdr["documento_titulo"].ToString().Trim();
                         documento.empresa_name = sdr["empresa_name"].ToString().Trim();
+                        documento.documento_status = sdr["documento_status"].ToString();
+                        documento.transportista_nombre = sdr["transportista_nombre"].ToString().Trim();
+                        documento.guia_numero = sdr["guia_numero"].ToString().Trim();
                         lst.Add(documento);
                     }
                 }
@@ -160,7 +169,5 @@ namespace AltoChicamaSystem.Data.Documento
             }
             return Tuple.Create(rpta, msg, lst);
         }
-
-
     }
 }

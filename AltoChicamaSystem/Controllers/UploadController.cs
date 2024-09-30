@@ -23,32 +23,36 @@ namespace AltoChicamaSystem.Controllers
         }
 
         [HttpPost]
-        public ActionResult RegDocumento(IFormFile documento_pdf, string documento_titulo, int empresa_id, int transportista_id, DateTime fecha_servicio, DateTime fecha_pago, decimal documento_deuda)
+        public async Task<ActionResult> RegDocumento(IFormFile documento_pdf, string documento_titulo, int empresa_id, int guia_id)
         {
-            var result = Tuple.Create("1", "Error al Registrar");
             try
             {
-                // Convertir el archivo PDF a byte[]
-                byte[] fileData = null;
+                if (documento_pdf == null || documento_pdf.Length == 0)
+                {
+                    return BadRequest(Tuple.Create("1", "No se ha proporcionado un archivo PDF válido."));
+                }
+
+                byte[] fileData;
                 using (var memoryStream = new MemoryStream())
                 {
-                    documento_pdf.CopyTo(memoryStream);
+                    await documento_pdf.CopyToAsync(memoryStream);
                     fileData = memoryStream.ToArray();
                 }
+
+                string bandera = conf.GetValue<string>("Bandera");
+                int documento_numero = int.Parse(objdocumentoCN.Documento_MaxNumero(bandera).Item2) + 1;
 
                 CMDocumento cmDocumento = new CMDocumento
                 {
                     documento_titulo = documento_titulo,
                     documento_pdf = fileData,
                     empresa_id = empresa_id,
-                    transportista_id = transportista_id,
-                    fecha_servicio = fecha_servicio,
-                    fecha_pago = fecha_pago,
-                    documento_deuda = documento_deuda
+                    documento_status = "1", // Asumiendo que 1 es activo
+                    documento_numero = documento_numero,
+                    guia_id = guia_id
                 };
 
-                string bandera = conf.GetValue<string>("Bandera");
-                result = objdocumentoCN.regDocumento(cmDocumento, bandera);
+                var result = objdocumentoCN.regDocumento(cmDocumento, bandera);
 
                 if (result.Item1 == "0")
                 {
@@ -61,7 +65,7 @@ namespace AltoChicamaSystem.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(Tuple.Create("1", $"Error al Registrar: {ex.Message}"));
+                return StatusCode(500, Tuple.Create("1", $"Error interno del servidor: {ex.Message}"));
             }
         }
 
