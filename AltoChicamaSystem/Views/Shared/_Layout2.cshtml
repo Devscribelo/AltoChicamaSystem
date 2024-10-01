@@ -12,17 +12,30 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Estilos y Scripts comunes -->
+    <!-- CSS: Estilos principales -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/alert.css">
+    <link rel="stylesheet" href="~/css/_Layout2.css">
+    <link rel="stylesheet" href="~/css/selector.css">
+
+    <!-- CSS: DataTables y componentes -->
+    <link rel="stylesheet" href="~/lib/DataTables/Table/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="~/lib/Buttons-2.3.6/css/buttons.bootstrap4.min.css">
+
+    <!-- CSS: SweetAlert2 -->
+    <link rel="stylesheet" href="~/css/cdn.jsdelivr.net_npm_sweetalert2@11.7.12_dist_sweetalert2.min.css">
+
+    <!-- CSS: Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <!-- Fuentes -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <!-- Iconos -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="~/lib/DataTables/Table/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="~/lib/Buttons-2.3.6/css/buttons.bootstrap4.min.css">
-    <link href="~/css/cdn.jsdelivr.net_npm_sweetalert2@11.7.12_dist_sweetalert2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="~/css/_Layout2.css">
+
     <title>@ViewData["Title"]</title>
 </head>
 <body>
@@ -137,30 +150,42 @@
     @await RenderSectionAsync("Scripts", required: false)
     @RenderBody()
 
+    <!-- Contenido del body -->
+    <!-- JS: jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- JS: Select2 -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="~/lib/select2/cdn.jsdelivr.net_npm_select2@4.1.0-rc.0_dist_js_select2.min.js"></script>
+
+    <!-- JS: Popper -->
     <script src="~/lib/popper/popper.min.js"></script>
+
+    <!-- JS: Bootstrap -->
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JS: DataTables y componentes -->
     <script src="~/lib/DataTables/Table/jquery.dataTables.min.js"></script>
     <script src="~/lib/DataTables/Buttons/dataTables.buttons.min.js"></script>
     <script src="~/lib/Buttons-2.3.6/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/lib/DataTables/Buttons/buttons.html5.min.js"></script>
+
+    <!-- JS: SweetAlert2 -->
     <script src="~/js/cdn.jsdelivr.net_npm_sweetalert2@11.7.12_dist_sweetalert2.all.min.js"></script>
+
+    <!-- JS: Chart.js -->
     <script src="~/lib/chart/chart.js"></script>
+
+    <!-- JS: JSZip (para exportación) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+
+    <!-- JS: pdfmake (para exportación PDF) -->
+    <script src="~/lib/DataTables/Pdf/pdfmake.min.js"></script>
+    <script src="~/lib/DataTables/Pdf/vfs_fonts.js"></script>
+
+    <!-- JS: Script personalizado -->
     <script src="~/js/_Layout2.js"></script>
-
-    <!-- SELECT 2-->
-    <script src="~/lib/select2/cdn.jsdelivr.net_npm_select2@4.1.0-rc.0_dist_js_select2.min.js"></script>
-
-    <!--Export table buttons-->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-    <script type="text/javascript" src="~/lib/DataTables/Pdf/pdfmake.min.js"></script>
-    <script type="text/javascript" src="~/lib/DataTables/Pdf/vfs_fonts.js"></script>
-   @*  EXPORTAR *@
-    <script type="text/javascript" src="~/lib/DataTables/Buttons/buttons.html5.min.js"></script>
-
-
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
+    <script src="~/config.js"></script>
     @if (isUser)
     {
             <script type="text/javascript">

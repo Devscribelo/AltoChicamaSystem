@@ -13,8 +13,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 
     <!-- CSS personalizado -->
-    <link rel="stylesheet" href="~/css/selector.css">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/factura.css">
     <link rel="stylesheet" href="~/css/documentos.css">
     <link rel="stylesheet" href="~/css/alert.css">
@@ -114,7 +112,7 @@
 
         <!-- Modal Detalles de Factura -->
         <div class="modal" id="modal_detalles_guia" tabindex="-1">
-            <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-dialog modal-lg modal-dialog-centered" style="max-width:73% !important;">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Detalles de Factura</h5>
@@ -286,10 +284,6 @@
             }
     </style>
     <!-- JS Personalizado -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script type="text/javascript" src="~/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-    <script src="~/js/js_jquery.dataTables.min.js"></script>
-    <script src="~/config.js"></script>
     <script src="~/js/factura.js?v=0.0.0.5"></script>
     <script>
         // Función para aplicar la lógica de validación a un campo de monto
