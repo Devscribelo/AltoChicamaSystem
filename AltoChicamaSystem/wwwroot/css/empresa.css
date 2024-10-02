@@ -67,7 +67,7 @@
         border-radius: 5px 0 0 5px; /* Redondea solo el borde izquierdo */
     }
 
-.modal-content form .btnGuardar {
+.modal-content form .btnGuardar1 {
     display: block;
     width: 100%; /* Bot�n de tama�o completo */
     padding: 10px 15px; /* Espacio interno en el bot�n */
@@ -80,7 +80,7 @@
     transition: background-color 0.3s ease; /* Animaci�n suave al hacer hover */
 }
 
-    .modal-content form .btnGuardar:hover {
+    .modal-content form .btnGuardar1:hover {
         background-color: #198754; /* Color de fondo al pasar el cursor */
     }
 
@@ -236,7 +236,7 @@ table.dataTable.no-footer {
     margin-top: 0.4em !important;
 }
 
-.btnGuardar {
+.btnGuardar1 {
     display: block;
     margin: 25px auto 0;
     color: #fff;

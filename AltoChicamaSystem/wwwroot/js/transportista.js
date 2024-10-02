@@ -1,5 +1,6 @@
 $(document).ready(function () {
     getListTransportista();
+    agregarBotonesExportacion("#table_empresa");
 });
 
 function copiarTexto(texto) {

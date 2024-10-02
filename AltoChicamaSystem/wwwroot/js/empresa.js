@@ -212,17 +212,23 @@ function modalConfirmacionEliminar(data) {
                     'la empresa fue eliminado.',
                     'success'
                 )
-        } else if (
-            /* Read more about handling dismissals below */
-            result.dismiss === Swal.DismissReason.cancel
-        ) {
-            swalWithBootstrapButtons.fire(
-                'Cancelado',
-                'La empresa y sus documentos siguen almacenados',
-                'error'
-            )
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            swalWithBootstrapButtons.fire({
+                title: 'Cancelado',
+                text: 'La empresa y sus documentos siguen almacenados',
+                icon: 'error',
+                showCancelButton: true,
+                confirmButtonText: 'Ok',
+                cancelButtonText: 'Cancelar',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.cancel) {
+                    // Vuelve a mostrar el primer modal si hace clic en "Volver a confirmar"
+                    modalConfirmacionEliminar(data);
+                }
+            });
         }
-    })
+    });
 }
 function eliminarEmpresa(data) {
     var empresa_id = data.toString();
