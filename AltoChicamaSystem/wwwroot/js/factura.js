@@ -7,11 +7,7 @@
         alterFacturaStatus(rowData.id_factura);
     });
     $('#btnConsultar').click(function () {
-        // Obtener los valores seleccionados
-        var transportistaId = $('#input_transportista').val();
-        var facturaStatus = $('#input_estado').val();
-
-        // Llamar a la función getListFacturaTransportista con los valores obtenidos
+        capturarValoresSeleccionados();
         getListFacturaTransportista(transportistaId, facturaStatus);
     });
 });
@@ -297,14 +293,7 @@ function capturarValoresSeleccionados() {
 
     // Validar que ambos valores estén seleccionados
     if (transportista_id && estado !== null) {
-        if (estado == 0) {
-            document.getElementById('precio_empresa').style = "display:block;";
-        }
-        else {
-            document.getElementById('precio_empresa').style = "display:none;";
-        }
         // Llamar a la función para enviar los datos
-        obtenerDeudasEmpresa(transportista_id);
         getListFacturaTransportista(transportista_id, estado);
     } else {
         Swal.fire({
@@ -315,11 +304,12 @@ function capturarValoresSeleccionados() {
     }
 }
 
+
 function getListFacturaTransportista(transportista_id, estado) {
     const apiUrl = `/api/Factura/ObtenerDocumento/`;
     endpoint = getDomain() + "/Factura/listarFacturaTransportista";
 
-    console.log("Enviando datos:", { transportista_id, estado }); // Para depuración
+    console.log("Enviando datos:", { transportista_id, estado });
 
     return new Promise((resolve, reject) => {
         $.ajax({
@@ -339,7 +329,6 @@ function getListFacturaTransportista(transportista_id, estado) {
                 var datosRow = "";
 
                 if (data.Item1 === "1") {
-                    // Si no hay datos, agregar una fila con el mensaje
                     datosRow += "<tr><td colspan='6' style='text-align:center;'>No hay datos para mostrar</td></tr>";
                 } else {
                     for (var i = 0; i < dataEmpresa.length; i++) {
@@ -367,13 +356,23 @@ function getListFacturaTransportista(transportista_id, estado) {
                     }
                 }
 
-                // Inicializar la tabla si aún no está configurada
-                if (!$("#table_empresa").hasClass("dataTable")) {
-                    tableFactura = $("#table_empresa").DataTable({
+                if ($.fn.DataTable.isDataTable("#table_empresa")) {
+                    $("#table_empresa").DataTable().clear().rows.add($(datosRow)).draw();
+                } else {
+                    $("#table_empresa").DataTable({
                         language: {
                             url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
                         },
                         dom: 'frtip',
+                        data: $(datosRow),
+                        columns: [
+                            { data: 'id_factura' },
+                            { data: 'factura_monto' },
+                            { data: 'num_factura' },
+                            { data: 'transportista_nombre' },
+                            { data: 'factura_status' },
+                            { data: 'acciones' }
+                        ],
                         buttons: [
                             {
                                 extend: 'excel',
@@ -397,17 +396,13 @@ function getListFacturaTransportista(transportista_id, estado) {
                     });
                 }
 
-                // Limpiar la tabla y agregar las filas
-                tableFactura.clear();
-                tableFactura.rows.add($(datosRow)).draw();
-
-                resolve(data); // Resuelve la promesa con la respuesta completa
+                resolve(data);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.error("Error:", textStatus, errorThrown);
                 Swal.close();
                 alert('Error fatal: ' + textStatus + ' - ' + errorThrown);
-                reject(errorThrown); // Rechaza la promesa con el error
+                reject(errorThrown);
             }
         });
     });
@@ -541,7 +536,7 @@ function getListFacturaDetail(id_factura) {
             },
             success: function (data) {
                 console.log(data);
-                var dataFactura = data.item3; 
+                var dataFactura = data.item3;
                 var datosRow = "";
 
                 if (data.Item1 === "1") {
@@ -637,7 +632,7 @@ function alterFacturaStatus(id_factura) {
             var rpta = data.item1;
             var msg = data.item2;
             if (rpta == "0") {
-                getListFactura();
+                updateFacturaRow(id_factura);
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -652,6 +647,41 @@ function alterFacturaStatus(id_factura) {
             } else {
                 alert("Ocurrió un fallo: " + errorThrown);
             }
+        }
+    });
+}
+
+function updateFacturaRow(id_factura) {
+    var endpoint = getDomain() + "/Factura/GetFactura";
+    $.ajax({
+        type: "GET",
+        url: endpoint,
+        data: { id_factura: id_factura },
+        success: function (data) {
+            if (data && data.item3) {
+                var factura = data.item3;
+                var table = $("#table_empresa").DataTable();
+                var row = table.row($(`tr[data-id_factura='${id_factura}']`));
+                if (row.length) {
+                    row.data({
+                        id_factura: factura.id_factura,
+                        factura_monto: factura.factura_monto,
+                        num_factura: factura.num_factura,
+                        transportista_nombre: factura.transportista_nombre,
+                        factura_status: `<div class='form-check form-switch'>
+                            <input style='width: 46px; margin-top: 4px;' class='form-check-input status3' type='checkbox' 
+                            id='flexSwitchCheckDefault${factura.id_factura}' 
+                            ${factura.factura_status === 'True' ? 'checked' : ''} 
+                            data-factura_status='${factura.id_factura}'>
+                        </div>`,
+                        acciones: `<i class='bx bx-edit editar-button icon-circle'></i>
+                        <i style='margin-left: 9px;' class='bx bx-trash eliminar-button icon-circle red'></i>`
+                    }).draw();
+                }
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Error al actualizar la fila:", textStatus, errorThrown);
         }
     });
 }
@@ -815,7 +845,6 @@ function alterEmpresaFactura(id_factura) {
 
 
 function guardarEditFactura(id_factura) {
-
     var factura_status;
     if ($('#edit_factura_status_a').is(':checked')) {
         factura_status = $("#edit_factura_status_a").val();
@@ -851,8 +880,14 @@ function guardarEditFactura(id_factura) {
             var rpta = data.item1;
             var msg = data.item2;
             if (rpta == "0") {
-                getListFactura();
                 $("#modal_editar_factura").modal("hide");
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Éxito',
+                    text: 'Factura actualizada correctamente',
+                }).then(() => {
+                    actualizarTablaFacturas();
+                });
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -869,6 +904,75 @@ function guardarEditFactura(id_factura) {
                 text: 'Error al modificar la factura',
             });
         }
+    });
+}
+
+function actualizarTablaFacturas() {
+    var endpoint = getDomain() + "/Factura/ListaFactura";
+
+    $.ajax({
+        type: "GET",
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        dataType: "json",
+        success: function (data) {
+            var dataFactura = data.item3;
+            var datosRow = [];
+
+            for (var i = 0; i < dataFactura.length; i++) {
+                datosRow.push([
+                    dataFactura[i].id_factura,
+                    dataFactura[i].num_factura,
+                    dataFactura[i].factura_monto,
+                    dataFactura[i].transportista_nombre,
+                    `<div class='form-check form-switch'>
+                        <input style='width: 46px; margin-top: 4px;' class='form-check-input status3' type='checkbox' 
+                        id='flexSwitchCheckDefault${dataFactura[i].id_factura}' 
+                        ${dataFactura[i].factura_status === 'True' ? 'checked' : ''} 
+                        data-factura_status='${dataFactura[i].id_factura}'>
+                    </div>`,
+                    `<i class='bx bx-detail detalle-factura icon-circle' data-id='${dataFactura[i].id_factura}'></i>
+                    <i class='bx bx-edit editar-button icon-circle' data-factura='${JSON.stringify(dataFactura[i])}'></i>
+                    <i style='margin-left: 9px;' class='bx bx-trash eliminar-button icon-circle red' data-id='${dataFactura[i].id_factura}'></i>`
+                ]);
+            }
+
+            var table = $("#table_empresa").DataTable();
+            table.clear().rows.add(datosRow).draw();
+
+            // Volver a agregar los event listeners
+            agregarEventListeners();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Error al actualizar la tabla:", textStatus, errorThrown);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudo actualizar la tabla de facturas',
+            });
+        }
+    });
+}
+
+function agregarEventListeners() {
+    // Event listener para el botón de editar
+    $('#table_empresa').off('click', '.editar-button').on('click', '.editar-button', function () {
+        var facturaData = JSON.parse($(this).attr('data-factura'));
+        modalEditarFactura(facturaData);
+    });
+
+    // Event listener para el botón de eliminar
+    $('#table_empresa').off('click', '.eliminar-button').on('click', '.eliminar-button', function () {
+        var id_factura = $(this).attr('data-id');
+        modalConfirmacionEliminar(id_factura);
+    });
+
+    // Event listener para el botón de detalle
+    $('#table_empresa').off('click', '.detalle-factura').on('click', '.detalle-factura', function () {
+        var id_factura = $(this).attr('data-id');
+        modalDetalleFactura(id_factura);
     });
 }
 
