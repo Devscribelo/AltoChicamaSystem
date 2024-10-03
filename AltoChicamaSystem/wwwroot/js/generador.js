@@ -1393,7 +1393,7 @@ async function generarPDF() {
             doc.addImage(imgQR12, "PNG", 162, startY + 122, 25, 25); // Ajusta las coordenadas y tamaño según sea necesario
             // Obtener la fecha de la ID 'fecha' y transformarla
             // Obtener la fecha en formato 'YYYY-MM-DD'
-            const fechaString = document.getElementById("fecha1").value; // Formato 'YYYY-MM-DD'
+            const fechaString = document.getElementById("fecha").value; // Formato 'YYYY-MM-DD'
 
             // Convertir la fecha de formato 'YYYY-MM-DD' a un objeto Date
             const [anio, mes, dia] = fechaString.split('-').map(Number);
