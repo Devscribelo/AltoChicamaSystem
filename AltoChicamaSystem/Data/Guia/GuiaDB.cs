@@ -59,6 +59,122 @@ namespace AltoChicamaSystem.Data.Guia
             }
             return Tuple.Create(rpta, msg, lst);
         }
+        public Tuple<string, string, List<CMGuia>> listarGuia(string bandera)
+        {
+            List<CMGuia> lst = new List<CMGuia>();
+            SqlConnection sqlCon = new SqlConnection();
+            string rpta = "";
+            string msg = "";
+            try
+            {
+                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                sqlCon.Open();
+                SqlCommand sqlCmd = new SqlCommand();
+                sqlCmd.Connection = sqlCon;
+                sqlCmd.CommandText = "Guia_list";
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                {
+                    if (sdr.Read())
+                    {
+                        rpta = sdr["Rpta"].ToString();
+                        msg = sdr["Msg"].ToString();
+                        sdr.NextResult();
+                    }
+
+                    if (rpta == "0")
+                    {
+                        while (sdr.Read())
+                        {
+                            CMGuia guia = new CMGuia
+                            {
+                                guia_id = Convert.ToInt32(sdr["guia_id"]),
+                                empresa_name = sdr["empresa_name"].ToString().Trim(),
+                                guia_direccion = sdr["guia_direccion"].ToString().Trim(),
+                                transportista_nombre = sdr["transportista_nombre"].ToString().Trim(),
+                                empresa_ruc = sdr["empresa_ruc"].ToString().Trim(),
+                                guia_fecha_servicio = sdr["guia_fecha_servicio"].ToString().Trim(),
+                                guia_costo = Convert.ToDecimal(sdr["guia_costo"]),
+                                guia_numero = sdr["guia_numero"].ToString().Trim(),
+                                guia_descarga = sdr["guia_descarga"].ToString().Trim(),
+                                guia_unidad = sdr["guia_unidad"].ToString().Trim(),
+                                guia_cantidad = Convert.ToDecimal(sdr["guia_cantidad"]),
+
+                            };
+                            lst.Add(guia);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                lst = new List<CMGuia>();
+                rpta = ex.Message;
+            }
+            finally
+            {
+                if (sqlCon.State == ConnectionState.Open)
+                {
+                    sqlCon.Close();
+                }
+            }
+            return Tuple.Create(rpta, msg, lst);
+        }
+
+        public Tuple<string, string, List<CMGuia>> listarGuiaTransportista(int transportista_id, bool? estado, string bandera)
+        {
+            List<CMGuia> lst = new List<CMGuia>();
+            string rpta = "1";  // Cambiado de "" a "1" para indicar error por defecto
+            string msg = "No se encontraron guías";  // Mensaje por defecto
+            int count = 0;
+            using (SqlConnection sqlCon = new SqlConnection(con.obtenerDatosConexion(bandera)))
+            {
+                sqlCon.Open();
+                using (SqlCommand sqlCmd = new SqlCommand("Guia_List_Transportista", sqlCon))
+                {
+                    sqlCmd.CommandType = CommandType.StoredProcedure;
+                    sqlCmd.Parameters.AddWithValue("@transportista_id", transportista_id);
+                    sqlCmd.Parameters.AddWithValue("@status", (object)estado ?? DBNull.Value);
+                    SqlDataReader sdr = sqlCmd.ExecuteReader();
+
+                    if (sdr.Read())
+                    {
+                        rpta = sdr["Rpta"].ToString();
+                        msg = sdr["Msg"].ToString();
+                        sdr.NextResult();
+                    }
+
+                    while (sdr.Read())
+                    {
+                        CMGuia guia = new CMGuia
+                        {
+                            guia_id = Convert.ToInt32(sdr["guia_id"]),
+                            empresa_name = sdr["empresa_name"].ToString().Trim(),
+                            guia_direccion = sdr["guia_direccion"].ToString().Trim(),
+                            transportista_nombre = sdr["transportista_nombre"].ToString().Trim(),
+                            empresa_ruc = sdr["empresa_ruc"].ToString().Trim(),
+                            guia_fecha_servicio = sdr["guia_fecha_servicio"].ToString().Trim(),
+                            guia_costo = Convert.ToDecimal(sdr["guia_costo"]),
+                            guia_numero = sdr["guia_numero"].ToString().Trim(),
+                            guia_descarga = sdr["guia_descarga"].ToString().Trim(),
+                            guia_unidad = sdr["guia_unidad"].ToString().Trim(),
+                            guia_cantidad = Convert.ToDecimal(sdr["guia_cantidad"]),
+                            guia_status = estado.HasValue ? (estado.Value ? "1" : "0") : null
+                        };
+                        lst.Add(guia);
+                        count++;
+                    }
+                }
+            }
+
+            if (count == 0 && rpta == "0")
+            {
+                msg = "NO HAY GUÍAS CON EL ESTADO ESPECIFICADO PARA ESTE TRANSPORTISTA";
+            }
+
+            return Tuple.Create(rpta, msg, lst);
+        }
+
 
         public Tuple<string, string, List<GuiaResult>> listarGuiaFiltro(int id_factura, string bandera)
         {

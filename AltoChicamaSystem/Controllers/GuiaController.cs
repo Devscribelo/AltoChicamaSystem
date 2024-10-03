@@ -20,6 +20,63 @@ namespace AltoChicamaSystem.Controllers
         }
 
         [HttpGet]
+        public ActionResult ListaGuia()
+        {
+            try
+            {
+                string bandera = conf.GetValue<string>("bandera");
+                var result = objusuarioCN.listarGuia(bandera);
+
+                if (result.Item1 == "0")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(Tuple.Create("1", $"Error: {ex.Message}", new List<CMGuia>()));
+            }
+        }
+
+        [HttpPost]
+        public ActionResult listarGuiaTransportista([FromBody] CMGuia request)
+        {
+            try
+            {
+                if (request == null || request.transportista_id <= 0)
+                {
+                    return BadRequest(Tuple.Create("1", "ID de transportista inválido", new List<CMGuia>()));
+                }
+
+                string bandera = conf.GetValue<string>("Bandera");
+                bool? estado = request.guia_status == "1";
+                var result = objusuarioCN.listarGuiaTransportista(request.transportista_id, estado, bandera);
+
+                if (result.Item1 == "0")
+                {
+                    if (result.Item3.Count == 0)
+                    {
+                        // No se encontraron guías, pero no es un error
+                        return Ok(Tuple.Create("0", result.Item2, result.Item3));
+                    }
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(Tuple.Create("1", $"Error: {ex.Message}", new List<CMGuia>()));
+            }
+        }
+
+        [HttpGet]
         public ActionResult GuiaSelect()
         {
             var result = Tuple.Create("1", "Error al listar Guia", new List<GuiaSelect>());
