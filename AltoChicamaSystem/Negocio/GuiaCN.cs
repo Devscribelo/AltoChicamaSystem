@@ -19,6 +19,10 @@ namespace AltoChicamaSystem.Negocio
         {
             return objDato.listarGuiaFiltro(factura_id, bandera);
         }
+        public Tuple<string, string> eliminarGuia(int guiaId, string bandera)
+        {
+            return objDato.eliminarGuia(guiaId, bandera);
+        }
 
         public Tuple<string, string, List<CMGuia>> listarGuiaTransportista(int transportista_id, bool? estado, string bandera)
         {

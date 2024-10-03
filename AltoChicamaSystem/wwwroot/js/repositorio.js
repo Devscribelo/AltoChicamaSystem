@@ -201,7 +201,74 @@ function crearFilaGuia(guia) {
     </tr>`;
 }
 
+function modalConfirmacionEliminarGuia(guiaId) {
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+    });
 
+    swalWithBootstrapButtons.fire({
+        title: '¿Estás segur@?',
+        text: "Recuerda que no podrás revertir los cambios. Al eliminar, se borrará la guía permanentemente.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'No, cancelar',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            eliminarGuia(guiaId);
+            swalWithBootstrapButtons.fire(
+                'Eliminada',
+                'La guía ha sido eliminada.',
+                'success'
+            );
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            swalWithBootstrapButtons.fire(
+                'Cancelado',
+                'La guía no ha sido eliminada',
+                'error'
+            );
+        }
+    });
+}
+
+// Actualiza la función eliminarGuia para usar el nuevo modal
+function eliminarGuia(guiaId) {
+    var endpoint = getDomain() + "/Guia/EliminarGuia";
+
+    $.ajax({
+        type: "POST",
+        url: endpoint,
+        contentType: "application/json",
+        data: JSON.stringify({ guia_id: guiaId }),
+        success: function (response) {
+            if (response.item1 === "0") {
+                Swal.fire('Eliminada', response.item2, 'success');
+                getListGuia(); // Actualiza la lista de guías
+            } else {
+                Swal.fire('Error', 'Error al eliminar la guía: ' + response.item2, 'error');
+                console.error('Error al eliminar guía:', response.item2);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('Error en eliminarGuia:', xhr.responseText);
+            var errorMessage = 'Hubo un problema al eliminar la guía';
+            try {
+                var response = JSON.parse(xhr.responseText);
+                if (response && response.item2) {
+                    errorMessage = response.item2;
+                }
+            } catch (e) {
+                console.error('Error al parsear la respuesta:', e);
+            }
+            Swal.fire('Error', errorMessage, 'error');
+        }
+    });
+}
 
 
 function inicializarTablaGuias() {

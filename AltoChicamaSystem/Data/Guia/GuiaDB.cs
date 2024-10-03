@@ -121,6 +121,51 @@ namespace AltoChicamaSystem.Data.Guia
             return Tuple.Create(rpta, msg, lst);
         }
 
+        public Tuple<string, string> eliminarGuia(int guiaId, string bandera)
+        {
+            string rpta = "1";
+            string msg = "Error al Eliminar";
+            using (SqlConnection sqlCon = new SqlConnection(con.obtenerDatosConexion(bandera)))
+            {
+                try
+                {
+                    sqlCon.Open();
+                    using (SqlCommand sqlCmd = new SqlCommand("Guia_delete", sqlCon))
+                    {
+                        sqlCmd.CommandType = CommandType.StoredProcedure;
+                        sqlCmd.Parameters.AddWithValue("@guia_id", guiaId);
+
+                        // Registrar los parámetros para depuración
+                        Console.WriteLine($"Ejecutando Guia_delate con guia_id={guiaId}");
+
+                        using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                        {
+                            if (sdr.Read())
+                            {
+                                rpta = sdr["Rpta"].ToString();
+                                msg = sdr["Msg"].ToString();
+                                // Registrar el resultado para depuración
+                                Console.WriteLine($"Resultado de Guia_delate: Rpta={rpta}, Msg={msg}");
+                            }
+                            else
+                            {
+                                // Registrar si no se leyó ningún resultado
+                                Console.WriteLine("No se leyó ningún resultado de Guia_delate");
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    rpta = "1";
+                    msg = $"Error al eliminar guía: {ex.Message}";
+                    // Registrar la excepción para depuración
+                    Console.WriteLine(msg);
+                }
+            }
+            return Tuple.Create(rpta, msg);
+        }
+
         public Tuple<string, string, List<CMGuia>> listarGuiaTransportista(int transportista_id, bool? estado, string bandera)
         {
             List<CMGuia> lst = new List<CMGuia>();
