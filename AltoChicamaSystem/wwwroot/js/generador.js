@@ -1355,6 +1355,7 @@ async function generarPDF(formId) {
 
                 // Leer el archivo del QR
                 //readerQR1.readAsDataURL(fileQr1);
+                doc.save();
                 const pdfData = doc.output('blob');
                 resolve(pdfData);
             };
