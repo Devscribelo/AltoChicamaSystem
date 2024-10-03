@@ -146,58 +146,6 @@ $(document).on('click', '.btnGuardar', function () {
     guardarDocumento(empresa_id);
 });
 
-function TransportistaSelect(id_transportista) {
-    var endpoint = getDomain() + "/Transportista/TransportistaSelect";
-
-    $.ajax({
-        type: "GET",
-        async: true,
-        url: endpoint,
-        headers: {
-            "Content-Type": "application/json"
-        },
-        dataType: "json",
-        beforeSend: function (xhr) {
-            console.log("Cargando transportistas...");
-        },
-        success: function (data) {
-            var TransportistaSelect = data.item3;
-
-            // Limpiar el select y agregar opción por defecto
-            if (id_transportista === "#input_transportista") {
-                $(id_transportista).empty();
-                $(id_transportista).append('<option value="" disabled selected>Seleccione un transportista...</option>');
-            }
-
-            // Verificar si la data es null, vacía, o contiene solo espacios en blanco
-            if (TransportistaSelect && TransportistaSelect.length > 0) {
-                // Agregar opciones al select
-                for (var i = 0; i < TransportistaSelect.length; i++) {
-                    var item = TransportistaSelect[i];
-                    $(id_transportista).append(
-                        '<option value="' + item.transportista_id + '">' + item.transportista_nombre + '</option>'
-                    );
-                }
-            }
-
-            // Inicializar o actualizar Select2 usando directamente el ID del select
-            $(id_transportista).select2({
-                placeholder: "Seleccione un transportista...",
-                allowClear: true,
-                language: "es",
-                dropdownCssClass: 'limit-dropdown' // Añadir la clase para limitar altura
-            });
-
-            // Habilitar el select
-            $(id_transportista).prop("disabled", false);
-        },
-        error: function (data) {
-            alert('Error fatal ' + data);
-            console.log("failure");
-        }
-    });
-}
-
 function obtenerIdTransportistaSeleccionada(id_transportista) {
     // Obtener el valor de la opción seleccionada en el select
     var valorSeleccionadoTransportista = $(id_transportista).val();

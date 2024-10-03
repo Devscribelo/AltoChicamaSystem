@@ -28,49 +28,34 @@
 <section class="home">
 
     <div class="subscribe">
-        <div class="submit-btn">SELECCIONE UN PDF:</div>
-    </div>
-
-    <div class="buttons" style="display: flex; justify-content: center; gap: 10px; margin-top: 30px !important;">
-        <button id="btnResiduos" onclick="showForm('pdfResiduos')">PDF RESIDUOS SOLIDOS</button>
-        <button id="btnAguas" onclick="showForm('pdfAguas')">PDF AGUAS</button>
+            <div class="submit-btn">Formulario para Certificado de Valorización</div>
     </div>
 
     <div id="qrcode" style="margin: 20px; display:none;"></div>
 
 
     <div id="pdfResiduos" class="form-container">
-        <h1 style="margin-top:19px !important; margin-bottom:19px !important; font-size:23px !important; border-bottom: 2px solid black !important; padding-bottom: 6px !important; font-weight: bold !important; text-transform: uppercase !important;">
-            Formulario para Certificado de Valorización
+        <h1 style="margin-top:19px !important; margin-bottom:19px !important; font-size:23px !important; padding-bottom: 6px !important; font-weight: bold !important; text-transform: uppercase !important;">
         </h1>
 
         <form id="formResiduos">
             <!-- Campos del formulario para residuos sólidos -->
-
             <div class="form-row">
-                <label class="codigoEmpresa" for="codigoEmpresa">Número de Certificado:</label>
-                <input type="text" id="codigoEmpresa" name="codigoEmpresa" required oninput="consistenciaDatosNew();">
+                <label class="input-group-text" for="input_transportista">Transportista</label>
+                <select id="input_transportista" name="input_transportista" class="js-example-placeholder-single js-states form-control" required onchange="actualizarAbreviacion()">
+                    <option></option> <!-- Opción vacía -->
+                </select>
             </div>
 
             <div class="form-row">
-                <label for="opcion">Seleccione una opción:</label>
-                <select id="opcion" name="opcion" required>
-                    <option value="VALORIZACIÓN DE RESIDUOS DE CONSTRUCCIÓN Y DEMOLICIÓN – APROVECHABLES">
-                        Opción 1: VALORIZACIÓN DE RESIDUOS DE CONSTRUCCIÓN Y DEMOLICIÓN – APROVECHABLES
-                    </option>
-                    <option value="VALORIZACIÓN DE RESIDUOS SOLIDOS – APROVECHABLES">
-                        Opción 2: VALORIZACIÓN DE RESIDUOS DE SÓLIDOS ORGÁNICOS
-                    </option>
-                    <option value="VALORIZACIÓN DE RESIDUOS INORGÁNICOS APROVECHABLES">
-                        Opción 3: VALORIZACIÓN DE RESIDUOS INORGÁNICOS APROVECHABLES
-                    </option>
-                    <option value="DESTRUCCIÓN Y VALORIZACIÓN DE DESMEDROS">
-                        Opción 3: DESTRUCCIÓN Y VALORIZACIÓN DE DESMEDROS
-                    </option>
-                    <option value="VALORIZACIÓN DE LODOS NO PELIGROSOS">
-                        Opción 4: VALORIZACIÓN DE LODOS NO PELIGROSOS
-                    </option>
-                </select>
+                <label for="abreviacion">Abreviación:</label>
+                <input type="text" id="abreviacion" name="abreviacion" value="" oninput="actualizarAbreviacion()" />
+            </div>
+
+
+            <div class="form-row" style="display:none !important;">
+                <label for="ruct">RUC Transportista:</label>
+                <input type="number" id="ruct" name="ruct" required disabled />
             </div>
 
             <div class="form-row">
@@ -83,46 +68,34 @@
                 <input type="text" id="numeroGuia" name="numeroGuia" required />
             </div>
 
-
             <div class="form-row">
-                <label class="input-group-text" for="input_transportista">Transportista</label>
-                <select id="input_transportista" name="input_transportista" class="js-example-placeholder-single js-states form-control" required onchange="actualizarAbreviacion()">
-                    <option></option> <!-- Opción vacía -->
-                </select>
-
-            </div>
-
-            <div class="form-row">
-                <label for="ruct">RUC Transportista:</label>
-                <input type="number" id="ruct" name="ruct" required disabled />
-            </div>
-
-            <div class="form-row">
-                <label for="abreviacion">Abreviación:</label>
-                <input type="text" id="abreviacion" name="abreviacion" value="" oninput="actualizarAbreviacion()" />
-            </div>
-
-            <div class="form-row">
-                <label for="tipoResiduoTitulo">Seleccione una opción de Título de RESIDUO:</label>
-                <select id="tipoResiduoTitulo" name="tipoResiduoTitulo" required>
-                    <option value="Tipo de Residuo">Opción 1: Tipo de Residuo</option>
-                    <option value="Tipo de Residuo Sólido">
-                        Opción 2: Tipo de Residuo Sólido
+                <label for="descarga">Descarga:</label>
+                <select id="descarga" name="opcion" required>
+                    <option value="Desmedros">
+                        Desmedros
                     </option>
-                    <option value="Tipo de Residuos Orgánicos">
-                        Opción 3: Tipo de Residuos Orgánicos
+                    <option value="Residuos Orgánicos">
+                        Residuos Orgánicos
+                    </option>
+                    <option value="Aguas Residuales">
+                        Aguas Residuales
+                    </option>
+                    <option value="Residuos Inorgánicos">
+                        Residuos Inorgánicos
+                    </option>
+                    <option value="Residuos de Construcción y Demolición">
+                        Residuos de Construcción y Demolición
+                    </option>
+                        <option value="Grasas Residuales">
+                        Grasas Residuales
+                    </option>
+                    <option value="Líquidos Residuales">
+                        Líquidos Residuales
+                    </option>
+                    <option value="Lodos">
+                        Lodos
                     </option>
                 </select>
-            </div>
-
-            <div class="form-row">
-                <label for="tipoRCD">Tipo de Residuo:</label>
-                <input type="text" id="tipoRCD" name="tipoRCD" required />
-            </div>
-
-            <div class="form-row">
-                <label for="toneladas">TN:</label>
-                <input type="number" id="toneladas" name="toneladas" required />
             </div>
 
             <div class="form-row">
@@ -130,7 +103,7 @@
                 <select id="nomEmpresa" name="Nombre de la empresa:"></select>
             </div>
 
-            <div class="form-row">
+            <div class="form-row" style="display: none !important;">
                 <label for="ruc">RUC Empresa:</label>
                 <input type="number" id="ruc" name="ruc" required disabled />
             </div>
@@ -177,108 +150,17 @@
                 </div>
             </div>
 
+            <div class="form-row">
+                <label for="cantidad">TN/M³:</label>
+                <input type="number" id="cantidad" name="cantidad" required />
+            </div>
 
-
-            <button style="margin-bottom:16px !important;" type="button" onclick="generarYGuardarPDF('pdfResiduos')">
+            <button style="margin-bottom:16px !important;" type="button" onclick="generarYGuardarPDF()">
                 Generar PDF
             </button>
         </form>
     </div>
 
-    <div id="pdfAguas" class="form-container">
-        <h1 style="margin-top:19px !important; margin-bottom:19px !important; font-size:23px !important; border-bottom: 2px solid black !important; padding-bottom: 6px !important; font-weight: bold !important; text-transform: uppercase !important;">
-            Formulario para Certificado de Valorización
-        </h1>
-        <form id="formAguas">
-            <!-- Campos del formulario para aguas -->
-            <div class="form-row">
-                <label for="codigoEmpresa1">Número de Certificado:</label>
-                <input type="text" id="codigoEmpresa1" name="codigoEmpresa1" required/>
-            </div>
-
-            <div class="form-row">
-                <label for="opcion1">Seleccione una opción:</label>
-                <select id="opcion1" name="opcion1" required>
-                    <option value="TRATAMIENTO DE LÍQUIDOS RESIDUALES">
-                        Opción 1: TRATAMIENTO DE LÍQUIDOS RESIDUALES
-                    </option>
-                    <option value="TRATAMIENTO DE GRASAS RESIDUALES DOMÉSTICAS">
-                        Opción 2: TRATAMIENTO DE GRASAS RESIDUALES DOMÉSTICAS
-                    </option>
-                    <option value="TRATAMIENTO DE AGUAS RESIDUALES – TIPO DOMÉSTICAS">
-                        Opción 3: TRATAMIENTO DE AGUAS RESIDUALES – TIPO DOMÉSTICAS
-                    </option>
-                </select>
-            </div>
-
-            <div class="form-row">
-                <label for="fecha1">Fecha:</label>
-                <input type="date" id="fecha1" name="fecha1" required />
-            </div>
-
-            <div class="form-row">
-                <label for="numeroGuia1">N° de Guía:</label>
-                <input type="text" id="numeroGuia1" name="numeroGuia1" required />
-            </div>
-
-            <div class="form-row">
-                <label for="empresa1">Empresa Transportista:</label>
-                <select id="empresa1" name="empresa1" required>
-                </select>
-            </div>
-
-            <div class="form-row">
-                <label for="ruct1">RUC Transportista:</label>
-                <input type="number" id="ruct1" name="ruct1" required disabled />
-            </div>
-
-            <div class="form-row">
-                <label for="tipoAguaTitulo">Seleccione una opción de Título de RESIDUO:</label>
-                <select id="tipoAguaTitulo" name="tipoAguaTitulo" required>
-                    <option value="Tipo de Agua Residual">
-                        Opción 1: Tipo de Agua Residual
-                    </option>
-                    <option value="Tipo de Residuo Líquido">
-                        Opción 2: Tipo de Residuo Líquido
-                    </option>
-                </select>
-            </div>
-
-            <div class="form-row">
-                <label for="tipoAgua">Tipo de Residuo:</label>
-                <input type="text" id="tipoAgua" name="tipoAgua" required />
-            </div>
-
-            <div class="form-row">
-                <label for="metros3">M³:</label>
-                <input type="number" id="metros3" name="metros3" required />
-            </div>
-
-            <div class="form-row">
-                <label for="residuos1">Dirección de Residuos:</label>
-                <textarea id="residuos1" name="residuos1" rows="1" required style="width: 100% !important; padding: 12px !important; "></textarea>
-            </div>
-
-            <div class="form-row">
-                <label for="nomEmpresa1">Nombre de la empresa:</label>
-                <select id="nomEmpresa1" name="Nombre de la empresa:"></select>
-            </div>
-
-            <div class="form-row">
-                <label for="ruc1">RUC Empresa:</label>
-                <input type="number" id="ruc1" name="ruc1" required disabled />
-            </div>
-
-            <div class="firma-container">
-                <label for="firma1">Firma de la empresa (imagen):</label>
-                <input type="file" id="firma1" name="firma1" accept="image/*" />
-            </div>
-
-            <button style="margin-bottom:6px !important;" type="button" onclick="generarPDF('pdfAguas')">
-                Generar PDF
-            </button>
-        </form>
-    </div>
 </section>
 
 

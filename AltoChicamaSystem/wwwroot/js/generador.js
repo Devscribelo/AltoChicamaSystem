@@ -77,7 +77,7 @@ function EmpresaSelect(id_grupo) {
 
                     if (empresas[selectedEmpresaId]) {
                         document.getElementById('ruc').value = empresas[selectedEmpresaId];
-                        document.getElementById('ruc').disabled = false; // Habilitar el RUC
+                        document.getElementById('ruc').disabled = true; // Habilitar el RUC
 
                         // Habilitar el select de direcciones
                         $("#residuos").prop("disabled", false); // Habilitar el select de direcciones
@@ -279,7 +279,6 @@ function TransportistaSelect() {
                     var selectedTransportista = $(this).val();
                     if (transportistas[selectedTransportista]) {
                         document.getElementById('ruct').value = transportistas[selectedTransportista];
-                        document.getElementById('ruct1').value = transportistas[selectedTransportista];
                     }
                 });
             } else {
@@ -510,19 +509,92 @@ inputAbreviacion.addEventListener('input', function () {
     }
 });
 
-async function generarPDF(formId) {
+async function generarPDF() {
+    let formId = "";
     const { jsPDF } = window.jspdf;
+
+    let descarga = document.getElementById("descarga").value;
+    let titulo = "";
+    let tipoResiduotittle = "";
+    let tipoResiduo = "";
+    let residuoDir = "";
+    let cantidad = document.getElementById("cantidad").value;
+    let numeroCert = "";
+    let unidad = "";
     
+    if (descarga === "Desmedros" || descarga === "Residuos Orgánicos" || descarga === "Residuos Inorgánicos" || descarga === "Residuos de Construcción y Demolición" || descarga === "Grasas Residuales" || descarga === "Lodos") {
+        formId = "pdfResiduos";
+        unidad = "TN";
+        if (descarga === "Desmedros") {
+            titulo = "DESTRUCCIÓN Y VALORIZACIÓN DE DESMEDROS";
+            tipoResiduotittle = "Tipo de Residuo";
+            tipoResiduo = "Desmedros (Productos Vencidos)";
+            residuoDir = "Desmedros";
+            numeroCert = "002";
+        }
+        else if (descarga === "Residuos Orgánicos") {
+            titulo = "VALORIZACIÓN DE RESIDUOS DE SÓLIDOS ORGÁNICOS";
+            tipoResiduotittle = "Tipo de Residuos Orgánicos";
+            tipoResiduo = "Descarte de espárragos";
+            residuoDir = "Residuos orgánicos";
+            numeroCert = "003";
+        }
+        else if (descarga === "Residuos Inorgánicos") {
+            titulo = "VALORIZACIÓN DE RESIDUOS INORGÁNICOS APROVECHABLES";
+            tipoResiduotittle = "Tipo de Residuo Sólido";
+            tipoResiduo = "Residuos Inorgánicos Aprovechables";
+            residuoDir = "Residuos inorgánicos aprovechables";
+            numeroCert = "005";
+        }
+        else if (descarga === "Residuos de Construcción y Demolición") {
+            titulo = "VALORIZACIÓN DE RESIDUOS DE CONSTRUCCIÓN Y DEMOLICIÓN - APROVECHABLES";
+            tipoResiduotittle = "Tipo de Residuo Sólido";
+            tipoResiduo = "Escombros no peligrosos";
+            residuoDir = "Residuos sólidos";
+            numeroCert = "006";
+        }
+        else if (descarga === "Grasas Residuales") {
+            titulo = "TRATAMIENTO DE GRASAS RESIDUALES DOMÉSTICAS";
+            tipoResiduotittle = "Tipo de Residuo Líquido";
+            tipoResiduo = "Grasa Residual Doméstica";
+            residuoDir = "Grasas Residuales Domésticas";
+            numeroCert = "007";
+        }
+        else if (descarga === "Lodos") {
+            titulo = "VALORIZACIÓN DE LODOS NO PELIGROSOS";
+            tipoResiduotittle = "Tipo de Residuo";
+            tipoResiduo = "Lodos de PTAR";
+            residuoDir = "Lodos provenientes";
+            numeroCert = "009";
+        }
+    }
+    else if (descarga === "Líquidos Residuales" || descarga === "Aguas Residuales") {
+        formId = "pdfAguas";
+        unidad = "M³";
+        if (descarga === "Líquidos Residuales") {
+            titulo = "TRATAMIENTO DE LÍQUIDOS RESIDUALES";
+            tipoResiduotittle = "Tipo de Agua Residual";
+            tipoResiduo = "Líquidos Residuales";
+            residuoDir = "Líquidos residuales";
+            numeroCert = "008";
+        }
+        else if (descarga === "Aguas Residuales") {
+            titulo = "TRATAMIENTO DE AGUAS RESIDUALES – TIPO DOMÉSTICAS";
+            tipoResiduotittle = "Tipo de Agua Residual";
+            tipoResiduo = "Agua Residual – Tipo Doméstica";
+            residuoDir = "Aguas Residuales – Tipo Domésticas";
+            numeroCert = "004";
+        }
+    }
+
     if (formId === "pdfResiduos") {
         return new Promise(async (resolve, reject) => {
             let residuos = document.getElementById("residuos").value;
             let numeroGuia = document.getElementById("numeroGuia").value;
             let empresa = document.getElementById("input_transportista").value;
-            let tipoResiduoTitulo = document.getElementById("tipoResiduoTitulo").value;
-            let toneladas = document.getElementById("toneladas").value;
             let nomEmpresa = document.getElementById("nomEmpresa").value;
 
-            if (!residuos || !numeroGuia || !empresa || !tipoResiduoTitulo || !toneladas || !nomEmpresa) {
+            if (descarga === "" || !numeroGuia || !empresa || tipoResiduotittle === "" || !cantidad || !nomEmpresa) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Ocurrió un error!',
@@ -577,7 +649,7 @@ async function generarPDF(formId) {
             doc.setTextColor(0, 0, 0);
             doc.setFont(undefined, "bold");
             doc.text(
-                "N°" + document.getElementById("codigoEmpresa").value,
+                "N°" + numeroCert + "-" + "002"+"-2024",
                 pageWidth / 2, 44, null, null, "center");
             doc.setFont(undefined, "normal");
 
@@ -585,14 +657,14 @@ async function generarPDF(formId) {
             doc.setDrawColor(0, 100, 0);
             let textYPosition = 55;
             let textHeight = doc.getTextDimensions(
-                `${document.getElementById("opcion").value}`
+                `${titulo}`
             ).h;
             let rectYPosition = textYPosition - textHeight / 2 - 3.3;
             let rectHeight = textHeight + 4;
             doc.rect(margin, rectYPosition, contentWidth, rectHeight);
 
             // Obtener el texto y el tamaño del texto
-            const texto = document.getElementById("opcion").value;
+            const texto = titulo;
             doc.setFontSize(10);
             doc.setFont(undefined, "bold"); // Establecer la fuente en negrita
 
@@ -684,7 +756,7 @@ async function generarPDF(formId) {
             let headers = [
                 "Fecha",
                 guiaText, // Usar la variable ajustada
-                document.getElementById("tipoResiduoTitulo").value,
+                tipoResiduotittle,
                 "TN",
             ];
 
@@ -724,8 +796,8 @@ async function generarPDF(formId) {
             let rowData = [
                 fechaFormateada, // Usar la fecha formateada
                 document.getElementById("numeroGuia").value,
-                document.getElementById("tipoRCD").value,
-                document.getElementById("toneladas").value,
+                tipoResiduo,
+                cantidad,
             ];
 
             // Renderizar celdas de los datos
@@ -759,7 +831,7 @@ async function generarPDF(formId) {
 
             if (residuos) {
                 doc.setFontSize(11);
-                let texto = `Residuos sólidos provenientes de la siguiente dirección: ${residuos}, generados por la empresa:`;
+                let texto = `${residuoDir} provenientes de la siguiente dirección: ${residuos}, generados por la empresa:`;
                 let splittedText = doc.splitTextToSize(texto, contentWidth);
 
                 // Dibuja el texto en la posición correspondiente
@@ -977,6 +1049,7 @@ async function generarPDF(formId) {
             // Cuarta línea de texto
             doc.setTextColor(105, 105, 105); // Volver a color gris
             doc.text("914 105 601 | 913 036 413", textLeft, textBottom + 15);
+            doc.save();
             const pdfData = doc.output('blob');
             resolve(pdfData);
             //reader.readAsDataURL(file); // AQUÍ CREA CANICAS
@@ -984,18 +1057,13 @@ async function generarPDF(formId) {
         
 
     } else if (formId === "pdfAguas") {
-        return new Promise((resolve, reject) => {
-            const input1 = document.getElementById("firma1");
-            const file1 = input1.files[0];
-            let residuos = document.getElementById("residuos1").value;
-            let fecha = document.getElementById("fecha1").value;
-            let numeroGuia = document.getElementById("numeroGuia1").value;
-            let empresa = document.getElementById("empresa1").value;
-            let tipoAguaTitulo = document.getElementById("tipoAguaTitulo").value;
-            let metros = document.getElementById("metros3").value;
-            let nomEmpresa = document.getElementById("nomEmpresa1").value;
+        return new Promise(async (resolve, reject) => {
+            let residuos = document.getElementById("residuos").value;
+            let numeroGuia = document.getElementById("numeroGuia").value;
+            let empresa = document.getElementById("input_transportista").value;
+            let nomEmpresa = document.getElementById("nomEmpresa").value;
 
-            if (!file1 || !residuos || !fecha || !numeroGuia || !empresa || !tipoResiduoTitulo || !toneladas || !nomEmpresa) {
+            if (descarga === "" || !numeroGuia || !empresa || tipoResiduotittle === "" || !cantidad || !nomEmpresa) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Ocurrió un error!',
@@ -1004,362 +1072,406 @@ async function generarPDF(formId) {
                 return;
             }
 
-            const reader1 = new FileReader();
             const readerQR1 = new FileReader();
-            reader1.onload = async function (event) {
-                const imgData1 = event.target.result;
-                const doc = new jsPDF();
+            const doc = new jsPDF();
 
-                // Cargar las imágenes de encabezado y pie de página
-                const imgArriba = await loadImage("img/arriba.png");
-                const imgAbajo = await loadImage("img/abajo.png");
+            const imgArriba = await loadImage("img/arriba.png");
+            const imgAbajo = await loadImage("img/abajo.png");
+            const imgFirma = await loadImage("img/firma.png");
+            // Márgenes de 5 mm
+            const margin = 22;
+            const pageWidth = 210; // Ancho total de la página en mm
+            const pageHeight = 297; // Alto total de la página en mm
+            const contentWidth = pageWidth - 2 * margin;
 
-                // Márgenes de 5 mm
-                const margin = 5;
-                const pageWidth = 210; // Ancho total de la página en mm
-                const pageHeight = 297; // Alto total de la página en mm
-                const contentWidth = pageWidth - 2 * margin;
+            // Ajustar altura de imágenes
+            const alturaArriba = 39; // Altura en mm para la imagen de encabezado
+            const alturaAbajo = 39; // Altura en mm para la imagen de pie de página
 
-                // Ajustar altura de imágenes
-                const alturaArriba = 39; // Altura en mm para la imagen de encabezado
-                const alturaAbajo = 39; // Altura en mm para la imagen de pie de página
+            // Cálculo del ancho para mantener la proporción
+            const anchoArriba =
+                (imgArriba.width / imgArriba.height) * alturaArriba;
+            const anchoAbajo = (imgAbajo.width / imgAbajo.height) * alturaAbajo;
 
-                // Cálculo del ancho para mantener la proporción
-                const anchoArriba =
-                    (imgArriba.width / imgArriba.height) * alturaArriba;
-                const anchoAbajo = (imgAbajo.width / imgAbajo.height) * alturaAbajo;
+            // Encabezado y pie de página
+            doc.addImage(imgArriba, "PNG", 0, 0, anchoArriba, alturaArriba); // Encabezado
+            const offset = 10; // Ajusta este valor según lo lejos que quieras que suba
+            doc.addImage(
+                imgAbajo,
+                "PNG",
+                0,
+                doc.internal.pageSize.height - alturaAbajo - offset, // Resta el offset aquí
+                anchoAbajo,
+                alturaAbajo
+            );  // Pie de página
+            // Título
+            doc.setFontSize(14);
+            doc.setTextColor(0, 100, 0);
+            doc.setFont(undefined, "bold");
+            doc.text("CERTIFICADO", pageWidth / 2, 38, null, null, "center");
+            doc.setFont(undefined, "normal");
 
-                // Encabezado y pie de página
-                doc.addImage(imgArriba, "PNG", 0, 0, anchoArriba, alturaArriba); // Encabezado
-                doc.addImage(
-                    imgAbajo,
-                    "PNG",
-                    0,
-                    doc.internal.pageSize.height - alturaAbajo,
-                    anchoAbajo,
-                    alturaAbajo
-                ); // Pie de página
-                // Título
-                doc.setFontSize(18);
-                doc.setTextColor(0, 100, 0);
-                doc.setFont(undefined, "bold");
-                doc.text("CERTIFICADO", pageWidth / 2, 50, null, null, "center");
-                doc.setFont(undefined, "normal");
+            // Número de certificado
+            doc.setFontSize(14);
+            doc.setTextColor(0, 0, 0);
+            doc.setFont(undefined, "bold");
+            doc.text(
+                "N°" + numeroCert + "-" + "002" + "-2024",
+                pageWidth / 2, 44, null, null, "center");
+            doc.setFont(undefined, "normal");
 
-                // Número de certificado
-                doc.setFontSize(14);
-                doc.setTextColor(0, 0, 0);
-                doc.setFont(undefined, "bold");
-                doc.text(
-                    "N°" + document.getElementById("codigoEmpresa1").value,
-                    pageWidth / 2,
-                    60,
-                    null,
-                    null,
-                    "center"
-                );
-                doc.setFont(undefined, "normal");
+            // Definir un nuevo ancho para el cuadro
+            const nuevoAncho = contentWidth + 1; // Aumenta el ancho original en 20 (ajusta este valor como desees)
 
-                // Cuadro verde sin relleno ajustado a la altura del texto
-                doc.setDrawColor(0, 100, 0);
-                let textYPosition = 70;
-                let textHeight = doc.getTextDimensions(
-                    `${document.getElementById("opcion1").value}`
-                ).h;
-                let rectYPosition = textYPosition - textHeight / 2 - 2;
-                let rectHeight = textHeight + 2;
-                doc.rect(margin, rectYPosition, contentWidth, rectHeight);
+            // Cuadro verde sin relleno ajustado a la altura del texto
+            doc.setDrawColor(0, 100, 0);
+            let textYPosition = 55;
+            let textHeight = doc.getTextDimensions(
+                `${titulo}`
+            ).h;
+            let rectYPosition = textYPosition - textHeight / 2 - 3.3;
+            let rectHeight = textHeight + 4;
+            doc.rect(margin, rectYPosition, nuevoAncho, rectHeight); // Usa nuevoAncho aquí
 
-                // Obtener el texto y el tamaño del texto
-                // Obtener el texto y el tamaño del texto
-                const texto = document.getElementById("opcion1").value;
-                doc.setFontSize(11);
+            // Obtener el texto y el tamaño del texto
+            const texto = titulo;
+            doc.setFontSize(10);
+            doc.setFont(undefined, "bold"); // Establecer la fuente en negrita
 
-                // Obtener el ancho del texto usando doc.getTextWidth()
-                const anchoTexto = doc.getTextWidth(texto);
+            // Obtener el ancho del texto usando doc.getTextWidth()
+            const anchoTexto = doc.getTextWidth(texto);
 
-                // Calcular la posición centrada
-                const anchoPagina = doc.internal.pageSize.getWidth(); // Ancho de la página
-                const posicionCentradaX = (anchoPagina - anchoTexto) / 2; // posición centrada
+            // Calcular la nueva posición centrada en base al nuevo ancho
+            const anchoPagina = doc.internal.pageSize.getWidth(); // Ancho de la página
+            const posicionCentradaX = margin + (nuevoAncho - anchoTexto) / 2; // Ajusta según el nuevo ancho
 
-                // Mostrar la opción seleccionada en el cuadro verde (sin añadir margen adicional)
-                doc.text(texto, posicionCentradaX, textYPosition);
+            // Mostrar la opción seleccionada en el cuadro verde (sin añadir margen adicional)
+            doc.text(texto, posicionCentradaX, textYPosition);
 
-                // Texto predeterminado debajo del cuadro verde
-                doc.setFontSize(11);
-                let textoPredeterminado =
-                    "Con RGR N° 1165-2021-GR-LL-GGR-GRS, la Gerencia Regional de Salud – La Libertad, nos otorga la Autorización Sanitaria para el tratamiento de Aguas Residuales – Tipo Domésticas, a través del uso de tanque sépticos y un filtro biológico.";
-                let textoYPosition = textYPosition + 10;
-                let textLines = doc.splitTextToSize(
-                    textoPredeterminado,
-                    contentWidth
-                );
-                textLines.forEach((line, index) => {
-                    doc.text(line, margin, textoYPosition + index * 6);
-                });
+            // Restablecer la fuente a normal para el texto predeterminado
+            doc.setFont(undefined, "normal");
 
-                // Texto predeterminado adicional
-                let textoAdicional1 = "ALTO CHICAMA S.R.L. ";
-                let textoAdicional2Parte1 =
-                    "  certifica haber recibido líquidos residuales para su tratamiento, de acuerdo al siguiente";
-                let textoAdicional2Parte2 = "detalle: ";
-                let textoYPositionAdicional =
-                    textoYPosition + textLines.length * 7 + 5;
 
-                // Renderizar la primera parte del texto
-                doc.setFont(undefined, "bold");
-                doc.text(textoAdicional1, margin, textoYPositionAdicional);
-                doc.setFont(undefined, "normal");
-                doc.text(
-                    textoAdicional2Parte1,
-                    margin + doc.getTextWidth(textoAdicional1),
-                    textoYPositionAdicional
-                );
+            // Texto predeterminado debajo del cuadro verde
+            doc.setFontSize(11);
 
-                // Renderizar la segunda parte en la siguiente línea
-                let textoYPositionAdicional2 = textoYPositionAdicional + 7; // Ajusta este valor según sea necesario
-                doc.text(textoAdicional2Parte2, margin, textoYPositionAdicional2);
+            // Establecer el texto normal para evitar negrita
+            doc.setFont(undefined, "normal");
 
-                // Función para dividir texto largo en líneas
-                function splitTextToLines(text, maxWidth, doc) {
-                    let words = text.split(" ");
-                    let lines = [];
-                    let currentLine = words[0];
+            let textoPredeterminado =
+                "Con RGR N° 1165-2021-GR-LL-GGR-GRS, la Gerencia Regional de Salud – La Libertad, nos otorga la Autorización Sanitaria para el tratamiento de Aguas Residuales – Tipo Domésticas, a través del uso de tanque sépticos y un filtro biológico.";
 
-                    for (let i = 1; i < words.length; i++) {
-                        let word = words[i];
-                        let width = doc.getTextWidth(currentLine + " " + word);
-                        if (width < maxWidth) {
-                            currentLine += " " + word;
-                        } else {
-                            lines.push(currentLine);
-                            currentLine = word;
-                        }
+            let textoYPosition = textYPosition + 10; // Ajusta la posición Y
+            let textLines = doc.splitTextToSize(textoPredeterminado, contentWidth);
+
+            // Agregar el texto con justificación y factor de interlineado ajustado
+            doc.text(textLines, margin, textoYPosition, {
+                align: 'justify',
+                maxWidth: contentWidth,
+                lineHeightFactor: 1.8 // Ajuste del interlineado
+            });
+
+            // Texto predeterminado adicional
+            let empresaTexto = "ALTO CHICAMA S.R.L. "; // Solo este en bold
+            let textoDescripcion1 = "certifica haber recibido aguas residuales para su tratamiento, de acuerdo";
+            let textoDescripcion2 = "al siguiente detalle:";
+
+            // Ajustar la posición del texto para que no choque
+            let textoYPositionAdicional = textoYPosition + textLines.length * 7 + 3; // Ajuste de posición
+
+            // Cambiar el tamaño de la fuente y agregar el primer bloque de texto
+            doc.setFontSize(10.5); // Reducir tamaño de "ALTO CHICAMA S.R.L."
+            doc.setFont(undefined, "bold");
+            doc.text(empresaTexto, margin, textoYPositionAdicional); // Solo "ALTO CHICAMA S.R.L." en bold
+
+            // Volver al tamaño normal y agregar el texto normal después
+            doc.setFont(undefined, "normal");
+            doc.setFontSize(11); // Volver al tamaño normal
+            doc.text(
+                textoDescripcion1,
+                margin + doc.getTextWidth(empresaTexto), // El texto normal continúa después del nombre de la empresa
+                textoYPositionAdicional
+            );
+
+            // Ajustar la posición del siguiente texto
+            textoYPositionAdicional += 6.5; // Aumentar espacio entre líneas
+            doc.text(textoDescripcion2, margin, textoYPositionAdicional);
+
+
+            // Función para dividir texto largo en líneas
+            function splitTextToLines(text, maxWidth, doc) {
+                let words = text.split(" ");
+                let lines = [];
+                let currentLine = words[0];
+
+                for (let i = 1; i < words.length; i++) {
+                    let word = words[i];
+                    let width = doc.getTextWidth(currentLine + " " + word);
+                    if (width < maxWidth) {
+                        currentLine += " " + word;
+                    } else {
+                        lines.push(currentLine);
+                        currentLine = word;
                     }
-                    lines.push(currentLine); // Agrega la última línea
-                    return lines;
                 }
+                lines.push(currentLine); // Agrega la última línea
+                return lines;
+            }
 
-                // Inicializa `startY` antes de usarlo
-                let startY = 120;
-                let cellWidth = contentWidth / 4;
-                let cellHeight = 12;
+            // Inicializa `startY` antes de usarlo
+            let startY = 101;
+            let minCellHeight = 12; // Altura mínima por celda
+            let padding = 4; // Espacio adicional dentro de las celdas
 
-                let headers = [
-                    "Fecha",
-                    "N° de Guía \n" + document.getElementById("empresa1").value,
-                    document.getElementById("tipoAguaTitulo").value,
-                    "M³",
-                ];
+            // Definir el ancho total del documento
+            let totalWidth = contentWidth; // O el ancho que consideres adecuado
 
-                // Encabezados en negrita
-                doc.setFont(undefined, "bold");
-                headers.forEach((header, index) => {
-                    doc.rect(
-                        margin + index * cellWidth,
-                        startY,
-                        cellWidth,
-                        cellHeight
-                    );
+            // Asignar porcentajes fijos para las columnas
+            let colWidthsPercentages = [15, 35, 40, 10];
 
-                    let headerX = margin + index * cellWidth + cellWidth / 2;
-                    let headerY = startY + cellHeight / 2;
-                    doc.text(header, headerX, headerY, null, null, "center");
-                });
-                doc.setFont(undefined, "normal");
+            // Convertir los porcentajes en píxeles
+            let colWidths = colWidthsPercentages.map(percentage => (percentage / 100) * totalWidth);
 
-                startY += cellHeight;
+            let abreviacion = document.getElementById("abreviacion").value;
+            let guiaText = "N° de Guía " + abreviacion;
 
-                let rowData = [
-                    document.getElementById("fecha1").value,
-                    document.getElementById("numeroGuia1").value,
-                    document.getElementById("tipoAgua").value,
-                    document.getElementById("metros3").value,
-                ];
+            // Si la longitud total es mayor a 22 caracteres, insertar un salto de línea
+            if (guiaText.length > 24) {
+                guiaText = "N° de Guía\n" + abreviacion; // Añadir salto de línea
+            }
 
-                // Renderizar celdas
-                rowData.forEach((data, index) => {
-                    doc.rect(
-                        margin + index * cellWidth,
-                        startY,
-                        cellWidth,
-                        cellHeight
-                    );
+            let headers = [
+                "Fecha",
+                guiaText, // Usar la variable ajustada
+                tipoResiduotittle,
+                "  M³",
+            ];
 
-                    // Si el texto es muy largo, lo dividimos en líneas
-                    let maxTextWidth = cellWidth - 4; // Margen dentro de la celda
-                    let lines = splitTextToLines(data, maxTextWidth, doc);
+            // Encabezados en negrita
+            doc.setFont(undefined, "bold");
+            headers.forEach((header, index) => {
+                let cellWidth = colWidths[index];
 
-                    // Calcula el inicio Y para centrar el texto verticalmente
-                    let lineHeight = 5; // Altura de cada línea de texto
-                    let totalTextHeight = lines.length * lineHeight;
-                    let textY = startY + (cellHeight - totalTextHeight) / 2 + lineHeight / 2;
+                // Dibujar la celda del encabezado
+                doc.rect(margin + colWidths.slice(0, index).reduce((a, b) => a + b + 0.3, 0), startY, cellWidth + 0.3, minCellHeight);
 
-                    lines.forEach((line) => {
-                        let textWidth = doc.getTextWidth(line);
-                        let textX = margin + index * cellWidth + (cellWidth - textWidth) / 2; // Centramos horizontalmente
-                        doc.text(line, textX, textY);
-                        textY += lineHeight; // Mueve hacia abajo para la siguiente línea
+                // Coordenadas de los encabezados
+                let headerX = margin + colWidths.slice(0, index).reduce((a, b) => a + b, 0) + cellWidth / 2;
+                let headerY = startY + minCellHeight / 2 + doc.getTextDimensions(header).h / 4; // Centrado verticalmente
+
+                // Verificar si el texto contiene un salto de línea
+                if (header.includes("\n")) {
+                    let lines = header.split("\n");
+                    lines.forEach((line, lineIndex) => {
+                        let lineHeight = doc.getTextDimensions(line).h; // Altura de la línea
+                        let lineY = headerY + lineHeight * (lineIndex - (lines.length - 1) / 2); // Ajustar la posición para centrar las líneas
+                        doc.text(line, headerX, lineY, null, null, "center");
                     });
+                } else {
+                    doc.text(header, headerX, headerY, null, null, "center");
+                }
+            });
+            doc.setFont(undefined, "normal");
+
+            startY += minCellHeight;
+
+            // Convertir la fecha de "AAAA-MM-DD" a "DD-MM-AAAA"
+            let fechaOriginal = document.getElementById("fecha").value;
+            let [year, month, day] = fechaOriginal.split("-");
+            let fechaFormateada = `${day}-${month}-${year}`; // Nueva fecha con formato "DD-MM-AAAA"
+
+            let rowData = [
+                fechaFormateada, // Usar la fecha formateada
+                document.getElementById("numeroGuia").value,
+                tipoResiduo,
+                cantidad,
+            ];
+
+            // Renderizar celdas de los datos
+            rowData.forEach((data, index) => {
+                let cellWidth = colWidths[index];
+                let maxTextWidth = cellWidth - padding; // Margen dentro de la celda
+                let lines = splitTextToLines(data, maxTextWidth, doc);
+
+                // Calcula la altura necesaria para las líneas
+                let lineHeight = 6; // Altura de cada línea de texto
+                let totalTextHeight = lines.length * lineHeight;
+                let cellHeight = Math.max(totalTextHeight, minCellHeight); // Elige la mayor entre el mínimo y el calculado
+
+                // Dibuja el rectángulo de la celda
+                doc.rect(margin + colWidths.slice(0, index).reduce((a, b) => a + b + 0.3, 0), startY, cellWidth + 0.3, cellHeight);
+
+                // Centramos verticalmente el texto
+                let textY = startY + (cellHeight - totalTextHeight) / 2 + (totalTextHeight > cellHeight ? 0 : lineHeight / 1.5); // Ajuste para centrar
+
+                lines.forEach((line) => {
+                    let textWidth = doc.getTextWidth(line);
+                    let textX = margin + colWidths.slice(0, index).reduce((a, b) => a + b, 0) + (cellWidth - textWidth) / 2; // Centramos horizontalmente
+                    doc.text(line, textX, textY);
+                    textY += lineHeight; // Mueve hacia abajo para la siguiente línea
                 });
+            });
 
-
-
-
-                if (residuos) {
-                    doc.setFontSize(11);
-                    let texto = `Líquidos residuales provenientes de la siguiente dirección: ${residuos}, generados por la empresa:`;
-                    let splittedText = doc.splitTextToSize(texto, contentWidth);
-                    doc.text(splittedText, margin, textoYPositionAdicional + 45);
-                }
-
-                // Cuadro con información de RUC y Nombre de la Empresa
+            if (residuos) {
                 doc.setFontSize(11);
-                let infoStartY = textoYPositionAdicional + 55;
-                let infoCellWidthLeft = contentWidth * 0.7; // 70% del ancho para la primera celda
-                let infoCellWidthRight = contentWidth * 0.3; // 30% del ancho para la segunda celda
-                let infoCellHeight = 10;
+                let texto = `${residuoDir} provenientes de la siguiente dirección: ${residuos}, generados por la empresa:`;
 
-                let nomEmpresa = `${document.getElementById("nomEmpresa1").value}`;
-                let rucValue = `RUC: ${document.getElementById("ruc1").value}`;
+                // Divide el texto para ajustarlo al ancho de la página
+                let splittedText = doc.splitTextToSize(texto, contentWidth);
 
-                // Dibuja la primera celda (nombre de la empresa)
-                doc.rect(margin, infoStartY, infoCellWidthLeft, infoCellHeight);
+                // Dibuja el texto en la posición correspondiente con los mismos estilos
+                doc.text(splittedText, margin, textoYPositionAdicional + 38, {
+                    lineHeightFactor: 1.7
+                });
+            }
 
-                // Ajustar el estilo de fuente a negrita para el nombre de la empresa
-                doc.setFont(undefined, "bold");
+            // Cuadro con información de RUC y Nombre de la Empresa
+            doc.setFontSize(11);
+            let infoStartY = textoYPositionAdicional + 50;
+            let infoCellWidthLeft = contentWidth * 0.7; // 70% del ancho para la primera celda
+            let infoCellWidthRight = contentWidth * 0.3; // 30% del ancho para la segunda celda
+            let infoCellHeight = 10;
 
-                // Calcular el ancho del texto y centrarlo
-                let textWidthEmpresa = doc.getTextWidth(nomEmpresa);
-                let textXEmpresa =
-                    margin + (infoCellWidthLeft - textWidthEmpresa) / 2;
-                doc.text(nomEmpresa, textXEmpresa, infoStartY + 7);
+            //let nomEmpresa = `${document.getElementById("nomEmpresa").value}`;
+            let rucValue = `RUC: ${document.getElementById("ruc").value}`;
 
-                // Restaurar el estilo de fuente normal para el resto del texto
-                doc.setFont(undefined, "normal");
+            // Dibuja la primera celda (nombre de la empresa)
+            doc.rect(margin, infoStartY, infoCellWidthLeft, infoCellHeight);
 
-                // Dibuja la segunda celda (RUC) a la derecha de la primera
-                doc.rect(
-                    margin + infoCellWidthLeft,
-                    infoStartY,
-                    infoCellWidthRight,
-                    infoCellHeight
-                );
+            // Ajustar el estilo de fuente a negrita para el nombre de la empresa
+            doc.setFont(undefined, "bold");
 
-                // Calcular el ancho del texto y centrarlo
-                let textWidthRuc = doc.getTextWidth(rucValue);
-                let textXRuc =
-                    margin +
-                    infoCellWidthLeft +
-                    (infoCellWidthRight - textWidthRuc) / 2;
-                doc.text(rucValue, textXRuc, infoStartY + 7);
+            // Calcular el ancho del texto y centrarlo
+            let textWidthEmpresa = doc.getTextWidth(nomEmpresa);
+            let textXEmpresa =
+                margin + (infoCellWidthLeft - textWidthEmpresa) / 2;
+            doc.text(nomEmpresa, textXEmpresa, infoStartY + 7);
 
-                // Agregar el texto predeterminado con los datos de la empresa y el RUC
-                doc.setFontSize(11);
-                let nombreEmpresa = document.getElementById("empresa1").value;
-                let ruct = document.getElementById("ruct1").value;
+            // Restaurar el estilo de fuente normal para el resto del texto
+            doc.setFont(undefined, "normal");
 
-                let textoPredeterminado3 = `Transportados por la empresa ${nombreEmpresa} con RUC: ${ruct} hacia la Infraestructura de Valorización Alto Chicama, ubicada en la Panamericana Norte Km 594, Sector La Soledad – Chicama – Ascope – La Libertad; para su valorización.`;
+            // Dibuja la segunda celda (RUC) a la derecha de la primera
+            doc.rect(
+                margin + infoCellWidthLeft,
+                infoStartY,
+                infoCellWidthRight + 1,
+                infoCellHeight
+            );
 
-                let splittedText = doc.splitTextToSize(
-                    textoPredeterminado3,
-                    contentWidth
-                );
-                doc.text(splittedText, margin, infoStartY + 20);
+            // Calcular el ancho del texto y centrarlo
+            let textWidthRuc = doc.getTextWidth(rucValue);
+            let textXRuc =
+                margin +
+                infoCellWidthLeft +
+                (infoCellWidthRight - textWidthRuc) / 2;
+            doc.text(rucValue, textXRuc, infoStartY + 7);
 
-                // Firma de la empresa
-                doc.addImage(imgData1, "PNG", 75, startY + 75, 60, 30);
+            // Agregar el texto predeterminado con los datos de la empresa y el RUC
+            doc.setFontSize(11);
+            let nombreEmpresa = document.getElementById("input_transportista").value;
+            let ruct = document.getElementById("ruct").value;
 
-                // Leer la imagen del QR
+            // Texto con los datos de la empresa y el RUC
+            let textoPredeterminado3 = `Transportados por la empresa ${nombreEmpresa} con RUC: ${ruct} hacia la Infraestructura de Valorización Alto Chicama, ubicada en la Panamericana Norte Km 594, Sector La Soledad – Chicama – Ascope – La Libertad; para su tratamiento.`;
 
-                // Agregar la imagen del QR
-                doc.addImage(imgQR12, "PNG", 160, startY + 122, 25, 25); // Ajusta las coordenadas y tamaño según sea necesario
-                // Obtener la fecha de la ID 'fecha' y transformarla
-                // Obtener la fecha en formato 'YYYY-MM-DD'
-                const fechaString = document.getElementById("fecha1").value; // Formato 'YYYY-MM-DD'
+            // Dividir el texto en líneas que se ajusten al ancho del contenido
+            let splittedText = doc.splitTextToSize(textoPredeterminado3, contentWidth);
 
-                // Convertir la fecha de formato 'YYYY-MM-DD' a un objeto Date
-                const [anio, mes, dia] = fechaString.split('-').map(Number);
+            // Agregar el texto con justificación y factor de interlineado ajustado
+            doc.text(splittedText, margin, infoStartY + 20, {
+                align: 'justify',
+                maxWidth: contentWidth,
+                lineHeightFactor: 1.7 // Ajuste del interlineado
+            });
 
-                // Crear un objeto Date usando el valor sin ajuste de zona horaria
-                const fecha = new Date(anio, mes - 1, dia);
+            // Firma de la empresa
+            doc.addImage(imgFirma, "PNG", 75, startY + 78, 51, 26);
 
-                // Crear una función que obtenga la fecha en formato local
-                function obtenerFechaLocal(fecha) {
-                    const dia = fecha.getDate();
-                    const mes = fecha.getMonth(); // Nota: los meses van de 0 a 11
-                    const anio = fecha.getFullYear();
+            // Leer la imagen del QR
 
-                    return { dia, mes, anio };
-                }
+            // Agregar la imagen del QR
+            doc.addImage(imgQR12, "PNG", 162, startY + 122, 25, 25); // Ajusta las coordenadas y tamaño según sea necesario
+            // Obtener la fecha de la ID 'fecha' y transformarla
+            // Obtener la fecha en formato 'YYYY-MM-DD'
+            const fechaString = document.getElementById("fecha1").value; // Formato 'YYYY-MM-DD'
 
-                // Obtener la fecha en formato local
-                const { dia: diaLocal, mes: mesLocal, anio: anioLocal } = obtenerFechaLocal(fecha);
+            // Convertir la fecha de formato 'YYYY-MM-DD' a un objeto Date
+            const [anio, mes, dia] = fechaString.split('-').map(Number);
 
-                // Array de nombres de meses
-                const meses = [
-                    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-                    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
-                ];
+            // Crear un objeto Date usando el valor sin ajuste de zona horaria
+            const fecha = new Date(anio, mes - 1, dia);
 
-                // Crear la cadena de texto para la fecha
-                const textoFecha = `Trujillo, ${diaLocal} de ${meses[mesLocal]} del ${anioLocal}`;
+            // Crear una función que obtenga la fecha en formato local
+            function obtenerFechaLocal(fecha) {
+                const dia = fecha.getDate();
+                const mes = fecha.getMonth(); // Nota: los meses van de 0 a 11
+                const anio = fecha.getFullYear();
 
-                // Obtener el ancho de la página y calcular la posición para el texto
-                const pdfPageWidth = doc.internal.pageSize.width; // Usar un nombre diferente para evitar conflictos
-                const textWidth = doc.getTextWidth(textoFecha); // Ancho del texto
-                const textX = pdfPageWidth - textWidth - 10; // Posición X (alineado a la derecha)
-                const textY = startY + 120; // Posición Y (ajusta según sea necesario)
+                return { dia, mes, anio };
+            }
 
-                doc.setFontSize(10);
-                doc.setTextColor(105, 105, 105); // Color gris para el texto
+            // Obtener la fecha en formato local
+            const { dia: diaLocal, mes: mesLocal, anio: anioLocal } = obtenerFechaLocal(fecha);
 
-                // Añadir la fecha al PDF
-                doc.text(textoFecha, textX, textY);
+            // Array de nombres de meses
+            const meses = [
+                "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+            ];
 
-                // Texto adicional en la parte inferior izquierda
-                const textLeft = 10; // Posición en X
-                const textBottom = pageHeight - 30; // Posición en Y (desde abajo)
+            // Crear la cadena de texto para la fecha
+            const textoFecha = `Trujillo, ${diaLocal} de ${meses[mesLocal]} del ${anioLocal}`;
 
-                doc.setFontSize(10);
-                doc.setTextColor(105, 105, 105); // Color gris para el texto
+            // Obtener el ancho de la página y calcular la posición para el texto
+            const pdfPageWidth = doc.internal.pageSize.width; // Usar un nombre diferente para evitar conflictos
+            const textWidth = doc.getTextWidth(textoFecha); // Ancho del texto
+            const textX = pdfPageWidth - textWidth - 10; // Posición X (alineado a la derecha)
+            const textY = startY + 120; // Posición Y (ajusta según sea necesario)
 
-                // Primera línea de texto
-                doc.text(
-                    "OFICINA / INFRAESTRUCTURA DE VALORIZACIÓN",
-                    textLeft,
-                    textBottom
-                );
 
-                // Segunda línea de texto
-                doc.text(
-                    "Panamericana Norte Km 594, Sector La Soledad – Chicama – Ascope – La Libertad",
-                    textLeft,
-                    textBottom + 5
-                );
+            doc.setFontSize(10);
+            doc.setTextColor(105, 105, 105); // Color gris para el texto
 
-                // Tercera línea de texto
-                doc.text("comercial@", textLeft, textBottom + 10);
-                doc.setTextColor(0, 128, 0); // Color verde para el correo
-                doc.text(
-                    "serviciosambientalesaltochicama.com",
-                    textLeft + doc.getTextWidth("comercial@"),
-                    textBottom + 10
-                );
+            // Añadir la fecha al PDF
+            doc.text(textoFecha, textX, textY);
 
-                // Cuarta línea de texto
-                doc.setTextColor(105, 105, 105); // Volver a color gris
-                doc.text("914 105 601 | 913 036 413", textLeft, textBottom + 15);
+            // Texto adicional en la parte inferior izquierda
+            const textLeft = 22; // Posición en X
+            const textBottom = pageHeight - 40; // Posición en Y (desde abajo)
 
-                //doc.save("certificado_valorizacion.pdf");
+            doc.setFontSize(10);
+            doc.setTextColor(105, 105, 105); // Color gris para el texto
 
-                // Leer el archivo del QR
-                //readerQR1.readAsDataURL(fileQr1);
-                const pdfData = doc.output('blob');
-                resolve(pdfData);
-            };
-            reader1.onerror = reject;
-            reader1.readAsDataURL(file1);
+            // Primera línea de texto
+            doc.text(
+                "OFICINA / INFRAESTRUCTURA DE VALORIZACIÓN",
+                textLeft,
+                textBottom
+            );
+
+            // Segunda línea de texto
+            doc.text(
+                "Panamericana Norte Km 594, Sector La Soledad – Chicama – Ascope – La Libertad",
+                textLeft,
+                textBottom + 5
+            );
+
+            // Tercera línea de texto
+            doc.text("comercial@", textLeft, textBottom + 10);
+            doc.setTextColor(0, 128, 0); // Color verde para el correo
+            doc.text(
+                "serviciosambientalesaltochicama.com",
+                textLeft + doc.getTextWidth("comercial@"),
+                textBottom + 10
+            );
+
+            // Cuarta línea de texto
+            doc.setTextColor(105, 105, 105); // Volver a color gris
+            doc.text("914 105 601 | 913 036 413", textLeft, textBottom + 15);
+            //DESCARGA
+            doc.save("certificado_valorizacion.pdf");
+            const pdfData = doc.output('blob');
+            resolve(pdfData);
             //window.location.reload();
         });
     } else {
@@ -1367,9 +1479,9 @@ async function generarPDF(formId) {
     }
 }
 
-async function generarYGuardarPDF(formId) {
+async function generarYGuardarPDF() {
     try {
-        const pdfBlob = await generarPDF(formId);
+        const pdfBlob = await generarPDF();
         console.log(pdfBlob);
         guardarDocumento(pdfBlob);
 
