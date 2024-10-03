@@ -1,9 +1,8 @@
-﻿$(document).ready(function () {
-    consult = false;
-    EmpresaSelect("#input_empresa");
-    getListDocumento();
+﻿$(document).ready(async function () {
 
-    // Llamar a obtenerDeudasEmpresas al cargar la página
+    consult = false;
+    getListDocumento();
+    await TransportistaSelect();
     obtenerDeudasEmpresas();
     obtenerGananciasEmpresas();
 
@@ -24,53 +23,58 @@
 function TransportistaSelect() {
     var endpoint = getDomain() + "/Transportista/TransportistaSelect";
 
-    $.ajax({
-        type: "GET",
-        async: true,
-        url: endpoint,
-        headers: {
-            "Content-Type": "application/json"
-        },
-        dataType: "json",
-        beforeSend: function (xhr) {
-            console.log("Cargando transportistas...");
-        },
-        success: function (data) {
-            var TransportistaSelect = data.item3;
+    return new Promise((resolve, reject) =>{
+        $.ajax({
+            type: "GET",
+            async: true,
+            url: endpoint,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            dataType: "json",
+            beforeSend: function (xhr) {
+                console.log("Cargando transportistas...");
+            },
+            success: function (data) {
+                var TransportistaSelect = data.item3;
 
-            // Limpiar el select y agregar opción por defecto
-            $('#input_transportista').empty();
-            $('#input_transportista').append(new Option("Seleccione un transportista...", "", true, true));
+                $('#input_transportista').select2({
+                    placeholder: "Seleccione un transportista...",
+                    allowClear: true,
+                    language: "es",
+                    dropdownCssClass: 'limit-dropdown' // Añadir la clase para limitar altura
+                });
 
-            // Verificar si la data es null, vacía, o contiene solo espacios en blanco
-            if (TransportistaSelect && TransportistaSelect.length > 0) {
-                // Agregar opciones al select
-                for (var i = 0; i < TransportistaSelect.length; i++) {
-                    var item = TransportistaSelect[i];
-                    $('#input_transportista').append(new Option(item.transportista_nombre, item.transportista_id));
+                // Limpiar el select y agregar opción por defecto
+                $('#input_transportista').empty();
+                $('#input_transportista').append(new Option("Seleccione un transportista...", "", true, true));
+
+                // Verificar si la data es null, vacía, o contiene solo espacios en blanco
+                if (TransportistaSelect && TransportistaSelect.length > 0) {
+                    // Agregar opciones al select
+                    for (var i = 0; i < TransportistaSelect.length; i++) {
+                        var item = TransportistaSelect[i];
+                        $('#input_transportista').append(new Option(item.transportista_nombre, item.transportista_id));
+                    }
+                } else {
+                    console.log("No se encontraron transportistas.");
+                    $('#input_transportista').append(new Option("No hay transportistas disponibles", ""));
+                    return
                 }
-            } else {
-                console.log("No se encontraron transportistas.");
-                $('#input_transportista').append(new Option("No hay transportistas disponibles", ""));
+
+                // Habilitar el select
+                $('#input_transportista').prop("disabled", false);
+
+                resolve()
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error al cargar transportistas: ' + textStatus);
+                console.error("Error al cargar transportistas:", textStatus, errorThrown);
             }
+        });
+    })
 
-            // Inicializar o actualizar Select2 usando directamente el ID del select
-            $('#input_transportista').select2({
-                placeholder: "Seleccione un transportista...",
-                allowClear: true,
-                language: "es",
-                dropdownCssClass: 'limit-dropdown' // Añadir la clase para limitar altura
-            });
-
-            // Habilitar el select
-            $('#input_transportista').prop("disabled", false);
-
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            alert('Error al cargar transportistas: ' + textStatus);
-            console.error("Error al cargar transportistas:", textStatus, errorThrown);
-        }
-    });
 }
 
 function obtenerIdTransportistaSeleccionada(id_transportista) {
@@ -84,11 +88,12 @@ function obtenerIdTransportistaSeleccionada(id_transportista) {
         console.log("No hay ninguna transportista seleccionada.");
     }
 
-    return valorSeleccionadoTransportista;  // Retorna el valor (empresa_id) seleccionado
+    return valorSeleccionadoTransportista;  // Retorna el valor (transportista_id) seleccionado
 }
 
-// Llamada inicial para llenar el select de empresas
+// Llamada inicial para llenar el select de transportistas
 TransportistaSelect("#input_transportista");
+
 
 $(document).on('click', '.btnGuardar', function () {
     TransportistaSelect("#input_transportista");
@@ -255,7 +260,7 @@ function getListDocumento() {
             success: function (data) {
                 var dataEmpresa = data.item3;
                 var datosRow = "";
-
+                console.log(dataEmpresa)
                 resolve(dataEmpresa);
 
                 for (var i = 0; i < dataEmpresa.length; i++) {
