@@ -10,6 +10,207 @@ namespace AltoChicamaSystem.Data.Factura
     {
         private ConexionDB con = new ConexionDB();
 
+
+        public Tuple<string, string, decimal> listarGananciasTransportistas(string bandera)
+        {
+            string rpta = "0"; // Inicializar rpta en "0"
+            string msg = "";
+            decimal totalGanancias = 0;
+
+            SqlConnection sqlCon = new SqlConnection();
+            try
+            {
+                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                sqlCon.Open();
+                SqlCommand sqlCmd = new SqlCommand();
+                sqlCmd.Connection = sqlCon;
+                sqlCmd.CommandText = "Ganancias_Transportistas_Factura";
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+
+                using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                {
+                    // Leer la primera fila para obtener Rpta y Msg
+                    if (sdr.Read())
+                    {
+                        rpta = sdr["Rpta"].ToString();
+                        msg = sdr["Msg"].ToString();
+                    }
+
+                    // Cambiar a la siguiente tabla de resultados
+                    if (sdr.NextResult() && rpta == "0" && sdr.Read())
+                    {
+                        totalGanancias = Convert.ToDecimal(sdr["total_ganancias"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                msg = ex.Message;
+                totalGanancias = 0;
+            }
+            finally
+            {
+                if (sqlCon.State == ConnectionState.Open)
+                {
+                    sqlCon.Close();
+                }
+            }
+
+            return Tuple.Create(rpta, msg, totalGanancias);
+        }
+
+
+
+        public Tuple<string, string, decimal> listarDeudasTransportistas(string bandera)
+        {
+            string rpta = "0"; // Inicializar rpta en "0"
+            string msg = "";
+            decimal totalDeudas = 0;
+
+            SqlConnection sqlCon = new SqlConnection();
+            try
+            {
+                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                sqlCon.Open();
+                SqlCommand sqlCmd = new SqlCommand();
+                sqlCmd.Connection = sqlCon;
+                sqlCmd.CommandText = "Deudas_Transportistas_Factura";
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+
+                using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                {
+                    // Leer la primera fila para obtener Rpta y Msg
+                    if (sdr.Read())
+                    {
+                        rpta = sdr["Rpta"].ToString();
+                        msg = sdr["Msg"].ToString();
+                    }
+
+                    // Cambiar a la siguiente tabla de resultados
+                    if (sdr.NextResult() && rpta == "0" && sdr.Read())
+                    {
+                        totalDeudas = Convert.ToDecimal(sdr["total_deudas"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                msg = ex.Message;
+                totalDeudas = 0;
+            }
+            finally
+            {
+                if (sqlCon.State == ConnectionState.Open)
+                {
+                    sqlCon.Close();
+                }
+            }
+
+            return Tuple.Create(rpta, msg, totalDeudas);
+        }
+
+        public Tuple<string, string, decimal> listarGananciasTransportistasIndividual(int transportista_id, string bandera)
+        {
+            string rpta = "0"; // Inicializar rpta en "0"
+            string msg = "";
+            decimal totalGanancias = 0;
+
+            SqlConnection sqlCon = new SqlConnection();
+            try
+            {
+                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                sqlCon.Open();
+                SqlCommand sqlCmd = new SqlCommand();
+                sqlCmd.Connection = sqlCon;
+                sqlCmd.CommandText = "Ganancias_Transportistas_Factura_Individual";
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+
+                // Añadir parámetro transportistaId
+                sqlCmd.Parameters.AddWithValue("@transportista_id", transportista_id);
+
+                using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                {
+                    // Leer la primera fila para obtener Rpta y Msg
+                    if (sdr.Read())
+                    {
+                        rpta = sdr["Rpta"].ToString();
+                        msg = sdr["Msg"].ToString();
+                    }
+
+                    // Cambiar a la siguiente tabla de resultados
+                    if (sdr.NextResult() && rpta == "0" && sdr.Read())
+                    {
+                        totalGanancias = Convert.ToDecimal(sdr["total_ganancias"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                msg = ex.Message;
+                totalGanancias = 0;
+            }
+            finally
+            {
+                if (sqlCon.State == ConnectionState.Open)
+                {
+                    sqlCon.Close();
+                }
+            }
+
+            return Tuple.Create(rpta, msg, totalGanancias);
+        }
+
+        public Tuple<string, string, decimal> listarDeudasTransportistasIndividual(int transportista_id, string bandera)
+        {
+            string rpta = "0"; // Inicializar rpta en "0"
+            string msg = "";
+            decimal totalDeudas = 0;
+
+            SqlConnection sqlCon = new SqlConnection();
+            try
+            {
+                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                sqlCon.Open();
+                SqlCommand sqlCmd = new SqlCommand();
+                sqlCmd.Connection = sqlCon;
+                sqlCmd.CommandText = "Perdidas_Transportistas_Factura_Individual";
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+
+                // Añadir parámetro transportistaId
+                sqlCmd.Parameters.AddWithValue("@transportista_id", transportista_id);
+
+                using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                {
+                    // Leer la primera fila para obtener Rpta y Msg
+                    if (sdr.Read())
+                    {
+                        rpta = sdr["Rpta"].ToString();
+                        msg = sdr["Msg"].ToString();
+                    }
+
+                    // Cambiar a la siguiente tabla de resultados
+                    if (sdr.NextResult() && rpta == "0" && sdr.Read())
+                    {
+                        totalDeudas = Convert.ToDecimal(sdr["total_perdidas"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                msg = ex.Message;
+                totalDeudas = 0;
+            }
+            finally
+            {
+                if (sqlCon.State == ConnectionState.Open)
+                {
+                    sqlCon.Close();
+                }
+            }
+
+            return Tuple.Create(rpta, msg, totalDeudas);
+        }
+
         public Tuple<string, string> regFactura(CMFactura cmFactura, string bandera)
         {
             string rpta = "";

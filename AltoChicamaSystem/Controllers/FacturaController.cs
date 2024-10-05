@@ -1,5 +1,6 @@
 ﻿using AltoChicamaSystem.Models;
 using AltoChicamaSystem.Negocio;
+using Azure.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -42,6 +43,107 @@ namespace AltoChicamaSystem.Controllers
             catch
             {
                 return BadRequest(result);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult listarGananciasTransportistas()
+        {
+            var result = Tuple.Create("1", "Error al obtener ganancias", 0m); // Valor predeterminado
+
+            try
+            {
+                string bandera = conf.GetValue<string>("Bandera");
+                result = objFacturaCN.listarGananciasTransportistas(bandera);
+
+                if (result.Item1 == "0") // Verifica si la operación fue exitosa
+                {
+                    return Ok(result); // Devuelve el resultado completo
+                }
+                else
+                {
+                    return BadRequest(result); // Devuelve el resultado en caso de error
+                }
+            }
+            catch
+            {
+                return BadRequest(result); // Devuelve el resultado en caso de excepción
+            }
+        }
+
+
+        [HttpGet]
+        public ActionResult listarDeudasTransportistas()
+        {
+            var result = Tuple.Create("1", "Error al obtener deudas", 0m); // Valor predeterminado
+
+            try
+            {
+                string bandera = conf.GetValue<string>("Bandera");
+                result = objFacturaCN.listarDeudasTransportistas(bandera);
+
+                if (result.Item1 == "0") // Verifica si la operación fue exitosa
+                {
+                    return Ok(result); // Devuelve el resultado completo
+                }
+                else
+                {
+                    return BadRequest(result); // Devuelve el resultado en caso de error
+                }
+            }
+            catch
+            {
+                return BadRequest(result); // Devuelve el resultado en caso de excepción
+            }
+        }
+
+        [HttpPost]
+        public ActionResult listarGananciasTransportistasIndividual([FromBody] CMFactura request)
+        {
+            var result = Tuple.Create("1", "Error al obtener ganancias", 0m); // Valor predeterminado
+
+            try
+            {
+                string bandera = conf.GetValue<string>("Bandera");
+                result = objFacturaCN.listarGananciasTransportistasIndividual(request.transportista_id, bandera);
+
+                if (result.Item1 == "0") // Verifica si la operación fue exitosa
+                {
+                    return Ok(result); // Devuelve el resultado completo
+                }
+                else
+                {
+                    return BadRequest(result); // Devuelve el resultado en caso de error
+                }
+            }
+            catch
+            {
+                return BadRequest(result); // Devuelve el resultado en caso de excepción
+            }
+        }
+
+        [HttpPost]
+        public ActionResult listarDeudasTransportistasIndividual([FromBody] CMFactura request)
+        {
+            var result = Tuple.Create("1", "Error al obtener deudas", 0m); // Valor predeterminado
+
+            try
+            {
+                string bandera = conf.GetValue<string>("Bandera");
+                result = objFacturaCN.listarDeudasTransportistasIndividual(request.transportista_id, bandera);
+
+                if (result.Item1 == "0") // Verifica si la operación fue exitosa
+                {
+                    return Ok(result); // Devuelve el resultado completo
+                }
+                else
+                {
+                    return BadRequest(result); // Devuelve el resultado en caso de error
+                }
+            }
+            catch
+            {
+                return BadRequest(result); // Devuelve el resultado en caso de excepción
             }
         }
 

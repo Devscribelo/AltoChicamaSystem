@@ -1,16 +1,123 @@
 ﻿$(document).ready(function () {
     getListFactura();
     agregarBotonesExportacion("#table_empresa");
-
+    obtenerGananciasTransportista();
+    obtenerDeudasTransportista();
     $(document).on('change', '.status3', function () {
         var rowData = $(this).closest('tr').data();
         alterFacturaStatus(rowData.id_factura);
     });
+
+    // Definir las variables aquí
+
     $('#btnConsultar').click(function () {
         capturarValoresSeleccionados();
-        getListFacturaTransportista(transportistaId, facturaStatus);
+
     });
 });
+
+function obtenerGananciasTransportista() {
+    var endpoint = getDomain() + "/Factura/listarGananciasTransportistas";
+
+    $.ajax({
+        type: "GET",
+        async: true,
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        dataType: "json",
+        beforeSend: function () {
+            console.log("Cargando ganancias...");
+        },
+        success: function (data) {
+            // Accedemos a Item3 directamente
+            var dataGanancias = data.item3; // Asegúrate de que sea Item3
+
+            // Verificamos si la respuesta indica que hay ganancias disponibles
+            if (data.Item1 === "0") { // Cambiamos la verificación para usar solo Item1
+                $("#input_deuda2").val("S/. 0.00"); // No hay ganancias disponibles
+            } else {
+                // Si hay datos, convertimos el valor de totalGanancias
+                $("#input_deuda2").val("S/. " + parseFloat(dataGanancias).toFixed(2)); // Ganancia Total
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            // Manejo de errores de la petición
+            alert('Error al cargar ganancias: ' + textStatus + ' - ' + errorThrown);
+            console.error("Error al cargar ganancias:", textStatus, errorThrown);
+        }
+    });
+}
+
+
+function obtenerDeudasTransportista() {
+    var endpoint = getDomain() + "/Factura/listarDeudasTransportistas";
+
+    $.ajax({
+        type: "GET",
+        async: true,
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        dataType: "json",
+        beforeSend: function () {
+            console.log("Cargando deudas...");
+        },
+        success: function (data) {
+            // Accedemos a Item3 directamente
+            var dataDeudas = data.item3; // Asegúrate de que sea Item3
+
+            // Verificamos si la respuesta indica que hay ganancias disponibles
+            if (data.Item1 === "0") { // Cambiamos la verificación para usar solo Item1
+                $("#input_deuda3").val("S/. 0.00"); // No hay ganancias disponibles
+            } else {
+                // Si hay datos, convertimos el valor de totalGanancias
+                $("#input_deuda3").val("S/. " + parseFloat(dataDeudas).toFixed(2)); // Ganancia Total
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            // Manejo de errores de la petición
+            alert('Error al cargar deudas: ' + textStatus + ' - ' + errorThrown);
+            console.error("Error al cargar deudas:", textStatus, errorThrown);
+        }
+    });
+}
+
+
+
+function initializeDataTable() {
+    if (!$.fn.DataTable.isDataTable("#table_empresa")) {
+        $("#table_empresa").DataTable({
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+            },
+            dom: 'frtip',
+            buttons: [
+                {
+                    extend: 'excel',
+                    className: 'btn_export_Excel',
+                    exportOptions: {
+                        columns: ':visible:not(:last-child, :nth-last-child(2))'
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    className: 'btn_export_Pdf',
+                    exportOptions: {
+                        columns: ':visible:not(:last-child, :nth-last-child(2))'
+                    }
+                }
+            ],
+            colResize: {
+                tableWidthFixed: 'false'
+            },
+            colReorder: true
+        });
+    }
+}
+
 
 function modalDetalleFactura(id_factura) {
     $("#modal_detalles_guia").modal("show").css('display', 'flex');
@@ -31,21 +138,60 @@ function mostrarGuiasSeleccionadas() {
     return (guias);
 }
 
+function vaciarFormFactura() {
+    $('#modal_nueva_factura input[type="text"]').val('');
+    $('#modal_nueva_factura input[type="number"]').val('');
+}
+
+function modalNuevaFactura() {
+    vaciarFormFactura();
+    $("#modal_nueva_factura").modal("show").css('display', 'flex');
+
+    // Cargar los transportistas después de que el modal se haya mostrado
+    $("#modal_nueva_factura").on('shown.bs.modal', function () {
+        TransportistaSelect2("#input_transportista_modal");
+    });
+
+    GuiaSelect("#input_guias_modal");
+
+    $("form").off("submit").one("submit", function (event) {
+        event.preventDefault();
+        guardarNewFactura();
+    });
+}
+
 function guardarNewFactura() {
+    // Obtén el formulario para validarlo
+    var form = document.querySelector("#modal_nueva_factura form");
+
+    // Verifica si el formulario es válido
+    if (!form.checkValidity()) {
+        // Encuentra el primer campo inválido
+        var invalidField = form.querySelector(':invalid');
+
+        // Enfoca el primer campo inválido y muestra su mensaje de error
+        if (invalidField) {
+            invalidField.focus(); // Enfoca el campo inválido
+            invalidField.reportValidity(); // Muestra el mensaje de error nativo
+        }
+
+        return; // Detiene el envío si no es válido
+    }
+
     var factura_status = $("#input_factura_status_a").is(':checked') ? $("#input_factura_status_a").val() : $("#input_factura_status_i").val();
     var guias = mostrarGuiasSeleccionadas();
 
     var dataPost = {
         factura_monto: $("#input_factura_monto").val(),
         num_factura: $("#input_factura_numfactura").val(),
-        factura_status: factura_status, // Asegúrate que este valor esté definido antes de usarlo
+        factura_status: factura_status,
         transportista_id: $("#input_transportista_modal").val(),
         guias_ids: guias.toString()
     };
 
     dataPost = trimJSONFields(dataPost);
 
-    console.log("Datos que se enviarán:", dataPost); // Aquí ves qué datos se están enviando
+    console.log("Datos que se enviarán:", dataPost);
 
     var endpoint = getDomain() + "/Factura/regFactura";
 
@@ -68,6 +214,7 @@ function guardarNewFactura() {
                 getListFactura();
                 $("#modal_nueva_factura").modal("hide");
                 GuiaSelect("#input_guias_modal");
+                obtenerGananciasTransportista();
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -86,6 +233,7 @@ function guardarNewFactura() {
         }
     });
 }
+
 
 function TransportistaSelect(id_transportista) {
     var endpoint = getDomain() + "/Transportista/TransportistaSelect";
@@ -142,8 +290,10 @@ function TransportistaSelect(id_transportista) {
 }
 
 function TransportistaSelect2(selectId) {
+
+    var endpoint = getDomain() + "/Transportista/TransportistaSelect";
+
     return new Promise((resolve, reject) => {
-        var endpoint = getDomain() + "/Transportista/TransportistaSelect";
 
         $.ajax({
             type: "GET",
@@ -161,6 +311,14 @@ function TransportistaSelect2(selectId) {
 
                 var TransportistaSelect = data.item3;
 
+                $(selectId).select2({
+                    placeholder: "Seleccione un transportista...",
+                    allowClear: true,
+                    language: "es",
+                    dropdownCssClass: 'limit-dropdown',
+                    dropdownParent: $(selectId).closest('.modal-body')
+                });
+
                 $(selectId).empty().append(new Option("Seleccione un transportista...", "", true, true));
 
                 if (TransportistaSelect && TransportistaSelect.length > 0) {
@@ -172,14 +330,6 @@ function TransportistaSelect2(selectId) {
                     console.log("No se encontraron transportistas.");
                     $(selectId).append(new Option("No hay transportistas disponibles", ""));
                 }
-
-                $(selectId).select2({
-                    placeholder: "Seleccione un transportista...",
-                    allowClear: true,
-                    language: "es",
-                    dropdownCssClass: 'limit-dropdown',
-                    dropdownParent: $(selectId).closest('.modal-body')
-                });
 
                 $(selectId).prop("disabled", false);
 
@@ -228,6 +378,15 @@ function GuiaSelect(selectId) {
         success: function (data) {
             var GuiaSelect = data.item3;
 
+            // Inicializar o actualizar Select2
+            $(selectId).select2({
+                placeholder: "Seleccione un guia...",
+                allowClear: true,
+                language: "es",
+                dropdownCssClass: 'limit-dropdown', // Añadir la clase para limitar altura
+                dropdownParent: $(selectId).closest('.modal-body') // Asegura que el dropdown se muestre correctamente en el modal
+            });
+
             // Limpiar el select y agregar opción por defecto
             $(selectId).empty();
 
@@ -242,14 +401,6 @@ function GuiaSelect(selectId) {
                 console.log("No se encontraron guías.");
                 $(selectId).append(new Option("No hay guías disponibles", ""));
             }
-
-            // Inicializar o actualizar Select2
-            $(selectId).select2({
-                allowClear: true,
-                language: "es",
-                dropdownCssClass: 'limit-dropdown', // Añadir la clase para limitar altura
-                dropdownParent: $(selectId).closest('.modal-body') // Asegura que el dropdown se muestre correctamente en el modal
-            });
 
             // Habilitar el select
             $(selectId).prop("disabled", false);
@@ -279,22 +430,19 @@ $(document).on('click', '.btnGuardar2', function () {
     guardarEditFactura(transportista_id);
 });
 
-function obtenerIdEmpresaSeleccionada(empresaSelecionada) {
-    // Obtener el valor de la opción seleccionada en el select
-    var valorSeleccionado = $(empresaSelecionada).val();
-
-    return valorSeleccionado;  // Retorna el valor (empresa_id) seleccionado
-}
 
 function capturarValoresSeleccionados() {
     // Capturar los valores seleccionados
-    var transportista_id = obtenerIdEmpresaSeleccionada("#input_transportista");
+    var transportista_id = $("#input_transportista").val();
     var estado = $("#input_estado").val();
+    var transportista_nombre = $("#input_transportista option:selected").text();
 
     // Validar que ambos valores estén seleccionados
     if (transportista_id && estado !== null) {
         // Llamar a la función para enviar los datos
-        getListFacturaTransportista(transportista_id, estado);
+        getListFacturaTransportista(transportista_id, estado, transportista_nombre);
+        obtenerGananciasTransportistaIndividual(transportista_id);
+        obtenerDeudasTransportistaIndividual(transportista_id);
     } else {
         Swal.fire({
             icon: 'error',
@@ -305,7 +453,7 @@ function capturarValoresSeleccionados() {
 }
 
 
-function getListFacturaTransportista(transportista_id, estado) {
+function getListFacturaTransportista(transportista_id, estado, transportista_nombre) {
     const apiUrl = `/api/Factura/ObtenerDocumento/`;
     endpoint = getDomain() + "/Factura/listarFacturaTransportista";
 
@@ -328,6 +476,15 @@ function getListFacturaTransportista(transportista_id, estado) {
                 var dataEmpresa = data.item3;
                 var datosRow = "";
 
+                // Cerrar modal
+                $("#resumenCuentasOculto").hide();
+                // Mostrar el resumen de cuentas
+                $("#resumenCuentas").show(); // Muestra el contenedor
+
+                // Actualiza el encabezado con el nombre del transportista
+                $("#nombreTransportista").html(`<span style="font-size: 20px;">Resumen de Cuentas - ${transportista_nombre}</span>`);
+
+
                 if (data.Item1 === "1") {
                     datosRow += "<tr><td colspan='6' style='text-align:center;'>No hay datos para mostrar</td></tr>";
                 } else {
@@ -349,6 +506,7 @@ function getListFacturaTransportista(transportista_id, estado) {
                             "</div>" +
                             "</td>" +
                             "<td id='acciones'>" +
+                            `<i class='bx bx-detail detalle-factura icon-circle' id='detalle_factura" + i + "' onclick='modalDetalleFactura(${dataFactura[i].id_factura})'></i>` +
                             "<i class='bx bx-edit editar-button icon-circle' id='editar_factura" + i + "'></i>" +
                             "<i style='margin-left: 9px;' class='bx bx-trash eliminar-button icon-circle red' id='eliminar_factura" + i + "'></i>" +
                             "</td>" +
@@ -408,6 +566,80 @@ function getListFacturaTransportista(transportista_id, estado) {
     });
 }
 
+function obtenerGananciasTransportistaIndividual(transportista_id) {
+    var endpoint = getDomain() + "/Factura/listarGananciasTransportistasIndividual"; // Asegúrate de que la ruta sea correcta
+
+    $.ajax({
+        type: "POST",
+        async: true,
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        dataType: "json",
+        data: JSON.stringify({
+            transportista_id: transportista_id // Enviar transportista_id al backend
+        }),
+        beforeSend: function () {
+            console.log("Cargando ganancias individuales...");
+        },
+        success: function (data) {
+            // Accedemos a Item3 directamente para las ganancias individuales
+            var totalGanancias = data.item3; // Suponiendo que es Item3 el total de ganancias
+
+            // Verificamos si la respuesta indica que hay ganancias disponibles
+            if (data.Item1 === "0") { // Cambiamos la verificación para usar solo Item1
+                $("#input_ganancia_transportista").val("S/. " + parseFloat(totalGanancias).toFixed(2)); // No hay ganancias disponibles
+            } else {
+                // Si hay datos, convertimos el valor de totalGanancias
+                $("#input_ganancia_transportista").val("S/. " + parseFloat(totalGanancias).toFixed(2)); // Mostrar la ganancia total
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            // Manejo de errores en la petición
+            alert('Error al cargar ganancias: ' + textStatus + ' - ' + errorThrown);
+            console.error("Error al cargar ganancias:", textStatus, errorThrown);
+        }
+    });
+}
+
+function obtenerDeudasTransportistaIndividual(transportista_id) {
+    var endpoint = getDomain() + "/Factura/listarDeudasTransportistasIndividual"; // Asegúrate de que la ruta sea correcta
+
+    $.ajax({
+        type: "POST",
+        async: true,
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        dataType: "json",
+        data: JSON.stringify({
+            transportista_id: transportista_id // Enviar transportista_id al backend
+        }),
+        beforeSend: function () {
+            console.log("Cargando ganancias individuales...");
+        },
+        success: function (data) {
+            // Accedemos a Item3 directamente para las ganancias individuales
+            var totalDeudas = data.item3; // Suponiendo que es Item3 el total de ganancias
+
+            // Verificamos si la respuesta indica que hay ganancias disponibles
+            if (data.Item1 === "0") { // Cambiamos la verificación para usar solo Item1
+                $("#input_deuda_transportista").val("S/. 0.00"); // No hay ganancias disponibles
+            } else {
+                // Si hay datos, convertimos el valor de totalDeudas
+                $("#input_deuda_transportista").val("S/. " + parseFloat(totalDeudas).toFixed(2)); // Mostrar la ganancia total
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            // Manejo de errores en la petición
+            alert('Error al cargar ganancias: ' + textStatus + ' - ' + errorThrown);
+            console.error("Error al cargar ganancias:", textStatus, errorThrown);
+        }
+    });
+}
+
 function getListFactura() {
     var endpoint = getDomain() + "/Factura/ListaFactura";
 
@@ -448,57 +680,34 @@ function getListFactura() {
                         "<i style='margin-left: 9px;' class='bx bx-trash eliminar-button icon-circle red' id='eliminar_factura" + i + "'></i>" +
                         "</td>" +
                         "</tr>";
-                }
-                $(document).on('click', '.editar-button', function () {
-                    var rowData = $(this).closest('tr').data();
-                    modalEditarFactura(rowData);
-                });
+                    }
 
-                $(document).on('click', '.eliminar-button', function () {
-                    var rowData = $(this).closest('tr').data();
-                    modalConfirmacionEliminar(rowData.id_factura);
-                });
-
-                if (!$("#tb_empresa").hasClass("dataTable")) {
-                    tableFactura = $("#table_empresa").DataTable({
-                        language: {
-                            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
-                        },
-                        dom: 'frtip',
-                        buttons: [
-                            {
-                                extend: 'excel',
-                                className: 'btn_export_Excel',
-                                exportOptions: {
-                                    columns: ':visible:not(:last-child, :nth-last-child(2))' // Oculta la penúltima y la última columna en la exportación a Excel
-                                }
-                            },
-                            {
-                                extend: 'pdf',
-                                className: 'btn_export_Pdf',
-                                exportOptions: {
-                                    columns: ':visible:not(:last-child, :nth-last-child(2))' // Oculta la penúltima y la última columna en la exportación a Excel
-                                }
-                            }
-                        ],
-                        colResize: {
-                            tableWidthFixed: 'false'
-                        },
-                        colReorder: true
+                    if ($.fn.DataTable.isDataTable("#table_empresa")) {
+                        $("#table_empresa").DataTable().clear().rows.add($(datosRow)).draw();
+                    } else {
+                        initializeDataTable();
+                        $("#table_empresa").DataTable().rows.add($(datosRow)).draw();
+                    }
+    
+                    $(document).on('click', '.editar-button', function () {
+                        var rowData = $(this).closest('tr').data();
+                        modalEditarFactura(rowData);
                     });
+    
+                    $(document).on('click', '.eliminar-button', function () {
+                        var rowData = $(this).closest('tr').data();
+                        modalConfirmacionEliminar(rowData.id_factura);
+                    });
+    
+                },
+                failure: function (data) {
+                    Swal.close();
+                    alert('Error fatal ' + data);
+                    console.log("failure");
                 }
-
-                tableFactura.clear();
-                tableFactura.rows.add($(datosRow)).draw();
-            },
-            failure: function (data) {
-                Swal.close();
-                alert('Error fatal ' + data);
-                console.log("failure");
-            }
+            });
         });
-    });
-}
+    }
 function formatearFecha(fechaString) {
     if (!fechaString) return '';
 
@@ -611,6 +820,7 @@ function getListFacturaDetail(id_factura) {
 }
 
 function alterFacturaStatus(id_factura) {
+    var transportista_id = $("#input_transportista").val();
     var dataPost = {
         id_factura: id_factura
     };
@@ -632,7 +842,11 @@ function alterFacturaStatus(id_factura) {
             var rpta = data.item1;
             var msg = data.item2;
             if (rpta == "0") {
+                obtenerGananciasTransportistaIndividual(transportista_id);
+                obtenerDeudasTransportistaIndividual(transportista_id);
                 updateFacturaRow(id_factura);
+                obtenerGananciasTransportista();
+                obtenerDeudasTransportista();
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -685,25 +899,7 @@ function updateFacturaRow(id_factura) {
         }
     });
 }
-function vaciarFormFactura() {
-    $('#modal_nueva_factura input[type="text"]').val('');
-    $('#modal_nueva_factura input[type="number"]').val('');
-}
 
-function modalNuevaFactura() {
-    vaciarFormFactura();
-    $("#modal_nueva_factura").modal("show").css('display', 'flex');
-
-    // Cargar los transportistas después de que el modal se haya mostrado
-    $("#modal_nueva_factura").on('shown.bs.modal', function () {
-        TransportistaSelect2("#input_transportista_modal");
-    });
-
-    $("form").off("submit").one("submit", function (event) {
-        event.preventDefault();
-        guardarNewFactura();
-    });
-}
 
 function modalConfirmacionEliminar(id_factura) {
     Swal.fire({
@@ -741,6 +937,8 @@ function eliminarFactura(id_factura) {
             var msg = data.item2;
             if (rpta == "0") {
                 getListFactura();
+                obtenerGananciasTransportista();
+                obtenerDeudasTransportista();
                 Swal.fire(
                     'Eliminado!',
                     'La factura ha sido eliminada.',
@@ -825,6 +1023,7 @@ function alterEmpresaFactura(id_factura) {
             var msg = data.item2;
             if (rpta == "0") {
                 getListEmpresa();
+
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -887,6 +1086,8 @@ function guardarEditFactura(id_factura) {
                     text: 'Factura actualizada correctamente',
                 }).then(() => {
                     actualizarTablaFacturas();
+                    obtenerGananciasTransportista();
+                    obtenerDeudasTransportista();
                 });
             } else {
                 Swal.fire({
@@ -979,7 +1180,7 @@ function agregarEventListeners() {
 
 $(document).ready(function () {
     $('.js-example-basic-multiple').select2({
-        placeholder: 'Selecciona las guias.',
+        placeholder: 'Seleccione un guia...',
         allowClear: true
     });
 });

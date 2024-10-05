@@ -5,6 +5,10 @@
     font-family: 'Poppins', sans-serif !important;
 }
 
+.select2-selection.required {
+    background-color: yellow !important;
+}
+
 .subscribe {
     margin-top: 10px !important;
     position: relative !important;

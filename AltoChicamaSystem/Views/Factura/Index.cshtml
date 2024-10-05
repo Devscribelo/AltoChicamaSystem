@@ -108,6 +108,68 @@
                     </div>
                 </div>
             </div>
+
+
+            <div class="container mt-4 mb-4 justify-content-center" style="padding-left:8% !important;">
+                <div class="row mt-3 mb-3 border rounded p-4 bg-light shadow-sm justify-content-center" id="resumenCuentasOculto">
+                    <div class="col-12 text-center mb-2">
+                        <h4 class="text-dark font-weight-bold" style="font-size: 1.5rem; display: inline-block;">
+                            <span style="color: #f39c12;">&#x2609;</span>
+                            Resumen de Cuentas
+                            <span style="color: #f39c12;">&#x2609;</span>
+                        </h4>
+                    </div>
+
+                    <div class="col-md-6" style="padding-right: 6px !important;">
+                        <div class="input-group">
+                            <span class="input-group-text">Ganancia Total:</span>
+                            <input class="form-control" id="input_deuda2" style="padding: 12px;" placeholder="$0.00" disabled />
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text">Deuda Total:</span>
+                            <input class="form-control" id="input_deuda3" style="padding: 12px;" placeholder="$0.00" disabled />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="container mt-4 mb-4 justify-content-center" style="padding-left:8% !important;">
+                <div class="row mt-3 mb-3 border rounded p-4 bg-light shadow-sm justify-content-center" id="resumenCuentas" style="display: none;">
+                    <div class="col-12 text-center mb-2">
+                        <h4 class="text-dark font-weight-bold" style="font-size: 1.5rem; display: inline-block;">
+                            <span style="color: #f39c12;">&#x2609;</span>
+                            <span id="nombreTransportista">Resumen de Cuentas</span>
+                            <span style="color: #f39c12;">&#x2609;</span>
+                        </h4>
+                    </div>
+
+                    <div class="col-md-6" style="padding-right: 6px !important;">
+                        <div class="input-group">
+                            <span class="input-group-text">Ganancia Total:</span>
+                            <input class="form-control" id="input_ganancia_transportista" style="padding: 12px;" placeholder="$0.00" disabled />
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text">Deuda Total:</span>
+                            <input class="form-control" id="input_deuda_transportista" style="padding: 12px;" placeholder="$0.00" disabled />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
         </main>
 
         <!-- Modal Detalles de Factura -->
@@ -163,13 +225,13 @@
                                     <!-- Número de Factura -->
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Número de Factura</span>
-                                        <input type="text" class="form-control" id="input_factura_numfactura" autocomplete="off" placeholder="Ingrese el número de Factura" maxlength="100">
+                                        <input type="text" class="form-control" id="input_factura_numfactura" autocomplete="off" placeholder="Ingrese el número de Factura" maxlength="100" required>
                                     </div>
 
                                     <!-- Transportista -->
                                     <div class="input-group input-group-sm mb-3 flex-column">
                                         <label class="input-group-text w-100" for="input_transportista_modal">Transportista</label>
-                                        <select class="form-select w-100" id="input_transportista_modal">
+                                        <select class="form-select w-100" id="input_transportista_modal" required>
                                             <!-- Opciones de empresa -->
                                         </select>
                                     </div>
@@ -177,7 +239,7 @@
                                     <!-- Guías -->
                                     <div class="input-group input-group-sm mb-3 flex-column">
                                         <label class="input-group-text w-100" for="input_guias_modal">Guías</label>
-                                        <select class="js-example-basic-multiple form-select w-100" name="estados[]" multiple="multiple" id="input_guias_modal">
+                                        <select class="js-example-basic-multiple form-select w-100" name="estados[]" multiple="multiple" id="input_guias_modal" required>
                                             <!-- Opciones de guia -->
                                         </select>
                                     </div>
