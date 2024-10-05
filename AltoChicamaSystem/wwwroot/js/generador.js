@@ -270,15 +270,24 @@ function TransportistaSelect() {
                 // Agregar opciones al select
                 for (var i = 0; i < TransportistaSelect.length; i++) {
                     var item = TransportistaSelect[i];
-                    $('#input_transportista').append(new Option(item.transportista_nombre, item.transportista_nombre));
-                    transportistas[item.transportista_nombre] = item.transportista_ruc;
+                    $('#input_transportista').append($('<option>', {
+                        value: item.transportista_nombre,
+                        text: item.transportista_nombre,
+                        'data-id': item.transportista_id // Agregar el ID como atributo de datos
+                    }));
+                    transportistas[item.transportista_nombre] = {
+                        ruc: item.transportista_ruc,
+                        id: item.transportista_id
+                    };
                 }
 
                 // Manejar el evento de cambio en el select
                 $('#input_transportista').change(function () {
                     var selectedTransportista = $(this).val();
+                    var selectedTransportistaId = $(this).find(':selected').data('id');
                     if (transportistas[selectedTransportista]) {
-                        document.getElementById('ruct').value = transportistas[selectedTransportista];
+                        document.getElementById('ruct').value = transportistas[selectedTransportista]; 
+                        document.getElementById('idt').value = selectedTransportistaId; 
                     }
                 });
             } else {
@@ -509,6 +518,61 @@ inputAbreviacion.addEventListener('input', function () {
     }
 });
 
+function guardarNewGuia(guia_numero, guia_descarga, guia_cantidad, guia_unidad, transportista_id, guia_fecha_servicio, guia_costo, guia_direccion) {
+    var dataPost = {
+        guia_numero: guia_numero,
+        guia_descarga: guia_descarga,
+        guia_unidad: guia_unidad,
+        guia_cantidad: guia_cantidad,
+        transportista_id: transportista_id,
+        guia_fecha_servicio: guia_fecha_servicio,
+        guia_direccion: guia_direccion
+    };
+
+    dataPost = trimJSONFields(dataPost);
+
+    var endpoint = getDomain() + "/Guia/RegistrarGuia";
+
+    $.ajax({
+        type: "POST",
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify(dataPost),
+        dataType: "json",
+        beforeSend: function (xhr) {
+            console.log("Registrando guía...");
+        },
+        success: function (data) {
+            var rpta = data.item1;
+            var msg = data.item2;
+            if (rpta == "0") {
+                // Actualizar la lista de guías sin recargar la página
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Éxito',
+                    text: 'Guía registrada correctamente',
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Ocurrió un error!',
+                    text: msg || 'No se pudo registrar la guía',
+                });
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Ocurrió un error!',
+                text: jqXHR.responseJSON?.item2 || 'No se pudo registrar la guía',
+            });
+        },
+    });
+}
+
+
 async function generarPDF() {
     let formId = "";
     const { jsPDF } = window.jspdf;
@@ -521,6 +585,10 @@ async function generarPDF() {
     let cantidad = document.getElementById("cantidad").value;
     let numeroCert = "";
     let unidad = "";
+    let guia_numero = document.getElementById("numeroGuia").value; 
+    let transportistaid = document.getElementById('idt').value;
+    let fechaformulario = document.getElementById("fecha").value;
+    let direccionform = document.getElementById("residuos").value;
     
     if (descarga === "Desmedros" || descarga === "Residuos Orgánicos" || descarga === "Residuos Inorgánicos" || descarga === "Residuos de Construcción y Demolición" || descarga === "Grasas Residuales" || descarga === "Lodos") {
         formId = "pdfResiduos";
@@ -586,6 +654,16 @@ async function generarPDF() {
             numeroCert = "004";
         }
     }
+
+    console.log(guia_numero);
+    console.log(descarga);
+    console.log(cantidad);
+    console.log(unidad);
+    console.log(transportistaid);
+    console.log(fechaformulario);
+    console.log(direccionform);
+
+    guardarNewGuia(guia_numero,descarga,cantidad,unidad, transportistaid, fechaformulario,0,direccionform);
 
     if (formId === "pdfResiduos") {
         return new Promise(async (resolve, reject) => {
@@ -1483,7 +1561,7 @@ async function generarYGuardarPDF() {
     try {
         const pdfBlob = await generarPDF();
         console.log(pdfBlob);
-        guardarDocumento(pdfBlob);
+        //guardarDocumento(pdfBlob);
 
         // Convertir el Blob a una cadena base64
         const reader = new FileReader();

@@ -8,6 +8,54 @@ namespace AltoChicamaSystem.Data.Guia
     {
         private ConexionDB con = new ConexionDB();
 
+        public Tuple<string, string> regGuia(CMGuia guia, string bandera)
+        {
+            SqlConnection sqlCon = new SqlConnection();
+            string rpta = "";
+            string msg = "";
+
+            try
+            {
+                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                sqlCon.Open();
+                SqlCommand sqlCmd = new SqlCommand();
+                sqlCmd.Connection = sqlCon;
+                sqlCmd.CommandText = "Guia_reg";
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+
+                sqlCmd.Parameters.AddWithValue("@guia_numero", guia.guia_numero);
+                sqlCmd.Parameters.AddWithValue("@guia_descarga", guia.guia_descarga);
+                sqlCmd.Parameters.AddWithValue("@guia_cantidad", guia.guia_cantidad);
+                sqlCmd.Parameters.AddWithValue("@guia_unidad", guia.guia_unidad);
+                sqlCmd.Parameters.AddWithValue("@transportista_id", guia.transportista_id);
+                sqlCmd.Parameters.AddWithValue("@guia_fecha_servicio", guia.guia_fecha_servicio);
+                sqlCmd.Parameters.AddWithValue("@guia_costo", guia.guia_costo);
+                sqlCmd.Parameters.AddWithValue("@guia_direccion", guia.guia_direccion);
+
+                SqlDataReader sdr = sqlCmd.ExecuteReader();
+
+                if (sdr.Read())
+                {
+                    rpta = sdr["Rpta"].ToString();
+                    msg = sdr["Msg"].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                rpta = "1";
+                msg = ex.Message;
+            }
+            finally
+            {
+                if (sqlCon.State == ConnectionState.Open)
+                {
+                    sqlCon.Close();
+                }
+            }
+
+            return Tuple.Create(rpta, msg);
+        }
+
         public Tuple<string, string, List<GuiaSelect>> GuiaSelect(string bandera)
         {
             List<GuiaSelect> lst = new List<GuiaSelect>();

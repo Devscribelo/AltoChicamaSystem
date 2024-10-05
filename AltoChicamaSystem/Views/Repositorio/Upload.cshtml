@@ -49,151 +49,80 @@
     </style>
 </head>
 <body>
-    <section class="home">
-        <main>
-            <div class="row" style="margin: 0;">
-                <div class="subscribe text-center">
-                    <br>
-                    <div class="submit-btn">EMPRESAS</div>
-                </div>
-            </div>
-        </main>
-
-        <div class="row" style="margin: 0;">
-
-            <div class="col-md-7">
-                <div class="d-flex justify-content-center align-items-center" style="margin-top: 40px !important">
-                    <div class="container text-center">
-                        <h2>Carga de Documentos</h2>
-                        <p class="subtitle">No olvide especificar la empresa</p>
-                        <form id="file-upload-form" class="uploader">
-                            <input id="file-upload" type="file" name="fileUpload" accept="application/pdf" class="form-control-file" />
-                            <label for="file-upload" id="file-drag">
-                                <div id="start">
-                                    <i class="fa fa-download" aria-hidden="true"></i>
-                                    <div>Seleccione un archivo PDF</div>
-                                    <div id="notpdf" class="hidden">Por favor seleccione solo archivos PDF</div>
-                                    <span id="file-upload-btn" class="btn btn-primary">Seleccione un PDF</span>
-                                </div>
-                                <div id="response" class="hidden">
-                                    <div id="messages"></div>
-                                    <progress class="progress" id="file-progress" value="0">
-                                        <span>0</span>%
-                                    </progress>
-                                </div>
-                            </label>
-                            <div id="pdf-preview" class="hidden">
-                                <i class="far fa-file-pdf" aria-hidden="true"></i>
-                                <p id="pdf-file-name"></p>
-                            </div>
-                            <button type="submit" id="upload-btn" class="btn btn-success mt-3">Subir PDF</button>
-                        </form>
-                        <div class="input-group mt-3">
-                            <label class="input-group-text" for="input_empresa">Empresa</label>
-                            <select class="form-select" id="input_empresa">
-                                <!-- Opciones de empresa -->
-                            </select>
-                        </div>
-                        <div class="input-group mt-3">
-                            <label class="input-group-text" for="input_transportista">Transportista</label>
-                            <select class="form-select" id="input_transportista">
-                                <!-- Opciones de empresa -->
-                            </select>
-                        </div>
-                
-                        <!-- Contenedor donde se agregan las entradas dinámicamente -->
-                        <div id="matriculas_container" class="mt-3"></div>
-
+    <main class="home">
+        <section>
+                <div class="row" style="margin: 0;">
+                    <div class="subscribe text-center">
+                        <br>
+                        <div class="submit-btn">EMPRESAS</div>
                     </div>
                 </div>
+        
 
-            </div>
+            <div class="container-fluid d-flex justify-content-center align-items-center" style="height: 100vh;">
+                <div class="row justify-content-center w-100">
+                    <div class="col-md-5">
+                        <div class="container">
+                            <h2 class="text-center">Calculos de Servicios</h2>
 
+                            <div class="input-group mt-3">
+                                <label for="fechaServicio" class="form-label input-group-text">Fecha de servicio:</label>
+                                <input type="date" id="input_fechaServicio" name="fechaServicio" class="form-control" required />
+                            </div>
 
-            <div class="col-md-5">
-                <div class="d-flex justify-content-center align-items-center" style="margin-top: 40px !important">
-                    <div class="container text-center">
-                        <h2>Calculos de Servicios</h2>
+                            <!-- Fecha Límite -->
+                            <div class="input-group mt-3">
+                                <label for="fechaPago" class="form-label input-group-text">Fecha Límite:</label>
+                                <input type="date" id="input_fechaPago" name="fechaPago" class="form-control" required />
+                            </div>
 
-                        <div class="input-group mt-3">
-                            <label for="fechaServicio" class="form-label input-group-text">Fecha de servicio:</label>
-                            <input type="date" id="input_fechaServicio" name="fechaServicio" class="form-control" required />
-                        </div>
+                            <div class="input-group mt-3">
+                                <label for="total" class="form-label input-group-text">TN 0 M³</label>
+                                <input type="number" id="input_toneladas" name="total" class="form-control" required />
+                            </div>
 
-                        <!-- Fecha Límite -->
-                        <div class="input-group mt-3">
-                            <label for="fechaPago" class="form-label input-group-text">Fecha Límite:</label>
-                            <input type="date" id="input_fechaPago" name="fechaPago" class="form-control" required />
-                        </div>
-
-
-
-                        <div class="input-group mt-3">
-                            <label for="total" class="form-label input-group-text">TN 0 M³</label>
-                            <input type="number" id="input_toneladas" name="total" class="form-control" required />
-                        </div>
-
-
-                        <div class="row">
-                            <!-- PRECIO tonelada -->
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <label for="total" class="form-label input-group-text">
-                                        Precio por TN 0 M³
-                                    </label>
-                                    <input type="number" id="input_precioTonelada" name="total" class="form-control" required />
+                            <div class="row mt-3">
+                                <!-- PRECIO tonelada -->
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <label for="total" class="form-label input-group-text">Precio por TN 0 M³</label>
+                                        <input type="number" id="input_precioTonelada" name="total" class="form-control" required />
+                                    </div>
+                                </div>
+                                <!-- PRECIO tonelada -->
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <label for="total" class="form-label input-group-text">Precio sin IGV</label>
+                                        <input type="number" id="input_total" name="total" class="form-control" readonly />
+                                    </div>
                                 </div>
                             </div>
-                            <!-- PRECIO tonelada -->
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <label for="total" class="form-label input-group-text">
-                                        Precio sin IGV
-                                    </label>
-                                    <input type="number" id="input_total" name="total" class="form-control" readonly />
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="col-md-12">
-                            <div class="input-group">
-                                <label for="total" class="form-label input-group-text">
-                                    Precio con IGV (18%)
-                                </label>
+                            <div class="input-group mt-3">
+                                <label for="total" class="form-label input-group-text">Precio con IGV (18%)</label>
                                 <input type="number" id="input_igv" name="igv" class="form-control" readonly />
                             </div>
-                        </div>
 
-                        <div class="col-md-12">
-                            <div class="input-group">
+                            <div class="input-group mt-3">
                                 <span class="input-group-text">Detracción:</span>
                                 <input type="number" id="input_detraccion" name="detraccion" class="form-control" placeholder="Ingrese cantidad" />
                             </div>
+
+                            <!-- Total con el símbolo S/. -->
+                            <div class="input-group mt-3">
+                                <label for="total" class="form-label input-group-text">Total (S/.)</label>
+                                <input type="number" id="input_totalIGV" name="totalIGV" class="form-control" readonly />
+                            </div>
                         </div>
-
-                        <!-- Total con el símbolo S/. -->
-                        <div class="input-group mt-3">
-                            <label for="total" class="form-label input-group-text">
-                                Total (S/.)
-                            </label>
-                            <input type="number" id="input_totalIGV" name="totalIGV" class="form-control" readonly />
-                        </div>
-
-
-
                     </div>
                 </div>
             </div>
+        </section>
+    </main>
+    <script src="~/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+    <!-- JS Personalizado -->
+    <script src="~/config.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous"></script>
 
-
-        </div>
-
-        <script src="~/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-        <!-- JS Personalizado -->
-        <script src="~/config.js"></script>
-        <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous"></script>
-
-
-    </section>
 </body>
 </html>

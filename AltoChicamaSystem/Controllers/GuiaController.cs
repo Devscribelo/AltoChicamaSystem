@@ -19,6 +19,34 @@ namespace AltoChicamaSystem.Controllers
             conf = config;
         }
 
+        [HttpPost]
+        public ActionResult RegistrarGuia([FromBody] CMGuia guia)
+        {
+            try
+            {
+                if (guia == null)
+                {
+                    return BadRequest(Tuple.Create("1", "Datos de guía inválidos"));
+                }
+
+                string bandera = conf.GetValue<string>("Bandera");
+                var result = objusuarioCN.registrarGuia(guia, bandera);
+
+                if (result.Item1 == "0")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, Tuple.Create("1", $"Error interno: {ex.Message}"));
+            }
+        }
+
         [HttpGet]
         public ActionResult GuiaSelect()
         {

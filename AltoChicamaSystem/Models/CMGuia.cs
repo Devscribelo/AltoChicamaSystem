@@ -10,6 +10,9 @@
         public int transportista_id { get; set; }
         public string guia_fecha_servicio { get; set; }
         public decimal guia_costo { get; set; }
+        public string guia_direccion { get; set; }
+        public string guia_status { get; set; }
+
     }
     public class GuiaSelect
     {

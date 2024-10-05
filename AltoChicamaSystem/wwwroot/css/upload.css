@@ -1,14 +1,4 @@
-﻿body {
-    font-family: Arial, sans-serif !important;
-    background-color: #e2f3e7 !important;
-    margin: 0 !important;
-    padding: 20px !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    min-height: 100vh !important;
-}
-
+﻿
 .container {
     background-color: white !important;
     border-radius: 8px !important;
@@ -19,99 +9,23 @@
     margin-bottom: 30px !important;
 }
 
+
+
+.container.text-center {
+    background-color: white !important;
+    border-radius: 8px !important;
+    padding: 30px !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+    width: 100% !important;
+    max-width: 500px !important; /* Ajusta este valor según tus necesidades */
+    margin-bottom: 30px !important;
+}
+
+    
 h2 {
     color: #2c3e50 !important;
     margin-bottom: 10px !important;
 }
-
-.lead {
-    color: #34495e !important;
-    margin-bottom: 20px !important;
-}
-
-.subtitle {
-    color: #34495e;
-    margin-bottom: 20px;
-    text-align: center;
-    font-style: italic;
-}
-
-.uploader {
-    border: 2px dashed #27ae60 !important;
-    border-radius: 8px !important;
-    padding: 20px !important;
-    text-align: center !important;
-    cursor: pointer !important;
-    transition: background-color 0.3s !important;
-}
-
-    .uploader:hover {
-        background-color: #ecf0f1 !important;
-    }
-
-#file-upload {
-    display: none !important;
-}
-
-#file-drag {
-    display: block !important;
-    font-weight: bold !important;
-    color: #2c3e50 !important;
-    padding: 40px 0 !important;
-}
-
-#start i {
-    font-size: 50px !important;
-    margin-bottom: 10px !important;
-    color: #3498db !important;
-}
-
-#response {
-    margin-top: 20px !important;
-}
-
-#messages {
-    margin-bottom: 10px !important;
-}
-
-.btn {
-    display: inline-block !important;
-    padding: 10px 20px !important;
-    background-color: #3498db !important;
-    color: white !important;
-    border: none !important;
-    border-radius: 5px !important;
-    cursor: pointer !important;
-    transition: background-color 0.3s !important;
-}
-
-    .btn:hover {
-        background-color: #2980b9 !important;
-    }
-
-.btn-success {
-    background-color: #2ecc71 !important;
-}
-
-    .btn-success:hover {
-        background-color: #27ae60 !important;
-    }
-
-.progress {
-    width: 100% !important;
-    height: 20px !important;
-    border-radius: 5px !important;
-    background-color: #ecf0f1 !important;
-    overflow: hidden !important;
-    justify-content:center !important;
-}
-
-    .progress span {
-        display: block !important;
-        height: 100% !important;
-        background-color: #3498db !important;
-        transition: width 0.3s !important;
-    }
 
 .input-group {
     margin-top: 20px !important;
@@ -123,14 +37,6 @@ h2 {
     border: none !important;
     padding: 10px !important;
     border-radius: 5px 0 0 5px !important;
-}
-
-.form-select {
-    flex-grow: 1 !important;
-    padding: 10px !important;
-    border: 1px solid #bdc3c7 !important;
-    border-radius: 0 5px 5px 0 !important;
-    outline: none !important;
 }
 
 .hidden {
@@ -177,10 +83,3 @@ h2 {
         .subscribe .submit-btn:hover {
             background-color: #0d4b1f !important;
         }
-.plate-row {
-    display: flex !important;
-    align-items: center !important;
-    gap: 10px !important;
-    margin-bottom: 10px !important;
-    justify-content: center !important;
-}
