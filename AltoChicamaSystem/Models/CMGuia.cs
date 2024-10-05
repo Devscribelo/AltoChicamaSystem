@@ -15,6 +15,7 @@
         public string empresa_name { get; set; }
         public string transportista_nombre { get; set; }
         public string empresa_ruc { get; set; }
+        public int documento_id { get; set; }
     }
     public class GuiaSelect
     {
