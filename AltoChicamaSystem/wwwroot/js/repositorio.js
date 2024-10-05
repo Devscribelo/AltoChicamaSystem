@@ -159,6 +159,7 @@ function getListGuia() {
                     "<td id='acciones'>" +
                     `<a href='#' onclick='eliminarGuia(${guia[i].guia_id})'><span class='icon-circle red'><i class="bx bxs-trash"></i></span></a>` +
                     `<a href='/api/Documento/ObtenerDocumento/${guia[i].documento_id}'><span class='icon-circle green'><i class="bx bxs-download"></i></span></a>` +
+                    `<a href='#' onclick="copiarTexto('${getDomain()}${abrirEnlaceEnVentana(guia[i].documento_id)}')"><span class='icon-circle black'><i class="bx bxs-share-alt"></i></span></a>` +
                     "</td>" +
                     "</tr>";
             }
