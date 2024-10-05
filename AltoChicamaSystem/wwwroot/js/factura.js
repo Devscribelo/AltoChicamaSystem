@@ -506,7 +506,7 @@ function getListFacturaTransportista(transportista_id, estado, transportista_nom
                             "</div>" +
                             "</td>" +
                             "<td id='acciones'>" +
-                            `<i class='bx bx-detail detalle-factura icon-circle' id='detalle_factura" + i + "' onclick='modalDetalleFactura(${dataFactura[i].id_factura})'></i>` +
+                            `<i class='bx bx-detail detalle-factura icon-circle' id='detalle_factura" + i + "' onclick='modalDetalleFactura(${dataEmpresa[i].id_factura})'></i>` +
                             "<i class='bx bx-edit editar-button icon-circle' id='editar_factura" + i + "'></i>" +
                             "<i style='margin-left: 9px;' class='bx bx-trash eliminar-button icon-circle red' id='eliminar_factura" + i + "'></i>" +
                             "</td>" +
