@@ -339,6 +339,99 @@ table.dataTable.no-footer {
     }
 }
 
+#btnExportExcel1, #btnExportPdf1 {
+    position: relative;
+    width: 144px;
+    height: 35px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border: 1px solid #17795E !important;
+    background-color: #209978 !important;
+    overflow: hidden;
+    font-size: 10px !important;
+}
+
+    #btnExportExcel1, #btnExportPdf1, #btnExportExcel1 .button__icon, #btnExportExcel1 .button__text, #btnExportPdf1 .button__icon, #btnExportPdf1 .button__text {
+        transition: all 0.3s;
+    }
+
+        #btnExportExcel1 .button__text, #btnExportPdf1 .button__text {
+            transform: translateX(22px) !important;
+            color: #fff !important;
+            font-weight: 600 !important;
+        }
+
+        #btnExportExcel1 .button__icon {
+            position: absolute;
+            transform: translateX(109px) !important;
+            height: 100% !important;
+            width: 39px !important;
+            background-color: #17795E !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #btnExportPdf1 .button__icon {
+            position: absolute;
+            transform: translateX(109px) !important;
+            height: 100% !important;
+            width: 39px !important;
+            background-color: #9a1508 !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #btnExportExcel1 .svg, #btnExportPdf1 .svg {
+            width: 20px !important;
+            fill: #fff !important;
+        }
+
+        #btnExportExcel1:hover, #btnExportPdf1:hover {
+            background: #0d4b1f !important;
+        }
+
+        #btnExportPdf1:hover {
+            background: #e74c3c !important;
+        }
+
+            #btnExportExcel1:hover .button__text, #btnExportPdf1:hover .button__text {
+                color: transparent !important;
+            }
+
+            #btnExportExcel1:hover .button__icon, #btnExportPdf1:hover .button__icon {
+                width: 148px !important;
+                transform: translateX(0) !important;
+            }
+
+        #btnExportExcel1:active .button__icon {
+            background-color: #146c54 !important;
+        }
+
+        #btnExportPdf1:active .button__icon {
+            background-color: #9a1508 !important;
+        }
+
+        #btnExportExcel1:active {
+            border: 1px solid #146c54 !important;
+        }
+
+        #btnExportPdf1:active {
+            border: 1px solid #e74c3c !important;
+        }
+
+#btnExportExcel1 {
+    border: 1px solid #0d4b1f !important;
+    background-color: #0d4b1f !important; /* Color de fondo verde para Excel */
+}
+
+#btnExportPdf1 {
+    border: 1px solid #c0392b !important;
+    background-color: #e74c3c !important; /* Color de fondo rojo para PDF */
+}
+
 /* Estilos espec�ficos para los botones */
 #btnExportExcel, #btnExportPdf {
     position: relative;

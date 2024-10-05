@@ -726,7 +726,57 @@ function formatearFecha(fechaString) {
     return 'Fecha inválida';
 }
 
+function agregarBotonesExportacion1(tablaId) {
+    var contenedorBotones = document.getElementById("contenedorBotones1");
+
+    // Función para crear un botón de exportación
+    function crearBoton(id, clase, svgPath, altText) {
+        var boton = document.createElement("button");
+        boton.id = id;
+        boton.type = "button";
+        boton.className = "button " + clase;
+
+        boton.innerHTML = `
+            <span class="button__text">${altText}</span>
+            <span class="button__icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35" class="svg">
+                    <path d="${svgPath}"></path>
+                </svg>
+            </span>
+        `;
+
+        boton.addEventListener("click", function () {
+            // Exportar a Excel o PDF según la clase del botón
+            if ($.fn.DataTable.isDataTable(tablaId)) {
+                $(tablaId).DataTable().button('.' + clase).trigger();
+            }
+        });
+
+        return boton;
+    }
+
+    // Crear botón de exportación Excel
+    contenedorBotones.appendChild(crearBoton(
+        "btnExportExcel1",
+        "btn_export_Excel",
+        "M17.5,22.131a1.249,1.249,0,0,1-1.25-1.25V2.187a1.25,1.25,0,0,1,2.5,0V20.881A1.25,1.25,0,0,1,17.5,22.131Z M17.5,22.693a3.189,3.189,0,0,1-2.262-.936L8.487,15.006a1.249,1.249,0,0,1,1.767-1.767l6.751,6.751a.7.7,0,0,0,.99,0l6.751-6.751a1.25,1.25,0,0,1,1.768,1.767l-6.752,6.751A3.191,3.191,0,0,1,17.5,22.693Z",
+        "Exportar Excel"
+    ));
+
+    // Agregar un margen entre los botones
+    contenedorBotones.appendChild(document.createTextNode("\u00A0")); // Agrega un espacio en blanco
+
+    // Crear botón de exportación PDF
+    contenedorBotones.appendChild(crearBoton(
+        "btnExportPdf1",
+        "btn_export_Pdf",
+        "M17.5,22.131a1.249,1.249,0,0,1-1.25-1.25V2.187a1.25,1.25,0,0,1,2.5,0V20.881A1.25,1.25,0,0,1,17.5,22.131Z M17.5,22.693a3.189,3.189,0,0,1-2.262-.936L8.487,15.006a1.249,1.249,0,0,1,1.767-1.767l6.751,6.751a.7.7,0,0,0,.99,0l6.751-6.751a1.25,1.25,0,0,1,1.768,1.767l-6.752,6.751A3.191,3.191,0,0,1,17.5,22.693Z",
+        "Exportar PDF"
+    ));
+}
+
 function getListFacturaDetail(id_factura) {
+    agregarBotonesExportacion1("#table_detalles_factura");
     return new Promise((resolve, reject) => {
 
         const endpoint = getDomain() + "/Guia/ListarGuiaFiltro";
@@ -774,8 +824,7 @@ function getListFacturaDetail(id_factura) {
 
                 }
 
-                // Inicializar la tabla si aún no está configurada
-                if (!$("#table_detalles_factura").hasClass("dataTable")) {
+                if (!$.fn.DataTable.isDataTable("#table_detalles_factura")) {
                     tableFactura = $("#table_detalles_factura").DataTable({
                         language: {
                             url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
@@ -785,16 +834,10 @@ function getListFacturaDetail(id_factura) {
                             {
                                 extend: 'excel',
                                 className: 'btn_export_Excel',
-                                exportOptions: {
-                                    columns: ':visible:not(:last-child, :nth-last-child(1))'
-                                }
                             },
                             {
                                 extend: 'pdf',
                                 className: 'btn_export_Pdf',
-                                exportOptions: {
-                                    columns: ':visible:not(:last-child, :nth-last-child(1))'
-                                }
                             }
                         ],
                         colResize: {
@@ -804,6 +847,7 @@ function getListFacturaDetail(id_factura) {
                         searching: false
                     });
                 }
+
 
                 // Limpiar la tabla y agregar las filas
                 tableFactura.clear();
@@ -842,8 +886,10 @@ function alterFacturaStatus(id_factura) {
             var rpta = data.item1;
             var msg = data.item2;
             if (rpta == "0") {
-                obtenerGananciasTransportistaIndividual(transportista_id);
-                obtenerDeudasTransportistaIndividual(transportista_id);
+                if (transportista_id) {
+                    obtenerGananciasTransportistaIndividual(transportista_id);
+                    obtenerDeudasTransportistaIndividual(transportista_id);
+                }
                 updateFacturaRow(id_factura);
                 obtenerGananciasTransportista();
                 obtenerDeudasTransportista();
