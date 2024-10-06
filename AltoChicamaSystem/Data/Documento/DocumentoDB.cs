@@ -452,6 +452,39 @@ namespace AltoChicamaSystem.Data.Documento
             return mayorDocumentoID;
         }
 
+        public int ObtenerNewNumCertificado(string bandera)
+        {
+            int numCertificado = 0;
+            using (SqlConnection sqlCon = new SqlConnection(con.obtenerDatosConexion(bandera)))
+            {
+                try
+                {
+                    sqlCon.Open();
+                    using (SqlCommand sqlCmd = new SqlCommand("ObtenerMayorDocumentoNumero", sqlCon))
+                    {
+                        sqlCmd.CommandType = CommandType.StoredProcedure;
+
+                        using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                        {
+                            if (sdr.Read())
+                            {
+                                if (sdr["documento_numero"] != DBNull.Value)
+                                {
+                                    numCertificado = Convert.ToInt32(sdr["documento_numero"]);
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Manejo de errores: considera registrar el error para fines de depuración
+                    Console.WriteLine("Error al obtener el mayor documento ID: " + ex.Message);
+                }
+            }
+            return numCertificado;
+        }
+
         public int Documento_MaxNumero(string bandera)
         {
             int MaxDocumentoNumero = 0; // Valor por defecto en caso de error o no resultados

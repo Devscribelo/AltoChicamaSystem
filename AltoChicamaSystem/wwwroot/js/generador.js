@@ -78,6 +78,7 @@ function EmpresaSelect(id_grupo) {
                     if (empresas[selectedEmpresaId]) {
                         document.getElementById('ruc').value = empresas[selectedEmpresaId];
                         document.getElementById('ruc').disabled = true; // Habilitar el RUC
+                        document.getElementById('ide').value = selectedEmpresaId;
 
                         // Habilitar el select de direcciones
                         $("#residuos").prop("disabled", false); // Habilitar el select de direcciones
@@ -352,8 +353,32 @@ function obtenerMayorDocumentoID() {
     });
 }
 
+function obtenerMayorNumDocumento() {
+    var documento_num;
+    var endpoint = "/Repositorio/Documento_MaxNumero"; // Ruta relativa del endpoint
 
-
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: "POST",
+            url: endpoint,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            dataType: "json",
+            success: function (data) {
+                console.log("Respuesta del servidor:", data); // Inspecciona la respuesta completa
+                //console.log(data.item3);
+                documento_num = parseInt(data.item3) + 1;
+                resolve(documento_num);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+                alert('Error fatal: ' + error);
+                reject(error); // Rechaza la promesa en caso de error
+            }
+        });
+    });
+}
 
 function abrirEnlaceEnVentana(documentoId) {
     const enlace = `/api/Documento/Ver/${documentoId}`;
@@ -518,29 +543,41 @@ inputAbreviacion.addEventListener('input', function () {
     }
 });
 
-function guardarNewGuia(guia_numero, guia_descarga, guia_cantidad, guia_unidad, transportista_id, guia_fecha_servicio, guia_costo, guia_direccion) {
-    var dataPost = {
-        guia_numero: guia_numero,
-        guia_descarga: guia_descarga,
-        guia_unidad: guia_unidad,
-        guia_cantidad: guia_cantidad,
-        transportista_id: transportista_id,
-        guia_fecha_servicio: guia_fecha_servicio,
-        guia_direccion: guia_direccion
-    };
+function formatDate(date) {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0'); // Meses de 0 a 11
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`; // Ajusta según sea necesario
+}
 
-    dataPost = trimJSONFields(dataPost);
 
+async function guardarNewGuia() {
+    var { guia_numero, descarga, cantidad, unidad, transportistaid, fechaformulario, cero, direccionform, pdfData, empresaid, num_doc } = await generarPDF();
+    console.log(cantidad);
+    var formData = new FormData();
+    var fecha = formatDate(fechaformulario);
+    formData.append('guia_numero', guia_numero);
+    formData.append('guia_descarga', descarga);
+    formData.append('guia_unidad', unidad);
+    formData.append('guia_cantidad', cantidad);
+    formData.append('transportista_id', transportistaid);
+    formData.append('guia_fecha_servicio', fechaformulario);
+    formData.append('guia_direccion', direccionform);
+    formData.append('guia_costo', cero);
+    formData.append('documento_pdf', pdfData);
+    formData.append('empresa_id', empresaid);
+    formData.append('documento_numero', num_doc);
+
+    console.log(formData);
     var endpoint = getDomain() + "/Guia/RegistrarGuia";
 
     $.ajax({
         type: "POST",
         url: endpoint,
-        headers: {
-            "Content-Type": "application/json"
-        },
-        data: JSON.stringify(dataPost),
-        dataType: "json",
+        processData: false,
+        contentType: false,
+        data: formData,
         beforeSend: function (xhr) {
             console.log("Registrando guía...");
         },
@@ -574,9 +611,17 @@ function guardarNewGuia(guia_numero, guia_descarga, guia_cantidad, guia_unidad, 
 
 
 async function generarPDF() {
+    let num_doc = await obtenerMayorNumDocumento();
+    let num_doc_str = "";
+    if (num_doc < 10) {
+        num_doc_str = "00" + num_doc.toString();
+    }
+    else if (num_doc < 100) {
+        num_doc_str = "0" + num_doc.toString();
+    }
     let formId = "";
     const { jsPDF } = window.jspdf;
-
+    let empresaid = document.getElementById("ide").value;
     let descarga = document.getElementById("descarga").value;
     let titulo = "";
     let tipoResiduotittle = "";
@@ -589,6 +634,7 @@ async function generarPDF() {
     let transportistaid = document.getElementById('idt').value;
     let fechaformulario = document.getElementById("fecha").value;
     let direccionform = document.getElementById("residuos").value;
+    let [anio, mes, dia] = fechaformulario.split("-");
     
     if (descarga === "Desmedros" || descarga === "Residuos Orgánicos" || descarga === "Residuos Inorgánicos" || descarga === "Residuos de Construcción y Demolición" || descarga === "Grasas Residuales" || descarga === "Lodos") {
         formId = "pdfResiduos";
@@ -598,42 +644,42 @@ async function generarPDF() {
             tipoResiduotittle = "Tipo de Residuo";
             tipoResiduo = "Desmedros (Productos Vencidos)";
             residuoDir = "Desmedros";
-            numeroCert = "002";
+            numeroCert = "002-" + num_doc_str + "-" + anio;            
         }
         else if (descarga === "Residuos Orgánicos") {
             titulo = "VALORIZACIÓN DE RESIDUOS DE SÓLIDOS ORGÁNICOS";
             tipoResiduotittle = "Tipo de Residuos Orgánicos";
             tipoResiduo = "Descarte de espárragos";
             residuoDir = "Residuos orgánicos";
-            numeroCert = "003";
+            numeroCert = "003-" + num_doc_str + "-" + anio;  
         }
         else if (descarga === "Residuos Inorgánicos") {
             titulo = "VALORIZACIÓN DE RESIDUOS INORGÁNICOS APROVECHABLES";
             tipoResiduotittle = "Tipo de Residuo Sólido";
             tipoResiduo = "Residuos Inorgánicos Aprovechables";
             residuoDir = "Residuos inorgánicos aprovechables";
-            numeroCert = "005";
+            numeroCert = "005-" + num_doc_str + "-" + anio; 
         }
         else if (descarga === "Residuos de Construcción y Demolición") {
             titulo = "VALORIZACIÓN DE RESIDUOS DE CONSTRUCCIÓN Y DEMOLICIÓN - APROVECHABLES";
             tipoResiduotittle = "Tipo de Residuo Sólido";
             tipoResiduo = "Escombros no peligrosos";
             residuoDir = "Residuos sólidos";
-            numeroCert = "006";
+            numeroCert = "006-" + num_doc_str + "-" + anio; 
         }
         else if (descarga === "Grasas Residuales") {
             titulo = "TRATAMIENTO DE GRASAS RESIDUALES DOMÉSTICAS";
             tipoResiduotittle = "Tipo de Residuo Líquido";
             tipoResiduo = "Grasa Residual Doméstica";
             residuoDir = "Grasas Residuales Domésticas";
-            numeroCert = "007";
+            numeroCert = "007-" + num_doc_str + "-" + anio; 
         }
         else if (descarga === "Lodos") {
             titulo = "VALORIZACIÓN DE LODOS NO PELIGROSOS";
             tipoResiduotittle = "Tipo de Residuo";
             tipoResiduo = "Lodos de PTAR";
             residuoDir = "Lodos provenientes";
-            numeroCert = "009";
+            numeroCert = "009-" + num_doc_str + "-" + anio; 
         }
     }
     else if (descarga === "Líquidos Residuales" || descarga === "Aguas Residuales") {
@@ -644,26 +690,16 @@ async function generarPDF() {
             tipoResiduotittle = "Tipo de Agua Residual";
             tipoResiduo = "Líquidos Residuales";
             residuoDir = "Líquidos residuales";
-            numeroCert = "008";
+            numeroCert = "008-" + num_doc_str + "-" + anio; 
         }
         else if (descarga === "Aguas Residuales") {
             titulo = "TRATAMIENTO DE AGUAS RESIDUALES – TIPO DOMÉSTICAS";
             tipoResiduotittle = "Tipo de Agua Residual";
             tipoResiduo = "Agua Residual – Tipo Doméstica";
             residuoDir = "Aguas Residuales – Tipo Domésticas";
-            numeroCert = "004";
+            numeroCert = "004-" + num_doc_str + "-" + anio; 
         }
     }
-
-    console.log(guia_numero);
-    console.log(descarga);
-    console.log(cantidad);
-    console.log(unidad);
-    console.log(transportistaid);
-    console.log(fechaformulario);
-    console.log(direccionform);
-
-    guardarNewGuia(guia_numero,descarga,cantidad,unidad, transportistaid, fechaformulario,0,direccionform);
 
     if (formId === "pdfResiduos") {
         return new Promise(async (resolve, reject) => {
@@ -727,7 +763,7 @@ async function generarPDF() {
             doc.setTextColor(0, 0, 0);
             doc.setFont(undefined, "bold");
             doc.text(
-                "N°" + numeroCert + "-" + "002"+"-2024",
+                "N°" + numeroCert,
                 pageWidth / 2, 44, null, null, "center");
             doc.setFont(undefined, "normal");
 
@@ -1129,7 +1165,8 @@ async function generarPDF() {
             doc.text("914 105 601 | 913 036 413", textLeft, textBottom + 15);
             doc.save();
             const pdfData = doc.output('blob');
-            resolve(pdfData);
+            const cero = 0;
+            resolve({ guia_numero, descarga, cantidad, unidad, transportistaid, fechaformulario,cero,direccionform, pdfData, empresaid,num_doc});
             //reader.readAsDataURL(file); // AQUÍ CREA CANICAS
         });
         
@@ -1549,7 +1586,8 @@ async function generarPDF() {
             //DESCARGA
             doc.save("certificado_valorizacion.pdf");
             const pdfData = doc.output('blob');
-            resolve(pdfData);
+            const cero = 0;
+            resolve({ guia_numero, descarga, cantidad, unidad, transportistaid, fechaformulario, cero, direccionform, pdfData, empresaid, num_doc });
             //window.location.reload();
         });
     } else {
@@ -1561,7 +1599,7 @@ async function generarYGuardarPDF() {
     try {
         const pdfBlob = await generarPDF();
         console.log(pdfBlob);
-        //guardarDocumento(pdfBlob);
+        guardarDocumento(pdfBlob);
 
         // Convertir el Blob a una cadena base64
         const reader = new FileReader();

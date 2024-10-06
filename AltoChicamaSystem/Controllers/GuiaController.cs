@@ -20,17 +20,40 @@ namespace AltoChicamaSystem.Controllers
         }
 
         [HttpPost]
-        public ActionResult RegistrarGuia([FromBody] CMGuia guia)
+        public async Task<ActionResult> RegistrarGuia(string guia_numero, string guia_descarga, decimal guia_cantidad,string guia_unidad, int transportista_id, string guia_fecha_servicio, decimal guia_costo, string guia_direccion, IFormFile documento_pdf, int empresa_id, string documento_numero)
         {
             try
             {
-                if (guia == null)
+                if (documento_pdf == null || documento_pdf.Length == 0)
                 {
-                    return BadRequest(Tuple.Create("1", "Datos de guía inválidos"));
+                    return BadRequest(Tuple.Create("1", "No se ha generado el PDF correctamente"));
+                }
+
+                byte[] fileData;
+                using (var memoryStream = new MemoryStream())
+                {
+                    await documento_pdf.CopyToAsync(memoryStream);
+                    fileData = memoryStream.ToArray();
                 }
 
                 string bandera = conf.GetValue<string>("Bandera");
-                var result = objusuarioCN.registrarGuia(guia, bandera);
+
+                CMGuia cmguia = new CMGuia
+                {
+                    guia_numero = guia_numero,
+                    guia_descarga = guia_descarga,
+                    guia_unidad = guia_unidad,
+                    guia_cantidad = guia_cantidad,
+                    transportista_id = transportista_id,
+                    guia_fecha_servicio = guia_fecha_servicio.ToString().Trim(),
+                    guia_costo = guia_costo,
+                    guia_direccion = guia_direccion,
+                    documento_pdf = fileData,
+                    empresa_id = empresa_id,
+                    documento_numero = documento_numero
+                };
+
+                var result = objusuarioCN.registrarGuia(cmguia, bandera);
 
                 if (result.Item1 == "0")
                 {
@@ -43,7 +66,7 @@ namespace AltoChicamaSystem.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, Tuple.Create("1", $"Error interno: {ex.Message}"));
+                return StatusCode(500, Tuple.Create("1", $"Error interno del servidor: {ex.Message}"));
             }
         }
 

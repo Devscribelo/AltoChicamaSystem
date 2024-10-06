@@ -112,6 +112,10 @@
                 <label for="ruc">RUC Empresa:</label>
                 <input type="number" id="ruc" name="ruc" required disabled />
             </div>
+                <div class="form-row" style="display: none !important;">
+                    <label for="ide">RUC Empresa:</label>
+                    <input type="number" id="ide" name="ide" required disabled />
+                </div>
 
             <div class="form-row">
                 <label for="residuos">Dirección de Residuos:</label>
@@ -160,7 +164,7 @@
                 <input type="number" id="cantidad" name="cantidad" required />
             </div>
 
-            <button style="margin-bottom:16px !important;" type="button" onclick="generarYGuardarPDF()">
+                <button style="margin-bottom:16px !important;" type="button" onclick="guardarNewGuia()">
                 Generar PDF
             </button>
         </form>

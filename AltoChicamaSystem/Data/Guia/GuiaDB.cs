@@ -31,6 +31,9 @@ namespace AltoChicamaSystem.Data.Guia
                 sqlCmd.Parameters.AddWithValue("@guia_fecha_servicio", guia.guia_fecha_servicio);
                 sqlCmd.Parameters.AddWithValue("@guia_costo", guia.guia_costo);
                 sqlCmd.Parameters.AddWithValue("@guia_direccion", guia.guia_direccion);
+                sqlCmd.Parameters.AddWithValue("@documento_pdf", guia.documento_pdf);
+                sqlCmd.Parameters.AddWithValue("@empresa_id", guia.empresa_id);
+                sqlCmd.Parameters.AddWithValue("@documento_numero", guia.documento_numero);
 
                 SqlDataReader sdr = sqlCmd.ExecuteReader();
 

@@ -98,7 +98,6 @@ TransportistaSelect("#input_transportista");
 $(document).on('click', '.btnGuardar', function () {
     TransportistaSelect("#input_transportista");
     var transportista_id = $("#input_transportista_id").val();
-    guardarDocumento(transportista_id);
 });
 
 function obtenerIdEmpresaSeleccionada(empresaSelecionada) {
