@@ -84,7 +84,7 @@ namespace AltoChicamaSystem.Controllers
                     return NotFound("Documento no encontrado");
                 }
 
-                return File(documento.documento_pdf, "application/pdf", $"{documento.documento_titulo}.pdf");
+                return File(documento.documento_pdf, "application/pdf");
             }
             catch (Exception ex)
             {
@@ -107,7 +107,7 @@ namespace AltoChicamaSystem.Controllers
                 }
 
                 // Configura el Content-Disposition como inline
-                Response.Headers.Add("Content-Disposition", "inline; filename=" + $"{documento.documento_titulo}.pdf");
+                Response.Headers.Add("Content-Disposition", "inline; filename=" + $"{documento.documento_id}.pdf");
 
                 return File(documento.documento_pdf, "application/pdf");
             }

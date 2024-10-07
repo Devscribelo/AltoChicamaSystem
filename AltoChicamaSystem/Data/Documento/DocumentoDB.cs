@@ -75,7 +75,6 @@ namespace AltoChicamaSystem.Data.Documento
                     documento = new CMDocumento
                     {
                         documento_id = Convert.ToInt32(sdr["documento_id"]),
-                        documento_titulo = sdr["documento_titulo"].ToString(),
                         documento_pdf = (byte[])sdr["documento_pdf"]
                     };
                 }
