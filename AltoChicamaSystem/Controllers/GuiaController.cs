@@ -36,7 +36,7 @@ namespace AltoChicamaSystem.Controllers
                     fileData = memoryStream.ToArray();
                 }
 
-                string bandera = conf.GetValue<string>("Bandera");
+                string bandera = conf.GetValue<string>("Bandera") ?? string.Empty;
 
                 CMGuia cmguia = new CMGuia
                 {

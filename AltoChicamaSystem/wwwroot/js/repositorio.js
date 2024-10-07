@@ -166,6 +166,10 @@ function getListGuia() {
 
 
             if (!$("#tb_guia").hasClass("dataTable")) {
+                if ($.fn.DataTable.isDataTable("#table_guia")) {
+                    $("#table_guia").DataTable().destroy(); // Destruye la instancia anterior
+                }
+
                 tableFactura = $("#table_guia").DataTable({
                     language: {
                         url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
@@ -389,7 +393,69 @@ function getListGuiaTransportista(transportista_id, estado) {
                     // Limpiar la tabla o mostrar un mensaje en ella
                     $("#table_guia").DataTable().clear().draw();
                 } else {
-                    actualizarTablaGuias(data.item3);
+                    var guia = data.item3;
+                    var datosRow = "";
+                    console.log(datosRow);
+
+                    for (var i = 0; i < guia.length; i++) {
+                        datosRow +=
+                            "<tr class='filaTabla' " +
+                            "data-guia_id='" + formatDateString(guia[i].guia_id) + "'>" + // Corregido aquí
+                            "<td>" + guia[i].guia_fecha_servicio + "</td>" +
+                            "<td>" + guia[i].guia_numero + "</td>" +
+                            "<td>" + guia[i].guia_descarga + "</td>" +
+                            "<td>" + guia[i].empresa_name + "</td>" +
+                            "<td>" + guia[i].transportista_nombre + "</td>" +
+                            "<td>" + guia[i].empresa_ruc + "</td>" +
+                            "<td>" + guia[i].guia_direccion + "</td>" +
+                            "<td>" + guia[i].guia_cantidad + "</td>" +
+                            "<td>" + guia[i].guia_unidad + "</td>" +
+                            "<td>" + guia[i].guia_status + "</td>" +
+                            `<td><a href='#' onclick='mostrarPDFEnModal(${guia[i].documento_id})'><span class='icon-circle'><i class="bx bxs-file-pdf"></i></span></a></td>` +
+                            "<td id='acciones'>" +
+                            `<a href='#' onclick='eliminarGuia(${guia[i].guia_id})'><span class='icon-circle red'><i class="bx bxs-trash"></i></span></a>` +
+                            `<a href='/api/Documento/ObtenerDocumento/${guia[i].documento_id}'><span class='icon-circle green'><i class="bx bxs-download"></i></span></a>` +
+                            `<a href='#' onclick="copiarTexto('${getDomain()}${abrirEnlaceEnVentana(guia[i].documento_id)}')"><span class='icon-circle black'><i class="bx bxs-share-alt"></i></span></a>` +
+                            "</td>" +
+                            "</tr>";
+                    }
+
+
+                    if (!$("#tb_guia").hasClass("dataTable")) {
+                        if ($.fn.DataTable.isDataTable("#table_guia")) {
+                            $("#table_guia").DataTable().destroy(); // Destruye la instancia anterior
+                        }
+
+                        tableFactura = $("#table_guia").DataTable({
+                            language: {
+                                url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
+                            },
+                            dom: 'frtip',
+                            buttons: [
+                                {
+                                    extend: 'excel',
+                                    className: 'btn_export_Excel',
+                                    exportOptions: {
+                                        columns: ':visible:not(:last-child, :nth-last-child(2))' // Oculta la penúltima y la última columna en la exportación a Excel
+                                    }
+                                },
+                                {
+                                    extend: 'pdf',
+                                    className: 'btn_export_Pdf',
+                                    exportOptions: {
+                                        columns: ':visible:not(:last-child, :nth-last-child(2))' // Oculta la penúltima y la última columna en la exportación a Excel
+                                    }
+                                }
+                            ],
+                            colResize: {
+                                tableWidthFixed: 'false'
+                            },
+                            colReorder: true
+                        });
+                    }
+
+                    tableFactura.clear();
+                    tableFactura.rows.add($(datosRow)).draw();
                 }
             } else {
                 var errorMessage = data && data.item2 ? data.item2 : "Error desconocido al obtener las guías";

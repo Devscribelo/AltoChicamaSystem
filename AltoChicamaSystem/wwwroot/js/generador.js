@@ -584,12 +584,16 @@ async function guardarNewGuia() {
         success: function (data) {
             var rpta = data.item1;
             var msg = data.item2;
+            console.log("Respuesta del servidor:", data);
+
             if (rpta == "0") {
-                // Actualizar la lista de guías sin recargar la página
                 Swal.fire({
                     icon: 'success',
                     title: 'Éxito',
                     text: 'Guía registrada correctamente',
+                }).then(() => {
+                    console.log("Después del éxito");
+                    // Verifica si hay alguna acción que esté causando el cierre aquí
                 });
             } else {
                 Swal.fire({
