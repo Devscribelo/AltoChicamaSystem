@@ -25,7 +25,6 @@ namespace AltoChicamaSystem.Data.Documento
                     CommandText = "Documento_reg",
                     CommandType = CommandType.StoredProcedure
                 };
-                sqlCmd.Parameters.AddWithValue("@documento_titulo", cmDocumento.documento_titulo.Trim());
                 sqlCmd.Parameters.AddWithValue("@documento_pdf", cmDocumento.documento_pdf);
                 sqlCmd.Parameters.AddWithValue("@empresa_id", cmDocumento.empresa_id);
                 sqlCmd.Parameters.AddWithValue("@documento_status", cmDocumento.documento_status);
