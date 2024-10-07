@@ -44,7 +44,6 @@ namespace AltoChicamaSystem.Controllers
 
                 CMDocumento cmDocumento = new CMDocumento
                 {
-                    documento_titulo = documento_titulo,
                     documento_pdf = fileData,
                     empresa_id = empresa_id,
                     documento_status = "1", // Asumiendo que 1 es activo
