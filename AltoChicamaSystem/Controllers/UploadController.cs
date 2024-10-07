@@ -83,7 +83,7 @@ namespace AltoChicamaSystem.Controllers
                     return NotFound("Documento no encontrado");
                 }
 
-                return File(documento.documento_pdf, "application/pdf");
+                return File(documento.documento_pdf, "application/pdf", $"{documento.documento_id}.pdf");
             }
             catch (Exception ex)
             {
