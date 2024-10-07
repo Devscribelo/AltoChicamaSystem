@@ -101,6 +101,12 @@
                                     <span class="text nav-text">Facturas</span>
                                 </a>
                             </li>
+                            <li class="nav-link @(currentController == "Valorizacion" && currentAction == "Index" ? "mode" : "")">
+                                <a asp-controller="Valorizacion" asp-action="Index">
+                                <i class='bx bxs-bar-chart-alt-2 icon'></i>
+                                    <span class="text nav-text">Valorización</span>
+                                </a>
+                            </li>
                     }
                     @if (isUser)
                     {
