@@ -498,8 +498,8 @@ function getListFacturaTransportista(transportista_id, estado, transportista_nom
                             "data-transportista_nombre='" + dataEmpresa[i].transportista_nombre + "'>" +
                             "<td>" + dataEmpresa[i].id_factura + "</td>" +
                             "<td>" + dataEmpresa[i].factura_monto + "</td>" +
-                            "<td>" + dataEmpresa[i].num_factura + "</td>" +
                             "<td>" + dataEmpresa[i].transportista_nombre + "</td>" +
+                            "<td>" + dataEmpresa[i].num_factura + "</td>" +
                             "<td>" +
                             "<div class='form-check form-switch'>" +
                             `<input style='width: 46px; margin-top: 4px;' class='form-check-input status3' type='checkbox' id='flexSwitchCheckDefault${i}' ${dataEmpresa[i].factura_status === 'True' ? 'checked' : ''} data-factura_status='${dataEmpresa[i].id_factura}'>` +
@@ -667,8 +667,8 @@ function getListFactura() {
                         "data-transportista_nombre='" + dataFactura[i].transportista_nombre + "'>" +
                         "<td>" + dataFactura[i].id_factura + "</td>" +
                         "<td>" + dataFactura[i].num_factura + "</td>" +
-                        "<td>" + dataFactura[i].factura_monto + "</td>" +
                         "<td>" + dataFactura[i].transportista_nombre + "</td>" +
+                        "<td>" + dataFactura[i].factura_monto + "</td>" +
                         "<td>" +
                         "<div class='form-check form-switch'>" +
                         `<input style='width: 46px; margin-top: 4px;' class='form-check-input status3' type='checkbox' id='flexSwitchCheckDefault${i}' ${dataFactura[i].factura_status === 'True' ? 'checked' : ''} data-factura_status='${dataFactura[i].id_factura}'>` +
