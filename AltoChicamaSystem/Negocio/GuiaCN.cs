@@ -12,9 +12,9 @@ namespace AltoChicamaSystem.Negocio
             return objDato.regGuia(guia, bandera);
         }
 
-        public Tuple<string, string, List<GuiaSelect>> GuiaSelect(string bandera)
+        public Tuple<string, string, List<GuiaSelect>> GuiaSelect(int transportista_id, string bandera)
         {
-            var result = objDato.GuiaSelect(bandera);
+            var result = objDato.GuiaSelect(transportista_id, bandera);
             return result;
         }
         public Tuple<string, string, List<CMGuia>> listarGuia(string bandera)

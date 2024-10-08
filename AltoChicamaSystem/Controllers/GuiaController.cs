@@ -127,14 +127,21 @@ namespace AltoChicamaSystem.Controllers
             }
         }
 
-        [HttpGet]
-        public ActionResult GuiaSelect()
+        [HttpPost]
+        public ActionResult GuiaSelect([FromBody] CMGuia request)
         {
             var result = Tuple.Create("1", "Error al listar Guia", new List<GuiaSelect>());
             try
             {
+                if (request == null || request.transportista_id <= 0)
+                {
+                    return BadRequest(Tuple.Create("1", "ID de transportista inválido", new List<CMGuia>()));
+                }
+
                 string bandera = conf.GetValue<string>("bandera");
-                result = objusuarioCN.GuiaSelect(bandera);
+
+                result = objusuarioCN.GuiaSelect(request.transportista_id,bandera);
+
                 if (result.Item1 == "0")
                 {
                     return Ok(result);

@@ -3,18 +3,31 @@
     agregarBotonesExportacion("#table_empresa");
     obtenerGananciasTransportista();
     obtenerDeudasTransportista();
+
+    // Cuando se cambia el valor del elemento con clase .status3
     $(document).on('change', '.status3', function () {
         var rowData = $(this).closest('tr').data();
         alterFacturaStatus(rowData.id_factura);
     });
 
-    // Definir las variables aquí
-
+    // Cuando se hace clic en el botón de consulta
     $('#btnConsultar').click(function () {
         capturarValoresSeleccionados();
+    });
 
+    // Evento para detectar el cambio de valor en #input_transportista_modal
+    
+    $('#input_transportista_modal').change(function () {
+        if ($("#input_transportista_modal").val()) {
+            // Llamar a la función GuiaSelect pasando el selector #input_guias_modal
+            GuiaSelect($("#input_transportista_modal").val(), "#input_guias_modal");
+        }
+        else {
+            $("#input_guias_modal").empty();
+        }
     });
 });
+
 
 function obtenerGananciasTransportista() {
     var endpoint = getDomain() + "/Factura/listarGananciasTransportistas";
@@ -152,8 +165,6 @@ function modalNuevaFactura() {
         TransportistaSelect2("#input_transportista_modal");
     });
 
-    GuiaSelect("#input_guias_modal");
-
     $("form").off("submit").one("submit", function (event) {
         event.preventDefault();
         guardarNewFactura();
@@ -213,7 +224,7 @@ function guardarNewFactura() {
             if (rpta == "0") {
                 getListFactura();
                 $("#modal_nueva_factura").modal("hide");
-                GuiaSelect("#input_guias_modal");
+                //GuiaSelect("#input_guias_modal");
                 obtenerGananciasTransportista();
             } else {
                 Swal.fire({
@@ -361,16 +372,17 @@ function obtenerIdTransportistaSeleccionada(id_transportista) {
     return valorSeleccionadoTransportista;
 }
 
-function GuiaSelect(selectId) {
+function GuiaSelect(transportista_id, selectId) {
     var endpoint = getDomain() + "/Guia/GuiaSelect";
 
     $.ajax({
-        type: "GET",
+        type: "POST",
         async: true,
         url: endpoint,
         headers: {
             "Content-Type": "application/json"
         },
+        data: JSON.stringify({transportista_id: transportista_id}),
         dataType: "json",
         beforeSend: function (xhr) {
             console.log("Cargando guías...");
@@ -412,7 +424,7 @@ function GuiaSelect(selectId) {
     });
 }
 
-GuiaSelect("#input_guias_modal");
+//GuiaSelect("#input_guias_modal");
 
 // Llamada inicial para llenar el select de transportistas
 TransportistaSelect2("#input_transportista");

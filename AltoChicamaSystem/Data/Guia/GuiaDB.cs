@@ -59,7 +59,7 @@ namespace AltoChicamaSystem.Data.Guia
             return Tuple.Create(rpta, msg);
         }
 
-        public Tuple<string, string, List<GuiaSelect>> GuiaSelect(string bandera)
+        public Tuple<string, string, List<GuiaSelect>> GuiaSelect(int transportista_id, string bandera)
         {
             List<GuiaSelect> lst = new List<GuiaSelect>();
             GuiaSelect guiaselect = new GuiaSelect();
@@ -75,6 +75,7 @@ namespace AltoChicamaSystem.Data.Guia
                 sqlCmd.Connection = sqlCon;
                 sqlCmd.CommandText = "Guia_list_select";
                 sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.Parameters.AddWithValue("@transportista_id", transportista_id);
                 SqlDataReader sdr = sqlCmd.ExecuteReader();
 
                 while (sdr.Read())
