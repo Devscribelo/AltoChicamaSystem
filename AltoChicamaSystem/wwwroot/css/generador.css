@@ -198,3 +198,13 @@ th {
 .swal2-checkbox {
     display: none !important;
 }
+
+.input-group {
+    display: flex !important;
+    align-items: center !important; /* Alinea verticalmente los elementos */
+}
+
+#residuos {
+    max-width: 770px !important; /* Permite que el select ocupe el espacio disponible */
+    overflow: hidden !important; /* Establece un ancho mínimo para el select */
+}

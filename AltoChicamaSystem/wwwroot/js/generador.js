@@ -193,7 +193,6 @@ EmpresaSelect("#nomEmpresa");
 EmpresaSelect("#nomEmpresa1");
 
 function guardarNewDireccion(empresa_id) {
-
     var empresa_id = $("#btnGuardarDireccion").data("empresaId"); // Obtener el id de la empresa del botón
 
     var dataPost = {
@@ -221,7 +220,17 @@ function guardarNewDireccion(empresa_id) {
             var rpta = data.item1;
             var msg = data.item2;
             if (rpta == "0") {
-                getListEmpresa();
+                // Mostrar mensaje de éxito
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Éxito',
+                    text: 'Guía registrada correctamente',
+                }).then(() => {
+                    console.log("Después del éxito");
+                    // Llama a cargarDirecciones para actualizar la lista de direcciones
+                    cargarDirecciones(empresa_id);
+                });
+
                 $("#modal_nueva_empresa").modal("hide");
             } else {
                 Swal.fire({
@@ -238,9 +247,12 @@ function guardarNewDireccion(empresa_id) {
                 title: 'Ocurrió un error!',
                 text: 'La empresa o el usuario ya fueron registrados',
             });
+            $("#btnGuardarDireccion").prop("disabled", false); // Asegúrate de habilitar el botón nuevamente
         }
     });
 }
+
+
 
 function TransportistaSelect() {
     var endpoint = getDomain() + "/Transportista/TransportistaSelect";
