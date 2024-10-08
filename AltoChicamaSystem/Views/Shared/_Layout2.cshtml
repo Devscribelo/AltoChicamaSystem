@@ -77,12 +77,7 @@
                                     <span class="text nav-text">Transportista</span>
                                 </a>
                             </li>
-                            <li class="nav-link @(currentController == "Upload" && currentAction == "Index" ? "mode" : "")">
-                                <a asp-controller="Upload" asp-action="Index">
-                                    <i class='bx bx-upload icon'></i>
-                                    <span class="text nav-text">Subir Archivos</span>
-                                </a>
-                            </li> 
+
                             <li class="nav-link @(currentController == "Generador" && currentAction == "Index" ? "mode" : "")">
                                 <a asp-controller="Generador" asp-action="Index">
                                     <i class='bx bxs-file-pdf icon'></i>

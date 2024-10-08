@@ -9,11 +9,6 @@ namespace AltoChicamaSystem.Controllers
     [Authorize(Roles = "Admin")]
     public class UploadController : Controller
     {
-        public ActionResult Index()
-        {
-            // Retorna la vista 'Upload.cshtml'
-            return View("~/Views/Repositorio/Upload.cshtml");
-        }
         private readonly DocumentoCN objdocumentoCN = new DocumentoCN();
         private readonly IConfiguration conf;
 

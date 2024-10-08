@@ -257,6 +257,7 @@ namespace AltoChicamaSystem.Data.Guia
                             guia_unidad = sdr["guia_unidad"].ToString().Trim(),
                             guia_cantidad = Convert.ToDecimal(sdr["guia_cantidad"]),
                             guia_status = sdr["guia_status"].ToString().Trim(),
+                            documento_id = Convert.ToInt32(sdr["documento_id"]),
                         };
                         lst.Add(guia);
                         count++;
