@@ -4,6 +4,7 @@ var tableEmpresa;
 $(document).ready(function () {
     consult = false;
     TransportistaSelect("#input_transportista");
+    agregarBotonesExportacion("#table_guia");
     getListGuia();
 
     $(document).on('change', '.status3', function () {
@@ -12,7 +13,7 @@ $(document).ready(function () {
     });
 
     $("#btnConsultar").click(function () {
-        capturarValoresSeleccionados();
+        capturarValoresSeleccionados("#tb_guia");
     });
 });
 
