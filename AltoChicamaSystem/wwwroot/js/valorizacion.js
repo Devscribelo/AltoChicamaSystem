@@ -41,6 +41,17 @@ function getListFactura() {
                         transportista_id: 102,
                         transportista_nombre: "Transportista B"
                     },
+                    {
+                        id_factura: 2,
+                        num_factura: "F002",
+                        factura_monto: 2000,
+                        factura_monto1: 1000, // Monto 1 simulado
+                        factura_monto2: 1000, // Monto 2 simulado
+                        factura_status: 'False',
+                        transportista_id: 102,
+                        transportista_nombre: "Transportista B"
+                    },
+
                     // Más datos simulados
                 ];
 
@@ -61,11 +72,7 @@ function getListFactura() {
                         "<td>" + dataFactura[i].factura_monto1 + "</td>" + // Añadido factura_monto1
                         "<td>" + dataFactura[i].factura_monto2 + "</td>" + // Añadido factura_monto2
                         "<td>" + dataFactura[i].transportista_nombre + "</td>" +
-                        "<td>" +
-                        "<div class='form-check form-switch'>" +
-                        `<input style='width: 46px; margin-top: 4px;' class='form-check-input status3' type='checkbox' id='flexSwitchCheckDefault${i}' ${dataFactura[i].factura_status === 'True' ? 'checked' : ''} data-factura_status='${dataFactura[i].id_factura}'>` +
-                        "</div>" +
-                        "</td>" +
+                        "<td>" + dataFactura[i].factura_monto2 + "</td>" +
                         "<td id='acciones'>" +
                         `<i class='bx bx-detail detalle-factura icon-circle' id='detalle_factura" + i + "' onclick='modalDetalleFactura(${dataFactura[i].id_factura})'></i>` +
                         "<i class='bx bx-edit editar-button icon-circle' id='editar_factura" + i + "'></i>" +
