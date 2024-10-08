@@ -554,7 +554,7 @@ function formatDate(date) {
 
 async function guardarNewGuia() {
     var { guia_numero, descarga, cantidad, unidad, transportistaid, fechaformulario, cero, direccionform, pdfData, empresaid, num_doc } = await generarPDF();
-    console.log(cantidad);
+    console.log(fechaformulario);
     var formData = new FormData();
     var fecha = formatDate(fechaformulario);
     formData.append('guia_numero', guia_numero);
@@ -600,6 +600,9 @@ async function guardarNewGuia() {
                     icon: 'error',
                     title: 'Ocurrió un error!',
                     text: msg || 'No se pudo registrar la guía',
+                }).then(() => {
+                    console.log("Error");
+                    // Verifica si hay alguna acción que esté causando el cierre aquí
                 });
             }
         },
@@ -608,6 +611,9 @@ async function guardarNewGuia() {
                 icon: 'error',
                 title: 'Ocurrió un error!',
                 text: jqXHR.responseJSON?.item2 || 'No se pudo registrar la guía',
+            }).then(() => {
+                console.log("Error");
+                // Verifica si hay alguna acción que esté causando el cierre aquí
             });
         },
     });
@@ -1167,7 +1173,6 @@ async function generarPDF() {
             // Cuarta línea de texto
             doc.setTextColor(105, 105, 105); // Volver a color gris
             doc.text("914 105 601 | 913 036 413", textLeft, textBottom + 15);
-            doc.save();
             const pdfData = doc.output('blob');
             const cero = 0;
             resolve({ guia_numero, descarga, cantidad, unidad, transportistaid, fechaformulario,cero,direccionform, pdfData, empresaid,num_doc});
@@ -1588,7 +1593,6 @@ async function generarPDF() {
             doc.setTextColor(105, 105, 105); // Volver a color gris
             doc.text("914 105 601 | 913 036 413", textLeft, textBottom + 15);
             //DESCARGA
-            doc.save("certificado_valorizacion.pdf");
             const pdfData = doc.output('blob');
             const cero = 0;
             resolve({ guia_numero, descarga, cantidad, unidad, transportistaid, fechaformulario, cero, direccionform, pdfData, empresaid, num_doc });
