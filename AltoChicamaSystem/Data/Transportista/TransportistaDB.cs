@@ -234,6 +234,68 @@ namespace AltoChicamaSystem.Data.Transportista
             }
             return Tuple.Create(rpta, msg);
         }
+
+        public Tuple<string, string, List<TransportistaVista>> TransportistaVista(int transportista_id, string bandera)
+        {
+            List<TransportistaVista> lst = new List<TransportistaVista>();
+            TransportistaVista transportistaselect = new TransportistaVista();
+            SqlConnection sqlCon = new SqlConnection();
+            string rpta = "";
+            string msg = "";
+            int count = 0;
+            try
+            {
+                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                sqlCon.Open();
+                SqlCommand sqlCmd = new SqlCommand();
+                sqlCmd.Connection = sqlCon;
+                sqlCmd.CommandText = "Guia_Vista_Transportista";
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.Parameters.AddWithValue("@transportista_id", transportista_id);
+                SqlDataReader sdr = sqlCmd.ExecuteReader();
+
+                while (sdr.Read())
+                {
+                    count++;
+                    if (count == 1)
+                    {
+                        rpta = sdr["Rpta"].ToString();
+                        msg = sdr["Msg"].ToString();
+                        sdr.NextResult();
+                    }
+                    if (rpta == "0" && count >= 2)
+                    {
+                        transportistaselect = new TransportistaVista();
+                        transportistaselect.guia_id = Convert.ToInt32(sdr["guia_id"]);
+                        transportistaselect.guia_numero = sdr["guia_numero"].ToString().Trim();
+                        transportistaselect.empresa_name = sdr["empresa_name"].ToString().Trim();
+                        transportistaselect.empresa_ruc = sdr["empresa_ruc"].ToString().Trim();
+                        transportistaselect.guia_fecha_servicio = sdr["guia_fecha_servicio"].ToString().Trim();
+                        transportistaselect.guia_direccion = sdr["guia_direccion"].ToString().Trim();
+                        transportistaselect.guia_costo = Convert.ToDecimal(sdr["guia_costo"]);
+                        transportistaselect.guia_cantidad = Convert.ToDecimal(sdr["guia_cantidad"]);
+                        transportistaselect.guia_unidad = sdr["guia_unidad"].ToString().Trim();
+                        transportistaselect.guia_descarga = sdr["guia_descarga"].ToString().Trim();
+                        transportistaselect.documento_id = Convert.ToInt32(sdr["documento_id"]);
+                        lst.Add(transportistaselect);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                lst = new List<TransportistaVista>();
+                msg = ex.Message;
+            }
+            finally
+            {
+                if (sqlCon.State == ConnectionState.Open)
+                {
+                    sqlCon.Close();
+                }
+            }
+            return Tuple.Create(rpta, msg, lst);
+        }
     }
 
     
