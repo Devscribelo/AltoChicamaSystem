@@ -29,6 +29,12 @@ namespace AltoChicamaSystem.Negocio
             return result;
         }
 
+        public Tuple<string, string, List<TransportistaVista>> TransportistaVista(int transportista_id,string bandera)
+        {
+            var result = objDato.TransportistaVista(transportista_id,bandera);
+            return result;
+        }
+
         public Tuple<string, string> delTransportista(CMTransportista cmTransportista, string bandera, int transportista_id)
         {
             var result = objDato.delTransportista(cmTransportista, bandera, transportista_id);

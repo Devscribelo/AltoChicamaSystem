@@ -16,12 +16,20 @@ function copiarTexto(texto) {
     });
 }
 
+function formatDateString(dateString) {
+    if (dateString) {
+        var date = new Date(dateString);
+        return date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    }
+    return '';
+}
+
 function getListDocumentoCliente(transportista_id) {
 
     return new Promise((resolve, reject) => {
         const apiUrl = `/api/Documento/ObtenerDocumento/`;
         const x = getDomain() + apiUrl;
-        const endpoint = getDomain() + "/RepositorioTransportista/listarDocumentoFiltradoTransportista";
+        const endpoint = getDomain() + "/RepositorioTransportista/transportistaVista";
 
         $.ajax({
             type: "POST",
@@ -36,35 +44,30 @@ function getListDocumentoCliente(transportista_id) {
                 console.log("cargando");
             },
             success: function (data) {
-                var dataEmpresa = data.item3; // Obt�n los datos de la respuesta
+                var guia = data.item3; // Obt�n los datos de la respuesta
                 var datosRow = "";
-                console.log(dataEmpresa);
+                console.log(guia);
             
 
-                resolve(dataEmpresa);
+                resolve(guia);
 
-                for (var i = 0; i < dataEmpresa.length; i++) {
+                for (var i = 0; i < guia.length; i++) {
                     datosRow +=
                         "<tr class='filaTabla' " +
-                        "data-documento_id='" + dataEmpresa[i].documento_numero + "' " +
-                        "data-documento_titulo='" + dataEmpresa[i].documento_titulo + "' " +
-                        "data-empresa_name='" + dataEmpresa[i].empresa_name + "' >" +
-                        "<td>" + dataEmpresa[i].documento_numero + "</td>" +
-                        "<td>" + dataEmpresa[i].documento_titulo + "</td>" +
-                        "<td>" + dataEmpresa[i].empresa_name + "</td>" +
-                        "<td>" +
-                        "<a href='#' onclick='mostrarPDFEnModal(" + dataEmpresa[i].documento_id + ")'>" +
-                        "<span class='icon-circle pdf-icon'><i class=\"bx bxs-file-pdf\"></i></span>" +
-                        "</a>" +
-                        "</td>" +
-                        "<td>" +
-                        "<div>" +
-                        "<a href='" + apiUrl + dataEmpresa[i].documento_id + "'>" +
-                        "<span class='icon-circle green'><i class=\"bx bxs-download\"></i></span>" +
-                        "</a>" +
-                        "<a href='#' onclick=\"copiarTexto('" + getDomain() + abrirEnlaceEnVentana(dataEmpresa[i].documento_id) + "')\">" +
-                        "<span class='icon-circle black'><i class=\"bx bxs-share-alt\"></i></span>" +
-                        "</div>" +
+                        "data-guia_id='" + formatDateString(guia[i].guia_id) + "'>" + // Corregido aquí
+                        "<td>" + guia[i].guia_fecha_servicio + "</td>" +
+                        "<td>" + guia[i].guia_numero + "</td>" +
+                        "<td>" + guia[i].guia_descarga + "</td>" +
+                        "<td>" + guia[i].empresa_name + "</td>" +
+                        "<td>" + guia[i].empresa_ruc + "</td>" +
+                        "<td>" + guia[i].guia_direccion + "</td>" +
+                        "<td>" + guia[i].guia_cantidad + "</td>" +
+                        "<td>" + guia[i].guia_unidad + "</td>" +
+                        
+                        `<td><a href='#' onclick='mostrarPDFEnModal(${guia[i].documento_id})'><span class='icon-circle'><i class="bx bxs-file-pdf"></i></span></a></td>` +
+                        "<td id='acciones'>" +
+                        `<a href='/api/Documento/ObtenerDocumento/${guia[i].documento_id}'><span class='icon-circle green'><i class="bx bxs-download"></i></span></a>` +
+                        `<a href='#' onclick="copiarTexto('${getDomain()}${abrirEnlaceEnVentana(guia[i].documento_id)}')"><span class='icon-circle black'><i class="bx bxs-share-alt"></i></span></a>` +
                         "</td>" +
                         "</tr>";
                 }

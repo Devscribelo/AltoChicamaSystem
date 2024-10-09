@@ -51,6 +51,96 @@ function getListFactura() {
                         transportista_id: 102,
                         transportista_nombre: "Transportista B"
                     },
+                    {
+                        id_factura: 2,
+                        num_factura: "F002",
+                        factura_monto: 2000,
+                        factura_monto1: 1000, // Monto 1 simulado
+                        factura_monto2: 1000, // Monto 2 simulado
+                        factura_status: 'False',
+                        transportista_id: 102,
+                        transportista_nombre: "Transportista B"
+                    },
+                    {
+                        id_factura: 2,
+                        num_factura: "F002",
+                        factura_monto: 2000,
+                        factura_monto1: 1000, // Monto 1 simulado
+                        factura_monto2: 1000, // Monto 2 simulado
+                        factura_status: 'False',
+                        transportista_id: 102,
+                        transportista_nombre: "Transportista B"
+                    },
+                    {
+                        id_factura: 2,
+                        num_factura: "F002",
+                        factura_monto: 2000,
+                        factura_monto1: 1000, // Monto 1 simulado
+                        factura_monto2: 1000, // Monto 2 simulado
+                        factura_status: 'False',
+                        transportista_id: 102,
+                        transportista_nombre: "Transportista B"
+                    },
+                    {
+                        id_factura: 2,
+                        num_factura: "F002",
+                        factura_monto: 2000,
+                        factura_monto1: 1000, // Monto 1 simulado
+                        factura_monto2: 1000, // Monto 2 simulado
+                        factura_status: 'False',
+                        transportista_id: 102,
+                        transportista_nombre: "Transportista B"
+                    },
+                    {
+                        id_factura: 2,
+                        num_factura: "F002",
+                        factura_monto: 2000,
+                        factura_monto1: 1000, // Monto 1 simulado
+                        factura_monto2: 1000, // Monto 2 simulado
+                        factura_status: 'False',
+                        transportista_id: 102,
+                        transportista_nombre: "Transportista B"
+                    },
+                    {
+                        id_factura: 2,
+                        num_factura: "F002",
+                        factura_monto: 2000,
+                        factura_monto1: 1000, // Monto 1 simulado
+                        factura_monto2: 1000, // Monto 2 simulado
+                        factura_status: 'False',
+                        transportista_id: 102,
+                        transportista_nombre: "Transportista B"
+                    },
+                    {
+                        id_factura: 2,
+                        num_factura: "F002",
+                        factura_monto: 2000,
+                        factura_monto1: 1000, // Monto 1 simulado
+                        factura_monto2: 1000, // Monto 2 simulado
+                        factura_status: 'False',
+                        transportista_id: 102,
+                        transportista_nombre: "Transportista B"
+                    },
+                    {
+                        id_factura: 2,
+                        num_factura: "F002",
+                        factura_monto: 2000,
+                        factura_monto1: 1000, // Monto 1 simulado
+                        factura_monto2: 1000, // Monto 2 simulado
+                        factura_status: 'False',
+                        transportista_id: 102,
+                        transportista_nombre: "Transportista B"
+                    },
+                    {
+                        id_factura: 2,
+                        num_factura: "F002",
+                        factura_monto: 2000,
+                        factura_monto1: 1000, // Monto 1 simulado
+                        factura_monto2: 1000, // Monto 2 simulado
+                        factura_status: 'False',
+                        transportista_id: 102,
+                        transportista_nombre: "Transportista B"
+                    },
 
                     // Más datos simulados
                 ];
@@ -131,7 +221,6 @@ function getListFactura() {
     });
 }
 
-TransportistaSelect("#input_transportista");
 function TransportistaSelect(id_transportista) {
     var endpoint = getDomain() + "/Transportista/TransportistaSelect";
 
@@ -151,15 +240,6 @@ function TransportistaSelect(id_transportista) {
             success: function (data) {
                 var TransportistaSelect = data.item3;
 
-                
-                // Inicializar o actualizar Select2 usando directamente el ID del select
-                $('#input_transportista').select2({
-                    placeholder: "Seleccione un transportista...",
-                    allowClear: true,
-                    language: "es",
-                    dropdownCssClass: 'limit-dropdown' // Añadir la clase para limitar altura
-                });
-
                 // Limpiar el select y agregar opción por defecto
                 $('#input_transportista').empty();
                 $('#input_transportista').append(new Option("Seleccione un transportista...", "", true, true));
@@ -169,20 +249,28 @@ function TransportistaSelect(id_transportista) {
                     // Agregar opciones al select
                     for (var i = 0; i < TransportistaSelect.length; i++) {
                         var item = TransportistaSelect[i];
-                        $(id_transportista).append(
-                            $('#input_transportista').append(new Option(item.transportista_nombre, item.transportista_id))
-                        );
+                        $('#input_transportista').append(new Option(item.transportista_nombre, item.transportista_id));
+                     
                     }
                 } else {
                     console.log("No se encontraron transportistas.");
                     $('#input_transportista').append(new Option("No hay transportistas disponibles", ""));
-                    return
                 }
+
+
+                
+                // Inicializar o actualizar Select2 usando directamente el ID del select
+                $('#input_transportista').select2({
+                    placeholder: "Seleccione un transportista...",
+                    allowClear: true,
+                    language: "es",
+                    dropdownCssClass: 'limit-dropdown' // Añadir la clase para limitar altura
+                });
 
                 // Habilitar el select
                 $('#input_transportista').prop("disabled", false);
 
-                resolve()
+               
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -192,3 +280,5 @@ function TransportistaSelect(id_transportista) {
         });
     })
 }
+
+TransportistaSelect("#input_transportista");
