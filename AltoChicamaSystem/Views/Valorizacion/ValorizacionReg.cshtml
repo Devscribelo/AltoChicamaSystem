@@ -1,0 +1,132 @@
+﻿@{
+    ViewData["Title"] = "ValorizacionRegistrar";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="~/css/upload.css" rel="stylesheet" />
+    <link href="~/css/selector.css" rel="stylesheet" />
+
+    <!-- JS Libraries -->
+    <script src="~/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+
+    <!-- JS Personalizado -->
+    <script src="~/config.js"></script>
+
+</head>
+<body>
+    <main class="home">
+        <section>
+            <div class="row" style="margin: 0;">
+                <div class="subscribe text-center">
+                    <br>
+                    <div class="submit-btn">VALORIZACIÓN POR SERVICIOS</div>
+                </div>
+            </div>
+
+            <div class="row mt-5 mb-4 justify-content-center">
+                <!-- Guías -->
+                <div class="col-md-12 d-flex justify-content-center">
+                    <label class="input-group-text" for="input_transportista">Transportista</label>
+                    <select id="input_transportista" class="js-example-placeholder-single js-states form-control mx-2">
+                        <option value="" disabled selected hidden></option> <!-- Opción vacía, deshabilitada y seleccionada por defecto -->
+                    </select>
+                </div>
+
+            </div>
+
+            <section id="input_tabla_valorizacion" class="tab-panel" style="padding-bottom: 0;">
+                <form id="form_edit_unidad_medida">
+                    <div class="table-responsive">
+                        <table class="table tabla_valorizacion" id="input_tabla_valorizacion">
+                            <thead>
+                                <tr>
+                                    <th colspan="8" style="text-align: center; background-color: #f8f9fa; font-weight: bold; font-size: 17px; padding:10px !important;">VALORIZACIÓN POR SERVICIOS</th>
+                                </tr>
+                                <tr class="headth">
+                                    <th class="tabla_valorizacion_th_td" scope="col">Item</th>
+                                    <th class="tabla_valorizacion_th_td" style="width:25% !important" scope="col">N Guia</th>
+                                    <th class="tabla_valorizacion_th_td" scope="col">Fecha</th>
+                                    <th class="tabla_valorizacion_th_td" scope="col">Tipo</th>
+                                    <th class="tabla_valorizacion_th_td" scope="col">Cantidad (TN)</th>
+                                    <th class="tabla_valorizacion_th_td" scope="col">Costo/TN</th>
+                                    <th class="tabla_valorizacion_th_td" scope="col">Costo Total</th>
+                                    <th class="estilo-especial">
+                                        <i class="bx bx-plus-circle icon-circle add" id="agregar_fila_valorizacion" onclick="agregarFilaValorizacion()"></i>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Aquí se agregarán las filas dinámicamente con JavaScript -->
+                            </tbody>
+                        </table>
+
+                        <!-- Fila de totales -->
+                        <table class="table">
+                            <tfoot>
+                                <tr>
+                                    <td colspan="4" style="text-align: center; font-weight: bold; text-align: end;">TOTAL (TN)</td>
+                                    <td><input type="number" id="totalCantidad" placeholder="Total Cantidad" class="form-control" readonly></td>
+                                    <td colspan="2" style="text-align: center; font-weight: bold;">COSTO TOTAL</td>
+                                    <td><input type="number" id="totalCostoTotal" placeholder="Total Costo Total" class="form-control" readonly></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Espacio adicional y tabla para el resumen final -->
+            <br>
+
+            <!-- Tabla del resumen del servicio con líneas de separación y celdas combinadas -->
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <!-- Columna vacía que abarca todas las filas en el lado izquierdo -->
+                        <td rowspan="3" style="width: 25%;"></td> <!-- Columna vacía con rowspan para abarcar 3 filas -->
+                        <!-- Primera fila con SUB TOTAL -->
+                        <td style="text-align: center; font-weight: bold;width: 25%;">SUB TOTAL</td>
+
+                        <!-- Columna vacía en el lado derecho, fila 1 -->
+                        <td style="width: 10.47%;"></td> <!-- Columna vacía fila 1 -->
+                    </tr>
+                    <tr>
+                        <!-- Segunda fila con IGV 18% -->
+                        <td style="text-align: center; font-weight: bold;width: 25%;">IGV 18%</td>
+
+                        <!-- Columna vacía en el lado derecho, fila 2 -->
+                        <td style="width: 10.47%;"></td> <!-- Columna vacía fila 2 -->
+                    </tr>
+                    <tr>
+                        <!-- Tercera fila con PRECIO TOTAL DEL SERVICIO -->
+                        <td style="text-align: center; font-weight: bold;width: 25%;">PRECIO TOTAL DEL SERVICIO</td>
+
+                        <!-- Columna vacía en el lado derecho, fila 3 -->
+                        <td style="width: 10.47%;"></td> <!-- Columna vacía fila 3 -->
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Espacio adicional y tabla para el resumen final -->
+            <br>
+
+
+
+
+        </section>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/config.js"></script>
+    <script src="js/upload.js"></script> <!-- Incluyendo el archivo separado para el modal -->
+    <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous"></script>
+</body>
+</html>
