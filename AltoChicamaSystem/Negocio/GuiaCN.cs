@@ -17,6 +17,20 @@ namespace AltoChicamaSystem.Negocio
             var result = objDato.GuiaSelect(transportista_id, bandera);
             return result;
         }
+
+        public Tuple<string, string, List<GuiaSelect>> GuiaSelectFiltrado(int transportista_id, string bandera)
+        {
+            var result = objDato.GuiaSelectFiltrado(transportista_id, bandera);
+            return result;
+        }
+
+        public Tuple<string, string, List<CMGuia>> GuiaSelectValorizacion(int transportista_id, int guia_id, string bandera)
+        {
+            // Ajustar la llamada al acceso a datos para incluir el parámetro guia_id
+            var result = objDato.GuiaSelectValorizacion(transportista_id, guia_id, bandera);
+            return result;
+        }
+
         public Tuple<string, string, List<CMGuia>> listarGuia(string bandera)
         {
             return objDato.listarGuia(bandera);

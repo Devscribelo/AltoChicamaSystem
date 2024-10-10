@@ -111,6 +111,125 @@ namespace AltoChicamaSystem.Data.Guia
             }
             return Tuple.Create(rpta, msg, lst);
         }
+
+        public Tuple<string, string, List<GuiaSelect>> GuiaSelectFiltrado(int transportista_id, string bandera)
+        {
+            List<GuiaSelect> lst = new List<GuiaSelect>();
+            GuiaSelect guiaselect = new GuiaSelect();
+            SqlConnection sqlCon = new SqlConnection();
+            string rpta = "";
+            string msg = "";
+            int count = 0;
+            try
+            {
+                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                sqlCon.Open();
+                SqlCommand sqlCmd = new SqlCommand();
+                sqlCmd.Connection = sqlCon;
+                sqlCmd.CommandText = "Guia_list_select_filtrado";
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.Parameters.AddWithValue("@transportista_id", transportista_id);
+                SqlDataReader sdr = sqlCmd.ExecuteReader();
+
+                while (sdr.Read())
+                {
+                    count++;
+                    if (count == 1)
+                    {
+                        rpta = sdr["Rpta"].ToString();
+                        msg = sdr["Msg"].ToString();
+                        sdr.NextResult();
+                    }
+                    if (rpta == "0" && count >= 2)
+                    {
+                        guiaselect = new GuiaSelect();
+                        guiaselect.guia_id = Convert.ToInt32(sdr["guia_id"]);
+                        guiaselect.guia_numero = sdr["guia_numero"].ToString().Trim();
+                        lst.Add(guiaselect);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                lst = new List<GuiaSelect>();
+                msg = ex.Message;
+            }
+            finally
+            {
+                if (sqlCon.State == ConnectionState.Open)
+                {
+                    sqlCon.Close();
+                }
+            }
+            return Tuple.Create(rpta, msg, lst);
+        }
+
+        public Tuple<string, string, List<CMGuia>> GuiaSelectValorizacion(int transportista_id, int guia_id, string bandera)
+        {
+            List<CMGuia> lst = new List<CMGuia>();
+            CMGuia guiaselect = new CMGuia();
+            SqlConnection sqlCon = new SqlConnection();
+            string rpta = "";
+            string msg = "";
+            int count = 0;
+
+            try
+            {
+                // Obtener la conexión según la bandera
+                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                sqlCon.Open();
+
+                SqlCommand sqlCmd = new SqlCommand();
+                sqlCmd.Connection = sqlCon;
+                sqlCmd.CommandText = "Guia_list_select_Valorizacion";  // Asegúrate de que el SP incluya guia_id
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.Parameters.AddWithValue("@transportista_id", transportista_id);
+                sqlCmd.Parameters.AddWithValue("@guia_id", guia_id);
+
+                SqlDataReader sdr = sqlCmd.ExecuteReader();
+
+                while (sdr.Read())
+                {
+                    count++;
+                    if (count == 1)
+                    {
+                        rpta = sdr["Rpta"].ToString();
+                        msg = sdr["Msg"].ToString();
+                        sdr.NextResult();  // Avanza al siguiente conjunto de resultados
+                    }
+
+                    // Si la respuesta es correcta, llenar la lista de guías
+                    if (rpta == "0" && count >= 2)
+                    {
+                        guiaselect = new CMGuia();
+                        guiaselect.guia_id = Convert.ToInt32(sdr["guia_id"]);
+                        guiaselect.guia_numero = sdr["guia_numero"].ToString().Trim();
+                        guiaselect.guia_fecha_servicio = sdr["guia_fecha_servicio"].ToString().Trim();  // Ejemplo de campo adicional
+                        guiaselect.guia_descarga = sdr["guia_descarga"].ToString().Trim();  // Otro campo adicional
+                        guiaselect.guia_cantidad = Convert.ToDecimal(sdr["guia_cantidad"]);  // Manejo de decimales si aplica
+                        lst.Add(guiaselect);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                lst = new List<CMGuia>();
+                msg = ex.Message;
+            }
+            finally
+            {
+                if (sqlCon.State == ConnectionState.Open)
+                {
+                    sqlCon.Close();
+                }
+            }
+
+            // Devolver la tupla con el resultado
+            return Tuple.Create(rpta, msg, lst);
+        }
+
+
         public Tuple<string, string, List<CMGuia>> listarGuia(string bandera)
         {
             List<CMGuia> lst = new List<CMGuia>();

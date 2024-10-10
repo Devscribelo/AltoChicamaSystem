@@ -1,5 +1,4 @@
-﻿using AltoChicamaSystem.Data.Guia;
-using AltoChicamaSystem.Data.Valorizacion;
+﻿using AltoChicamaSystem.Data.Valorizacion;
 using AltoChicamaSystem.Models;
 
 namespace AltoChicamaSystem.Negocio
@@ -8,9 +7,10 @@ namespace AltoChicamaSystem.Negocio
     {
         private ValorizacionDB objDato = new ValorizacionDB();
 
-        public Tuple<string, string> registrarValorizacion(CMValorizacion CMValorizacion, string bandera)
+        public Tuple<string, string> registrarValorizacion(CMValorizacion cmValorizacion, string bandera)
         {
-            return objDato.regValorizacion(CMValorizacion, bandera);
+            var result  = objDato.regValorizacion(cmValorizacion, bandera);
+            return result;
         }
     }
 }

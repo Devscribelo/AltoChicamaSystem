@@ -676,7 +676,7 @@ table.dataTable.no-footer {
     /* Estilos para las celdas de la tabla */
     .table th, .table td {
         border: 1px solid #0d4b1f !important; /* Color de las líneas de la tabla */
-        padding: 8px !important; /* Espaciado interno */
+        padding: 7px !important; /* Espaciado interno */
         text-align: center !important; /* Centra el contenido */
         text-align: center !important; /* Alinea el texto al centro */
         vertical-align: middle !important; /* Alinea verticalmente en el medio */
@@ -738,3 +738,4 @@ table.dataTable.no-footer {
     text-align: center !important; /* Alinea el texto al centro */
     vertical-align: middle !important; /* Alinea verticalmente en el medio */
 }
+
