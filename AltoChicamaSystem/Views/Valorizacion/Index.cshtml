@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 
     <!-- CSS personalizado -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/selector.css">
     <link rel="stylesheet" href="~/css/factura.css">
     <link rel="stylesheet" href="~/css/documentos.css">
     <link rel="stylesheet" href="~/css/alert.css">
@@ -66,15 +68,9 @@
                                     <thead style="color: #023E73;">
                                         <tr>
                                             <th>Ítem</th>
-                                            <th>N° Guía R. AUM</th>
-                                            <th>Fecha</th>
-                                            <th>Tipo</th>
-                                            <th>
-                                                Cantidad
-                                                (TN)
-                                            </th>
-                                            <th>Costo/TN</th>
-                                            <th>Costo Total</th>
+                                            <th>Código</th>
+                                            <th>Transportista</th>
+                                            <th>Monto</th>
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
@@ -87,152 +83,32 @@
             </div>
         </main>
 
-        <!-- Modal Detalles de Factura 
-        <div class="modal" id="modal_detalles_guia" tabindex="-1">
+        <div class="modal" id="modal_detalles_valorizacion" tabindex="-1">
             <div class="modal-dialog modal-lg modal-dialog-centered" style="max-width:73% !important;">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Detalles de Factura</h5>
+                        <h5 class="modal-title">Detalles de Valorizacion</h5>
+                        <div class="col-lg-6 col-md-6 col-sm-12 d-flex align-items-center justify-content-end" style="justify-content:flex-end !important" id="contenedorBotones1">
+                            <!-- Aquí se agregarán más botones si es necesario -->
+                        </div>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="table-responsive">
-                            <table class="table table-sm custom-table" id="table_detalles_factura">
+                            <table class="table table-sm custom-table" id="table_detalles_valorizacion">
                                 <thead style="color: #023E73;">
                                     <tr>
-                                        <th>guia_id</th>
-                                        <th>guia_numero</th>
-                                        <th>guia_descarga</th>
-                                        <th>guia_cantidad</th>
-                                        <th>guia_unidad</th>
-                                        <th>guia_costo</th>
-                                        <th>Fecha Servicio</th>
-                                        <th>transportista_nombre</th>
+                                        <th>Valorización ID</th>
+                                        <th>N° Guia</th>
+                                        <th>Fecha</th>
+                                        <th>Tipo</th>
+                                        <th>Cantidad</th>
+                                        <th>Costo/TN</th>
+                                        <th>Costo Total</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tb_detalles_factura"></tbody>
+                                <tbody id="tb_detalles_valorizacion"></tbody>
                             </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>-->
-
-        <!-- Modal Nueva Factura -->
-        <div class="modal" id="modal_nueva_factura" tabindex="-1">
-            <div class="modal-dialog modal-md modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Factura</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <form>
-                                    <!-- Monto -->
-                                    <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">Monto</span>
-                                        <input type="text" class="form-control" id="input_factura_monto" required autocomplete="off"
-                                               inputmode="decimal" placeholder="Ingrese el Monto">
-                                    </div>
-
-                                    <!-- Número de Factura -->
-                                    <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">Número de Factura</span>
-                                        <input type="text" class="form-control" id="input_factura_numfactura" autocomplete="off" placeholder="Ingrese el número de Factura" maxlength="100">
-                                    </div>
-
-                                    <!-- Transportista -->
-                                    <div class="input-group input-group-sm mb-3 flex-column">
-                                        <label class="input-group-text w-100" for="input_transportista_modal">Transportista</label>
-                                        <select class="form-select w-100" id="input_transportista_modal">
-                                            <!-- Opciones de empresa -->
-                                        </select>
-                                    </div>
-
-                                    <!-- Guías -->
-                                    <div class="input-group input-group-sm mb-3 flex-column">
-                                        <label class="input-group-text w-100" for="input_guias_modal">Guías</label>
-                                        <select class="js-example-basic-multiple form-select w-100" name="estados[]" multiple="multiple" id="input_guias_modal">
-                                            <!-- Opciones de guia -->
-                                        </select>
-                                    </div>
-
-                                    <!-- Status -->
-                                    <div class="form-group" style="margin-right: 246px !important; margin-bottom: 10px !important;">
-                                        <label id="status" for="radio_status" class="col-form-label">Estado: </label>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" style="margin-top: 4px !important;margin-right:2px !important;" type="radio" name="radio_factura_status" id="input_factura_status_a" value="1" checked>
-                                            <label class="form-check-label" for="input_factura_status_a">Activo</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" style="margin-top: 4px !important;margin-right:2px !important;" type="radio" name="radio_factura_status" id="input_factura_status_i" value="0">
-                                            <label class="form-check-label" for="input_factura_status_i">Inactivo</label>
-                                        </div>
-                                    </div>
-
-                                    <button id="btnGuardarFactura" class="btnGuardar" type="submit">Guardar Factura</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal Edit Plan Contable -->
-        <div class="modal" id="modal_editar_factura" tabindex="-1">
-            <div class="modal-dialog modal-md modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Editar Factura</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-12">
-
-                                <form>
-
-                                    <!-- empresa ruc -->
-                                    <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">Monto</span>
-                                        <input type="text" class="form-control" id="edit_factura_monto" required autocomplete="off"
-                                               inputmode="decimal">
-                                    </div>
-
-                                    <!-- empresa_correo -->
-                                    <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">Número de Factura  </span>
-                                        <input type="text" class="form-control" id="edit_factura_numfactura" autocomplete="off">
-                                    </div>
-
-                                    <!-- empresa_correo -->
-                                    <div class="input-group input-group-sm mb-3">
-                                        <label class="input-group-text" for="input_transportista_modal_edit">Transportista</label>
-                                        <select class="form-select" id="input_transportista_modal_edit">
-                                            <!-- Opciones de empresa -->
-                                        </select>
-                                    </div>
-
-                                    <!-- Status -->
-                                    <div class="form-group" style="margin-right: 246px !important; margin-bottom: 10px !important;">
-                                        <label id="status" for="radio_status" class="col-form-label">Estado: </label>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" style="margin-top: 4px !important;margin-right:2px !important;" type="radio" name="radio_factura_status" id="edit_factura_status_a" value="1">
-                                            <label class="form-check-label" for="edit_factura_status_a">Activo</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" style="margin-top: 4px !important;margin-right:2px !important;" type="radio" name="radio_factura_status" id="edit_factura_status_i" value="0">
-                                            <label class="form-check-label" for="edit_factura_status_i">Inactivo</label>
-                                        </div>
-                                    </div>
-
-                                    <button id="btnGuardarEditFactura" class="btnGuardar2" type="submit">Actualizar</button>
-
-                                </form>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -266,6 +142,10 @@
 
     </style>
     <!-- JS Personalizado -->
+    <script type="text/javascript" src="~/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script src="~/js/js_jquery.dataTables.min.js"></script>
+    <script src="~/config.js"></script>
     <script src="~/js/valorizacion.js?v=0.0.0.5"></script>
     <script>
         // Función para aplicar la lógica de validación a un campo de monto

@@ -22,5 +22,23 @@ namespace AltoChicamaSystem.Negocio
             var result = objDato.ValorizacionReturn(valorizacion_id, bandera);
             return result;
         }
+
+        public Tuple<string, string, List<CMValorizacion>> listarValorizacion(string bandera)
+        {
+            return objDato.listarValorizacion(bandera);
+        }
+        public Tuple<string, string> eliminarValorizacion(int valorizacionId, string bandera)
+        {
+            return objDato.eliminarValorizacion(valorizacionId, bandera);
+        }
+        public Tuple<string, string, List<CMValorizacion>> listarValorizacionDetalle(int valorizacion_id, string bandera)
+        {
+            return objDato.listarValorizacionDetalle(valorizacion_id, bandera);
+        }
+        public Tuple<string, string, List<CMValorizacion>> listarValorizacionTransportista(int transportista_id, string bandera)
+        {
+            var result = objDato.listarValorizacionTransportista(transportista_id, bandera);
+            return result;
+        }
     }
 }

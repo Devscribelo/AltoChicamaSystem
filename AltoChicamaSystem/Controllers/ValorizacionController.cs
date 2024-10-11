@@ -21,74 +21,126 @@ namespace AltoChicamaSystem.Controllers
             conf = config;
         }
 
-        // GET: ValorizacionController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: ValorizacionController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: ValorizacionController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> RegistrarValorizacion(string guia_ids, decimal valorizacion_costotn, decimal valorizacion_subtotal, decimal valorizacion_igv, string valorizacion_codigo, int transportista_id)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                string bandera = conf.GetValue<string>("Bandera") ?? string.Empty;
+
+                CMValorizacion cmvalorizacion = new CMValorizacion
+                {
+                    guia_ids = guia_ids,
+                    valorizacion_costotn = valorizacion_costotn,
+                    valorizacion_subtotal = valorizacion_subtotal,
+                    valorizacion_igv = valorizacion_igv,
+                    valorizacion_codigo = valorizacion_codigo,
+                    transportista_id = transportista_id,
+                };
+
+                var result = objusuarioCN.registrarValorizacion(cmvalorizacion, bandera);
+
+                if (result.Item1 == "0")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return StatusCode(500, Tuple.Create("1", $"Error interno del servidor: {ex.Message}"));
             }
         }
 
-        // GET: ValorizacionController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: ValorizacionController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ValorizacionController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: ValorizacionController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        [HttpGet]
+        public ActionResult ListaValorizacion()
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                string bandera = conf.GetValue<string>("bandera");
+                var result = objusuarioCN.listarValorizacion(bandera);
+
+                if (result.Item1 == "0")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return BadRequest(Tuple.Create("1", $"Error: {ex.Message}", new List<CMValorizacion>()));
             }
         }
+
+        [HttpPost]
+        public IActionResult EliminarValorizacion([FromBody] CMValorizacion request)
+        {
+            try
+            {
+                if (request == null || request.valorizacion_id <= 0)
+                {
+                    return BadRequest(Tuple.Create("1", "ID de guía inválido"));
+                }
+
+                string bandera = conf.GetValue<string>("bandera");
+                var result = objusuarioCN.eliminarValorizacion(request.valorizacion_id, bandera);
+
+                // Registrar el resultado para depuración
+                Console.WriteLine($"Resultado de eliminarValorizacion: Item1={result.Item1}, Item2={result.Item2}");
+
+                if (result.Item1 == "0")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    // Registrar el error para depuración
+                    Console.WriteLine($"Error al eliminar valorizacion: {result.Item2}");
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Registrar la excepción para depuración
+                Console.WriteLine($"Excepción al eliminar valorizacion: {ex.Message}");
+                return StatusCode(500, Tuple.Create("1", $"Error interno: {ex.Message}"));
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ListarValorizacionDetalle([FromBody] CMValorizacion request)
+        {
+            try
+            {
+                if (request == null || request.valorizacion_id <= 0)
+                {
+                    return BadRequest(Tuple.Create("1", "ID de factura inválido", new List<CMValorizacion>()));
+                }
+
+                string bandera = conf.GetValue<string>("Bandera");
+                var result = objusuarioCN.listarValorizacionDetalle(request.valorizacion_id, bandera);
+
+                if (result.Item1 == "0")
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, Tuple.Create("1", $"Error interno: {ex.Message}", new List<CMValorizacion>()));
+            }
+        }
+
 
         [HttpPost]
         public ActionResult ValorizacionSelect([FromBody] CMValorizacion request)
@@ -147,6 +199,34 @@ namespace AltoChicamaSystem.Controllers
             catch
             {
                 return BadRequest(result);
+            }
+        }
+        [HttpPost]
+        public ActionResult listarValorizacionTransportista([FromBody] CMValorizacion request)
+        {
+            var result = Tuple.Create("1", "Error al listar", new List<CMValorizacion>());
+
+            try
+            {
+                string bandera = conf.GetValue<string>("Bandera");
+                result = objusuarioCN.listarValorizacionTransportista(request.transportista_id, bandera);
+
+                if (result.Item1 == "0")  // Verifica si la operación fue exitosa
+                {
+                    return Ok(result);
+                }
+                else if (result.Item1 == "1") // No hay datos
+                {
+                    return NotFound(new { Rpta = result.Item1, Msg = result.Item2 });
+                }
+                else // Para cualquier otro error
+                {
+                    return BadRequest(new { Rpta = result.Item1, Msg = result.Item2 });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Rpta = "1", Msg = ex.Message });
             }
         }
     }
