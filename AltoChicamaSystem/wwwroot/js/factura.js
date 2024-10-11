@@ -451,7 +451,7 @@ function ValorizacionSelect(transportista_id, selectId) {
 
             // Limpiar el select y agregar opción por defecto
             $(selectId).empty();
-
+            $(selectId).append('<option value="" disabled selected>Seleccione una valorización...</option>');
             // Verificar si la data es null, vacía, o contiene solo espacios en blanco
             if (ValorizacionSelect && ValorizacionSelect.length > 0) {
                 // Agregar opciones al select
