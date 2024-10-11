@@ -25,6 +25,12 @@
     }
 }
 
+$(document).ready(function () {
+    $('#botonEliminar').click(function () {
+        eliminarDireccion($("#residuos").val());
+    });
+});
+
 // Inicialmente ocultar todos los formularios y aplicar la clase activa al botón por defecto
 document.addEventListener("DOMContentLoaded", () => {
     showForm("pdfResiduos"); // Mostrar por defecto el formulario de residuos sólidos
@@ -160,7 +166,7 @@ function cargarDirecciones(empresa_id) {
                 // Agregar opciones con direcciones
                 for (var i = 0; i < direcciones.length; i++) {
                     var item = direcciones[i];
-                    $("#residuos").append(new Option(item.direccion, item.direccion));
+                    $("#residuos").append(new Option(item.direccion, item.direccion_id));
                 }
 
                 // Inicializar o actualizar Select2
@@ -248,6 +254,40 @@ function guardarNewDireccion(empresa_id) {
                 text: 'La empresa o el usuario ya fueron registrados',
             });
             $("#btnGuardarDireccion").prop("disabled", false); // Asegúrate de habilitar el botón nuevamente
+        }
+    });
+}
+
+
+
+function eliminarDireccion(direccion_id) {
+    var endpoint = getDomain() + "/Direccion/DelDireccion"; // Cambia esto al endpoint correcto
+    $.ajax({
+        type: "POST",
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify({ direccion_id: direccion_id }),
+        dataType: "json",
+        success: function (data) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Éxito',
+                text: 'Direccion Eliminada correctamente',
+            }).then(() => {
+     
+                var select = document.getElementById("nomEmpresa");
+                var selectedOption = select.options[select.selectedIndex];
+                var dataId = selectedOption.getAttribute("data-id");
+                cargarDirecciones(dataId);
+            });
+
+            
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error('Error al eliminar dirección:', textStatus, errorThrown);
+            alert('Error al eliminar dirección. Por favor, intente nuevamente.');
         }
     });
 }

@@ -70,7 +70,29 @@ namespace AltoChicamaSystem.Controllers
             }
         }
 
-      
+        [HttpPost]
+        public ActionResult DelDireccion([FromBody] Direccion request)
+        {
+            var result = Tuple.Create("1", "Error al Eliminar");
+            try
+            {
+                // Obtén la bandera desde la configuración o un valor por defecto
+                string bandera = conf.GetValue<string>("Bandera");
+
+
+                // Llama al método del negocio para eliminar la empresa
+                result = objusuarioCN.delDireccion( bandera, request.direccion_id);
+
+                return Ok(result);
+            }
+            catch
+            {
+                // En caso de error, retorna un BadRequest con el mensaje de error
+                return BadRequest(result);
+            }
+        }
+
+
 
     }
 }

@@ -17,5 +17,11 @@ namespace AltoChicamaSystem.Negocio
             return result;
         }
 
+        public Tuple<string, string> delDireccion(string bandera, int direccion_id)
+        {
+            var result = objDato.delDireccion(bandera, direccion_id);
+            return result;
+        }
+
     }
 }

@@ -99,7 +99,46 @@ namespace AltoChicamaSystem.Data.Empresa
             }
             return Tuple.Create(rpta, msg, lst);
         }
-        
+
+
+        public Tuple<string, string> delDireccion(string bandera, int direccion_id)
+        {
+            Direccion cmEmpresa = new Direccion();
+            string rpta = "";
+            string msg = "";
+            SqlConnection sqlCon = new SqlConnection();
+            try
+            {
+                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                sqlCon.Open();
+                SqlCommand sqlCmd = new SqlCommand();
+                sqlCmd.Connection = sqlCon;
+                sqlCmd.CommandText = "Direcciones_delete"; // Nombre del procedimiento almacenado para eliminación
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+                sqlCmd.Parameters.AddWithValue("@direccion_id", direccion_id); // Aceptar int
+
+                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                if (sdr.Read())
+                {
+                    rpta = sdr["Rpta"].ToString();
+                    msg = sdr["Msg"].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                msg = ex.Message;
+                cmEmpresa = new Direccion();
+            }
+            finally
+            {
+                if (sqlCon.State == ConnectionState.Open)
+                {
+                    sqlCon.Close();
+                }
+            }
+            return Tuple.Create(rpta, msg);
+        }
+
 
     }
 }
