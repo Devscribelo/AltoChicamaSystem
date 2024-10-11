@@ -733,3 +733,80 @@ table.dataTable.no-footer {
         transform: scale(1.1) !important; /* Efecto de zoom al pasar el cursor */
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3) !important; /* Sombra m�s pronunciada al pasar el cursor */
     }
+
+
+/* Ajustes generales para el modal */
+.modal-body {
+    max-height: 70vh !important; /* Limitar la altura máxima del cuerpo del modal */
+    overflow-y: auto !important; /* Habilitar el desplazamiento vertical si el contenido es demasiado alto */
+}
+
+/* Estilo para pantallas pequeñas */
+@media (max-width: 576px) {
+    .modal-dialog {
+        max-width: 90% !important; /* Asegurar que el modal no sea más ancho que el 90% de la pantalla */
+    }
+}
+
+/* Estilo para pantallas medianas */
+@media (min-width: 577px) and (max-width: 768px) {
+    .modal-dialog {
+        max-width: 80% !important; /* Asegurar que el modal no sea más ancho que el 80% de la pantalla */
+    }
+}
+
+/* Estilo para campos de formulario */
+.input-group {
+    flex-direction: column !important; /* Cambiar la dirección de flexión a columna para mejor adaptabilidad */
+}
+
+/* Botón guardar con ancho completo en móviles */
+#btnGuardarFactura {
+    width: 100% !important; /* Asegura que el botón ocupe todo el ancho disponible */
+    margin-top: 10px !important; /* Añadir un margen superior para separación */
+}
+
+/* Mejorar la visibilidad de los labels */
+.input-group-text {
+    font-weight: bold !important; /* Hacer que los labels sean más destacados */
+}
+
+/* Estilo para el grupo de estado */
+.form-group {
+    margin-bottom: 15px !important; /* Asegurar espacio entre grupos de formulario */
+}
+
+/* Ajustar el tamaño de los radios en pantallas pequeñas */
+@media (max-width: 576px) {
+    .form-check-input {
+        width: 1.25rem !important; /* Ajustar el tamaño del input de tipo radio */
+        height: 1.25rem !important; /* Ajustar el tamaño del input de tipo radio */
+    }
+}
+
+.form-group {
+    display: flex !important; /* Usar flexbox para alinear elementos */
+    align-items: center !important; /* Alinear verticalmente los elementos al centro */
+    justify-content: flex-start !important; /* Alinear a la izquierda */
+    margin-bottom: 10px !important; /* Espaciado inferior */
+    margin-right: 40px !important; /* Añadir margen derecho para mover el grupo más a la derecha */
+}
+
+#status {
+    margin-right: 10px !important; /* Espacio entre el label y los radios */
+}
+
+.form-check {
+    margin-right: 15px !important; /* Espacio entre las opciones de radio */
+}
+
+.form-check-input {
+    margin-top: 0 !important; /* Alinear los radios con el texto */
+}
+
+.form-check-label {
+    margin-left: 2px !important; /* Espacio entre el radio y la etiqueta */
+}
+
+
+
