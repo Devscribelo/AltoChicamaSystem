@@ -79,7 +79,18 @@ function TransportistaSelect(id_transportista) {
     });
 }
 
+
 function GuiaSelect(transportista_id, id_select) {
+    // Verificar si el transportista_id es válido
+    if (!transportista_id) {
+        // Limpiar el select y agregar opción por defecto
+        $(id_select).empty();
+        $(id_select).append('<option value="" disabled selected>Seleccione un transportista primero...</option>');
+        // Deshabilitar el select
+        $(id_select).prop("disabled", true);
+        return; // Salir de la función si no hay transportista_id
+    }
+
     var endpoint = getDomain() + "/Guia/GuiaSelectFiltrado";
 
     $.ajax({
@@ -136,6 +147,7 @@ function GuiaSelect(transportista_id, id_select) {
         }
     });
 }
+
 
 function limpiarTabla() {
     const tabla = document.querySelector('#input_tabla_valorizacion tbody');
@@ -411,7 +423,11 @@ async function capturarDatosValorizacion(transportista_id) {
     const guia_ids = capturarGuiasSeleccionadas();  // Nueva función para capturar las guías seleccionadas
 
     if (guia_ids.length === 0) {
-        alert("Debe seleccionar al menos una guía.");
+        Swal.fire({
+            icon: 'error',
+            title: 'Ocurrió un error!',
+            text: `Debe seleccionar al menos una guía..`,
+        });
         return;
     }
 
@@ -458,7 +474,11 @@ async function capturarDatosValorizacion(transportista_id) {
                     icon: 'success',
                     title: 'Registro Exitoso',
                     text: `${msg} fueron registrados.`,
+                }).then(() => {
+                    // Recargar la página después de que se cierre el mensaje
+                    location.reload();
                 });
+
             } else {
                 // Mostrar mensaje de error
                 Swal.fire({

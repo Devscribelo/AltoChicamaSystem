@@ -23,7 +23,7 @@ body {
     max-width: 800px !important;
     margin: 0 auto !important;
     padding: 20px !important;
-    background-color: #e6f3f0 !important;
+
 
 }
 
@@ -207,4 +207,12 @@ th {
 #residuos {
     max-width: 770px !important; /* Permite que el select ocupe el espacio disponible */
     overflow: hidden !important; /* Establece un ancho mínimo para el select */
+}
+
+
+#input_transportista + .select2-container--default .select2-selection--single {
+    background-color: #fff !important;
+    border: 1px solid #aaa !important;
+    border-radius: 1px !important;
+    height: 46px !important;
 }

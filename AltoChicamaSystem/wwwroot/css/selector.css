@@ -102,7 +102,7 @@ button.select2-selection__clear {
 }
 
 .limit-dropdown .select2-results__options {
-    max-height: 100px !important; /* Controla la altura visible del desplegable */
+    max-height: 210px !important; /* Controla la altura visible del desplegable */
     overflow-y: auto !important; /* Habilita el scroll si hay más opciones */
 }
 
