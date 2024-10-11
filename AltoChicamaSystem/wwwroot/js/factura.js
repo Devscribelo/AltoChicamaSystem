@@ -20,10 +20,19 @@
     $('#input_transportista_modal').change(function () {
         if ($("#input_transportista_modal").val()) {
             // Llamar a la función GuiaSelect pasando el selector #input_guias_modal
-            GuiaSelect($("#input_transportista_modal").val(), "#input_guias_modal");
+            ValorizacionSelect($("#input_transportista_modal").val(), "#input_valorizacion_modal");
+            $('#input_valorizacion_modal').change(function () {
+                if ($("#input_valorizacion_modal").val()) {
+                    ValorizacionReturn($("#input_valorizacion_modal").val());
+                }
+            })
+            document.getElementById('input_guias_modal').value = '';
+            document.getElementById('input_factura_monto').value = '';
         }
         else {
-            $("#input_guias_modal").empty();
+            document.getElementById('input_guias_modal').value = '';
+            document.getElementById('input_factura_monto').value = '';
+            $("#input_valorizacion_modal").empty();
         }
     });
 });
@@ -190,14 +199,16 @@ function guardarNewFactura() {
     }
 
     var factura_status = $("#input_factura_status_a").is(':checked') ? $("#input_factura_status_a").val() : $("#input_factura_status_i").val();
-    var guias = mostrarGuiasSeleccionadas();
+    var guias = document.getElementById('input_guias_modal');
+    console.log(guias.getAttribute('data-id-guia'));
 
     var dataPost = {
         factura_monto: $("#input_factura_monto").val(),
         num_factura: $("#input_factura_numfactura").val(),
         factura_status: factura_status,
         transportista_id: $("#input_transportista_modal").val(),
-        guias_ids: guias.toString()
+        guias_ids: guias.getAttribute('data-id-guia'),
+        factura_fecha_pago: $("#fecha").val()
     };
 
     dataPost = trimJSONFields(dataPost);
@@ -372,8 +383,8 @@ function obtenerIdTransportistaSeleccionada(id_transportista) {
     return valorSeleccionadoTransportista;
 }
 
-function GuiaSelect(transportista_id, selectId) {
-    var endpoint = getDomain() + "/Guia/GuiaSelect";
+function ValorizacionReturn(valorizacion_id) {
+    var endpoint = getDomain() + "/Valorizacion/ValorizacionReturn";
 
     $.ajax({
         type: "POST",
@@ -382,17 +393,56 @@ function GuiaSelect(transportista_id, selectId) {
         headers: {
             "Content-Type": "application/json"
         },
-        data: JSON.stringify({transportista_id: transportista_id}),
+        data: JSON.stringify({ valorizacion_id: valorizacion_id }),
         dataType: "json",
         beforeSend: function (xhr) {
             console.log("Cargando guías...");
         },
         success: function (data) {
-            var GuiaSelect = data.item3;
+            var valorizacionDatos = data.item3;
+            console.log(valorizacionDatos);
+            for (var i = 0; i < valorizacionDatos.length; i++) {
+                console.log(valorizacionDatos[i].valorizacion_guias);
+                console.log(valorizacionDatos[i].valorizacion_numeros);
+                console.log(valorizacionDatos[i].valorizacion_monto);
+                document.getElementById('input_factura_monto').value = valorizacionDatos[i].valorizacion_monto;
+                document.getElementById('input_guias_modal').value = valorizacionDatos[i].valorizacion_numeros
+                    .split(',')
+                    .map(guia => `GUIA N°${guia.trim()}`) // Agregar "GUIA N°" a cada número
+                    .join(', '); // Unir las guías con una coma y un espacio
+
+                document.getElementById('input_guias_modal').setAttribute('data-numero-guia', valorizacionDatos[i].valorizacion_numeros);
+                document.getElementById('input_guias_modal').setAttribute('data-id-guia', valorizacionDatos[i].valorizacion_guias);
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Error al cargar valorizaciones: ' + textStatus);
+            console.error("Error al cargar valorizaciones:", textStatus, errorThrown);
+        }
+    });
+}
+
+function ValorizacionSelect(transportista_id, selectId) {
+    var endpoint = getDomain() + "/Valorizacion/ValorizacionSelect";
+
+    $.ajax({
+        type: "POST",
+        async: true,
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify({ transportista_id: transportista_id }),
+        dataType: "json",
+        beforeSend: function (xhr) {
+            console.log("Cargando guías...");
+        },
+        success: function (data) {
+            var ValorizacionSelect = data.item3;
 
             // Inicializar o actualizar Select2
             $(selectId).select2({
-                placeholder: "Seleccione un guia...",
+                placeholder: "Seleccione una valorización...",
                 allowClear: true,
                 language: "es",
                 dropdownCssClass: 'limit-dropdown', // Añadir la clase para limitar altura
@@ -403,28 +453,26 @@ function GuiaSelect(transportista_id, selectId) {
             $(selectId).empty();
 
             // Verificar si la data es null, vacía, o contiene solo espacios en blanco
-            if (GuiaSelect && GuiaSelect.length > 0) {
+            if (ValorizacionSelect && ValorizacionSelect.length > 0) {
                 // Agregar opciones al select
-                for (var i = 0; i < GuiaSelect.length; i++) {
-                    var item = GuiaSelect[i];
-                    $(selectId).append(new Option(item.guia_numero, item.guia_id));
+                for (var i = 0; i < ValorizacionSelect.length; i++) {
+                    var item = ValorizacionSelect[i]; 
+                    $(selectId).append(new Option(item.valorizacion_codigo, item.valorizacion_id));
                 }
             } else {
-                console.log("No se encontraron guías.");
-                $(selectId).append(new Option("No hay guías disponibles", ""));
+                console.log("No se encontraron valorizaciones.");
+                $(selectId).append(new Option("No hay valorizaciones disponibles", ""));
             }
 
             // Habilitar el select
             $(selectId).prop("disabled", false);
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            alert('Error al cargar guías: ' + textStatus);
-            console.error("Error al cargar guías:", textStatus, errorThrown);
+            alert('Error al cargar valorizaciones: ' + textStatus);
+            console.error("Error al cargar valorizaciones:", textStatus, errorThrown);
         }
     });
 }
-
-//GuiaSelect("#input_guias_modal");
 
 // Llamada inicial para llenar el select de transportistas
 TransportistaSelect2("#input_transportista");
@@ -485,7 +533,7 @@ function getListFacturaTransportista(transportista_id, estado, transportista_nom
                 console.log("Cargando...");
             },
             success: function (data) {
-                var dataEmpresa = data.item3;
+                var dataFactura = data.item3;
                 var datosRow = "";
 
                 // Cerrar modal
@@ -500,25 +548,27 @@ function getListFacturaTransportista(transportista_id, estado, transportista_nom
                 if (data.Item1 === "1") {
                     datosRow += "<tr><td colspan='6' style='text-align:center;'>No hay datos para mostrar</td></tr>";
                 } else {
-                    for (var i = 0; i < dataEmpresa.length; i++) {
+                    for (var i = 0; i < dataFactura.length; i++) {
                         datosRow +=
                             "<tr class='filaTabla' " +
-                            "data-id_factura='" + dataEmpresa[i].id_factura + "' " +
-                            "data-factura_monto='" + dataEmpresa[i].factura_monto + "' " +
-                            "data-num_factura='" + dataEmpresa[i].num_factura + "'" +
-                            "data-factura_status='" + dataEmpresa[i].factura_status + "' " +
-                            "data-transportista_nombre='" + dataEmpresa[i].transportista_nombre + "'>" +
-                            "<td>" + dataEmpresa[i].id_factura + "</td>" +
-                            "<td>" + dataEmpresa[i].factura_monto + "</td>" +
-                            "<td>" + dataEmpresa[i].transportista_nombre + "</td>" +
-                            "<td>" + dataEmpresa[i].num_factura + "</td>" +
+                            "data-id_factura='" + dataFactura[i].id_factura + "' " +
+                            "data-factura_monto='" + dataFactura[i].factura_monto + "' " +
+                            "data-num_factura='" + dataFactura[i].num_factura + "'" +
+                            "data-factura_status='" + dataFactura[i].factura_status + "'" +
+                            "data-transportista_id='" + dataFactura[i].transportista_id + "'" +
+                            "data-transportista_nombre='" + dataFactura[i].transportista_nombre + "'>" +
+                            "<td>" + dataFactura[i].id_factura + "</td>" +
+                            "<td>" + dataFactura[i].num_factura + "</td>" +
+                            "<td>" + dataFactura[i].factura_fecha_pago + "</td>" +
+                            "<td>" + dataFactura[i].transportista_nombre + "</td>" +
+                            "<td>" + dataFactura[i].factura_monto + "</td>" +
                             "<td>" +
                             "<div class='form-check form-switch'>" +
-                            `<input style='width: 46px; margin-top: 4px;' class='form-check-input status3' type='checkbox' id='flexSwitchCheckDefault${i}' ${dataEmpresa[i].factura_status === 'True' ? 'checked' : ''} data-factura_status='${dataEmpresa[i].id_factura}'>` +
+                            `<input style='width: 46px; margin-top: 4px;' class='form-check-input status3' type='checkbox' id='flexSwitchCheckDefault${i}' ${dataFactura[i].factura_status === 'True' ? 'checked' : ''} data-factura_status='${dataFactura[i].id_factura}'>` +
                             "</div>" +
                             "</td>" +
                             "<td id='acciones'>" +
-                            `<i class='bx bx-detail detalle-factura icon-circle' id='detalle_factura" + i + "' onclick='modalDetalleFactura(${dataEmpresa[i].id_factura})'></i>` +
+                            `<i class='bx bx-detail detalle-factura icon-circle' id='detalle_factura" + i + "' onclick='modalDetalleFactura(${dataFactura[i].id_factura})'></i>` +
                             "<i class='bx bx-edit editar-button icon-circle' id='editar_factura" + i + "'></i>" +
                             "<i style='margin-left: 9px;' class='bx bx-trash eliminar-button icon-circle red' id='eliminar_factura" + i + "'></i>" +
                             "</td>" +
@@ -679,6 +729,7 @@ function getListFactura() {
                         "data-transportista_nombre='" + dataFactura[i].transportista_nombre + "'>" +
                         "<td>" + dataFactura[i].id_factura + "</td>" +
                         "<td>" + dataFactura[i].num_factura + "</td>" +
+                        "<td>" + dataFactura[i].factura_fecha_pago + "</td>" +
                         "<td>" + dataFactura[i].transportista_nombre + "</td>" +
                         "<td>" + dataFactura[i].factura_monto + "</td>" +
                         "<td>" +
@@ -741,6 +792,11 @@ function formatearFecha(fechaString) {
 function agregarBotonesExportacion1(tablaId) {
     var contenedorBotones = document.getElementById("contenedorBotones1");
 
+    // Comprobar si los botones ya existen antes de agregarlos
+    if (contenedorBotones.querySelector("#btnExportExcel1") && contenedorBotones.querySelector("#btnExportPdf1")) {
+        return; // Si los botones ya están presentes, no los agregues de nuevo
+    }
+
     // Función para crear un botón de exportación
     function crearBoton(id, clase, svgPath, altText) {
         var boton = document.createElement("button");
@@ -786,6 +842,7 @@ function agregarBotonesExportacion1(tablaId) {
         "Exportar PDF"
     ));
 }
+
 
 function getListFacturaDetail(id_factura) {
     agregarBotonesExportacion1("#table_detalles_factura");

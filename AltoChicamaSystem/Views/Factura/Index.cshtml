@@ -100,6 +100,7 @@
                                         <tr>
                                             <th>ID</th>
                                             <th>Número de Factura</th>
+                                            <th>Fecha de Pago</th>
                                             <th>Transportista</th>
                                             <th>Monto</th>
                                             <th style="width:65px;">Estado</th>
@@ -224,11 +225,33 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <form>
+                                    <!-- Transportista -->
+                                    <div class="input-group input-group-sm mb-3 flex-column">
+                                        <label class="input-group-text w-100" for="input_transportista_modal">Transportista</label>
+                                        <select class="form-select w-100" id="input_transportista_modal" required>
+                                            <!-- Opciones de empresa -->
+                                        </select>
+                                    </div>
+                                    <!-- Transportista -->
+                                    <div class="input-group input-group-sm mb-3 flex-column">
+                                        <label class="input-group-text w-100" for="input_valorizacion_modal">Valorización</label>
+                                        <select class="form-select w-100" id="input_valorizacion_modal" required>
+                                            <!-- Opciones de empresa -->
+                                        </select>
+                                    </div>
                                     <!-- Monto -->
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Monto</span>
                                         <input type="text" class="form-control" id="input_factura_monto" required autocomplete="off"
-                                               inputmode="decimal" placeholder="Ingrese el Monto">
+                                               inputmode="decimal" placeholder="Ingrese el Monto" disabled>
+                                    </div>
+
+                                    <!-- Guías -->
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Guías</span>
+                                        <input type="text" class="form-control" id="input_guias_modal" required autocomplete="off"
+                                               inputmode="decimal" placeholder="Ingrese las Guías" disabled
+                                               data-numero-guia="" data-id-guia="">
                                     </div>
 
                                     <!-- Número de Factura -->
@@ -237,20 +260,10 @@
                                         <input type="text" class="form-control" id="input_factura_numfactura" autocomplete="off" placeholder="Ingrese el número de Factura" maxlength="100" required>
                                     </div>
 
-                                    <!-- Transportista -->
-                                    <div class="input-group input-group-sm mb-3 flex-column">
-                                        <label class="input-group-text w-100" for="input_transportista_modal">Transportista</label>
-                                        <select class="form-select w-100" id="input_transportista_modal" required>
-                                            <!-- Opciones de empresa -->
-                                        </select>
-                                    </div>
-
-                                    <!-- Guías -->
-                                    <div class="input-group input-group-sm mb-3 flex-column">
-                                        <label class="input-group-text w-100" for="input_guias_modal">Guías</label>
-                                        <select class="js-example-basic-multiple form-select w-100" name="estados[]" multiple="multiple" id="input_guias_modal" required>
-                                            <!-- Opciones de guia -->
-                                        </select>
+                                    <!-- Fecha de Factura -->
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Fecha de Pago</span>
+                                        <input type="date" class="form-control" id="fecha" name="fecha" required />
                                     </div>
 
                                     <!-- Status -->

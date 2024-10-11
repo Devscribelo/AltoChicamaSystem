@@ -229,6 +229,7 @@ namespace AltoChicamaSystem.Data.Factura
                 sqlCmd.Parameters.AddWithValue("@factura_status", cmFactura.factura_status);
                 sqlCmd.Parameters.AddWithValue("@transportista_id", cmFactura.transportista_id);
                 sqlCmd.Parameters.AddWithValue("@guias_ids", cmFactura.guias_ids.Trim());
+                sqlCmd.Parameters.AddWithValue("@factura_fecha_pago",cmFactura.factura_fecha_pago.Trim());
 
                 SqlDataReader sdr = sqlCmd.ExecuteReader();
                 if (sdr.Read())
@@ -286,6 +287,7 @@ namespace AltoChicamaSystem.Data.Factura
                                 factura_status = sdr["factura_status"].ToString().Trim(),
                                 transportista_id = Convert.ToInt32(sdr["transportista_id"]),
                                 transportista_nombre = sdr["transportista_nombre"].ToString().Trim(),
+                                factura_fecha_pago = sdr["factura_fecha_pago"].ToString().Trim(),
                             };
                             lst.Add(factura);
                         }
@@ -346,7 +348,9 @@ namespace AltoChicamaSystem.Data.Factura
                                 factura_monto = Convert.ToDecimal(sdr["factura_monto"]),
                                 num_factura = sdr["num_factura"].ToString().Trim(),
                                 factura_status = sdr["factura_status"].ToString().Trim(),
+                                transportista_id = Convert.ToInt32(sdr["transportista_id"]),
                                 transportista_nombre = sdr["transportista_nombre"].ToString().Trim(),
+                                factura_fecha_pago = sdr["factura_fecha_pago"].ToString().Trim(),
                             };
                             lst.Add(factura);
                         }

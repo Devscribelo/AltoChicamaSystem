@@ -10,6 +10,7 @@
         public string transportista_nombre { get; set; }
         public int estado { get; set; }
         public string guias_ids { get; set; }
+        public string factura_fecha_pago { get; set; }
 
     }
 }
