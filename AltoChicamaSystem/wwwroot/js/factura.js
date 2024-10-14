@@ -505,9 +505,6 @@ $(document).on('click', '.btnGuardar', function () {
     guardarNewFactura(transportista_id);
 });
 
-$(document).on('click', '.btnGuardar2', function () {
-    guardarEditFactura(transportista_id);
-});
 
 
 function capturarValoresSeleccionados() {
@@ -1172,8 +1169,10 @@ function guardarEditFactura(id_factura) {
                     text: 'Factura actualizada correctamente',
                 }).then(() => {
                     actualizarTablaFacturas();
+                    getListFactura();
                     obtenerGananciasTransportista();
                     obtenerDeudasTransportista();
+                    
                 });
             } else {
                 Swal.fire({
@@ -1232,6 +1231,7 @@ function actualizarTablaFacturas() {
 
             // Volver a agregar los event listeners
             agregarEventListeners();
+
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.error("Error al actualizar la tabla:", textStatus, errorThrown);
@@ -1246,10 +1246,6 @@ function actualizarTablaFacturas() {
 
 function agregarEventListeners() {
     // Event listener para el botón de editar
-    $('#table_empresa').off('click', '.editar-button').on('click', '.editar-button', function () {
-        var facturaData = JSON.parse($(this).attr('data-factura'));
-        modalEditarFactura(facturaData);
-    });
 
     // Event listener para el botón de eliminar
     $('#table_empresa').off('click', '.eliminar-button').on('click', '.eliminar-button', function () {
