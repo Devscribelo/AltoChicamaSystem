@@ -1,5 +1,6 @@
 ﻿$(document).ready(function () {
     getListFactura();
+    initTransportistaSelect();
     agregarBotonesExportacion("#table_empresa");
     obtenerGananciasTransportista();
     obtenerDeudasTransportista();
@@ -167,6 +168,7 @@ function vaciarFormFactura() {
 
 function modalNuevaFactura() {
     vaciarFormFactura();
+    initTransportistaSelect2();
     $("#modal_nueva_factura").modal("show").css('display', 'flex');
 
     // Cargar los transportistas después de que el modal se haya mostrado
@@ -178,6 +180,14 @@ function modalNuevaFactura() {
         event.preventDefault();
         guardarNewFactura();
     });
+}
+
+function initTransportistaSelect2() {
+    // Llamada inicial para llenar los select de transportistas
+    TransportistaSelect2("#input_transportista");
+    TransportistaSelect2("#input_transportista_modal");
+    TransportistaSelect2("#input_transportista_modal_edit");
+
 }
 
 function guardarNewFactura() {
@@ -256,9 +266,26 @@ function guardarNewFactura() {
     });
 }
 
+function initTransportistaSelect() {
+    // Llamada inicial para llenar los select de transportistas
+    TransportistaSelect("#input_transportista");
+}
 
 function TransportistaSelect(id_transportista) {
     var endpoint = getDomain() + "/Transportista/TransportistaSelect";
+
+    // Solo destruye Select2 si está inicializado
+    if ($.fn.select2 && $(id_transportista).data('select2')) {
+        $(id_transportista).select2('destroy');
+    }
+
+    // Inicializar Select2 después de destruir la instancia previa
+    $(id_transportista).select2({
+        placeholder: "Seleccione un transportista...",
+        allowClear: true,
+        language: "es",
+        dropdownCssClass: 'limit-dropdown' // Añadir la clase para limitar altura
+    });
 
     $.ajax({
         type: "GET",
@@ -289,19 +316,11 @@ function TransportistaSelect(id_transportista) {
                 }
             } else {
                 console.log("No se encontraron transportistas.");
-                $('#input_transportista').append(new Option("No hay transportistas disponibles", ""));
+                $(id_transportista).append(new Option("No hay transportistas disponibles", ""));
             }
 
-            // Inicializar o actualizar Select2 usando directamente el ID del select
-            $('#input_transportista').select2({
-                placeholder: "Seleccione un transportista...",
-                allowClear: true,
-                language: "es",
-                dropdownCssClass: 'limit-dropdown' // Añadir la clase para limitar altura
-            });
-
             // Habilitar el select
-            $('#input_transportista').prop("disabled", false);
+            $(id_transportista).prop("disabled", false);
 
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -312,11 +331,9 @@ function TransportistaSelect(id_transportista) {
 }
 
 function TransportistaSelect2(selectId) {
-
     var endpoint = getDomain() + "/Transportista/TransportistaSelect";
 
     return new Promise((resolve, reject) => {
-
         $.ajax({
             type: "GET",
             async: true,
@@ -333,14 +350,21 @@ function TransportistaSelect2(selectId) {
 
                 var TransportistaSelect = data.item3;
 
+                // Destruir Select2 si está inicializado
+                if ($.fn.select2 && $(selectId).data('select2')) {
+                    $(selectId).select2('destroy');
+                }
+
+                // Inicializar Select2
                 $(selectId).select2({
                     placeholder: "Seleccione un transportista...",
                     allowClear: true,
                     language: "es",
                     dropdownCssClass: 'limit-dropdown',
-                    dropdownParent: $(selectId).closest('.modal-body')
+                    dropdownParent: $(selectId).closest('.modal-body') // Asegúrate de que este selector sea correcto
                 });
 
+                // Limpiar el select y agregar opción por defecto
                 $(selectId).empty().append(new Option("Seleccione un transportista...", "", true, true));
 
                 if (TransportistaSelect && TransportistaSelect.length > 0) {
@@ -353,6 +377,7 @@ function TransportistaSelect2(selectId) {
                     $(selectId).append(new Option("No hay transportistas disponibles", ""));
                 }
 
+                // Habilitar el select
                 $(selectId).prop("disabled", false);
 
                 console.log("Select2 inicializado para:", selectId);
@@ -366,8 +391,6 @@ function TransportistaSelect2(selectId) {
         });
     });
 }
-
-
 
 function obtenerIdTransportistaSeleccionada(id_transportista) {
     // Obtener el valor de la opción seleccionada en el select
@@ -474,10 +497,6 @@ function ValorizacionSelect(transportista_id, selectId) {
     });
 }
 
-// Llamada inicial para llenar el select de transportistas
-TransportistaSelect2("#input_transportista");
-TransportistaSelect2("#input_transportista_modal");
-TransportistaSelect("#input_transportista_modal_edit");
 
 
 $(document).on('click', '.btnGuardar', function () {
@@ -959,7 +978,7 @@ function alterFacturaStatus(id_factura) {
                     obtenerGananciasTransportistaIndividual(transportista_id);
                     obtenerDeudasTransportistaIndividual(transportista_id);
                 }
-                updateFacturaRow(id_factura);
+
                 obtenerGananciasTransportista();
                 obtenerDeudasTransportista();
             } else {
@@ -980,40 +999,7 @@ function alterFacturaStatus(id_factura) {
     });
 }
 
-function updateFacturaRow(id_factura) {
-    var endpoint = getDomain() + "/Factura/GetFactura";
-    $.ajax({
-        type: "GET",
-        url: endpoint,
-        data: { id_factura: id_factura },
-        success: function (data) {
-            if (data && data.item3) {
-                var factura = data.item3;
-                var table = $("#table_empresa").DataTable();
-                var row = table.row($(`tr[data-id_factura='${id_factura}']`));
-                if (row.length) {
-                    row.data({
-                        id_factura: factura.id_factura,
-                        factura_monto: factura.factura_monto,
-                        num_factura: factura.num_factura,
-                        transportista_nombre: factura.transportista_nombre,
-                        factura_status: `<div class='form-check form-switch'>
-                            <input style='width: 46px; margin-top: 4px;' class='form-check-input status3' type='checkbox' 
-                            id='flexSwitchCheckDefault${factura.id_factura}' 
-                            ${factura.factura_status === 'True' ? 'checked' : ''} 
-                            data-factura_status='${factura.id_factura}'>
-                        </div>`,
-                        acciones: `<i class='bx bx-edit editar-button icon-circle'></i>
-                        <i style='margin-left: 9px;' class='bx bx-trash eliminar-button icon-circle red'></i>`
-                    }).draw();
-                }
-            }
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.error("Error al actualizar la fila:", textStatus, errorThrown);
-        }
-    });
-}
+
 
 
 function modalConfirmacionEliminar(id_factura) {
@@ -1241,6 +1227,7 @@ function actualizarTablaFacturas() {
                 datosRow.push([
                     dataFactura[i].id_factura,
                     dataFactura[i].num_factura,
+                    dataFactura[i].factura_fecha_pago,
                     dataFactura[i].factura_monto,
                     dataFactura[i].transportista_nombre,
                     `<div class='form-check form-switch'>
