@@ -205,7 +205,7 @@ th {
 }
 
 #residuos {
-    max-width: 700px !important; /* Permite que el select ocupe el espacio disponible */
+    max-width: 690px !important; /* Permite que el select ocupe el espacio disponible */
     overflow: hidden !important; /* Establece un ancho mínimo para el select */
 }
 
