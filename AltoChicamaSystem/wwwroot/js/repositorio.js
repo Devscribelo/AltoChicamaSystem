@@ -4,7 +4,7 @@ var tableEmpresa;
 $(document).ready(function () {
     consult = false;
     TransportistaSelect("#input_transportista");
-    agregarBotonesExportacion("#table_guia");
+    agregarBotonesExportacionExcel("#table_guia");
     getListGuia();
 
     $(document).on('change', '.status3', function () {
@@ -188,13 +188,6 @@ function getListGuia() {
                             exportOptions: {
                                 columns: ':visible:not(:last-child, :nth-last-child(2))' // Oculta la penúltima y la última columna en la exportación a Excel
                             }
-                        },
-                        {
-                            extend: 'pdf',
-                            className: 'btn_export_Pdf',
-                            exportOptions: {
-                                columns: ':visible:not(:last-child, :nth-last-child(2))' // Oculta la penúltima y la última columna en la exportación a Excel
-                            }
                         }
                     ],
                     colResize: {
@@ -237,7 +230,7 @@ function crearFilaGuia(guia) {
     var direccion = guia.guia_direccion;
     var cantidad = guia.guia_cantidad;
     var unidadMedida = guia.guia_unidad;
-    var guiaStatus = guia.guia_status; 
+    var guiaStatus = guia.guia_status;
 
     return `<tr class='filaTabla' data-guia_id='${guia.guia_id}'>
         <td>${fechaDescarga}</td>
@@ -343,13 +336,6 @@ function inicializarTablaGuias() {
                 exportOptions: {
                     columns: ':visible:not(:last-child, :nth-last-child(1))'
                 }
-            },
-            {
-                extend: 'pdf',
-                className: 'btn_export_Pdf',
-                exportOptions: {
-                    columns: ':visible:not(:last-child, :nth-last-child(1))'
-                }
             }
         ],
         colResize: {
@@ -366,28 +352,38 @@ function capturarValoresSeleccionados() {
 
     console.log("Valores seleccionados:", { transportista_id, estado });
 
-    if (transportista_id && estado !== null) {
-        getListGuiaTransportista(transportista_id, estado);
+    if (transportista_id) {  // Validamos solo si transportista_id está presente
+        // Si el estado tiene valor, llamamos a la función con ambos parámetros
+        // Si el estado no está presente, llamamos solo con el transportista_id
+        getListGuiaTransportista(transportista_id, estado !== null && estado !== "" ? estado : undefined);
     } else {
         Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: "Por favor, seleccione un transportista y un estado.",
+            text: "Por favor, seleccione un transportista.",
         });
     }
 }
 
-
 function getListGuiaTransportista(transportista_id, estado) {
     var endpoint = getDomain() + "/Guia/listarGuiaTransportista";
     console.log("Enviando solicitud a:", endpoint);
-    console.log("Datos enviados:", { transportista_id, estado });
+
+    // Crear el objeto de datos
+    var data = { transportista_id: transportista_id };
+
+    // Solo agregar 'estado' si está definido y no es nulo o vacío
+    if (estado !== undefined && estado !== null && estado !== "") {
+        data.guia_status = estado; // Se agrega el estado solo si tiene un valor
+    }
+
+    console.log("Datos enviados:", data);
 
     $.ajax({
         type: "POST",
         url: endpoint,
         contentType: "application/json",
-        data: JSON.stringify({ transportista_id: transportista_id, guia_status: estado }),
+        data: JSON.stringify(data),  // Enviar solo los datos necesarios
         dataType: "json",
         success: function (data) {
             console.log("Respuesta recibida:", data);
@@ -426,7 +422,6 @@ function getListGuiaTransportista(transportista_id, estado) {
                             "</tr>";
                     }
 
-
                     if (!$("#tb_guia").hasClass("dataTable")) {
                         if ($.fn.DataTable.isDataTable("#table_guia")) {
                             $("#table_guia").DataTable().destroy(); // Destruye la instancia anterior
@@ -441,13 +436,6 @@ function getListGuiaTransportista(transportista_id, estado) {
                                 {
                                     extend: 'excel',
                                     className: 'btn_export_Excel',
-                                    exportOptions: {
-                                        columns: ':visible:not(:last-child, :nth-last-child(2))' // Oculta la penúltima y la última columna en la exportación a Excel
-                                    }
-                                },
-                                {
-                                    extend: 'pdf',
-                                    className: 'btn_export_Pdf',
                                     exportOptions: {
                                         columns: ':visible:not(:last-child, :nth-last-child(2))' // Oculta la penúltima y la última columna en la exportación a Excel
                                     }
@@ -484,6 +472,7 @@ function getListGuiaTransportista(transportista_id, estado) {
         }
     });
 }
+
 
 function alterDocumentoStatus(documento_id) {
     var endpoint = getDomain() + "/Repositorio/alterDocumentoStatus";
@@ -547,4 +536,45 @@ function eliminarDocumento(documento_id) {
             });
         }
     });
+}
+
+// Nueva función para agregar solo el botón de exportación a Excel
+function agregarBotonesExportacionExcel(tablaId) {
+    var contenedorBotones = document.getElementById("contenedorBotones");
+
+    // Crear botón de exportación Excel
+    var botonExcel = crearBoton(
+        "btnExportExcel",
+        "btn_export_Excel",
+        "M17.5,22.131a1.249,1.249,0,0,1-1.25-1.25V2.187a1.25,1.25,0,0,1,2.5,0V20.881A1.25,1.25,0,0,1,17.5,22.131Z M17.5,22.693a3.189,3.189,0,0,1-2.262-.936L8.487,15.006a1.249,1.249,0,0,1,1.767-1.767l6.751,6.751a.7.7,0,0,0,.99,0l6.751-6.751a1.25,1.25,0,0,1,1.768,1.767l-6.752,6.751A3.191,3.191,0,0,1,17.5,22.693Z",
+        "Exportar Excel"
+    );
+
+    contenedorBotones.appendChild(botonExcel);
+
+    // Agregar evento al botón de exportación Excel
+    botonExcel.addEventListener("click", function () {
+        if ($.fn.DataTable.isDataTable(tablaId)) {
+            $(tablaId).DataTable().button('.btn_export_Excel').trigger();
+        }
+    });
+}
+
+// Función para crear un botón de exportación (puedes copiarla de config.js)
+function crearBoton(id, clase, svgPath, altText) {
+    var boton = document.createElement("button");
+    boton.id = id;
+    boton.type = "button";
+    boton.className = "button " + clase;
+
+    boton.innerHTML = `
+        <span class="button__text">${altText}</span>
+        <span class="button__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35" class="svg">
+                <path d="${svgPath}"></path>
+            </svg>
+        </span>
+    `;
+
+    return boton;
 }

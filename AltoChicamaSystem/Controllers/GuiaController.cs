@@ -104,16 +104,12 @@ namespace AltoChicamaSystem.Controllers
                 }
 
                 string bandera = conf.GetValue<string>("Bandera");
-                bool? estado = request.guia_status == "1";
+                bool? estado = request.guia_status == "1" ? (bool?)true : null; // Manejo del estado
+
                 var result = objusuarioCN.listarGuiaTransportista(request.transportista_id, estado, bandera);
 
                 if (result.Item1 == "0")
                 {
-                    if (result.Item3.Count == 0)
-                    {
-                        // No se encontraron guías, pero no es un error
-                        return Ok(Tuple.Create("0", result.Item2, result.Item3));
-                    }
                     return Ok(result);
                 }
                 else

@@ -793,7 +793,7 @@ function agregarBotonesExportacion1(tablaId) {
     var contenedorBotones = document.getElementById("contenedorBotones1");
 
     // Comprobar si los botones ya existen antes de agregarlos
-    if (contenedorBotones.querySelector("#btnExportExcel1") && contenedorBotones.querySelector("#btnExportPdf1")) {
+    if (contenedorBotones.querySelector("#btnExportExcel1")) {
         return; // Si los botones ya están presentes, no los agregues de nuevo
     }
 
@@ -829,17 +829,6 @@ function agregarBotonesExportacion1(tablaId) {
         "btn_export_Excel",
         "M17.5,22.131a1.249,1.249,0,0,1-1.25-1.25V2.187a1.25,1.25,0,0,1,2.5,0V20.881A1.25,1.25,0,0,1,17.5,22.131Z M17.5,22.693a3.189,3.189,0,0,1-2.262-.936L8.487,15.006a1.249,1.249,0,0,1,1.767-1.767l6.751,6.751a.7.7,0,0,0,.99,0l6.751-6.751a1.25,1.25,0,0,1,1.768,1.767l-6.752,6.751A3.191,3.191,0,0,1,17.5,22.693Z",
         "Exportar Excel"
-    ));
-
-    // Agregar un margen entre los botones
-    contenedorBotones.appendChild(document.createTextNode("\u00A0")); // Agrega un espacio en blanco
-
-    // Crear botón de exportación PDF
-    contenedorBotones.appendChild(crearBoton(
-        "btnExportPdf1",
-        "btn_export_Pdf",
-        "M17.5,22.131a1.249,1.249,0,0,1-1.25-1.25V2.187a1.25,1.25,0,0,1,2.5,0V20.881A1.25,1.25,0,0,1,17.5,22.131Z M17.5,22.693a3.189,3.189,0,0,1-2.262-.936L8.487,15.006a1.249,1.249,0,0,1,1.767-1.767l6.751,6.751a.7.7,0,0,0,.99,0l6.751-6.751a1.25,1.25,0,0,1,1.768,1.767l-6.752,6.751A3.191,3.191,0,0,1,17.5,22.693Z",
-        "Exportar PDF"
     ));
 }
 
@@ -903,10 +892,6 @@ function getListFacturaDetail(id_factura) {
                             {
                                 extend: 'excel',
                                 className: 'btn_export_Excel',
-                            },
-                            {
-                                extend: 'pdf',
-                                className: 'btn_export_Pdf',
                             }
                         ],
                         colResize: {
