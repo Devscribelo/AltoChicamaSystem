@@ -207,15 +207,13 @@ function guardarNewFactura() {
 
         return; // Detiene el envío si no es válido
     }
-
-    var factura_status = $("#input_factura_status_a").is(':checked') ? $("#input_factura_status_a").val() : $("#input_factura_status_i").val();
     var guias = document.getElementById('input_guias_modal');
     console.log(guias.getAttribute('data-id-guia'));
 
     var dataPost = {
         factura_monto: $("#input_factura_monto").val(),
         num_factura: $("#input_factura_numfactura").val(),
-        factura_status: factura_status,
+        factura_status: '0',
         transportista_id: $("#input_transportista_modal").val(),
         guias_ids: guias.getAttribute('data-id-guia'),
         factura_fecha_pago: $("#fecha").val()
@@ -505,6 +503,9 @@ $(document).on('click', '.btnGuardar', function () {
     guardarNewFactura(transportista_id);
 });
 
+$(document).on('click', '.btnGuardar2', function () {
+    guardarEditFactura(transportista_id);
+});
 
 
 function capturarValoresSeleccionados() {
@@ -981,9 +982,6 @@ function alterFacturaStatus(id_factura) {
     });
 }
 
-
-
-
 function modalConfirmacionEliminar(id_factura) {
     Swal.fire({
         title: '¿Estás seguro?',
@@ -1169,10 +1167,8 @@ function guardarEditFactura(id_factura) {
                     text: 'Factura actualizada correctamente',
                 }).then(() => {
                     actualizarTablaFacturas();
-                    getListFactura();
                     obtenerGananciasTransportista();
                     obtenerDeudasTransportista();
-                    
                 });
             } else {
                 Swal.fire({
@@ -1231,7 +1227,6 @@ function actualizarTablaFacturas() {
 
             // Volver a agregar los event listeners
             agregarEventListeners();
-
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.error("Error al actualizar la tabla:", textStatus, errorThrown);
@@ -1246,6 +1241,10 @@ function actualizarTablaFacturas() {
 
 function agregarEventListeners() {
     // Event listener para el botón de editar
+    $('#table_empresa').off('click', '.editar-button').on('click', '.editar-button', function () {
+        var facturaData = JSON.parse($(this).attr('data-factura'));
+        modalEditarFactura(facturaData);
+    });
 
     // Event listener para el botón de eliminar
     $('#table_empresa').off('click', '.eliminar-button').on('click', '.eliminar-button', function () {
