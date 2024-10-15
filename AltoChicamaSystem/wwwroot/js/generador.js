@@ -339,7 +339,7 @@ function TransportistaSelect() {
                     var selectedTransportista = $(this).val();
                     var selectedTransportistaId = $(this).find(':selected').data('id');
                     if (transportistas[selectedTransportista]) {
-                        document.getElementById('ruct').value = transportistas[selectedTransportista]; 
+                        document.getElementById('ruct').value = transportistas[selectedTransportista].ruc; 
                         document.getElementById('idt').value = selectedTransportistaId; 
                     }
                 });
@@ -765,6 +765,8 @@ async function generarPDF() {
 
     if (formId === "pdfResiduos") {
         return new Promise(async (resolve, reject) => {
+            let residuosSelect = document.getElementById("residuos");
+            let residuosNombre = residuosSelect.options[residuosSelect.selectedIndex].text;
             let residuos = document.getElementById("residuos").value;
             let numeroGuia = document.getElementById("numeroGuia").value;
             let empresa = document.getElementById("input_transportista").value;
@@ -1007,7 +1009,7 @@ async function generarPDF() {
 
             if (residuos) {
                 doc.setFontSize(11);
-                let texto = `${residuoDir} provenientes de la siguiente dirección: ${residuos}, generados por la empresa:`;
+                let texto = `${residuoDir} provenientes de la siguiente dirección: ${residuosNombre}, generados por la empresa:`;
                 let splittedText = doc.splitTextToSize(texto, contentWidth);
 
                 // Dibuja el texto en la posición correspondiente
@@ -1234,6 +1236,8 @@ async function generarPDF() {
 
     } else if (formId === "pdfAguas") {
         return new Promise(async (resolve, reject) => {
+            let residuosSelect = document.getElementById("residuos");
+            let residuosNombre = residuosSelect.options[residuosSelect.selectedIndex].text;
             let residuos = document.getElementById("residuos").value;
             let numeroGuia = document.getElementById("numeroGuia").value;
             let empresa = document.getElementById("input_transportista").value;
@@ -1490,7 +1494,7 @@ async function generarPDF() {
 
             if (residuos) {
                 doc.setFontSize(11);
-                let texto = `${residuoDir} provenientes de la siguiente dirección: ${residuos}, generados por la empresa:`;
+                let texto = `${residuoDir} provenientes de la siguiente dirección: ${residuosNombre}, generados por la empresa:`;
 
                 // Divide el texto para ajustarlo al ancho de la página
                 let splittedText = doc.splitTextToSize(texto, contentWidth);
@@ -1548,7 +1552,7 @@ async function generarPDF() {
             let ruct = document.getElementById("ruct").value;
 
             // Texto con los datos de la empresa y el RUC
-            let textoPredeterminado3 = `Transportados por la empresa ${nombreEmpresa} con RUC: ${ruct} hacia la Infraestructura de Valorización Alto Chicama, ubicada en la Panamericana Norte Km 594, Sector La Soledad – Chicama – Ascope – La Libertad; para su tratamiento.`;
+            let textoPredeterminado3 = `Transportados por la empresa ${nombreEmpresa} con RUC: ${ruct} hacia la Infraestructura de Alto Chicama, ubicada en la Panamericana Norte Km 594, Sector La Soledad – Chicama – Ascope – La Libertad; para su tratamiento.`;
 
             // Dividir el texto en líneas que se ajusten al ancho del contenido
             let splittedText = doc.splitTextToSize(textoPredeterminado3, contentWidth);
