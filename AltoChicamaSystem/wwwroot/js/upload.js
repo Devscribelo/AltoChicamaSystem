@@ -260,7 +260,7 @@ function agregarFilaValorizacion() {
         <td class="tabla_valorizacion_th_td"><input type="date" class="form-control" required></td>
         <td class="tabla_valorizacion_th_td"><input type="text" placeholder="Tipo" class="form-control" required></td>
         <td class="tabla_valorizacion_th_td"><input type="number" placeholder="Cantidad (TN)" class="form-control cantidad" required oninput="calcularCostoTotal(this)"></td>
-        <td class="tabla_valorizacion_th_td"><input type="number" placeholder="Costo/TN" class="form-control costo" id="valorizacion_costotn" required oninput="sincronizarCosto(this);calcularCostoTotal(this)"></td>
+        <td class="tabla_valorizacion_th_td"><input type="number" placeholder="Costo/TN" class="form-control costo" data-costo-id="valorizacion_costotn_${numeroItem}" required oninput="calcularCostoTotal(this)"></td>
         <td class="tabla_valorizacion_th_td"><input type="number" placeholder="Costo Total" class="form-control costo-total" readonly></td>
         <td class="estilo-especial">
             <i class="bx bx-trash icon-circle red eliminar_fila" onclick="eliminarFila(this)"></i>
@@ -272,30 +272,7 @@ function agregarFilaValorizacion() {
     GuiaSelect(transportistaSeleccionado, `#input_guias_modal_${numeroItem}`);
 
     actualizarNumeracion();
-    sincronizarCostoDeFila();
-}
 
-
-function sincronizarCosto(element) {
-    const valorCosto = element.value; // Obtener el valor actual del input
-    const inputsCosto = document.querySelectorAll('input[id="valorizacion_costotn"]'); // Seleccionar todos los inputs de costo con el mismo ID
-
-    // Asignar el mismo valor a todos los inputs de costo
-    inputsCosto.forEach(input => {
-        input.value = valorCosto;
-    });
-}
-
-function sincronizarCostoDeFila() {
-    const costos = document.querySelectorAll('input[id="valorizacion_costotn"]'); // Seleccionar todos los inputs de costo
-
-    // Si hay al menos un input, sincroniza el valor de la primera fila
-    if (costos.length > 1) {
-        const primerCosto = costos[0].value; // Obtener el valor del primer input
-        for (let i = 1; i < costos.length; i++) {
-            costos[i].value = primerCosto; // Sincroniza el valor a las demás filas
-        }
-    }
 }
 
 // Función para calcular el costo total
@@ -434,7 +411,10 @@ async function capturarDatosValorizacion(transportista_id) {
     // Convierte el array de guía IDs en una cadena separada por comas
     const guia_ids_str = guia_ids.join(',');
 
-    const valorizacion_costotn = parseFloat($('#valorizacion_costotn').val());
+    // Capturar los valores de valorizacion_costotn
+    const costos = Array.from(document.querySelectorAll('input[data-costo-id^="valorizacion_costotn_"]'));
+    const valorizacion_costotn = costos.map(input => input.value).filter(value => value).join(','); // Crea una cadena con los costos
+
     const valorizacion_subtotal = parseFloat($('#subtotal').val());
     const valorizacion_igv = parseFloat($('#igv').val());
     const valorizacion_codigo = $('#input_codigo').val().trim();

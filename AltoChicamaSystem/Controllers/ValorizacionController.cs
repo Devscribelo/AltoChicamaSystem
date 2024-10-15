@@ -22,7 +22,7 @@ namespace AltoChicamaSystem.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> RegistrarValorizacion(string guia_ids, decimal valorizacion_costotn, decimal valorizacion_subtotal, decimal valorizacion_igv, string valorizacion_codigo, int transportista_id)
+        public async Task<ActionResult> RegistrarValorizacion(string guia_ids, string valorizacion_costotn, decimal valorizacion_subtotal, decimal valorizacion_igv, string valorizacion_codigo, int transportista_id)
         {
             try
             {
