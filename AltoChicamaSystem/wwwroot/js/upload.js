@@ -155,6 +155,7 @@ function limpiarTabla() {
 }
 
 function cargarGuiasPorTransportistaYGuia(transportista_id, guia_id, numeroItem) {
+
     var endpoint = getDomain() + "/Guia/GuiaSelectValorizacion";
 
     $.ajax({
@@ -222,10 +223,8 @@ function cargarGuiasPorTransportistaYGuia(transportista_id, guia_id, numeroItem)
             // Habilitar el select
             $(`#input_guias_modal_${numeroItem}`).prop("disabled", false);
         },
-        error: function (jqXHR, textStatus, errorThrown) {
-            alert('Error al cargar guías: ' + textStatus);
-            console.error("Error al cargar guías:", textStatus, errorThrown);
-        }
+
+
     });
 }
 
