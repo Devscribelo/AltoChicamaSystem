@@ -65,7 +65,7 @@
 
                 <div class="container mt-2">
                     <div class="row align-items-center">
-                        <div class="col-md-7 d-flex justify-content-end">
+                        <div class="col-lg-7 d-md-flex mb-2 mb-lg-0 justify-content-end">
                             <label class="input-group-text" for="input_transportista">Transportista</label>
                             <select id="input_transportista" class="js-example-placeholder-single js-states form-control">
                                 <option></option> <!-- Opción vacía -->
@@ -73,7 +73,7 @@
 
                         </div>
 
-                        <div class="col-md-3 d-flex justify-content-end">
+                        <div class="col-lg-3 d-md-flex  justify-content-end">
                             <label class="input-group-text" for="input_estado">Estado</label>
                             <select class="form-select" id="input_estado">
                                 <option value="" disabled selected>Seleccionar el estado</option>
@@ -82,7 +82,7 @@
                             </select>
                         </div>
 
-                        <div class="col-md-2 d-flex justify-content-end p-0">
+                        <div class="col-lg-2 d-flex justify-content-end p-0">
                             <button id="btnConsultar" class="btn btn-primary me-2 bg-custom">Consultar</button>
                             <button id="btnConsultar2" class="btn btn-primary bg-custom" onClick="window.location.reload(true)">
                                 <i class='bx bx-refresh'></i>
@@ -116,7 +116,7 @@
             </div>
 
 
-            <div class="container mt-4 mb-4 justify-content-center" style="padding-left:8% !important;">
+            <div class="container mt-4 mb-4 justify-content-center overflow-hidden" style="padding-left:8% !important;">
                 <div class="row mt-3 mb-3 border rounded p-4 bg-light shadow-sm justify-content-center" id="resumenCuentasOculto">
                     <div class="col-12 text-center mb-2">
                         <h4 class="text-dark font-weight-bold" style="font-size: 1.5rem; display: inline-block;">
@@ -243,14 +243,14 @@
                                     <!-- Monto -->
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Monto</span>
-                                        <input type="text" class="form-control" id="input_factura_monto" required autocomplete="off"
+                                        <input type="text" class="form-control rounded-0 mt-1" id="input_factura_monto" required autocomplete="off"
                                                inputmode="decimal" placeholder="Ingrese el Monto" disabled>
                                     </div>
 
                                     <!-- Guías -->
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Guías</span>
-                                        <input type="text" class="form-control" id="input_guias_modal" required autocomplete="off"
+                                        <input type="text" class="form-control rounded-0 mt-1" id="input_guias_modal" required autocomplete="off"
                                                inputmode="decimal" placeholder="Ingrese las Guías" disabled
                                                data-numero-guia="" data-id-guia="">
                                     </div>
@@ -258,15 +258,31 @@
                                     <!-- Número de Factura -->
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Número de Factura</span>
-                                        <input type="text" class="form-control" id="input_factura_numfactura" autocomplete="off" placeholder="Ingrese el número de Factura" maxlength="100" required>
+                                        <input type="text" class="form-control rounded-0 mt-1" id="input_factura_numfactura" autocomplete="off" placeholder="Ingrese el número de Factura" maxlength="100" required>
                                     </div>
 
                                     <!-- Fecha de Factura -->
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Fecha de Pago</span>
-                                        <input type="date" class="form-control" id="fecha" name="fecha" required />
+                                        <input type="date" class="form-control rounded-0 mt-1" id="fecha" name="fecha" required />
                                     </div>
 
+<<<<<<< Updated upstream
+=======
+                                    <!-- Status -->
+                                    <div class="form-group" style="margin-right: 246px !important; margin-bottom: 10px !important;">
+                                        <label id="status" for="radio_status" class="col-form-label">Estado: </label>
+                                        <div class="form-check form-check-inline d-flex">
+                                            <input class="form-check-input" style="margin-top: 4px !important;margin-right:2px !important;" type="radio" name="radio_factura_status" id="input_factura_status_a" value="1" checked>
+                                            <label class="form-check-label" for="input_factura_status_a">Activo</label>
+                                        </div>
+                                        <div class="form-check form-check-inline d-flex">
+                                            <input class="form-check-input" style="margin-top: 4px !important;margin-right:2px !important;" type="radio" name="radio_factura_status" id="input_factura_status_i" value="0">
+                                            <label class="form-check-label" for="input_factura_status_i">Inactivo</label>
+                                        </div>
+                                    </div>
+
+>>>>>>> Stashed changes
                                     <button id="btnGuardarFactura" class="btnGuardar" type="submit">Guardar Factura</button>
                                 </form>
                             </div>

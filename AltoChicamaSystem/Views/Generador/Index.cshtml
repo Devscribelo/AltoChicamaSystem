@@ -41,41 +41,41 @@
 
         <form id="formResiduos">
             <!-- Campos del formulario para residuos sólidos -->
-            <div class="form-row">
-                <label class="input-group-text" for="input_transportista">Transportista</label>
+                <div class="form-min-column form-md-row">
+                <label class="input-group-text form-control" for="input_transportista">Transportista</label>
                 <select id="input_transportista" name="input_transportista" class="js-example-placeholder-single js-states form-control" required onchange="actualizarAbreviacion()" style="width:100%;">
                     <option></option> <!-- Opción vacía -->
                 </select>
             </div>
 
-            <div class="form-row">
-                <label for="abreviacion">Abreviación:</label>
+            <div class="form-min-column form-md-row">
+                <label class="form-control" for="abreviacion">Abreviación:</label>
                 <input type="text" id="abreviacion" name="abreviacion" value="" oninput="actualizarAbreviacion()" />
             </div>
 
 
-            <div class="form-row" style="display:none !important;">
-                <label for="ruct">RUC Transportista:</label>
+            <div class="form-min-column form-md-row" style="display:none !important;">
+                <label class="form-control" for="ruct">RUC Transportista:</label>
                 <input type="number" id="ruct" name="ruct" required disabled />
             </div>
 
-                <div class="form-row" style="display:none !important;">
-                    <label for="idt">RUC Transportista:</label>
+                <div class="form-min-column form-md-row" style="display:none !important;">
+                    <label class="form-control" for="idt">RUC Transportista:</label>
                     <input type="number" id="idt" name="idt" required disabled />
                 </div>
 
-            <div class="form-row">
-                <label for="fecha">Fecha:</label>
+            <div class="form-min-column form-md-row">
+                <label class="form-control" for="fecha">Fecha:</label>
                 <input type="date" id="fecha" name="fecha" required />
             </div>
 
-            <div class="form-row">
-                <label for="numeroGuia">N° de Guía:</label>
+            <div class="form-min-column form-md-row">
+                <label class="form-control" for="numeroGuia">N° de Guía:</label>
                 <input type="text" id="numeroGuia" name="numeroGuia" required />
             </div>
 
-            <div class="form-row">
-                <label for="descarga">Descarga:</label>
+            <div class="form-min-column form-md-row">
+                <label class="form-control" for="descarga">Descarga:</label>
                 <select id="descarga" name="opcion" required>
                     <option value="Desmedros">
                         Desmedros
@@ -110,32 +110,34 @@
                 </select>
             </div>
 
-            <div class="form-row">
-                <label for="nomEmpresa">Nombre de la empresa:</label>
+            <div class="form-min-column form-md-row">
+                <label class="form-control" for="nomEmpresa">Nombre de la empresa:</label>
                 <select id="nomEmpresa" name="Nombre de la empresa:"></select>
             </div>
 
-            <div class="form-row" style="display: none !important;">
+            <div class="form-min-column form-md-row" style="display: none !important;">
                 <label for="ruc">RUC Empresa:</label>
                 <input type="number" id="ruc" name="ruc" required disabled />
             </div>
-                <div class="form-row" style="display: none !important;">
+                <div class="form-min-column form-md-row" style="display: none !important;">
                     <label for="ide">RUC Empresa:</label>
                     <input type="number" id="ide" name="ide" required disabled />
                 </div>
 
-            <div class="form-row">
-                <label for="residuos">Dirección de Residuos:</label>
-                <div class="input-group">
+            <div class="form-min-column form-md-row">
+                <label class="form-control" for="residuos">Dirección de Residuos:</label>
+                <div class="input-group ">
                     <select id="residuos" class="js-example-placeholder-single js-states form-control">
                         <option></option>
                     </select>
-                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal_nueva_empresa">
-                        <i class="bx bx-plus"></i>
-                    </button>
-                    <button type="button" class="btn btn-outline-danger" id="botonEliminar" >
-                        <i class="bx bx-x"></i>
-                    </button>
+                    <div class="">
+                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal_nueva_empresa">
+                                <i class="bx bx-plus"></i>
+                            </button>
+                            <button type="button" class="btn btn-outline-danger " id="botonEliminar">
+                                <i class="bx bx-x"></i>
+                            </button>
+                    </div>
                 </div>
             </div>
 
@@ -169,8 +171,8 @@
                 </div>
             </div>
 
-            <div class="form-row">
-                <label for="cantidad">TN/M³:</label>
+            <div class="form-min-column form-md-row">
+                <label class="form-control" for="cantidad">TN/M³:</label>
                 <input type="number" id="cantidad" name="cantidad" required />
             </div>
 
