@@ -6,7 +6,7 @@ $(document).ready(function () {
     TransportistaSelect("#input_transportista");
     agregarBotonesExportacionExcel("#table_guia");
     getListGuia();
-
+    initTransportistaSelect();
     $(document).on('change', '.status3', function () {
         var documentoId = $(this).data('empresa_status');
         alterDocumentoStatus(documentoId);
@@ -106,7 +106,10 @@ function TransportistaSelect(id_transportista) {
 }
 
 
-TransportistaSelect("#input_transportista");
+function initTransportistaSelect() {
+    TransportistaSelect("#input_transportista");
+}
+
 
 function obtenerIdEmpresaSeleccionada(empresaSelecionada) {
     return $(empresaSelecionada).val();

@@ -355,13 +355,13 @@ function getListValorizacionDetail(valorizacion_id) {
                             "data-guia_fecha_servicio='" + formatearFecha(dataValorizacion[i].guia_fecha_servicio) + "' " +
                             "data-guia_descarga='" + dataValorizacion[i].guia_descarga + "'" +
                             "data-guia_cantidad='" + dataValorizacion[i].guia_cantidad + "'" +
-                            "data-valorizacion_costotn='" + dataValorizacion[i].valorizacion_costotn + "' >" +
+                            "data-valorizacion_costotn='" + dataValorizacion[i].guia_costo + "' >" +
                             "<td>" + dataValorizacion[i].valorizacion_id + "</td>" +
                             "<td>" + dataValorizacion[i].guia_numero + "</td>" +
                             "<td>" + formatearFecha(dataValorizacion[i].guia_fecha_servicio) + "</td>" +
                             "<td>" + dataValorizacion[i].guia_descarga + "</td>" +
                             "<td>" + dataValorizacion[i].guia_cantidad + "</td>" +
-                            "<td>" + dataValorizacion[i].valorizacion_costotn + "</td>" +
+                            "<td>" + dataValorizacion[i].guia_costo + "</td>" +
                             "<td>" + dataValorizacion[i].valorizacion_total + "</td>"
                     }
 
