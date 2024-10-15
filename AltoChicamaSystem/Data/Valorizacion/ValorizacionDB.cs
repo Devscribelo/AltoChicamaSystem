@@ -292,7 +292,7 @@ namespace AltoChicamaSystem.Data.Valorizacion
                         valorizacion.guia_fecha_servicio = sdr["guia_fecha_servicio"].ToString().Trim();
                         valorizacion.guia_descarga = sdr["guia_descarga"].ToString().Trim();
                         valorizacion.guia_cantidad = Convert.ToDecimal(sdr["guia_cantidad"]);
-                        valorizacion.valorizacion_costotn = Convert.ToDecimal(sdr["valorizacion_costotn"]);
+                        valorizacion.guia_costo = Convert.ToDecimal(sdr["guia_costo"]);
                         valorizacion.valorizacion_total = Convert.ToDecimal(sdr["valorizacion_total"]);
 
                         lst.Add(valorizacion);
