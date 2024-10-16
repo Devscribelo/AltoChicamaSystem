@@ -147,41 +147,6 @@
     <script src="~/js/js_jquery.dataTables.min.js"></script>
     <script src="~/config.js"></script>
     <script src="~/js/valorizacion.js?v=0.0.0.5"></script>
-    <script>
-        // Función para aplicar la lógica de validación a un campo de monto
-            function aplicarValidacionMonto(elementId) {
-                document.getElementById(elementId).addEventListener('input', function (e) {
-                    // Elimina cualquier carácter que no sea dígito o punto decimal
-                    let value = this.value.replace(/[^\d.]/g, '');
-
-                    // Divide el valor en parte entera y decimal
-                    let parts = value.split('.');
-
-                    // Limita la parte entera a 16 dígitos (18 - 2 decimales)
-                    if (parts[0].length > 16) {
-                        parts[0] = parts[0].substring(0, 16);
-                    }
-
-                    // Si hay parte decimal, limítala a 2 dígitos
-                    if (parts.length > 1) {
-                        parts[1] = parts[1].substring(0, 2);
-                    }
-
-                    // Reúne las partes
-                    this.value = parts.join('.');
-
-                    // Asegura que solo haya un punto decimal
-                    if ((this.value.match(/\./g) || []).length > 1) {
-                        this.value = this.value.replace(/\.+$/, '');
-                    }
-                });
-            }
-
-            // Aplicar la validación al campo de monto en el modal de nueva factura
-            aplicarValidacionMonto('input_factura_monto');
-
-            // Aplicar la validación al campo de monto en el modal de edición de factura
-            aplicarValidacionMonto('edit_factura_monto');
-    </script>
+    
 </body>
 </html>
