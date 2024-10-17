@@ -4,7 +4,6 @@ var tableEmpresa;
 $(document).ready(function () {
     TransportistaSelect("#input_transportista");
     getListValorizacion();
-    initTransportistaSelect();
     $('#btnConsultar').click(function () {
         capturarValoresSeleccionados();
     });
@@ -210,22 +209,9 @@ function TransportistaSelect(id_transportista) {
             success: function (data) {
                 var TransportistaSelect = data.item3;
 
-                // Solo destruye Select2 si está inicializado
-                if ($.fn.select2 && $(id_transportista).data('select2')) {
-                    $(id_transportista).select2('destroy');
-                }
-
-                // Inicializar Select2
-                $(id_transportista).select2({
-                    placeholder: "Seleccione un transportista...",
-                    allowClear: true,
-                    language: "es",
-                    dropdownCssClass: 'limit-dropdown' // Añadir la clase para limitar altura
-                });
-
-                // Limpiar el select antes de añadir nuevas opciones
-                $(id_transportista).empty();
-                $(id_transportista).append('<option value="" disabled selected>Seleccione un transportista...</option>');
+                // Limpiar el select y agregar opción por defecto
+                $('#input_transportista').empty();
+                $('#input_transportista').append(new Option("Seleccione un transportista...", "", true, true));
 
                 // Verificar si la data es null, vacía, o contiene solo espacios en blanco
                 if (TransportistaSelect && TransportistaSelect.length > 0) {
@@ -236,11 +222,25 @@ function TransportistaSelect(id_transportista) {
 
                     }
                 } else {
-                    $(id_transportista).append(new Option("No hay transportistas disponibles", ""));
+                    console.log("No se encontraron transportistas.");
+                    $('#input_transportista').append(new Option("No hay transportistas disponibles", ""));
                 }
 
+
+
+                // Inicializar o actualizar Select2 usando directamente el ID del select
+                $('#input_transportista').select2({
+                    placeholder: "Seleccione un transportista...",
+                    allowClear: true,
+                    language: "es",
+                    dropdownCssClass: 'limit-dropdown' // Añadir la clase para limitar altura
+                });
+
                 // Habilitar el select
-                $(id_transportista).prop("disabled", false);
+                $('#input_transportista').prop("disabled", false);
+
+
+
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert('Error al cargar transportistas: ' + textStatus);
@@ -250,9 +250,7 @@ function TransportistaSelect(id_transportista) {
     })
 }
 
-function initTransportistaSelect() {
-    TransportistaSelect("#input_transportista");
-}
+TransportistaSelect("#input_transportista");
 
 function modalConfirmacionEliminarValorizacion(valorizacionId) {
     const swalWithBootstrapButtons = Swal.mixin({
