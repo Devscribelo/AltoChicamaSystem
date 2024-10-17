@@ -94,111 +94,28 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- Nueva fila con logo y datos de la empresa -->
-                        <div class="row mb-3" style="border: 2px solid green; padding: 10px;">
-                            <div class="col-md-3" style="width: 25%; border-right: 2px solid green;">
-                                <img src="~/img/gh2.png" alt="Logo" style="width: 100%; height: auto;"> <!-- Cambia la ruta al logo -->
-                            </div>
-                            <div class="col-md-9" style="width: 75%;">
-                                <div style="text-align: center; font-weight: bold; font-size: 20px;">EO-RS ALTO CHICAMA S.R.L</div>
-                                <div class="row">
-                                    <div class="col-md-2">Código</div>
-                                    <div class="col-md-10">
-                                        <input type="text" class="form-control" id="codigo_empresa" placeholder="CÓDIGO" style="border: 2px solid green; text-transform: uppercase;">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-2">Cliente</div>
-                                    <div class="col-md-10">
-                                        <input type="text" class="form-control" id="cliente_empresa" placeholder="CLIENTE" style="border: 2px solid green; text-transform: uppercase;">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-2">RUC</div>
-                                    <div class="col-md-10">
-                                        <input type="text" class="form-control" id="ruc_empresa" placeholder="RUC" style="border: 2px solid green; text-transform: uppercase;">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="table-responsive">
-                            <!-- Tabla de Valorización -->
-                            <table class="table table-bordered" style="width: 100%; border: 2px solid green;">
+                            <table class="table table-sm custom-table" id="table_detalles_valorizacion">
                                 <thead style="color: #023E73;">
-                                    <tr>
-                                        <th colspan="7" style="text-align: center; font-weight: bold; font-size: 17px; color: green;">VALORIZACIÓN POR SERVICIOS | RCD 2024</th>
-                                    </tr>
                                     <tr>
                                         <th>Valorización ID</th>
                                         <th>N° Guia</th>
                                         <th>Fecha</th>
                                         <th>Tipo</th>
-                                        <th>Cantidad (TN)</th>
+                                        <th>Cantidad</th>
                                         <th>Costo/TN</th>
                                         <th>Costo Total</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tb_detalles_valorizacion"></tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="4" style="text-align: right; font-weight: bold;">TOTAL (TN)</td>
-                                        <td>
-                                            <input type="number" id="totalCantidad" placeholder="Total Cantidad" class="form-control" readonly>
-                                        </td>
-                                        <td style="text-align: center; font-weight: bold;">COSTO TOTAL</td>
-                                        <td>
-                                            <input type="number" id="totalCostoTotal" placeholder="Total Costo Total" class="form-control" readonly>
-                                        </td>
-                                    </tr>
-                                </tfoot>
                             </table>
-
-                            <!-- Tabla de Resumen -->
-                            <div class="row mt-4" style="height: 100%;">
-                                <div class="col-md-4" style="border: 2px solid green; max-height: 100% !important;">
-                                    <div style="border: 2px green; padding: 10px; height: 100%; text-align: center; display: flex; align-items: center; justify-content: center;">
-                                        <p style="font-weight: bold; height: 100%;">FIRMA</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-6" style="border: 2px solid green; max-height: 100% !important;">
-                                    <table class="table table-bordered" style="height: 100%;">
-                                        <tbody>
-                                            <tr>
-                                                <td style="text-align: center; font-weight: bold;">SUB TOTAL</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="text-align: center; font-weight: bold;">IGV</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="text-align: center; font-weight: bold;">PRECIO TOTAL DEL SERVICIO</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="col-md-2" style="border: 2px solid green; height: 100%;">
-                                    <table class="table table-bordered" style="height: 100%;">
-                                        <tbody>
-                                            <tr>
-                                                <td><input type="text" class="form-control" id="subtotal" value="0.0" readonly></td>
-                                            </tr>
-                                            <tr>
-                                                <td><input type="text" class="form-control" id="igv" value="0.0" readonly></td>
-                                            </tr>
-                                            <tr>
-                                                <td><input type="text" class="form-control" id="precio_total" value="0.0" readonly></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-    </section>
+    </section> 
 
     <style>
         .input-group-sm > .input-group-text {
@@ -230,45 +147,5 @@
     <script src="~/js/js_jquery.dataTables.min.js"></script>
     <script src="~/config.js"></script>
     <script src="~/js/valorizacion.js?v=0.0.0.5"></script>
-<<<<<<< HEAD
-
-=======
-    <script>
-        // Función para aplicar la lógica de validación a un campo de monto
-            function aplicarValidacionMonto(elementId) {
-                document.getElementById(elementId).addEventListener('input', function (e) {
-                    // Elimina cualquier carácter que no sea dígito o punto decimal
-                    let value = this.value.replace(/[^\d.]/g, '');
-
-                    // Divide el valor en parte entera y decimal
-                    let parts = value.split('.');
-
-                    // Limita la parte entera a 16 dígitos (18 - 2 decimales)
-                    if (parts[0].length > 16) {
-                        parts[0] = parts[0].substring(0, 16);
-                    }
-
-                    // Si hay parte decimal, limítala a 2 dígitos
-                    if (parts.length > 1) {
-                        parts[1] = parts[1].substring(0, 2);
-                    }
-
-                    // Reúne las partes
-                    this.value = parts.join('.');
-
-                    // Asegura que solo haya un punto decimal
-                    if ((this.value.match(/\./g) || []).length > 1) {
-                        this.value = this.value.replace(/\.+$/, '');
-                    }
-                });
-            }
-
-            // Aplicar la validación al campo de monto en el modal de nueva factura
-            aplicarValidacionMonto('input_factura_monto');
-
-            // Aplicar la validación al campo de monto en el modal de edición de factura
-            aplicarValidacionMonto('edit_factura_monto');
-    </script>
->>>>>>> parent of 875f9b4 (select2)
 </body>
 </html>
