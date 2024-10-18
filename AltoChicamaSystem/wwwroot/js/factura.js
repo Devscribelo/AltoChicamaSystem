@@ -162,8 +162,15 @@ function mostrarGuiasSeleccionadas() {
 }
 
 function vaciarFormFactura() {
+    // Vaciar inputs de tipo texto y número
     $('#modal_nueva_factura input[type="text"]').val('');
     $('#modal_nueva_factura input[type="number"]').val('');
+
+    // Vaciar inputs de tipo fecha
+    $('#modal_nueva_factura input[type="date"]').val('');
+
+    // Restablecer el select con clase 'form-select'
+    $('.form-select').val(null).trigger('change');  
 }
 
 function modalNuevaFactura() {

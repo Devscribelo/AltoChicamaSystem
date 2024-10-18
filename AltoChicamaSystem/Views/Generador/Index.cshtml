@@ -98,9 +98,6 @@
                     <option value="Líquidos Residuales">
                         Líquidos Residuales
                     </option>
-                    <option value="Lodos">
-                        Lodos
-                    </option>
                     <option value="Lodos Organicos">
                         Lodos Organicos
                     </option>
@@ -112,7 +109,9 @@
 
             <div class="form-min-column form-md-row">
                 <label class="form-control" for="nomEmpresa">Nombre de la empresa:</label>
-                <select id="nomEmpresa" name="Nombre de la empresa:"></select>
+                <select id="nomEmpresa" name="Nombre de la empresa:" class="js-example-placeholder-single js-states form-control" required">
+                    <option></option> <!-- Opción vacía -->
+                </select>
             </div>
 
             <div class="form-min-column form-md-row" style="display: none !important;">

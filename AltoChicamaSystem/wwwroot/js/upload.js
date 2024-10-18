@@ -240,6 +240,19 @@ function agregarFilaValorizacion() {
         return;
     }
 
+    // Obtener el valor del código de valorización
+    const valorizacion_codigo = $('#input_codigo').val().trim();
+
+    // Validar si el código está vacío
+    if (!valorizacion_codigo) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Código requerido',
+            text: 'Debe completar el código de valorización antes de agregar una nueva fila.',
+        });
+        return; // Detener la ejecución si el código está vacío
+    }
+
     const tabla = document.querySelector('#input_tabla_valorizacion tbody');
     const nuevaFila = document.createElement('tr');
 

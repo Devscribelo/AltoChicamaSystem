@@ -1,4 +1,12 @@
-﻿function showForm(formId) {
+﻿
+$(document).ready(function () {
+
+    initTransportistaSelect();
+    initEmpresaSelect();
+});
+
+
+function showForm(formId) {
     // Obtener todos los contenedores de formularios
     const forms = document.querySelectorAll(".form-container");
 
@@ -40,8 +48,21 @@ $(document).ready(function () {
     // Deshabilitar el select de direcciones al cargar la página
     $("#residuos").prop("disabled", true);
 });
+
 function EmpresaSelect(id_grupo) {
     var endpoint = getDomain() + "/Empresa/EmpresaSelect";
+
+    // Solo destruye Select2 si está inicializado
+    if ($.fn.select2 && $(id_grupo).data('select2')) {
+        $(id_grupo).select2('destroy');
+    }
+
+    // Inicializar Select2 para el select
+    $(id_grupo).select2({
+        placeholder: "Seleccione una empresa...",
+        allowClear: true,
+        language: "es"
+    });
 
     $.ajax({
         type: "GET",
@@ -51,8 +72,8 @@ function EmpresaSelect(id_grupo) {
             "Content-Type": "application/json"
         },
         dataType: "json",
-        beforeSend: function (xhr) {
-            console.log("cargando");
+        beforeSend: function () {
+            console.log("Cargando empresas...");
         },
         success: function (data) {
             var EmpresaSelect = data.item3;
@@ -66,15 +87,12 @@ function EmpresaSelect(id_grupo) {
             if (EmpresaSelect && EmpresaSelect.length > 0) {
                 var empresas = {};
 
-                for (var i = 0; i < EmpresaSelect.length; i++) {
-                    var item = EmpresaSelect[i];
-
-                    // Modificar el valor para que sea el nombre de la empresa, pero agregar el ID en data-id
+                EmpresaSelect.forEach(function (item) {
                     $(id_grupo).append(
                         '<option value="' + item.empresa_name + '" data-id="' + item.empresa_id + '">' + item.empresa_name + '</option>'
                     );
                     empresas[item.empresa_id] = item.empresa_ruc;
-                }
+                });
 
                 // Manejar el evento de cambio en el select de empresas
                 $(id_grupo).change(function () {
@@ -83,11 +101,11 @@ function EmpresaSelect(id_grupo) {
 
                     if (empresas[selectedEmpresaId]) {
                         document.getElementById('ruc').value = empresas[selectedEmpresaId];
-                        document.getElementById('ruc').disabled = true; // Habilitar el RUC
+                        document.getElementById('ruc').disabled = true; // Deshabilitar el RUC
                         document.getElementById('ide').value = selectedEmpresaId;
 
                         // Habilitar el select de direcciones
-                        $("#residuos").prop("disabled", false); // Habilitar el select de direcciones
+                        $("#residuos").prop("disabled", false);
 
                         // Setear el título del modal y abrirlo
                         $("#modal_nueva_empresa .modal-title").html("Registrar Dirección para: <span style='color: #198754'><strong>" + selectedEmpresaName + "</strong></span>");
@@ -96,8 +114,8 @@ function EmpresaSelect(id_grupo) {
                         // Llamar a la función para cargar direcciones basadas en la empresa seleccionada
                         cargarDirecciones(selectedEmpresaId);
                     } else {
-                        document.getElementById('ruc').disabled = true; // Deshabilitar el RUC si no hay empresa seleccionada
-                        $("#residuos").prop("disabled", true); // Deshabilitar el select de direcciones si no hay empresa seleccionada
+                        document.getElementById('ruc').disabled = true;
+                        $("#residuos").prop("disabled", true);
                     }
                 });
             }
@@ -108,6 +126,8 @@ function EmpresaSelect(id_grupo) {
         }
     });
 }
+
+
 // Manejar el envío del formulario con el nombre de la empresa
 $("#miFormulario").on("submit", function (event) {
     event.preventDefault(); // Evitar el envío por defecto para poder hacer el ajuste
@@ -195,8 +215,7 @@ function cargarDirecciones(empresa_id) {
     });
 }
 
-EmpresaSelect("#nomEmpresa");
-EmpresaSelect("#nomEmpresa1");
+
 
 function guardarNewDireccion(empresa_id) {
     var empresa_id = $("#btnGuardarDireccion").data("empresaId"); // Obtener el id de la empresa del botón
@@ -297,68 +316,71 @@ function eliminarDireccion(direccion_id) {
 function TransportistaSelect() {
     var endpoint = getDomain() + "/Transportista/TransportistaSelect";
 
+    // Solo destruye Select2 si está inicializado
+    if ($.fn.select2 && $('#input_transportista').data('select2')) {
+        $('#input_transportista').select2('destroy');
+    }
+
+    // Inicializar Select2 después de destruir la instancia previa
+    $('#input_transportista').select2({
+        placeholder: "Seleccione un transportista...",
+        allowClear: true,
+        language: "es",
+        dropdownCssClass: 'limit-dropdown' // Añadir la clase para limitar altura
+    });
+
     $.ajax({
         type: "GET",
-        async: true,
         url: endpoint,
         headers: {
             "Content-Type": "application/json"
         },
         dataType: "json",
-        beforeSend: function (xhr) {
+        beforeSend: function () {
             console.log("Cargando transportistas...");
         },
         success: function (data) {
-            var TransportistaSelect = data.item3;
+            var transportistas = data.item3;
 
             // Limpiar el select y agregar opción por defecto
-            $('#input_transportista').empty();
-            $('#input_transportista').append(new Option("Seleccione un transportista...", "", true, true));
+            var $select = $('#input_transportista');
+            $select.empty();
+            $select.append(new Option("Seleccione un transportista...", "", true, true));
 
-            // Verificar si la data es null, vacía, o contiene solo espacios en blanco
-            if (TransportistaSelect && TransportistaSelect.length > 0) {
-                // Guardar datos de los transportistas en una variable accesible
-                var transportistas = {};
+            // Verificar si se recibieron transportistas
+            if (transportistas && transportistas.length > 0) {
+                // Almacenar transportistas en un objeto accesible
+                var transportistasData = {};
 
                 // Agregar opciones al select
-                for (var i = 0; i < TransportistaSelect.length; i++) {
-                    var item = TransportistaSelect[i];
-                    $('#input_transportista').append($('<option>', {
+                transportistas.forEach(function (item) {
+                    $select.append($('<option>', {
                         value: item.transportista_nombre,
                         text: item.transportista_nombre,
-                        'data-id': item.transportista_id // Agregar el ID como atributo de datos
+                        'data-id': item.transportista_id
                     }));
-                    transportistas[item.transportista_nombre] = {
+                    transportistasData[item.transportista_nombre] = {
                         ruc: item.transportista_ruc,
                         id: item.transportista_id
                     };
-                }
+                });
 
-                // Manejar el evento de cambio en el select
-                $('#input_transportista').change(function () {
+                // Manejar evento de cambio en el select
+                $select.change(function () {
                     var selectedTransportista = $(this).val();
                     var selectedTransportistaId = $(this).find(':selected').data('id');
-                    if (transportistas[selectedTransportista]) {
-                        document.getElementById('ruct').value = transportistas[selectedTransportista].ruc; 
-                        document.getElementById('idt').value = selectedTransportistaId; 
+                    if (transportistasData[selectedTransportista]) {
+                        $('#ruct').val(transportistasData[selectedTransportista].ruc);
+                        $('#idt').val(selectedTransportistaId);
                     }
                 });
             } else {
                 console.log("No se encontraron transportistas.");
-                $('#input_transportista').append(new Option("No hay transportistas disponibles", ""));
+                $select.append(new Option("No hay transportistas disponibles", ""));
             }
 
-            // Inicializar o actualizar Select2 usando directamente el ID del select
-            $('#input_transportista').select2({
-                placeholder: "Seleccione un transportista...",
-                allowClear: true,
-                language: "es",
-                dropdownCssClass: 'limit-dropdown' // Añadir la clase para limitar altura
-            });
-
             // Habilitar el select
-            $('#input_transportista').prop("disabled", false);
-
+            $select.prop("disabled", false);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert('Error al cargar transportistas: ' + textStatus);
@@ -367,8 +389,16 @@ function TransportistaSelect() {
     });
 }
 
-TransportistaSelect("#empresa");
-TransportistaSelect("#empresa1");
+function initTransportistaSelect() {
+    TransportistaSelect("#empresa");
+    TransportistaSelect("#empresa1");
+}
+
+function initEmpresaSelect() {
+    EmpresaSelect("#nomEmpresa");
+    EmpresaSelect("#nomEmpresa1");
+}
+
 async function loadImage(path) {
     return new Promise((resolve, reject) => {
         const img = new Image();
@@ -698,7 +728,7 @@ async function generarPDF() {
     let direccionform = document.getElementById("residuos").value;
     let [anio, mes, dia] = fechaformulario.split("-");
     
-    if (descarga === "Desmedros" || descarga === "Residuos Orgánicos" || descarga === "Residuos Inorgánicos" || descarga === "Residuos de Construcción y Demolición" || descarga === "Grasas Residuales" || descarga === "Lodos") {
+    if (descarga === "Desmedros" || descarga === "Residuos Orgánicos" || descarga === "Residuos Inorgánicos" || descarga === "Residuos de Construcción y Demolición" || descarga === "Grasas Residuales" || descarga === "Lodos Organicos" || descarga === "Lodos de PTAR") {
         formId = "pdfResiduos";
         unidad = "TN";
         if (descarga === "Desmedros") {
@@ -736,13 +766,21 @@ async function generarPDF() {
             residuoDir = "Grasas Residuales Domésticas";
             numeroCert = "007-" + num_doc_str + "-" + anio; 
         }
-        else if (descarga === "Lodos") {
+        else if (descarga === "Lodos Organicos") {
+            titulo = "VALORIZACIÓN DE LODOS NO PELIGROSOS";
+            tipoResiduotittle = "Tipo de Residuo";
+            tipoResiduo = "Lodos Orgánicos";
+            residuoDir = "Lodos orgánicos";
+            numeroCert = "009-" + num_doc_str + "-" + anio; 
+        }
+        else if (descarga === "Lodos de PTAR") {
             titulo = "VALORIZACIÓN DE LODOS NO PELIGROSOS";
             tipoResiduotittle = "Tipo de Residuo";
             tipoResiduo = "Lodos de PTAR";
-            residuoDir = "Lodos provenientes";
-            numeroCert = "009-" + num_doc_str + "-" + anio; 
+            residuoDir = "Lodos de PTAR";
+            numeroCert = "009-" + num_doc_str + "-" + anio;
         }
+
     }
     else if (descarga === "Líquidos Residuales" || descarga === "Aguas Residuales") {
         formId = "pdfAguas";
