@@ -4,6 +4,7 @@ var tableEmpresa;
 $(document).ready(function () {
     TransportistaSelect("#input_transportista");
     getListValorizacion();
+    initTransportistaSelect();
     $('#btnConsultar').click(function () {
         capturarValoresSeleccionados();
     });
@@ -123,7 +124,7 @@ function getListValorizacion() {
                         "<td id='acciones'>" +
                         `<a href='#' onclick='modalConfirmacionEliminarValorizacion(${valorizacion[i].valorizacion_id})'><span class='icon-circle red'><i class="bx bxs-trash"></i></span></a>` +
                         `<i class='bx bx-detail detalle-valorizacion icon-circle' id='detalle_valorizacion_" + i + "' onclick='modalDetalleValorizacion(${valorizacion[i].valorizacion_id})'></i>`
-                        "</td>" +
+                    "</td>" +
                         "</tr>";
                 }
                 if ($.fn.DataTable.isDataTable("#table_empresa")) {
@@ -191,9 +192,22 @@ function TransportistaSelect(id_transportista) {
             success: function (data) {
                 var TransportistaSelect = data.item3;
 
-                // Limpiar el select y agregar opción por defecto
-                $('#input_transportista').empty();
-                $('#input_transportista').append(new Option("Seleccione un transportista...", "", true, true));
+                // Solo destruye Select2 si está inicializado
+                if ($.fn.select2 && $(id_transportista).data('select2')) {
+                    $(id_transportista).select2('destroy');
+                }
+
+                // Inicializar Select2
+                $(id_transportista).select2({
+                    placeholder: "Seleccione un transportista...",
+                    allowClear: true,
+                    language: "es",
+                    dropdownCssClass: 'limit-dropdown' // Añadir la clase para limitar altura
+                });
+
+                // Limpiar el select antes de añadir nuevas opciones
+                $(id_transportista).empty();
+                $(id_transportista).append('<option value="" disabled selected>Seleccione un transportista...</option>');
 
                 // Verificar si la data es null, vacía, o contiene solo espacios en blanco
                 if (TransportistaSelect && TransportistaSelect.length > 0) {
@@ -204,25 +218,11 @@ function TransportistaSelect(id_transportista) {
 
                     }
                 } else {
-                    console.log("No se encontraron transportistas.");
-                    $('#input_transportista').append(new Option("No hay transportistas disponibles", ""));
+                    $(id_transportista).append(new Option("No hay transportistas disponibles", ""));
                 }
 
-
-
-                // Inicializar o actualizar Select2 usando directamente el ID del select
-                $('#input_transportista').select2({
-                    placeholder: "Seleccione un transportista...",
-                    allowClear: true,
-                    language: "es",
-                    dropdownCssClass: 'limit-dropdown' // Añadir la clase para limitar altura
-                });
-
                 // Habilitar el select
-                $('#input_transportista').prop("disabled", false);
-
-
-
+                $(id_transportista).prop("disabled", false);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert('Error al cargar transportistas: ' + textStatus);
@@ -232,7 +232,9 @@ function TransportistaSelect(id_transportista) {
     })
 }
 
-TransportistaSelect("#input_transportista");
+function initTransportistaSelect() {
+    TransportistaSelect("#input_transportista");
+}
 
 function modalConfirmacionEliminarValorizacion(valorizacionId) {
     const swalWithBootstrapButtons = Swal.mixin({
@@ -383,208 +385,6 @@ function getListValorizacionDetail(valorizacion_id) {
 
 
 
-<<<<<<< Updated upstream
-async function exportarPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-    // Función para cargar una imagen de manera asíncrona
-    const loadImage = async (url) => {
-        const response = await fetch(url);
-        const blob = await response.blob();
-        return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result);
-            reader.readAsDataURL(blob); // Convertir a base64
-        });
-    };
-
-    // Configuración inicial del documento
-    const margin = 10;
-    const reducedWidth = 18; // Ajustar este valor para reducir el ancho
-    const contentWidth = doc.internal.pageSize.getWidth() - 2 * margin - reducedWidth; // Reducir el ancho total
-    let startY = 20; // Ajustar la posición inicial del texto según sea necesario
-    const lineHeightFactor = 1.8;
-
-    // Dibuja el cuadro superior con dos columnas
-    const boxWidth = contentWidth; // Ancho total del cuadro
-    const boxHeight = 32; // Altura total del cuadro (ajustar según sea necesario)
-
-    const leftColumnWidth = boxWidth * 0.3; // 30% para la columna izquierda
-    const rightColumnWidth = boxWidth * 0.7; // 70% para la columna derecha
-
-    // Calcular la posición centrada del cuadro superior
-    const boxX = (doc.internal.pageSize.getWidth() - boxWidth) / 2; // Cálculo para centrar el cuadro
-
-    // Dibujar el borde del cuadro superior
-    doc.setDrawColor(0, 100, 0); // Color del borde verde
-    doc.rect(boxX, startY, boxWidth, boxHeight, 'S'); // Cuadro centrado
-
-    // Dividir el cuadro en filas
-    let firstRowHeight = 8; // Altura de la primera fila (ajustado a 8)
-    let subsequentRowHeight = 8; // Altura de las filas subsiguientes (ajustado a 8)
-    let currentY = startY; // Y inicial para el cuadro
-
-    // Fila vacía en la columna izquierda
-    doc.rect(boxX, currentY, leftColumnWidth, subsequentRowHeight * 4, 'S'); // Columna izquierda
-    // Cargar la imagen de manera asíncrona
-    const img = await loadImage("/img/gh.png");
-
-    // Añadir la imagen en lugar del texto "Columna Izquierda"
-    const imgWidth = leftColumnWidth - 12; // Ajustar el ancho de la imagen para que encaje en la columna
-    const imgHeight = subsequentRowHeight * 3 - 3; // Ajustar la altura para que encaje en la columna
-    doc.addImage(img, 'JPEG', boxX + 6, currentY + 5, imgWidth, imgHeight);
-
-    // Dibujar las filas en la columna derecha (4 filas divididas)
-    for (let i = 0; i < 4; i++) { // Cambiar a 4 para mostrar solo 4 filas
-        doc.rect(boxX + leftColumnWidth, currentY, rightColumnWidth, subsequentRowHeight, 'S'); // Columna derecha
-        if (i === 0) {
-            doc.text("Fila 1 en columna derecha", boxX + leftColumnWidth + 4, currentY + 4); // Texto en la primera fila derecha (ajustado a 4)
-        } else {
-            // Dividir las siguientes filas en dos partes (20% - 80%)
-            const splitRowHeight = subsequentRowHeight; // Altura de la fila dividida
-            const splitLeftWidth = rightColumnWidth * 0.2; // 20% para la parte izquierda
-            const splitRightWidth = rightColumnWidth * 0.8; // 80% para la parte derecha
-
-            // Dibujar parte izquierda
-            doc.rect(boxX + leftColumnWidth, currentY, splitLeftWidth, splitRowHeight, 'S'); // Parte izquierda
-            doc.text("20%", boxX + leftColumnWidth + 4, currentY + 4); // Texto en parte izquierda (ajustado a 4)
-
-            // Dibujar parte derecha
-            doc.rect(boxX + leftColumnWidth + splitLeftWidth, currentY, splitRightWidth, splitRowHeight, 'S'); // Parte derecha
-            doc.text("80%", boxX + leftColumnWidth + splitLeftWidth + 4, currentY + 4); // Texto en parte derecha (ajustado a 4)
-        }
-        currentY += subsequentRowHeight; // Moverse hacia abajo
-    }
-
-    // Espacio después del cuadro superior
-    startY = currentY + 10; // Añadir un margen de 10 unidades
-
-    // **Nuevo cuadro debajo del existente**
-    const newBoxHeight = 32; // Altura total del nuevo cuadro
-    const newBoxWidth = contentWidth; // Ancho total del nuevo cuadro
-
-    const leftColumnWidthNew = newBoxWidth * 0.4; // 40% para la columna izquierda
-    const middleColumnWidthNew = newBoxWidth * 0.5; // 50% para la columna del medio
-    const rightColumnWidthNew = newBoxWidth * 0.1; // 10% para la columna derecha
-
-    // Calcular la posición centrada del nuevo cuadro
-    const newBoxX = (doc.internal.pageSize.getWidth() - newBoxWidth) / 2; // Cálculo para centrar el nuevo cuadro
-
-    // Dibujar el borde del nuevo cuadro
-    doc.setDrawColor(0, 100, 0); // Color del borde verde
-    doc.rect(newBoxX, startY, newBoxWidth, newBoxHeight, 'S'); // Cuadro centrado
-
-    // Dibujar las columnas en el nuevo cuadro
-    let currentYNew = startY; // Y inicial para el nuevo cuadro
-
-    // Columna izquierda
-    doc.rect(newBoxX, currentYNew, leftColumnWidthNew, newBoxHeight, 'S'); // Parte izquierda
-    doc.text("Columna Izquierda", newBoxX + 6, currentYNew + 5); // Texto en la columna izquierda
-
-    // Columna del medio
-    doc.rect(newBoxX + leftColumnWidthNew, currentYNew, middleColumnWidthNew, newBoxHeight, 'S'); // Parte del medio
-    doc.text("Columna del Medio", newBoxX + leftColumnWidthNew + 6, currentYNew + 5); // Texto en la columna del medio
-
-    // Columna derecha
-    doc.rect(newBoxX + leftColumnWidthNew + middleColumnWidthNew, currentYNew, rightColumnWidthNew, newBoxHeight, 'S'); // Parte derecha
-    doc.text("Columna Derecha", newBoxX + leftColumnWidthNew + middleColumnWidthNew + 6, currentYNew + 5); // Texto en la columna derecha
-
-    // **Fin del nuevo cuadro**
-
-    // Configurar las columnas de la tabla
-    const columns = ["Ítem", "N° Guia", "Fecha", "Tipo", "Cantidad", "Costo/TN", "Costo Total"];
-    const columnWidths = [10, 25, 25, 42.5, 20, 25, 25]; // Ajustar los anchos para la nueva configuración
-
-    // Calcular la posición centrada para toda la tabla
-    const totalWidth = columnWidths.reduce((acc, val) => acc + val, 0);
-    const tableX = (doc.internal.pageSize.getWidth() - totalWidth) / 2; // Posición centrada para la tabla
-
-    // Título del documento (en una sola celda de la tabla)
-    const titulo = "VALORIZACIÓN POR SERVICIOS | RCD 2024";
-    doc.setFontSize(10);
-    doc.setFont(undefined, "bold");
-
-    // Dibujar la fila del título
-    const titleHeight = 10; // Altura de la fila del título
-    doc.setDrawColor(0, 100, 0); // Color del borde verde
-    doc.rect(tableX, startY, totalWidth, titleHeight, 'S'); // Dibujar el borde
-
-    // Texto centrado dentro de la celda del título
-    const anchoTexto = doc.getTextWidth(titulo);
-    const posicionTextoTitulo = tableX + (totalWidth - anchoTexto) / 2; // Centrar el texto
-    doc.text(titulo, posicionTextoTitulo, startY + 7); // Texto centrado en la celda
-
-    // Incrementar la posición Y para comenzar la tabla
-    startY += titleHeight;
-
-    // Estilo de las cabeceras sin relleno (solo borde verde)
-    doc.setFontSize(10);
-    doc.setFont(undefined, "bold");
-
-    // Dibujar las cabeceras
-    let currentX = tableX;
-    for (let i = 0; i < columns.length; i++) {
-        doc.rect(currentX, startY, columnWidths[i], 10, 'S'); // Solo borde verde, sin relleno
-        let textoCabecera = columns[i];
-        let anchoTextoCabecera = doc.getTextWidth(textoCabecera);
-        let posicionTextoCabecera = currentX + (columnWidths[i] - anchoTextoCabecera) / 2; // Centrar texto
-        doc.text(textoCabecera, posicionTextoCabecera, startY + 7); // Texto centrado en la celda
-        currentX += columnWidths[i]; // Mover a la siguiente columna
-    }
-
-    // Añadir los datos de la tabla
-    startY += 10; // Espacio después de la cabecera
-    doc.setFontSize(10); // Tamaño de fuente para los datos de la tabla
-    doc.setFont(undefined, "normal");
-
-    let itemNumber = 1; // Contador para la columna "Ítem"
-    const table = document.getElementById('table_detalles_valorizacion');
-    const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
-
-    for (let row of rows) {
-        const cells = row.getElementsByTagName('td');
-        currentX = tableX; // Reiniciar posición X para cada fila
-
-        // Agregar número de ítem en la primera columna
-        doc.rect(currentX, startY, columnWidths[0], 10, 'S'); // Borde verde, sin fondo
-        let posicionTextoItem = currentX + (columnWidths[0] - doc.getTextWidth(itemNumber.toString())) / 2;
-        doc.text(itemNumber.toString(), posicionTextoItem, startY + 7); // Centrar el número de ítem
-        currentX += columnWidths[0];
-
-        // Incrementar el número de ítem
-        itemNumber++;
-
-        // Agregar los datos de las otras columnas
-        for (let i = 0; i < cells.length; i++) {
-            if (i === 0) continue; // Omitimos la primera celda que sería "Ítem"
-            const cellText = cells[i].innerText;
-            doc.rect(currentX, startY, columnWidths[i], 10, 'S'); // Borde verde, sin fondo
-
-            let anchoTextoCelda = doc.getTextWidth(cellText);
-            let posicionTextoCelda = currentX + (columnWidths[i] - anchoTextoCelda) / 2; // Centrar texto
-            doc.text(cellText, posicionTextoCelda, startY + 7); // Texto centrado en la celda
-            currentX += columnWidths[i]; // Mover a la siguiente columna
-        }
-
-        startY += 10; // Mover a la siguiente fila
-    }
-
-    // Texto justificado al final
-    const splittedText = doc.splitTextToSize("Este es un texto final de ejemplo que será justificado en el documento generado.", contentWidth);
-    doc.text(splittedText, margin, startY + 20, { align: 'justify', maxWidth: contentWidth, lineHeightFactor: lineHeightFactor });
-
-    // Descargar el archivo PDF
-    doc.save("documento.pdf");
-}
-
-
-
-// Asignar el evento al botón de exportar PDF
-document.getElementById('btnExportarPDF').addEventListener('click', exportarPDF);
-
-
-=======
 
 function getListValorizacionDetail2(valorizacion_id) {
     agregarBotonesExportacion1("#table_detail2");
@@ -619,17 +419,17 @@ function getListValorizacionDetail2(valorizacion_id) {
                     datosRowFormatted +=
                         "<tr style='border-bottom: 1px solid green;'>" +
                         "<td style='width: 20 %; font-weight: bold; border-right: 1px solid green; text-align: center; center; font-weight: 600; color: green;'>Código</td>" +
-                        "<td style='width: 80 %;'>" + 
+                        "<td style='width: 80 %;'>" +
                         "<span id='codigo' style='display: flex; justify-content: center;'>" + firstItem.valorizacion_id + "</span></td >" +
                         "</tr>" +
                         "<tr style='border-bottom: 1px solid green;'>" +
                         "<td style='width: 20%; font-weight: bold; border-right: 1px solid green; text-align: center; font-weight: 600; color: green;'>Cliente</td>" +
-                        "<td style='width: 80 %;'>" + 
+                        "<td style='width: 80 %;'>" +
                         "<span id='cliente' style='display: flex; justify-content: center;'>" + firstItem.guia_numero + "</span></td >" +
                         "</tr>" +
                         "<tr>" +
                         "<td style='width: 20%; font-weight: bold; border-right: 1px solid green; text-align: center; font-weight: 600; color: green;'>RUC</td>" +
-                        "<td style='width: 80 %;'>" + 
+                        "<td style='width: 80 %;'>" +
                         "<span id='ruc' style='display: flex; justify-content: center;'>" + firstItem.valorizacion_total + "</span></td >" +
                         "</tr>";
 
@@ -667,7 +467,7 @@ document.getElementById('downloadPDF').addEventListener('click', async function 
         tempContainer.style.backgroundColor = '#ffffff';
         tempContainer.style.boxSizing = 'border-box';
         tempContainer.innerHTML = modalContent.innerHTML;
-        document.body.appendChild(tempContainer);   
+        document.body.appendChild(tempContainer);
 
         // Preservar estilos de las tablas
         const tables = tempContainer.getElementsByTagName('table');
@@ -804,7 +604,6 @@ function areImagesLoaded(element) {
         });
     });
 }
->>>>>>> Stashed changes
 
 function getListValorizacionTransportista(transportista_id) {
     endpoint = getDomain() + "/Valorizacion/listarValorizacionTransportista";

@@ -9,6 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Material Icons -->
+
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 
     <!-- CSS personalizado -->
@@ -21,7 +22,7 @@
 
     <!-- JS Libraries -->
     <script src="~/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> <!-- Asegúrate de incluir jsPDF -->
+
     <!-- JS Personalizado -->
     <script src="~/config.js"></script>
     <style>
@@ -29,6 +30,7 @@
             z-index: 9999;
         }
     </style>
+
 </head>
 
 <body>
@@ -47,6 +49,7 @@
                             <select id="input_transportista" class="js-example-placeholder-single js-states form-control">
                                 <option></option> <!-- Opción vacía -->
                             </select>
+
                         </div>
 
                         <div class="col-md-2 d-flex justify-content-end p-0">
@@ -85,31 +88,8 @@
             <div class="modal-dialog modal-lg modal-dialog-centered" style="max-width:73% !important;">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Detalles de Valorización</h5>
+                        <h5 class="modal-title">Detalles de Valorizacion</h5>
                         <div class="col-lg-6 col-md-6 col-sm-12 d-flex align-items-center justify-content-end" style="justify-content:flex-end !important" id="contenedorBotones1">
-<<<<<<< Updated upstream
-                            <!-- Aquí se agregarán más botones si es necesario -->
-                            <button id="btnExportarPDF" class="btn btn-success">Exportar PDF</button> <!-- Botón para exportar PDF -->
-                        </div>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="table-responsive">
-                            <table class="table table-sm custom-table" id="table_detalles_valorizacion">
-                                <thead style="color: #023E73;">
-                                    <tr>
-                                        <th>Valorización ID</th>
-                                        <th>N° Guia</th>
-                                        <th>Fecha</th>
-                                        <th>Tipo</th>
-                                        <th>Cantidad</th>
-                                        <th>Costo/TN</th>
-                                        <th>Costo Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tb_detalles_valorizacion"></tbody>
-                            </table>
-=======
                             <button id="downloadPDF">Descargar PDF</button>
                         </div>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -195,7 +175,7 @@
                                     <table class="table" style="height: 100%;">
                                         <tbody>
                                             <tr>
-                                                <td id ="subtotal"></td>
+                                                <td id="subtotal"></td>
                                             </tr>
                                             <tr>
                                                 <td id="valorigv"></td>
@@ -207,7 +187,6 @@
                                     </table>
                                 </div>
                             </div>
->>>>>>> Stashed changes
                         </div>
                     </div>
                 </div>
@@ -229,22 +208,16 @@
             margin-bottom: 1rem;
         }
 
-            .modal-body .input-group-sm input {
-                height: 30px;
+            .modal-body .input-group-sm > .input-group-text,
+            .modal-body .input-group-sm > .form-control,
+            .modal-body .input-group-sm > .form-select {
+                width: 100%;
             }
 
-        .custom-table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: center;
+        body {
+            overflow-x: hidden;
         }
 
-<<<<<<< Updated upstream
-            .custom-table th, .custom-table td {
-                border: 1px solid #006400; /* Color verde */
-                padding: 8px;
-            }
-=======
     </style>
     <!-- JS Personalizado -->
 
@@ -259,17 +232,6 @@
     <script src="~/js/js_jquery.dataTables.min.js"></script>
     <script src="~/config.js"></script>
     <script src="~/js/valorizacion.js?v=0.0.0.5"></script>
->>>>>>> Stashed changes
 
-            .custom-table thead {
-                background-color: #006400;
-                color: white;
-            }
-    </style>
-
-    <!-- JS para Select2 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.full.min.js"></script>
-    <script src="~/js/selector.js"></script>
-    <script src="~/js/valorizacion.js"></script>
 </body>
 </html>
