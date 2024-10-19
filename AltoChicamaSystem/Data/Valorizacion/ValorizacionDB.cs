@@ -294,6 +294,8 @@ namespace AltoChicamaSystem.Data.Valorizacion
                         valorizacion.guia_cantidad = Convert.ToDecimal(sdr["guia_cantidad"]);
                         valorizacion.guia_costo = Convert.ToDecimal(sdr["guia_costo"]);
                         valorizacion.valorizacion_total = Convert.ToDecimal(sdr["valorizacion_total"]);
+                        valorizacion.transportista_ruc = sdr["transportista_ruc"].ToString().Trim();
+                        valorizacion.transportista_nombre = sdr["transportista_nombre"].ToString().Trim();
 
                         lst.Add(valorizacion);
                     }

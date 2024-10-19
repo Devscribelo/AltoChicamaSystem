@@ -13,6 +13,7 @@
 
     <!-- CSS personalizado -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="~/css/selector.css">
     <link rel="stylesheet" href="~/css/factura.css">
     <link rel="stylesheet" href="~/css/documentos.css">
@@ -86,6 +87,7 @@
                     <div class="modal-header">
                         <h5 class="modal-title">Detalles de Valorización</h5>
                         <div class="col-lg-6 col-md-6 col-sm-12 d-flex align-items-center justify-content-end" style="justify-content:flex-end !important" id="contenedorBotones1">
+<<<<<<< Updated upstream
                             <!-- Aquí se agregarán más botones si es necesario -->
                             <button id="btnExportarPDF" class="btn btn-success">Exportar PDF</button> <!-- Botón para exportar PDF -->
                         </div>
@@ -107,6 +109,105 @@
                                 </thead>
                                 <tbody id="tb_detalles_valorizacion"></tbody>
                             </table>
+=======
+                            <button id="downloadPDF">Descargar PDF</button>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div id="modal_contenido_valorizacion" class="modal-body">
+
+                        <!-- Nueva fila con logo y datos de la empresa -->
+                        <table style="width: 100%; border: 1px solid green; border-collapse: collapse; margin-bottom: 20px; height:110px; overflow: hidden;">
+                            <tr>
+                                <td style="width: 20%; padding: 10px;">
+                                    <img src="~/img/gh3.png" alt="Alto Chicama Logo" style="max-width: 100%; height: auto;">
+                                </td>
+                                <td style="width: 80%; position: relative; border-left: 1px solid green;">
+                                    <table style="width: 100%; border-collapse: collapse; position:absolute; top:0; height:100% !important;">
+                                        <tr style="width: 100%; border-bottom: 1px solid green;">
+                                            <td colspan="2">
+                                                <span style="display: flex; justify-content: center; font-weight: 600; font-size: 20px; color: green;">EO-RS ALTO CHICAMA S.R.L</span>
+                                            </td>
+                                        </tr>
+                                        <tbody id="tb_detalles_valorizacion2">
+                                        </tbody>
+
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+
+
+                        <div style="height: 30px;"></div>
+
+                        <div class="table-responsive">
+                            <!-- Tabla de Valorización -->
+                            <table class="" style="width: 100%; border: 1px solid green;" id="table_detail">
+                                <thead style="color: #023E73;">
+                                    <tr>
+                                        <th colspan="7" style="text-align: center; font-weight: 600; font-size: 17px; color: green; border-bottom: 1px solid green;">VALORIZACIÓN POR SERVICIOS | RCD 2024</th>
+                                    </tr>
+                                    <tr>
+                                        <th style="border-right: 1px solid green; font-weight: 600; color: green;">Ítem</th>
+                                        <th style="border-right: 1px solid green; font-weight: 600; color: green;">N° Guia</th>
+                                        <th style="border-right: 1px solid green; font-weight: 600; color: green;">Fecha</th>
+                                        <th style="border-right: 1px solid green; font-weight: 600; color: green;">Tipo</th>
+                                        <th style="border-right: 1px solid green; font-weight: 600; color: green;">Cantidad (TN)</th>
+                                        <th style="border-right: 1px solid green; font-weight: 600; color: green;">Costo/TN</th>
+                                        <th style="border-right: 1px solid green; font-weight: 600; color: green;">Costo Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tb_detalles_valorizacion"></tbody>
+                                <tfooter>
+                                    <tr style="border-top: 1px solid green;">
+                                        <td colspan="4" style="text-align: center; font-weight: bold; border-right: 1px solid green;">TOTAL (TN)</td>
+                                        <td style="text-align: center; border-right: 1px solid green;" id="totalCantidadDisplay">0</td> <!-- Muestra el totalCantidad aquí -->
+                                        <td style="text-align: center; font-weight: bold; border-right: 1px solid green;">COSTO TOTAL</td>
+                                        <td style="text-align: center; border: none !important;" id="totalCostoTotalDisplay">0</td> <!-- Muestra el totalCosto aquí -->
+                                    </tr>
+                                </tfooter>
+                            </table>
+
+                            <!-- Tabla de Resumen -->
+                            <div class="row mt-4" style="height: 100%;">
+                                <div class="col-md-4" style="border-top: 1px solid green;border-bottom: 1px solid green;border-left: 1px solid green; max-height: 100% !important;">
+                                    <div style="border: 1px green; padding: 10px; height: 100%; text-align: center; display: flex; align-items: center; justify-content: center;">
+                                        <p style="font-weight: bold; height: 100%;">FIRMA</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="border: 1px solid green; max-height: 100% !important;">
+                                    <table class="table" style="height: 100%;">
+                                        <tbody>
+                                            <tr>
+                                                <td style="text-align: center; font-weight: bold;border-bottom: 1px solid green;">SUB TOTAL</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align: center; font-weight: bold;border-bottom: 1px solid green;">IGV</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align: center; font-weight: bold;">PRECIO TOTAL DEL SERVICIO</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-2" style="border-top: 1px solid green;border-bottom: 1px solid green;border-right: 1px solid green;height: 100%;">
+                                    <table class="table" style="height: 100%;">
+                                        <tbody>
+                                            <tr>
+                                                <td id ="subtotal"></td>
+                                            </tr>
+                                            <tr>
+                                                <td id="valorigv"></td>
+                                            </tr>
+                                            <tr>
+                                                <td id="preciototal"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+>>>>>>> Stashed changes
                         </div>
                     </div>
                 </div>
@@ -138,10 +239,27 @@
             text-align: center;
         }
 
+<<<<<<< Updated upstream
             .custom-table th, .custom-table td {
                 border: 1px solid #006400; /* Color verde */
                 padding: 8px;
             }
+=======
+    </style>
+    <!-- JS Personalizado -->
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="~/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+    <!-- Agregar estas líneas en el HTML -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script src="~/js/js_jquery.dataTables.min.js"></script>
+    <script src="~/config.js"></script>
+    <script src="~/js/valorizacion.js?v=0.0.0.5"></script>
+>>>>>>> Stashed changes
 
             .custom-table thead {
                 background-color: #006400;

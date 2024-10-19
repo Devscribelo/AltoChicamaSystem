@@ -20,5 +20,6 @@
         public string transportista_nombre { get; set; }
         public string valorizacion_guias { get; set; }
         public string valorizacion_numeros { get; set; }
+        public string transportista_ruc { get; set; }
     }
 }

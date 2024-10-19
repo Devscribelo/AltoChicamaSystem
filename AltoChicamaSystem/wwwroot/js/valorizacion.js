@@ -30,6 +30,7 @@ function capturarValoresSeleccionados() {
 
 function modalDetalleValorizacion(valorizacion_id) {
     $("#modal_detalles_valorizacion").modal("show").css('display', 'flex');
+    getListValorizacionDetail2(valorizacion_id);
     getListValorizacionDetail(valorizacion_id);
 }
 
@@ -91,25 +92,6 @@ function agregarBotonesExportacion1(tablaId) {
 
         return boton;
     }
-
-    // Crear botón de exportación Excel
-    contenedorBotones.appendChild(crearBoton(
-        "btnExportExcel1",
-        "btn_export_Excel",
-        "M17.5,22.131a1.249,1.249,0,0,1-1.25-1.25V2.187a1.25,1.25,0,0,1,2.5,0V20.881A1.25,1.25,0,0,1,17.5,22.131Z M17.5,22.693a3.189,3.189,0,0,1-2.262-.936L8.487,15.006a1.249,1.249,0,0,1,1.767-1.767l6.751,6.751a.7.7,0,0,0,.99,0l6.751-6.751a1.25,1.25,0,0,1,1.768,1.767l-6.752,6.751A3.191,3.191,0,0,1,17.5,22.693Z",
-        "Exportar Excel"
-    ));
-
-    // Agregar un margen entre los botones
-    contenedorBotones.appendChild(document.createTextNode("\u00A0")); // Agrega un espacio en blanco
-
-    // Crear botón de exportación PDF
-    contenedorBotones.appendChild(crearBoton(
-        "btnExportPdf1",
-        "btn_export_Pdf",
-        "M17.5,22.131a1.249,1.249,0,0,1-1.25-1.25V2.187a1.25,1.25,0,0,1,2.5,0V20.881A1.25,1.25,0,0,1,17.5,22.131Z M17.5,22.693a3.189,3.189,0,0,1-2.262-.936L8.487,15.006a1.249,1.249,0,0,1,1.767-1.767l6.751,6.751a.7.7,0,0,0,.99,0l6.751-6.751a1.25,1.25,0,0,1,1.768,1.767l-6.752,6.751A3.191,3.191,0,0,1,17.5,22.693Z",
-        "Exportar PDF"
-    ));
 }
 
 function getListValorizacion() {
@@ -140,7 +122,7 @@ function getListValorizacion() {
                         "<td>" + valorizacion[i].valorizacion_monto + "</td>" +
                         "<td id='acciones'>" +
                         `<a href='#' onclick='modalConfirmacionEliminarValorizacion(${valorizacion[i].valorizacion_id})'><span class='icon-circle red'><i class="bx bxs-trash"></i></span></a>` +
-                        `<i class='bx bx-detail detalle-valorizacion icon-circle' id='detalle_valorizacion" + i + "' onclick='modalDetalleValorizacion(${valorizacion[i].valorizacion_id})'></i>` +
+                        `<i class='bx bx-detail detalle-valorizacion icon-circle' id='detalle_valorizacion_" + i + "' onclick='modalDetalleValorizacion(${valorizacion[i].valorizacion_id})'></i>`
                         "</td>" +
                         "</tr>";
                 }
@@ -322,9 +304,8 @@ function eliminarValorizacion(valorizacionId) {
 
 
 function getListValorizacionDetail(valorizacion_id) {
-    agregarBotonesExportacion1("#table_detalles_valorizacion");
+    agregarBotonesExportacion1("#table_detail");
     return new Promise((resolve, reject) => {
-
         const endpoint = getDomain() + "/Valorizacion/ListarValorizacionDetalle";
 
         $.ajax({
@@ -344,59 +325,52 @@ function getListValorizacionDetail(valorizacion_id) {
                 var dataValorizacion = data.item3;
                 var datosRow = "";
 
+                // Inicializar variables para las sumas
+                let totalCantidad = 0;
+                let totalCosto = 0;
+
                 if (data.Item1 === "1") {
-                    datosRow += "<tr><td colspan='6' style='text-align:center;'>No hay datos para mostrar</td></tr>";
+                    datosRow += "<tr><td colspan='7' style='text-align:center;'>No hay datos para mostrar</td></tr>";
                 } else {
+                    // Generar filas dinámicamente
                     for (var i = 0; i < dataValorizacion.length; i++) {
+                        // Sumar valores a las totales
+                        totalCantidad += parseFloat(dataValorizacion[i].guia_cantidad) || 0; // Asegúrate de convertir a número
+                        totalCosto += parseFloat(dataValorizacion[i].valorizacion_total) || 0; // Asegúrate de convertir a número
+
                         datosRow +=
-                            "<tr class='filaTabla' " +
+                            "<tr  style='border-top: 1px solid green;' class='filaTabla' " +
                             "data-valorizacion_id='" + dataValorizacion[i].valorizacion_id + "' " +
                             "data-guia_numero='" + dataValorizacion[i].guia_numero + "' " +
                             "data-guia_fecha_servicio='" + formatearFecha(dataValorizacion[i].guia_fecha_servicio) + "' " +
                             "data-guia_descarga='" + dataValorizacion[i].guia_descarga + "'" +
                             "data-guia_cantidad='" + dataValorizacion[i].guia_cantidad + "'" +
                             "data-valorizacion_costotn='" + dataValorizacion[i].guia_costo + "' >" +
-                            "<td>" + dataValorizacion[i].valorizacion_id + "</td>" +
-                            "<td>" + dataValorizacion[i].guia_numero + "</td>" +
-                            "<td>" + formatearFecha(dataValorizacion[i].guia_fecha_servicio) + "</td>" +
-                            "<td>" + dataValorizacion[i].guia_descarga + "</td>" +
-                            "<td>" + dataValorizacion[i].guia_cantidad + "</td>" +
-                            "<td>" + dataValorizacion[i].guia_costo + "</td>" +
-                            "<td>" + dataValorizacion[i].valorizacion_total + "</td>"
+                            "<td style='border-right: 1px solid green;'>" + (i + 1) + "</td>" + // Coloca el número de ítem
+                            "<td style='border-right: 1px solid green;'>" + dataValorizacion[i].guia_numero + "</td>" +
+                            "<td style='border-right: 1px solid green;'>" + formatearFecha(dataValorizacion[i].guia_fecha_servicio) + "</td>" +
+                            "<td style='border-right: 1px solid green;'>" + dataValorizacion[i].guia_descarga + "</td>" +
+                            "<td style='border-right: 1px solid green;'>" + dataValorizacion[i].guia_cantidad + "</td>" +
+                            "<td style='border-right: 1px solid green;'>" + dataValorizacion[i].guia_costo + "</td>" +
+                            "<td style='border-right: 1px solid green;'>" + dataValorizacion[i].valorizacion_total + "</td></tr>";
                     }
-
                 }
 
-                if (!$.fn.DataTable.isDataTable("#table_detalles_valorizacion")) {
-                    tableFactura = $("#table_detalles_valorizacion").DataTable({
-                        language: {
-                            url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json'
-                        },
-                        dom: 'frtip',
-                        buttons: [
-                            {
-                                extend: 'excel',
-                                className: 'btn_export_Excel',
-                            },
-                            {
-                                extend: 'pdf',
-                                className: 'btn_export_Pdf',
-                            }
-                        ],
-                        colResize: {
-                            tableWidthFixed: 'false'
-                        },
-                        colReorder: true,
-                        searching: false
-                    });
-                }
+                // Limpiar y agregar las filas a la tabla directamente
+                $("#tb_detalles_valorizacion").empty().append(datosRow);
 
+                // Actualizar los valores de totalCantidad y totalCosto en las celdas de la tabla
+                $("#totalCantidadDisplay").text(totalCantidad.toFixed(2));
+                $("#totalCostoTotalDisplay").text(totalCosto.toFixed(2));
 
-                // Limpiar la tabla y agregar las filas
-                tableFactura.clear();
-                tableFactura.rows.add($(datosRow)).draw();
+                // Actualizar subtotal, IGV y precio total
+                $("#subtotal").text(totalCosto.toFixed(2)).css("border-bottom", "1px solid green"); // Establecer subtotal igual a totalCostoTotal y aplicar estilo
+                const igv = totalCosto * 0.18; // Calcular IGV (18%)
+                $("#valorigv").text(igv.toFixed(2)).css("border-bottom", "1px solid green"); // Establecer IGV y aplicar estilo
+                const precioTotal = totalCosto + igv; // Calcular precio total
+                $("#preciototal").text(precioTotal.toFixed(2)); // Establecer precio total
 
-                resolve(data); // Resuelve la promesa con la respuesta complet
+                resolve(data); // Resuelve la promesa con la respuesta completa
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 Swal.close();
@@ -409,6 +383,7 @@ function getListValorizacionDetail(valorizacion_id) {
 
 
 
+<<<<<<< Updated upstream
 async function exportarPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
@@ -609,6 +584,227 @@ async function exportarPDF() {
 document.getElementById('btnExportarPDF').addEventListener('click', exportarPDF);
 
 
+=======
+
+function getListValorizacionDetail2(valorizacion_id) {
+    agregarBotonesExportacion1("#table_detail2");
+    return new Promise((resolve, reject) => {
+
+        const endpoint = getDomain() + "/Valorizacion/ListarValorizacionDetalle";
+
+        $.ajax({
+            type: "POST",
+            async: true,
+            url: endpoint,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify({ valorizacion_id: valorizacion_id }), // Serializa los datos a JSON
+            dataType: "json",
+            beforeSend: function (xhr) {
+                console.log("cargando");
+            },
+            success: function (data) {
+                console.log(data);
+                var dataValorizacion = data.item3;
+                var datosRowFormatted = "";
+
+                if (data.Item1 === "1") {
+                    datosRowFormatted += "<tr><td colspan='2' style='text-align:center; '>No hay datos para mostrar</td></tr>";
+                } else {
+                    // Solo tomamos el primer valor para mostrar los detalles generales
+                    var firstItem = dataValorizacion[0];
+
+                    // Datos únicos
+                    datosRowFormatted +=
+                        "<tr style='border-bottom: 1px solid green;'>" +
+                        "<td style='width: 20 %; font-weight: bold; border-right: 1px solid green; text-align: center; center; font-weight: 600; color: green;'>Código</td>" +
+                        "<td style='width: 80 %;'>" + 
+                        "<span id='codigo' style='display: flex; justify-content: center;'>" + firstItem.valorizacion_id + "</span></td >" +
+                        "</tr>" +
+                        "<tr style='border-bottom: 1px solid green;'>" +
+                        "<td style='width: 20%; font-weight: bold; border-right: 1px solid green; text-align: center; font-weight: 600; color: green;'>Cliente</td>" +
+                        "<td style='width: 80 %;'>" + 
+                        "<span id='cliente' style='display: flex; justify-content: center;'>" + firstItem.guia_numero + "</span></td >" +
+                        "</tr>" +
+                        "<tr>" +
+                        "<td style='width: 20%; font-weight: bold; border-right: 1px solid green; text-align: center; font-weight: 600; color: green;'>RUC</td>" +
+                        "<td style='width: 80 %;'>" + 
+                        "<span id='ruc' style='display: flex; justify-content: center;'>" + firstItem.valorizacion_total + "</span></td >" +
+                        "</tr>";
+
+
+                }
+
+                // Limpiar y agregar las filas a la tabla directamente
+                $("#tb_detalles_valorizacion2").empty().append(datosRowFormatted);
+
+                resolve(data); // Resuelve la promesa con la respuesta completa
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                Swal.close();
+                console.log("failure: " + textStatus + " - " + errorThrown);
+            }
+        });
+    });
+}
+
+document.getElementById('downloadPDF').addEventListener('click', async function () {
+    try {
+        const modalContent = document.getElementById('modal_contenido_valorizacion');
+        if (!modalContent) {
+            console.error('Modal content not found');
+            return;
+        }
+
+        // Crear un contenedor temporal
+        const tempContainer = document.createElement('div');
+        tempContainer.style.position = 'absolute';
+        tempContainer.style.left = '-9999px';
+        tempContainer.style.top = '0';
+        tempContainer.style.width = '800px'; // Ancho fijo para mantener proporciones
+        tempContainer.style.padding = '100px'; // Mantener el padding original
+        tempContainer.style.backgroundColor = '#ffffff';
+        tempContainer.style.boxSizing = 'border-box';
+        tempContainer.innerHTML = modalContent.innerHTML;
+        document.body.appendChild(tempContainer);   
+
+        // Preservar estilos de las tablas
+        const tables = tempContainer.getElementsByTagName('table');
+        Array.from(tables).forEach(table => {
+            table.style.width = '100%';
+            table.style.borderCollapse = 'collapse';
+            table.style.pageBreakInside = 'auto';
+
+            // Preservar bordes y padding de celdas
+            const cells = table.getElementsByTagName('td');
+            Array.from(cells).forEach(cell => {
+                cell.style.padding = '8px';
+
+            });
+        });
+
+        // Ajustar las imágenes para mantener proporción
+        const images = tempContainer.getElementsByTagName('img');
+        Array.from(images).forEach(img => {
+            if (img.getAttribute('style') && img.getAttribute('style').includes('width')) {
+                img.style.maxWidth = '100%';
+                img.style.height = 'auto';
+            }
+        });
+
+        // Esperar a que las imágenes se carguen
+        await areImagesLoaded(tempContainer);
+
+        // Configuración de HTML2Canvas
+        const canvas = await html2canvas(tempContainer, {
+            scale: 3, // Mayor calidad
+            useCORS: true,
+            logging: true,
+            backgroundColor: '#ffffff',
+            width: 800, // Ancho fijo que coincide con el contenedor
+            windowWidth: 800,
+            onclone: function (clonedDoc) {
+                console.log('Clone created successfully');
+            }
+        });
+
+        // Crear el PDF
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4',
+            compress: true
+        });
+
+        // Obtener dimensiones de la página A4 en mm
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+
+        // Convertir el canvas a imagen
+        const imgData = canvas.toDataURL('image/jpeg', 1.0);
+
+        // Calcular dimensiones manteniendo proporción y márgenes
+        const margin = 10; // 10mm de margen
+        const availableWidth = pageWidth - (2 * margin);
+        const imgWidth = availableWidth;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+        // Función para agregar una página
+        const addPage = (pageNum) => {
+            if (pageNum > 0) {
+                doc.addPage();
+            }
+            return doc.addImage(
+                imgData,
+                'JPEG',
+                margin, // X con margen
+                margin, // Y con margen
+                imgWidth,
+                imgHeight,
+                undefined,
+                'FAST'
+            );
+        };
+
+        // Calcular número de páginas necesarias
+        const virtualHeight = imgHeight + (2 * margin);
+        const numPages = Math.ceil(virtualHeight / pageHeight);
+
+        // Agregar páginas
+        for (let i = 0; i < numPages; i++) {
+            addPage(i);
+        }
+
+        // Guardar el PDF
+        doc.save('detalles_valorizacion.pdf');
+
+        // Limpiar
+        document.body.removeChild(tempContainer);
+
+    } catch (error) {
+        console.error('Error durante la generación del PDF:', error);
+        alert('Hubo un error al generar el PDF. Por favor, revise la consola para más detalles.');
+    }
+});
+
+// Función auxiliar para verificar si las imágenes están cargadas
+function areImagesLoaded(element) {
+    return new Promise((resolve) => {
+        const images = element.getElementsByTagName('img');
+        let loadedImages = 0;
+        const totalImages = images.length;
+
+        if (totalImages === 0) {
+            resolve(true);
+            return;
+        }
+
+        Array.from(images).forEach(img => {
+            if (img.complete) {
+                loadedImages++;
+                if (loadedImages === totalImages) {
+                    resolve(true);
+                }
+            } else {
+                img.onload = () => {
+                    loadedImages++;
+                    if (loadedImages === totalImages) {
+                        resolve(true);
+                    }
+                };
+                img.onerror = () => {
+                    loadedImages++;
+                    if (loadedImages === totalImages) {
+                        resolve(true);
+                    }
+                };
+            }
+        });
+    });
+}
+>>>>>>> Stashed changes
 
 function getListValorizacionTransportista(transportista_id) {
     endpoint = getDomain() + "/Valorizacion/listarValorizacionTransportista";
