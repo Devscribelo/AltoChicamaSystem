@@ -636,7 +636,7 @@ function formatDate(date) {
 
 async function guardarNewGuia() {
     var { guia_numero, descarga, cantidad, unidad, transportistaid, fechaformulario, cero, direccionform, pdfData, empresaid, num_doc } = await generarPDF();
-    console.log(fechaformulario);
+    var direccion = document.getElementById("residuos").textContent;
     var formData = new FormData();
     var fecha = formatDate(fechaformulario);
     formData.append('guia_numero', guia_numero);
@@ -645,7 +645,7 @@ async function guardarNewGuia() {
     formData.append('guia_cantidad', cantidad);
     formData.append('transportista_id', transportistaid);
     formData.append('guia_fecha_servicio', fechaformulario);
-    formData.append('guia_direccion', direccionform);
+    formData.append('guia_direccion', direccion);
     formData.append('guia_costo', cero);
     formData.append('documento_pdf', pdfData);
     formData.append('empresa_id', empresaid);
