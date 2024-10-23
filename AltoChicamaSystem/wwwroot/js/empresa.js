@@ -269,7 +269,6 @@ function eliminarEmpresa(data) {
 }
 
 function modalEditarEmpresa(rowData) {
-
     // Obtenemos el código de la empresa seleccionada desde los datos de la fila
     var empresa_id = rowData.empresa_id;
     var empresa_name = rowData.empresa_name;
@@ -277,7 +276,8 @@ function modalEditarEmpresa(rowData) {
     // Seteamos el título del modal con el código de la empresa
     $("#modal_editar_empresa .modal-title").html("Editando Empresa: <span style='color: #198754'><strong>" + empresa_name + "</strong></span>");
 
-    $("form").off("submit").one("submit", function (event) {
+    // Asegúrate de que el evento de envío se restablezca cada vez que se abra el modal
+    $("form").off("submit").on("submit", function (event) {
         event.preventDefault(); // Evita (recargar la página)
         guardarEditEmpresa(empresa_id);
     });
@@ -338,7 +338,6 @@ function alterEmpresaStatus(empresa_id) {
 }
 
 function guardarEditEmpresa(empresa_id) {
-
     var empresa_status;
     if ($('#edit_empresa_status_a').is(':checked')) {
         empresa_status = $("#edit_empresa_status_a").val();
@@ -368,11 +367,12 @@ function guardarEditEmpresa(empresa_id) {
         dataType: "json",
         beforeSend: function (xhr) {
             console.log("Guardando...");
-            $("#btnGuardarEditEmpresa").attr("disabled", true);
+            $("#btnGuardarEditEmpresa").attr("disabled", true); // Asegúrate de que el ID sea correcto
         },
         success: function (data) {
             var rpta = data.item1;
             var msg = data.item2;
+            console.log("Respuesta del servidor:", data); // Mensaje de depuración
             if (rpta == "0") {
                 getListEmpresa();
                 $("#modal_editar_empresa").modal("hide");
@@ -381,17 +381,18 @@ function guardarEditEmpresa(empresa_id) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Ocurrió un error!',
-                    text: 'La empresa o el usuario ya fueron registrados',
+                    text: msg, // Mostrar el mensaje de error del servidor
                 });
             }
-            $("#btnGuardarEditZona").prop("disabled", false);
+            $("#btnGuardarEditEmpresa").prop("disabled", false); // Asegúrate de que el ID sea correcto
         },
         error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Error en la solicitud:", textStatus, errorThrown); // Mensaje de depuración
             if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Ocurrió un error!',
-                    text: 'La empresa o el usuario ya fueron registrados',
+                    text: jqXHR.responseJSON.message,
                 });
             } else {
                 Swal.fire({
@@ -400,6 +401,7 @@ function guardarEditEmpresa(empresa_id) {
                     text: 'La empresa o el usuario ya fueron registrados',
                 });
             }
+            $("#btnGuardarEditEmpresa").prop("disabled", false); // Asegúrate de que el ID sea correcto
         }
     });
 }
@@ -407,7 +409,7 @@ function guardarEditEmpresa(empresa_id) {
 
 function guardarNewTransportista() {
     var dataPost = {
-        transportista_ruc:"21239421",
+        transportista_ruc: "21239421",
         transportista_nombre: "RamosExpress",
         empresa_id: '1023' // Asegúrate de tener un select para la empresa
     };
@@ -476,3 +478,5 @@ function getListTransportista() {
         });
     });
 }
+
+
