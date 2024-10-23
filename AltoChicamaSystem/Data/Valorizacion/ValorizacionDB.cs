@@ -289,6 +289,7 @@ namespace AltoChicamaSystem.Data.Valorizacion
                     {
                         valorizacion = new CMValorizacion();
                         valorizacion.valorizacion_id = Convert.ToInt32(sdr["valorizacion_id"]);
+                        valorizacion.valorizacion_codigo = sdr["valorizacion_codigo"].ToString().Trim();
                         valorizacion.guia_numero = sdr["guia_numero"].ToString().Trim();
                         valorizacion.guia_fecha_servicio = sdr["guia_fecha_servicio"].ToString().Trim();
                         valorizacion.guia_descarga = sdr["guia_descarga"].ToString().Trim();

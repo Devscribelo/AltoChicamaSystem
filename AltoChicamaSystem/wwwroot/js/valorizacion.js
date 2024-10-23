@@ -420,17 +420,17 @@ function getListValorizacionDetail2(valorizacion_id) {
                         "<tr style='border-bottom: 1px solid green;'>" +
                         "<td style='width: 20 %; font-weight: bold; border-right: 1px solid green; text-align: center; center; font-weight: 600; color: green;'>Código</td>" +
                         "<td style='width: 80 %;'>" +
-                        "<span id='codigo' style='display: flex; justify-content: center;'>" + firstItem.valorizacion_id + "</span></td >" +
+                        "<span id='codigo' style='display: flex; justify-content: center;'>" + firstItem.valorizacion_codigo + "</span></td >" +
                         "</tr>" +
                         "<tr style='border-bottom: 1px solid green;'>" +
                         "<td style='width: 20%; font-weight: bold; border-right: 1px solid green; text-align: center; font-weight: 600; color: green;'>Cliente</td>" +
                         "<td style='width: 80 %;'>" +
-                        "<span id='cliente' style='display: flex; justify-content: center;'>" + firstItem.guia_numero + "</span></td >" +
+                        "<span id='cliente' style='display: flex; justify-content: center;'>" + firstItem.transportista_nombre + "</span></td >" +
                         "</tr>" +
                         "<tr>" +
                         "<td style='width: 20%; font-weight: bold; border-right: 1px solid green; text-align: center; font-weight: 600; color: green;'>RUC</td>" +
                         "<td style='width: 80 %;'>" +
-                        "<span id='ruc' style='display: flex; justify-content: center;'>" + firstItem.valorizacion_total + "</span></td >" +
+                        "<span id='ruc' style='display: flex; justify-content: center;'>" + firstItem.transportista_ruc + "</span></td >" +
                         "</tr>";
 
 
