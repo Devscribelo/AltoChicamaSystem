@@ -1,8 +1,9 @@
 ﻿using AltoChicamaSystem.Models;
 using AltoChicamaSystem.Data;
 using System.Data;
-using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 using System;
+using System.Collections.Generic;
 
 namespace AltoChicamaSystem.Data.Empresa
 {
@@ -14,23 +15,21 @@ namespace AltoChicamaSystem.Data.Empresa
         {
             string rpta = "";
             string msg = "";
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Empresa_reg";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                sqlCmd.Parameters.AddWithValue("@empresa_name", cmEmpresa.empresa_name.Trim());
-                sqlCmd.Parameters.AddWithValue("@empresa_ruc", cmEmpresa.empresa_ruc.Trim());
-                sqlCmd.Parameters.AddWithValue("@empresa_correo", cmEmpresa.empresa_correo.Trim());
-                sqlCmd.Parameters.AddWithValue("@empresa_status", cmEmpresa.empresa_status);
-                sqlCmd.Parameters.AddWithValue("@usuario_user", cmEmpresa.usuario_user.Trim());
-                sqlCmd.Parameters.AddWithValue("@usuario_password", cmEmpresa.usuario_password.Trim());
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Empresa_reg";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCmd.Parameters.AddWithValue("p_empresa_name", cmEmpresa.empresa_name.Trim());
+                mySqlCmd.Parameters.AddWithValue("p_empresa_ruc", cmEmpresa.empresa_ruc.Trim());
+                mySqlCmd.Parameters.AddWithValue("p_empresa_correo", cmEmpresa.empresa_correo.Trim());
+                mySqlCmd.Parameters.AddWithValue("p_empresa_status", cmEmpresa.empresa_status);
 
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
                 if (sdr.Read())
                 {
                     rpta = sdr["Rpta"].ToString();
@@ -43,29 +42,29 @@ namespace AltoChicamaSystem.Data.Empresa
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg);
         }
 
-        public Tuple<string,string, List<CMEmpresa>> listarEmpresa(string bandera)
+        public Tuple<string, string, List<CMEmpresa>> listarEmpresa(string bandera)
         {
             List<CMEmpresa> lst = new List<CMEmpresa>();
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             string rpta = "";
             string msg = "";
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Empresa_list";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Empresa_list";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                using (MySqlDataReader sdr = mySqlCmd.ExecuteReader())
                 {
                     if (sdr.Read())
                     {
@@ -98,9 +97,9 @@ namespace AltoChicamaSystem.Data.Empresa
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg, lst);
@@ -110,19 +109,19 @@ namespace AltoChicamaSystem.Data.Empresa
         {
             List<CMEmpresa> lst = new List<CMEmpresa>();
             CMEmpresa empresaselect = new CMEmpresa();
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             string rpta = "";
             string msg = "";
             int count = 0;
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Empresa_list_select";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Empresa_list_select";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
 
                 while (sdr.Read())
                 {
@@ -141,7 +140,6 @@ namespace AltoChicamaSystem.Data.Empresa
                         empresaselect.empresa_ruc = sdr["empresa_ruc"].ToString().Trim();
                         lst.Add(empresaselect);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -151,33 +149,34 @@ namespace AltoChicamaSystem.Data.Empresa
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg, lst);
         }
+
         public Tuple<string, string> modEmpresa(CMEmpresa cmEmpresa, string bandera)
         {
             string rpta = "";
             string msg = "";
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Empresa_mod";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                sqlCmd.Parameters.AddWithValue("@empresa_id", cmEmpresa.empresa_id);
-                sqlCmd.Parameters.AddWithValue("@empresa_name", cmEmpresa.empresa_name.Trim());
-                sqlCmd.Parameters.AddWithValue("@empresa_ruc", cmEmpresa.empresa_ruc.Trim());
-                sqlCmd.Parameters.AddWithValue("@empresa_correo", cmEmpresa.empresa_correo.Trim());
-                sqlCmd.Parameters.AddWithValue("@empresa_status", cmEmpresa.empresa_status);
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Empresa_mod";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCmd.Parameters.AddWithValue("p_empresa_id", cmEmpresa.empresa_id);
+                mySqlCmd.Parameters.AddWithValue("p_empresa_name", cmEmpresa.empresa_name.Trim());
+                mySqlCmd.Parameters.AddWithValue("p_empresa_ruc", cmEmpresa.empresa_ruc.Trim());
+                mySqlCmd.Parameters.AddWithValue("p_empresa_correo", cmEmpresa.empresa_correo.Trim());
+                mySqlCmd.Parameters.AddWithValue("p_empresa_status", cmEmpresa.empresa_status);
 
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
                 if (sdr.Read())
                 {
                     rpta = sdr["Rpta"].ToString();
@@ -190,9 +189,9 @@ namespace AltoChicamaSystem.Data.Empresa
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg);
@@ -202,18 +201,18 @@ namespace AltoChicamaSystem.Data.Empresa
         {
             string rpta = "";
             string msg = "";
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Empresa_delete"; // Nombre del procedimiento almacenado para eliminación
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                sqlCmd.Parameters.AddWithValue("@empresa_id", empresa_id); // Aceptar int
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Empresa_delete";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCmd.Parameters.AddWithValue("p_empresa_id", empresa_id);
 
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
                 if (sdr.Read())
                 {
                     rpta = sdr["Rpta"].ToString();
@@ -227,15 +226,13 @@ namespace AltoChicamaSystem.Data.Empresa
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg);
         }
-
-
 
         public Tuple<string, string> alterEmpresaStatus(int empresa_id, string bandera)
         {
@@ -244,15 +241,15 @@ namespace AltoChicamaSystem.Data.Empresa
 
             try
             {
-                using (SqlConnection sqlCon = new SqlConnection(con.obtenerDatosConexion(bandera)))
+                using (MySqlConnection mySqlCon = new MySqlConnection(con.obtenerDatosConexion(bandera)))
                 {
-                    sqlCon.Open();
-                    using (SqlCommand sqlCmd = new SqlCommand("Empresa_alter_status", sqlCon))
+                    mySqlCon.Open();
+                    using (MySqlCommand mySqlCmd = new MySqlCommand("Empresa_alter_status", mySqlCon))
                     {
-                        sqlCmd.CommandType = CommandType.StoredProcedure;
-                        sqlCmd.Parameters.AddWithValue("@empresa_id", empresa_id);
+                        mySqlCmd.CommandType = CommandType.StoredProcedure;
+                        mySqlCmd.Parameters.AddWithValue("p_empresa_id", empresa_id);
 
-                        using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                        using (MySqlDataReader sdr = mySqlCmd.ExecuteReader())
                         {
                             if (sdr.Read())
                             {
@@ -271,6 +268,5 @@ namespace AltoChicamaSystem.Data.Empresa
 
             return Tuple.Create(rpta, msg);
         }
-
     }
 }

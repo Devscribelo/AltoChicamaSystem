@@ -1,8 +1,9 @@
 ﻿using AltoChicamaSystem.Models;
 using AltoChicamaSystem.Data;
 using System.Data;
-using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 using System;
+using System.Collections.Generic;
 
 namespace AltoChicamaSystem.Data.Valorizacion
 {
@@ -13,23 +14,23 @@ namespace AltoChicamaSystem.Data.Valorizacion
         {
             string rpta = "";
             string msg = "";
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Valorizacion_regGuia";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                sqlCmd.Parameters.AddWithValue("@guia_ids", cmValorizacion.guia_ids);
-                sqlCmd.Parameters.AddWithValue("@valorizacion_costotn", cmValorizacion.valorizacion_costotn);
-                sqlCmd.Parameters.AddWithValue("@valorizacion_subtotal", cmValorizacion.valorizacion_subtotal);
-                sqlCmd.Parameters.AddWithValue("@valorizacion_igv", cmValorizacion.valorizacion_igv);
-                sqlCmd.Parameters.AddWithValue("@valorizacion_codigo", cmValorizacion.valorizacion_codigo.Trim());
-                sqlCmd.Parameters.AddWithValue("@transportista_id", (cmValorizacion.transportista_id));
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Valorizacion_regGuia";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCmd.Parameters.AddWithValue("p_guia_ids", cmValorizacion.guia_ids);
+                mySqlCmd.Parameters.AddWithValue("p_valorizacion_costotn", cmValorizacion.valorizacion_costotn);
+                mySqlCmd.Parameters.AddWithValue("p_valorizacion_subtotal", cmValorizacion.valorizacion_subtotal);
+                mySqlCmd.Parameters.AddWithValue("p_valorizacion_igv", cmValorizacion.valorizacion_igv);
+                mySqlCmd.Parameters.AddWithValue("p_valorizacion_codigo", cmValorizacion.valorizacion_codigo.Trim());
+                mySqlCmd.Parameters.AddWithValue("p_transportista_id", (cmValorizacion.transportista_id));
 
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
                 if (sdr.Read())
                 {
                     rpta = sdr["Rpta"].ToString();
@@ -42,9 +43,9 @@ namespace AltoChicamaSystem.Data.Valorizacion
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg);
@@ -53,20 +54,20 @@ namespace AltoChicamaSystem.Data.Valorizacion
         {
             List<CMValorizacion> lst = new List<CMValorizacion>();
             CMValorizacion valorizacion = new CMValorizacion();
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             string rpta = "";
             string msg = "";
             int count = 0;
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Valorizacion_list_select";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                sqlCmd.Parameters.AddWithValue("@transportista_id", transportista_id);
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Valorizacion_list_select";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCmd.Parameters.AddWithValue("p_transportista_id", transportista_id);
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
 
                 while (sdr.Read())
                 {
@@ -93,9 +94,9 @@ namespace AltoChicamaSystem.Data.Valorizacion
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg, lst);
@@ -105,20 +106,20 @@ namespace AltoChicamaSystem.Data.Valorizacion
         {
             List<CMValorizacion> lst = new List<CMValorizacion>();
             CMValorizacion valorizacion = new CMValorizacion();
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             string rpta = "";
             string msg = "";
             int count = 0;
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Valorizacion_list_select_return";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                sqlCmd.Parameters.AddWithValue("@valorizacion_id", valorizacion_id);
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Valorizacion_list_select_return";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCmd.Parameters.AddWithValue("p_valorizacion_id", valorizacion_id);
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
 
                 while (sdr.Read())
                 {
@@ -146,9 +147,9 @@ namespace AltoChicamaSystem.Data.Valorizacion
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg, lst);
@@ -157,18 +158,18 @@ namespace AltoChicamaSystem.Data.Valorizacion
         public Tuple<string, string, List<CMValorizacion>> listarValorizacion(string bandera)
         {
             List<CMValorizacion> lst = new List<CMValorizacion>();
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             string rpta = "";
             string msg = "";
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Valorizacion_listGuia";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Valorizacion_listGuia";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                using (MySqlDataReader sdr = mySqlCmd.ExecuteReader())
                 {
                     if (sdr.Read())
                     {
@@ -202,9 +203,9 @@ namespace AltoChicamaSystem.Data.Valorizacion
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg, lst);
@@ -215,24 +216,24 @@ namespace AltoChicamaSystem.Data.Valorizacion
         {
             string rpta = "";
             string msg = "";
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             try
             {
                 // Conexión a la base de datos
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
 
                 // Crear el comando para ejecutar el procedimiento almacenado
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Valorizacion_delete";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Valorizacion_delete";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
 
                 // Pasar el parámetro valorizacion_id
-                sqlCmd.Parameters.AddWithValue("@valorizacion_id", valorizacion_id);
+                mySqlCmd.Parameters.AddWithValue("p_valorizacion_id", valorizacion_id);
 
                 // Ejecutar el comando y leer el resultado
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
                 if (sdr.Read())
                 {
                     rpta = sdr["Rpta"].ToString();
@@ -245,9 +246,9 @@ namespace AltoChicamaSystem.Data.Valorizacion
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
 
@@ -259,21 +260,21 @@ namespace AltoChicamaSystem.Data.Valorizacion
         {
             List<CMValorizacion> lst = new List<CMValorizacion>();
             CMValorizacion valorizacion = new CMValorizacion();
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             string rpta = "";
             string msg = "";
             int count = 0;
 
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Valorizacion_Detalle";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                sqlCmd.Parameters.AddWithValue("@valorizacion_id", valorizacion_id);
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Valorizacion_Detalle";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCmd.Parameters.AddWithValue("p_valorizacion_id", valorizacion_id);
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
 
                 while (sdr.Read())
                 {
@@ -308,9 +309,9 @@ namespace AltoChicamaSystem.Data.Valorizacion
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg, lst);
@@ -318,22 +319,22 @@ namespace AltoChicamaSystem.Data.Valorizacion
         public Tuple<string, string, List<CMValorizacion>> listarValorizacionTransportista(int transportista_id, string bandera)
         {
             List<CMValorizacion> lst = new List<CMValorizacion>();
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             string rpta = "";
             string msg = "";
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Valorizacion_listGuiaPorTransportista";  // Asumiendo que este es el nombre del SP
-                sqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Valorizacion_listGuiaPorTransportista";  // Asumiendo que este es el nombre del SP
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
 
                 // Añadir parámetros
-                sqlCmd.Parameters.AddWithValue("@transportista_id", Convert.ToInt32(transportista_id));
+                mySqlCmd.Parameters.AddWithValue("p_transportista_id", Convert.ToInt32(transportista_id));
 
-                using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                using (MySqlDataReader sdr = mySqlCmd.ExecuteReader())
                 {
                     if (sdr.Read())
                     {
@@ -372,13 +373,12 @@ namespace AltoChicamaSystem.Data.Valorizacion
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg, lst);
         }
-
     }
 }

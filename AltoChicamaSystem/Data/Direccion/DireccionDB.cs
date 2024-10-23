@@ -1,8 +1,9 @@
 ﻿using AltoChicamaSystem.Models;
 using AltoChicamaSystem.Data;
 using System.Data;
-using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 using System;
+using System.Collections.Generic;
 
 namespace AltoChicamaSystem.Data.Empresa
 {
@@ -14,19 +15,19 @@ namespace AltoChicamaSystem.Data.Empresa
         {
             string rpta = "";
             string msg = "";
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Direcciones_reg";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                sqlCmd.Parameters.AddWithValue("@direccion", cmEmpresa.direccion.Trim());
-                sqlCmd.Parameters.AddWithValue("@empresa_id", cmEmpresa.empresa_id);
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Direcciones_reg";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCmd.Parameters.AddWithValue("p_direccion", cmEmpresa.direccion.Trim());
+                mySqlCmd.Parameters.AddWithValue("p_empresa_id", cmEmpresa.empresa_id);
 
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
                 if (sdr.Read())
                 {
                     rpta = sdr["Rpta"].ToString();
@@ -39,9 +40,9 @@ namespace AltoChicamaSystem.Data.Empresa
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg);
@@ -51,20 +52,20 @@ namespace AltoChicamaSystem.Data.Empresa
         {
             List<Direccion> lst = new List<Direccion>();
             Direccion direccionselect = new Direccion();
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             string rpta = "";
             string msg = "";
             int count = 0;
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Direcciones_list";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                sqlCmd.Parameters.AddWithValue("@empresa_id", Convert.ToInt32(empresa_id));
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Direcciones_list";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCmd.Parameters.AddWithValue("p_empresa_id", Convert.ToInt32(empresa_id));
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
 
                 while (sdr.Read())
                 {
@@ -82,7 +83,6 @@ namespace AltoChicamaSystem.Data.Empresa
                         direccionselect.direccion = sdr["direccion"].ToString().Trim();
                         lst.Add(direccionselect);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -92,32 +92,30 @@ namespace AltoChicamaSystem.Data.Empresa
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg, lst);
         }
 
-
         public Tuple<string, string> delDireccion(string bandera, int direccion_id)
         {
-            Direccion cmEmpresa = new Direccion();
             string rpta = "";
             string msg = "";
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Direcciones_delete"; // Nombre del procedimiento almacenado para eliminación
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                sqlCmd.Parameters.AddWithValue("@direccion_id", direccion_id); // Aceptar int
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Direcciones_delete";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCmd.Parameters.AddWithValue("p_direccion_id", direccion_id);
 
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
                 if (sdr.Read())
                 {
                     rpta = sdr["Rpta"].ToString();
@@ -127,18 +125,15 @@ namespace AltoChicamaSystem.Data.Empresa
             catch (Exception ex)
             {
                 msg = ex.Message;
-                cmEmpresa = new Direccion();
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg);
         }
-
-
     }
 }

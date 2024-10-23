@@ -1,7 +1,7 @@
 ﻿using AltoChicamaSystem.Models;
 using AltoChicamaSystem.Data;
 using System.Data;
-using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 
 namespace AltoChicamaSystem.Data.Admin
 {
@@ -13,20 +13,20 @@ namespace AltoChicamaSystem.Data.Admin
             string rpta = "";
             string msg = "";
             int loginId = 0;
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
 
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Login_admin";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                sqlCmd.Parameters.AddWithValue("@admin_user", cmadmin.admin_user.Trim());
-                sqlCmd.Parameters.AddWithValue("@admin_password", cmadmin.admin_password.Trim());
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Login_admin";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCmd.Parameters.AddWithValue("p_admin_user", cmadmin.admin_user.Trim());
+                mySqlCmd.Parameters.AddWithValue("p_admin_password", cmadmin.admin_password.Trim());
 
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
 
                 if (sdr.Read())
                 {
@@ -41,9 +41,9 @@ namespace AltoChicamaSystem.Data.Admin
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
 

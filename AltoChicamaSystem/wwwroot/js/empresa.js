@@ -17,8 +17,6 @@ function guardarNewEmpresa() {
         empresa_ruc: $("#input_empresa_ruc").val(),
         empresa_correo: $("#input_empresa_correo").val(),
         empresa_status: empresa_status,
-        usuario_user: $("#input_empresa_usuario").val(),
-        usuario_password: $("#input_empresa_password").val(),
     };
 
     dataPost = trimJSONFields(dataPost);
@@ -49,7 +47,7 @@ function guardarNewEmpresa() {
                 Swal.fire({
                     icon: 'error',
                     title: 'Ocurrió un error!',
-                    text: 'La empresa o el usuario ya fueron registrados',
+                    text: 'La empresa ya fue registrada',
                 });
             }
             $("#btnGuardarEditEmpresa").prop("disabled", false);
@@ -59,13 +57,13 @@ function guardarNewEmpresa() {
                 Swal.fire({
                     icon: 'error',
                     title: 'Ocurrió un error!',
-                    text: 'La empresa o el usuario ya fueron registrados',
+                    text: 'La empresa ya fue registrada',
                 });
             } else {
                 Swal.fire({
                     icon: 'error',
                     title: 'Ocurrió un error!',
-                    text: 'La empresa o el usuario ya fueron registrados',
+                    text: 'La empresa ya fue registrada',
                 });
             }
         }

@@ -1,8 +1,9 @@
 ﻿using AltoChicamaSystem.Models;
 using AltoChicamaSystem.Data;
 using System.Data;
-using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 using System;
+using System.Collections.Generic;
 
 namespace AltoChicamaSystem.Data.Documento
 {
@@ -14,24 +15,24 @@ namespace AltoChicamaSystem.Data.Documento
         {
             string rpta = "1";
             string msg = "Error al Registrar";
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand
                 {
-                    Connection = sqlCon,
+                    Connection = mySqlCon,
                     CommandText = "Documento_reg",
                     CommandType = CommandType.StoredProcedure
                 };
-                sqlCmd.Parameters.AddWithValue("@documento_pdf", cmDocumento.documento_pdf);
-                sqlCmd.Parameters.AddWithValue("@empresa_id", cmDocumento.empresa_id);
-                sqlCmd.Parameters.AddWithValue("@documento_status", cmDocumento.documento_status);
-                sqlCmd.Parameters.AddWithValue("@documento_numero", cmDocumento.documento_numero);
-                sqlCmd.Parameters.AddWithValue("@guia_id", cmDocumento.guia_id);
+                mySqlCmd.Parameters.AddWithValue("p_documento_pdf", cmDocumento.documento_pdf);
+                mySqlCmd.Parameters.AddWithValue("p_empresa_id", cmDocumento.empresa_id);
+                mySqlCmd.Parameters.AddWithValue("p_documento_status", cmDocumento.documento_status);
+                mySqlCmd.Parameters.AddWithValue("p_documento_numero", cmDocumento.documento_numero);
+                mySqlCmd.Parameters.AddWithValue("p_guia_id", cmDocumento.guia_id);
 
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
                 if (sdr.Read())
                 {
                     rpta = sdr["Rpta"].ToString();
@@ -44,9 +45,9 @@ namespace AltoChicamaSystem.Data.Documento
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg);
@@ -55,20 +56,20 @@ namespace AltoChicamaSystem.Data.Documento
         public CMDocumento ObtenerDocumentoPorId(int documentoId, string bandera)
         {
             CMDocumento documento = null;
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand
                 {
-                    Connection = sqlCon,
+                    Connection = mySqlCon,
                     CommandText = "Documento_abrir",
                     CommandType = CommandType.StoredProcedure
                 };
-                sqlCmd.Parameters.AddWithValue("@DocumentoID", documentoId);
+                mySqlCmd.Parameters.AddWithValue("p_DocumentoID", documentoId);
 
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
                 if (sdr.Read())
                 {
                     documento = new CMDocumento
@@ -84,9 +85,9 @@ namespace AltoChicamaSystem.Data.Documento
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return documento;
@@ -96,19 +97,19 @@ namespace AltoChicamaSystem.Data.Documento
         {
             List<DocumentoResult> lst = new List<DocumentoResult>();
             DocumentoResult documento = new DocumentoResult();
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             string rpta = "";
             string msg = "";
             int count = 0;
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Documento_List";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Documento_List";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
 
                 while (sdr.Read())
                 {
@@ -140,9 +141,9 @@ namespace AltoChicamaSystem.Data.Documento
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg, lst);
@@ -152,20 +153,20 @@ namespace AltoChicamaSystem.Data.Documento
         {
             string rpta = "1";  // Valor por defecto en caso de error
             string msg = "Error al Eliminar";
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand
                 {
-                    Connection = sqlCon,
-                    CommandText = "Documento_delate",
+                    Connection = mySqlCon,
+                    CommandText = "Documento_delete",
                     CommandType = CommandType.StoredProcedure
                 };
-                sqlCmd.Parameters.AddWithValue("@documento_id", documentoId);
+                mySqlCmd.Parameters.AddWithValue("p_documento_id", documentoId);
 
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
                 if (sdr.Read())
                 {
                     rpta = sdr["Rpta"].ToString();
@@ -178,36 +179,33 @@ namespace AltoChicamaSystem.Data.Documento
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg);
         }
-
-        
 
         public (decimal, string) ObtenerDeudaTransportista(int transportista_id, string bandera)
         {
             decimal deudaEmpresa = 0; // Valor por defecto en caso de error o no resultados
             string nombreTransportista = string.Empty;
 
-            using (SqlConnection sqlCon = new SqlConnection(con.obtenerDatosConexion(bandera)))
+            using (MySqlConnection mySqlCon = new MySqlConnection(con.obtenerDatosConexion(bandera)))
             {
                 try
                 {
-                    sqlCon.Open();
-                    using (SqlCommand sqlCmd = new SqlCommand("Sumar_Deudas_Transportista", sqlCon))
+                    mySqlCon.Open();
+                    using (MySqlCommand mySqlCmd = new MySqlCommand("Sumar_Deudas_Transportista", mySqlCon))
                     {
-                        sqlCmd.CommandType = CommandType.StoredProcedure;
-                        sqlCmd.Parameters.AddWithValue("@transportista_id", transportista_id);
+                        mySqlCmd.CommandType = CommandType.StoredProcedure;
+                        mySqlCmd.Parameters.AddWithValue("p_transportista_id", transportista_id);
 
-                        using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                        using (MySqlDataReader sdr = mySqlCmd.ExecuteReader())
                         {
                             if (sdr.Read())
                             {
-                                // Lee el valor total_deuda y transportista_nombre
                                 if (sdr["total_deuda"] != DBNull.Value)
                                 {
                                     deudaEmpresa = Convert.ToDecimal(sdr["total_deuda"]);
@@ -222,32 +220,29 @@ namespace AltoChicamaSystem.Data.Documento
                 }
                 catch (Exception ex)
                 {
-                    // Manejo de errores
                     Console.WriteLine("Error al obtener la deuda: " + ex.Message);
                 }
             }
             return (deudaEmpresa, nombreTransportista);
         }
 
-
         public decimal ObtenerDeudaTotalTransportistas(string bandera)
         {
             decimal totalDeuda = 0; // Valor por defecto en caso de error o no resultados
 
-            using (SqlConnection sqlCon = new SqlConnection(con.obtenerDatosConexion(bandera)))
+            using (MySqlConnection mySqlCon = new MySqlConnection(con.obtenerDatosConexion(bandera)))
             {
                 try
                 {
-                    sqlCon.Open();
-                    using (SqlCommand sqlCmd = new SqlCommand("Sumar_Total_Deudas_Transportistas", sqlCon))
+                    mySqlCon.Open();
+                    using (MySqlCommand mySqlCmd = new MySqlCommand("Sumar_Total_Deudas_Transportistas", mySqlCon))
                     {
-                        sqlCmd.CommandType = CommandType.StoredProcedure;
+                        mySqlCmd.CommandType = CommandType.StoredProcedure;
 
-                        using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                        using (MySqlDataReader sdr = mySqlCmd.ExecuteReader())
                         {
                             if (sdr.Read())
                             {
-                                // Lee el total de deuda
                                 if (sdr["total_deuda"] != DBNull.Value)
                                 {
                                     totalDeuda = Convert.ToDecimal(sdr["total_deuda"]);
@@ -258,7 +253,6 @@ namespace AltoChicamaSystem.Data.Documento
                 }
                 catch (Exception ex)
                 {
-                    // Manejo de errores
                     Console.WriteLine("Error al obtener la suma total de deudas: " + ex.Message);
                 }
             }
@@ -269,20 +263,19 @@ namespace AltoChicamaSystem.Data.Documento
         {
             decimal totalDeuda = 0; // Valor por defecto en caso de error o no resultados
 
-            using (SqlConnection sqlCon = new SqlConnection(con.obtenerDatosConexion(bandera)))
+            using (MySqlConnection mySqlCon = new MySqlConnection(con.obtenerDatosConexion(bandera)))
             {
                 try
                 {
-                    sqlCon.Open();
-                    using (SqlCommand sqlCmd = new SqlCommand("Sumar_Total_Ganancias_Transportistas", sqlCon))
+                    mySqlCon.Open();
+                    using (MySqlCommand mySqlCmd = new MySqlCommand("Sumar_Total_Ganancias_Transportistas", mySqlCon))
                     {
-                        sqlCmd.CommandType = CommandType.StoredProcedure;
+                        mySqlCmd.CommandType = CommandType.StoredProcedure;
 
-                        using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                        using (MySqlDataReader sdr = mySqlCmd.ExecuteReader())
                         {
                             if (sdr.Read())
                             {
-                                // Lee el total de deuda
                                 if (sdr["total_deuda"] != DBNull.Value)
                                 {
                                     totalDeuda = Convert.ToDecimal(sdr["total_deuda"]);
@@ -293,7 +286,6 @@ namespace AltoChicamaSystem.Data.Documento
                 }
                 catch (Exception ex)
                 {
-                    // Manejo de errores
                     Console.WriteLine("Error al obtener la suma total de deudas: " + ex.Message);
                 }
             }
@@ -304,21 +296,21 @@ namespace AltoChicamaSystem.Data.Documento
         {
             List<DocumentoResult> lst = new List<DocumentoResult>();
             DocumentoResult documento = new DocumentoResult();
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             string rpta = "";
             string msg = "";
             int count = 0;
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Documento_List_Empresa";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                sqlCmd.Parameters.AddWithValue("@empresa_id", empresa_id);
-                sqlCmd.Parameters.AddWithValue("@estado", (object)estado ?? DBNull.Value);
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Documento_List_Empresa";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCmd.Parameters.AddWithValue("p_empresa_id", empresa_id);
+                mySqlCmd.Parameters.AddWithValue("p_estado", (object)estado ?? DBNull.Value);
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
 
                 while (sdr.Read())
                 {
@@ -350,9 +342,9 @@ namespace AltoChicamaSystem.Data.Documento
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg, lst);
@@ -362,20 +354,20 @@ namespace AltoChicamaSystem.Data.Documento
         {
             List<DocumentoResult> lst = new List<DocumentoResult>();
             DocumentoResult documento = new DocumentoResult();
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             string rpta = "";
             string msg = "";
             int count = 0;
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Documento_List_Transportista";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                sqlCmd.Parameters.AddWithValue("@transportista_id", transportista_id);
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Documento_List_Transportista";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCmd.Parameters.AddWithValue("p_transportista_id", transportista_id);
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
 
                 while (sdr.Read())
                 {
@@ -407,9 +399,9 @@ namespace AltoChicamaSystem.Data.Documento
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg, lst);
@@ -419,20 +411,19 @@ namespace AltoChicamaSystem.Data.Documento
         {
             int mayorDocumentoID = 0; // Valor por defecto en caso de error o no resultados
 
-            using (SqlConnection sqlCon = new SqlConnection(con.obtenerDatosConexion(bandera)))
+            using (MySqlConnection mySqlCon = new MySqlConnection(con.obtenerDatosConexion(bandera)))
             {
                 try
                 {
-                    sqlCon.Open();
-                    using (SqlCommand sqlCmd = new SqlCommand("ObtenerMayorDocumentoID", sqlCon))
+                    mySqlCon.Open();
+                    using (MySqlCommand mySqlCmd = new MySqlCommand("ObtenerMayorDocumentoID", mySqlCon))
                     {
-                        sqlCmd.CommandType = CommandType.StoredProcedure;
+                        mySqlCmd.CommandType = CommandType.StoredProcedure;
 
-                        using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                        using (MySqlDataReader sdr = mySqlCmd.ExecuteReader())
                         {
                             if (sdr.Read())
                             {
-                                // Lee el valor máximo del documento_id
                                 if (sdr["MayorDocumentoID"] != DBNull.Value)
                                 {
                                     mayorDocumentoID = Convert.ToInt32(sdr["MayorDocumentoID"]);
@@ -443,7 +434,6 @@ namespace AltoChicamaSystem.Data.Documento
                 }
                 catch (Exception ex)
                 {
-                    // Manejo de errores: considera registrar el error para fines de depuración
                     Console.WriteLine("Error al obtener el mayor documento ID: " + ex.Message);
                 }
             }
@@ -453,16 +443,16 @@ namespace AltoChicamaSystem.Data.Documento
         public int ObtenerNewNumCertificado(string bandera)
         {
             int numCertificado = 0;
-            using (SqlConnection sqlCon = new SqlConnection(con.obtenerDatosConexion(bandera)))
+            using (MySqlConnection mySqlCon = new MySqlConnection(con.obtenerDatosConexion(bandera)))
             {
                 try
                 {
-                    sqlCon.Open();
-                    using (SqlCommand sqlCmd = new SqlCommand("ObtenerMayorDocumentoNumero", sqlCon))
+                    mySqlCon.Open();
+                    using (MySqlCommand mySqlCmd = new MySqlCommand("ObtenerMayorDocumentoNumero", mySqlCon))
                     {
-                        sqlCmd.CommandType = CommandType.StoredProcedure;
+                        mySqlCmd.CommandType = CommandType.StoredProcedure;
 
-                        using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                        using (MySqlDataReader sdr = mySqlCmd.ExecuteReader())
                         {
                             if (sdr.Read())
                             {
@@ -476,7 +466,6 @@ namespace AltoChicamaSystem.Data.Documento
                 }
                 catch (Exception ex)
                 {
-                    // Manejo de errores: considera registrar el error para fines de depuración
                     Console.WriteLine("Error al obtener el mayor documento ID: " + ex.Message);
                 }
             }
@@ -487,20 +476,19 @@ namespace AltoChicamaSystem.Data.Documento
         {
             int MaxDocumentoNumero = 0; // Valor por defecto en caso de error o no resultados
 
-            using (SqlConnection sqlCon = new SqlConnection(con.obtenerDatosConexion(bandera)))
+            using (MySqlConnection mySqlCon = new MySqlConnection(con.obtenerDatosConexion(bandera)))
             {
                 try
                 {
-                    sqlCon.Open();
-                    using (SqlCommand sqlCmd = new SqlCommand("Documento_MaxNumero", sqlCon))
+                    mySqlCon.Open();
+                    using (MySqlCommand mySqlCmd = new MySqlCommand("Documento_MaxNumero", mySqlCon))
                     {
-                        sqlCmd.CommandType = CommandType.StoredProcedure;
+                        mySqlCmd.CommandType = CommandType.StoredProcedure;
 
-                        using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                        using (MySqlDataReader sdr = mySqlCmd.ExecuteReader())
                         {
                             if (sdr.Read())
                             {
-                                // Lee el valor máximo del documento_id
                                 if (sdr["MaxDocumentoNumero"] != DBNull.Value)
                                 {
                                     MaxDocumentoNumero = Convert.ToInt32(sdr["MaxDocumentoNumero"]);
@@ -511,16 +499,10 @@ namespace AltoChicamaSystem.Data.Documento
                 }
                 catch (Exception ex)
                 {
-                    // Manejo de errores: considera registrar el error para fines de depuración
                     Console.WriteLine("Error al obtener el numero de documento: " + ex.Message);
                 }
             }
             return MaxDocumentoNumero;
         }
-
-
-
-
-
     }
 }

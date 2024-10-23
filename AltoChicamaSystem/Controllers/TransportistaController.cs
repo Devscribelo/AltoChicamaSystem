@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace AltoChicamaSystem.Controllers
 {
-    [Authorize(Roles = "Admin, User")]
+    [Authorize(Roles = "Admin")]
     public class TransportistaController : Controller
     {
         public ActionResult Index()

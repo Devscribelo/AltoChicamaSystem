@@ -1,5 +1,6 @@
 ﻿using AltoChicamaSystem.Models;
 using AltoChicamaSystem.Negocio;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace AltoChicamaSystem.Controllers
 {
     public class ValorizacionController : Controller
     {
+        [Authorize(Roles = "Admin")]
         // GET: ValorizacionController
         public ActionResult Index()
         {

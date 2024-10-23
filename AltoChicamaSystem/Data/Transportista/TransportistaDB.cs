@@ -1,8 +1,9 @@
 ﻿using AltoChicamaSystem.Models;
 using AltoChicamaSystem.Data;
 using System.Data;
-using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 using System;
+using System.Collections.Generic;
 
 namespace AltoChicamaSystem.Data.Transportista
 {
@@ -14,23 +15,23 @@ namespace AltoChicamaSystem.Data.Transportista
         {
             string rpta = "1";  // Valor por defecto en caso de error
             string msg = "Error al Registrar";
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand
                 {
-                    Connection = sqlCon,
+                    Connection = mySqlCon,
                     CommandText = "Transportista_reg",
                     CommandType = CommandType.StoredProcedure
                 };
-                sqlCmd.Parameters.AddWithValue("@transportista_ruc", cmTransportista.transportista_ruc.Trim());
-                sqlCmd.Parameters.AddWithValue("@transportista_nombre", cmTransportista.transportista_nombre.Trim());
-                sqlCmd.Parameters.AddWithValue("@transportista_user", cmTransportista.transportista_user.Trim());
-                sqlCmd.Parameters.AddWithValue("@transportista_password", cmTransportista.transportista_password.Trim());
+                mySqlCmd.Parameters.AddWithValue("p_transportista_ruc", cmTransportista.transportista_ruc.Trim());
+                mySqlCmd.Parameters.AddWithValue("p_transportista_nombre", cmTransportista.transportista_nombre.Trim());
+                mySqlCmd.Parameters.AddWithValue("p_transportista_user", cmTransportista.transportista_user.Trim());
+                mySqlCmd.Parameters.AddWithValue("p_transportista_password", cmTransportista.transportista_password.Trim());
 
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
                 if (sdr.Read())
                 {
                     rpta = sdr["Rpta"].ToString();
@@ -43,33 +44,34 @@ namespace AltoChicamaSystem.Data.Transportista
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg);
         }
+
         public Tuple<string, string> modTransportista(CMTransportista cmTransportista, string bandera)
         {
             string rpta = "";
             string msg = "";
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Transportista_mod";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                sqlCmd.Parameters.AddWithValue("@transportista_id", cmTransportista.transportista_id);
-                sqlCmd.Parameters.AddWithValue("@transportista_nombre", cmTransportista.transportista_nombre.Trim());
-                sqlCmd.Parameters.AddWithValue("@transportista_ruc", cmTransportista.transportista_ruc.Trim());
-                sqlCmd.Parameters.AddWithValue("@transportista_user", cmTransportista.transportista_user.Trim());
-                sqlCmd.Parameters.AddWithValue("@transportista_password", cmTransportista.transportista_password.Trim());
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Transportista_mod";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCmd.Parameters.AddWithValue("p_transportista_id", cmTransportista.transportista_id);
+                mySqlCmd.Parameters.AddWithValue("p_transportista_nombre", cmTransportista.transportista_nombre.Trim());
+                mySqlCmd.Parameters.AddWithValue("p_transportista_ruc", cmTransportista.transportista_ruc.Trim());
+                mySqlCmd.Parameters.AddWithValue("p_transportista_user", cmTransportista.transportista_user.Trim());
+                mySqlCmd.Parameters.AddWithValue("p_transportista_password", cmTransportista.transportista_password.Trim());
 
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
                 if (sdr.Read())
                 {
                     rpta = sdr["Rpta"].ToString();
@@ -82,28 +84,29 @@ namespace AltoChicamaSystem.Data.Transportista
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg);
         }
+
         public Tuple<string, string, List<CMTransportista>> listaTransportista(string bandera)
         {
             List<CMTransportista> lst = new List<CMTransportista>();
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             string rpta = "";
             string msg = "";
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Transportista_list";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Transportista_list";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                using (MySqlDataReader sdr = mySqlCmd.ExecuteReader())
                 {
                     if (sdr.Read())
                     {
@@ -136,30 +139,31 @@ namespace AltoChicamaSystem.Data.Transportista
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg, lst);
         }
+
         public Tuple<string, string, List<CMTransportista>> TransportistaSelect(string bandera)
         {
             List<CMTransportista> lst = new List<CMTransportista>();
             CMTransportista transportistaselect = new CMTransportista();
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             string rpta = "";
             string msg = "";
             int count = 0;
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Transportista_list";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Transportista_list";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
 
                 while (sdr.Read())
                 {
@@ -180,7 +184,6 @@ namespace AltoChicamaSystem.Data.Transportista
                         transportistaselect.transportista_password = sdr["transportista_password"].ToString().Trim();
                         lst.Add(transportistaselect);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -190,9 +193,9 @@ namespace AltoChicamaSystem.Data.Transportista
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg, lst);
@@ -202,18 +205,18 @@ namespace AltoChicamaSystem.Data.Transportista
         {
             string rpta = "";
             string msg = "";
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Transportista_delete"; // Nombre del procedimiento almacenado para eliminación
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                sqlCmd.Parameters.AddWithValue("@transportista_id", transportista_id); // Aceptar int
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Transportista_delete"; // Nombre del procedimiento almacenado para eliminación
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCmd.Parameters.AddWithValue("p_transportista_id", transportista_id); // Aceptar int
 
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
                 if (sdr.Read())
                 {
                     rpta = sdr["Rpta"].ToString();
@@ -227,9 +230,9 @@ namespace AltoChicamaSystem.Data.Transportista
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg);
@@ -239,20 +242,20 @@ namespace AltoChicamaSystem.Data.Transportista
         {
             List<TransportistaVista> lst = new List<TransportistaVista>();
             TransportistaVista transportistaselect = new TransportistaVista();
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             string rpta = "";
             string msg = "";
             int count = 0;
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Guia_Vista_Transportista";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                sqlCmd.Parameters.AddWithValue("@transportista_id", transportista_id);
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Guia_Vista_Transportista";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCmd.Parameters.AddWithValue("p_transportista_id", transportista_id);
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
 
                 while (sdr.Read())
                 {
@@ -279,7 +282,6 @@ namespace AltoChicamaSystem.Data.Transportista
                         transportistaselect.documento_id = Convert.ToInt32(sdr["documento_id"]);
                         lst.Add(transportistaselect);
                     }
-
                 }
             }
             catch (Exception ex)
@@ -289,14 +291,12 @@ namespace AltoChicamaSystem.Data.Transportista
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg, lst);
         }
     }
-
-    
 }

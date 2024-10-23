@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AltoChicamaSystem.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class GeneradorController : Controller
     {
         // GET: GeneradorController

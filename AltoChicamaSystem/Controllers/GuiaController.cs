@@ -1,10 +1,12 @@
 ﻿using AltoChicamaSystem.Models;
 using AltoChicamaSystem.Negocio;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AltoChicamaSystem.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class GuiaController : Controller
     {
         public ActionResult Index()

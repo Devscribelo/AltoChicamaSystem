@@ -1,7 +1,7 @@
 ﻿using AltoChicamaSystem.Models;
 using AltoChicamaSystem.Data;
 using System.Data;
-using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 
 namespace AltoChicamaSystem.Data.Usuario
 {
@@ -11,19 +11,19 @@ namespace AltoChicamaSystem.Data.Usuario
         public Tuple<string, string, List<CMUsuario>> listarUsuario(string bandera)
         {
             List<CMUsuario> lst = new List<CMUsuario>();
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             string rpta = "";
             string msg = "";
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Usuario_list";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Usuario_list";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
 
-                using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                using (MySqlDataReader sdr = mySqlCmd.ExecuteReader())
                 {
                     if (sdr.Read())
                     {
@@ -54,31 +54,31 @@ namespace AltoChicamaSystem.Data.Usuario
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg, lst);
         }
-        public Tuple<string,string> regUsuario(CMUsuario cmUsuario, string bandera)
+        public Tuple<string, string> regUsuario(CMUsuario cmUsuario, string bandera)
         {
             string rpta = "";
             string msg = "";
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Usuario_Reg";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                sqlCmd.Parameters.AddWithValue("@usuario_user", cmUsuario.usuario_user.Trim());
-                sqlCmd.Parameters.AddWithValue("@usuario_password", cmUsuario.usuario_password.Trim());
-                sqlCmd.Parameters.AddWithValue("@empresa_id", Convert.ToInt32(cmUsuario.empresa_id));
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Usuario_Reg";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCmd.Parameters.AddWithValue("p_usuario_user", cmUsuario.usuario_user.Trim());
+                mySqlCmd.Parameters.AddWithValue("p_usuario_password", cmUsuario.usuario_password.Trim());
+                mySqlCmd.Parameters.AddWithValue("p_empresa_id", Convert.ToInt32(cmUsuario.empresa_id));
 
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
                 if (sdr.Read())
                 {
                     rpta = sdr["Rpta"].ToString();
@@ -89,11 +89,11 @@ namespace AltoChicamaSystem.Data.Usuario
             {
                 msg = ex.Message;
             }
-            finally 
-            { 
-                if (sqlCon.State == ConnectionState.Open)
+            finally
+            {
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg);

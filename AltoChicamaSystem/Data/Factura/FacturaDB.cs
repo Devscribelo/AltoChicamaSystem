@@ -1,8 +1,9 @@
 ﻿using AltoChicamaSystem.Models;
 using AltoChicamaSystem.Data;
 using System.Data;
-using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 using System;
+using System.Collections.Generic;
 
 namespace AltoChicamaSystem.Data.Factura
 {
@@ -10,33 +11,30 @@ namespace AltoChicamaSystem.Data.Factura
     {
         private ConexionDB con = new ConexionDB();
 
-
         public Tuple<string, string, decimal> listarGananciasTransportistas(string bandera)
         {
-            string rpta = "0"; // Inicializar rpta en "0"
+            string rpta = "0";
             string msg = "";
             decimal totalGanancias = 0;
 
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Ganancias_Transportistas_Factura";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Ganancias_Transportistas_Factura";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
 
-                using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                using (MySqlDataReader sdr = mySqlCmd.ExecuteReader())
                 {
-                    // Leer la primera fila para obtener Rpta y Msg
                     if (sdr.Read())
                     {
                         rpta = sdr["Rpta"].ToString();
                         msg = sdr["Msg"].ToString();
                     }
 
-                    // Cambiar a la siguiente tabla de resultados
                     if (sdr.NextResult() && rpta == "0" && sdr.Read())
                     {
                         totalGanancias = Convert.ToDecimal(sdr["total_ganancias"]);
@@ -50,43 +48,39 @@ namespace AltoChicamaSystem.Data.Factura
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
 
             return Tuple.Create(rpta, msg, totalGanancias);
         }
 
-
-
         public Tuple<string, string, decimal> listarDeudasTransportistas(string bandera)
         {
-            string rpta = "0"; // Inicializar rpta en "0"
+            string rpta = "0";
             string msg = "";
             decimal totalDeudas = 0;
 
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Deudas_Transportistas_Factura";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Deudas_Transportistas_Factura";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
 
-                using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                using (MySqlDataReader sdr = mySqlCmd.ExecuteReader())
                 {
-                    // Leer la primera fila para obtener Rpta y Msg
                     if (sdr.Read())
                     {
                         rpta = sdr["Rpta"].ToString();
                         msg = sdr["Msg"].ToString();
                     }
 
-                    // Cambiar a la siguiente tabla de resultados
                     if (sdr.NextResult() && rpta == "0" && sdr.Read())
                     {
                         totalDeudas = Convert.ToDecimal(sdr["total_deudas"]);
@@ -100,9 +94,9 @@ namespace AltoChicamaSystem.Data.Factura
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
 
@@ -111,33 +105,30 @@ namespace AltoChicamaSystem.Data.Factura
 
         public Tuple<string, string, decimal> listarGananciasTransportistasIndividual(int transportista_id, string bandera)
         {
-            string rpta = "0"; // Inicializar rpta en "0"
+            string rpta = "0";
             string msg = "";
             decimal totalGanancias = 0;
 
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Ganancias_Transportistas_Factura_Individual";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Ganancias_Transportistas_Factura_Individual";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
 
-                // Añadir parámetro transportistaId
-                sqlCmd.Parameters.AddWithValue("@transportista_id", transportista_id);
+                mySqlCmd.Parameters.AddWithValue("p_transportista_id", transportista_id);
 
-                using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                using (MySqlDataReader sdr = mySqlCmd.ExecuteReader())
                 {
-                    // Leer la primera fila para obtener Rpta y Msg
                     if (sdr.Read())
                     {
                         rpta = sdr["Rpta"].ToString();
                         msg = sdr["Msg"].ToString();
                     }
 
-                    // Cambiar a la siguiente tabla de resultados
                     if (sdr.NextResult() && rpta == "0" && sdr.Read())
                     {
                         totalGanancias = Convert.ToDecimal(sdr["total_ganancias"]);
@@ -151,9 +142,9 @@ namespace AltoChicamaSystem.Data.Factura
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
 
@@ -162,33 +153,30 @@ namespace AltoChicamaSystem.Data.Factura
 
         public Tuple<string, string, decimal> listarDeudasTransportistasIndividual(int transportista_id, string bandera)
         {
-            string rpta = "0"; // Inicializar rpta en "0"
+            string rpta = "0";
             string msg = "";
             decimal totalDeudas = 0;
 
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Perdidas_Transportistas_Factura_Individual";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Perdidas_Transportistas_Factura_Individual";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
 
-                // Añadir parámetro transportistaId
-                sqlCmd.Parameters.AddWithValue("@transportista_id", transportista_id);
+                mySqlCmd.Parameters.AddWithValue("p_transportista_id", transportista_id);
 
-                using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                using (MySqlDataReader sdr = mySqlCmd.ExecuteReader())
                 {
-                    // Leer la primera fila para obtener Rpta y Msg
                     if (sdr.Read())
                     {
                         rpta = sdr["Rpta"].ToString();
                         msg = sdr["Msg"].ToString();
                     }
 
-                    // Cambiar a la siguiente tabla de resultados
                     if (sdr.NextResult() && rpta == "0" && sdr.Read())
                     {
                         totalDeudas = Convert.ToDecimal(sdr["total_perdidas"]);
@@ -202,9 +190,9 @@ namespace AltoChicamaSystem.Data.Factura
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
 
@@ -215,23 +203,23 @@ namespace AltoChicamaSystem.Data.Factura
         {
             string rpta = "";
             string msg = "";
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Factura_reg";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                sqlCmd.Parameters.AddWithValue("@factura_monto", cmFactura.factura_monto);
-                sqlCmd.Parameters.AddWithValue("@num_factura", cmFactura.num_factura.Trim());
-                sqlCmd.Parameters.AddWithValue("@factura_status", cmFactura.factura_status);
-                sqlCmd.Parameters.AddWithValue("@transportista_id", cmFactura.transportista_id);
-                sqlCmd.Parameters.AddWithValue("@guias_ids", cmFactura.guias_ids.Trim());
-                sqlCmd.Parameters.AddWithValue("@factura_fecha_pago",cmFactura.factura_fecha_pago.Trim());
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Factura_reg";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCmd.Parameters.AddWithValue("p_factura_monto", cmFactura.factura_monto);
+                mySqlCmd.Parameters.AddWithValue("p_num_factura", cmFactura.num_factura.Trim());
+                mySqlCmd.Parameters.AddWithValue("p_factura_status", cmFactura.factura_status);
+                mySqlCmd.Parameters.AddWithValue("p_transportista_id", cmFactura.transportista_id);
+                mySqlCmd.Parameters.AddWithValue("p_guias_ids", cmFactura.guias_ids.Trim());
+                mySqlCmd.Parameters.AddWithValue("p_factura_fecha_pago", cmFactura.factura_fecha_pago.Trim());
 
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
                 if (sdr.Read())
                 {
                     rpta = sdr["Rpta"].ToString();
@@ -244,9 +232,9 @@ namespace AltoChicamaSystem.Data.Factura
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg);
@@ -255,18 +243,18 @@ namespace AltoChicamaSystem.Data.Factura
         public Tuple<string, string, List<CMFactura>> listarFactura(string bandera)
         {
             List<CMFactura> lst = new List<CMFactura>();
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             string rpta = "";
             string msg = "";
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Factura_list";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Factura_list";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                using (MySqlDataReader sdr = mySqlCmd.ExecuteReader())
                 {
                     if (sdr.Read())
                     {
@@ -302,9 +290,9 @@ namespace AltoChicamaSystem.Data.Factura
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg, lst);
@@ -313,23 +301,22 @@ namespace AltoChicamaSystem.Data.Factura
         public Tuple<string, string, List<CMFactura>> listarFacturaTransportista(int transportista_id, int estado, string bandera)
         {
             List<CMFactura> lst = new List<CMFactura>();
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             string rpta = "";
             string msg = "";
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Factura_List_Transportista";  // Asumiendo que este es el nombre del SP
-                sqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Factura_List_Transportista";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
 
-                // Añadir parámetros
-                sqlCmd.Parameters.AddWithValue("@transportista_id", Convert.ToInt32(transportista_id));
-                sqlCmd.Parameters.AddWithValue("@estado", Convert.ToInt32(estado));
+                mySqlCmd.Parameters.AddWithValue("p_transportista_id", transportista_id);
+                mySqlCmd.Parameters.AddWithValue("p_estado", estado);
 
-                using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                using (MySqlDataReader sdr = mySqlCmd.ExecuteReader())
                 {
                     if (sdr.Read())
                     {
@@ -355,9 +342,9 @@ namespace AltoChicamaSystem.Data.Factura
                             lst.Add(factura);
                         }
                     }
-                    else if (rpta == "1") // Si no hay datos
+                    else if (rpta == "1")
                     {
-                        msg = "No hay datos para mostrar"; // Mensaje personalizado
+                        msg = "No hay datos para mostrar";
                     }
                 }
             }
@@ -369,35 +356,34 @@ namespace AltoChicamaSystem.Data.Factura
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg, lst);
         }
 
-
         public Tuple<string, string> modFactura(CMFactura cmFactura, string bandera)
         {
             string rpta = "";
             string msg = "";
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Factura_mod";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                sqlCmd.Parameters.AddWithValue("@id_factura", cmFactura.id_factura);
-                sqlCmd.Parameters.AddWithValue("@factura_monto", cmFactura.factura_monto);
-                sqlCmd.Parameters.AddWithValue("@num_factura", cmFactura.num_factura.Trim());
-                sqlCmd.Parameters.AddWithValue("@factura_status", cmFactura.factura_status);
-                sqlCmd.Parameters.AddWithValue("@transportista_id", cmFactura.transportista_id);
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Factura_mod";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCmd.Parameters.AddWithValue("p_id_factura", cmFactura.id_factura);
+                mySqlCmd.Parameters.AddWithValue("p_factura_monto", cmFactura.factura_monto);
+                mySqlCmd.Parameters.AddWithValue("p_num_factura", cmFactura.num_factura.Trim());
+                mySqlCmd.Parameters.AddWithValue("p_factura_status", cmFactura.factura_status);
+                mySqlCmd.Parameters.AddWithValue("p_transportista_id", cmFactura.transportista_id);
 
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
                 if (sdr.Read())
                 {
                     rpta = sdr["Rpta"].ToString();
@@ -410,9 +396,9 @@ namespace AltoChicamaSystem.Data.Factura
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg);
@@ -422,18 +408,18 @@ namespace AltoChicamaSystem.Data.Factura
         {
             string rpta = "";
             string msg = "";
-            SqlConnection sqlCon = new SqlConnection();
+            MySqlConnection mySqlCon = new MySqlConnection();
             try
             {
-                sqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
-                sqlCon.Open();
-                SqlCommand sqlCmd = new SqlCommand();
-                sqlCmd.Connection = sqlCon;
-                sqlCmd.CommandText = "Factura_delete";
-                sqlCmd.CommandType = CommandType.StoredProcedure;
-                sqlCmd.Parameters.AddWithValue("@id_factura", id_factura);
+                mySqlCon.ConnectionString = con.obtenerDatosConexion(bandera);
+                mySqlCon.Open();
+                MySqlCommand mySqlCmd = new MySqlCommand();
+                mySqlCmd.Connection = mySqlCon;
+                mySqlCmd.CommandText = "Factura_delete";
+                mySqlCmd.CommandType = CommandType.StoredProcedure;
+                mySqlCmd.Parameters.AddWithValue("p_id_factura", id_factura);
 
-                SqlDataReader sdr = sqlCmd.ExecuteReader();
+                MySqlDataReader sdr = mySqlCmd.ExecuteReader();
                 if (sdr.Read())
                 {
                     rpta = sdr["Rpta"].ToString();
@@ -446,9 +432,9 @@ namespace AltoChicamaSystem.Data.Factura
             }
             finally
             {
-                if (sqlCon.State == ConnectionState.Open)
+                if (mySqlCon.State == ConnectionState.Open)
                 {
-                    sqlCon.Close();
+                    mySqlCon.Close();
                 }
             }
             return Tuple.Create(rpta, msg);
@@ -461,15 +447,15 @@ namespace AltoChicamaSystem.Data.Factura
 
             try
             {
-                using (SqlConnection sqlCon = new SqlConnection(con.obtenerDatosConexion(bandera)))
+                using (MySqlConnection mySqlCon = new MySqlConnection(con.obtenerDatosConexion(bandera)))
                 {
-                    sqlCon.Open();
-                    using (SqlCommand sqlCmd = new SqlCommand("Factura_alter_status", sqlCon))
+                    mySqlCon.Open();
+                    using (MySqlCommand mySqlCmd = new MySqlCommand("Factura_alter_status", mySqlCon))
                     {
-                        sqlCmd.CommandType = CommandType.StoredProcedure;
-                        sqlCmd.Parameters.AddWithValue("@id_factura", id_factura);
+                        mySqlCmd.CommandType = CommandType.StoredProcedure;
+                        mySqlCmd.Parameters.AddWithValue("p_id_factura", id_factura);
 
-                        using (SqlDataReader sdr = sqlCmd.ExecuteReader())
+                        using (MySqlDataReader sdr = mySqlCmd.ExecuteReader())
                         {
                             if (sdr.Read())
                             {
@@ -482,7 +468,7 @@ namespace AltoChicamaSystem.Data.Factura
             }
             catch (Exception ex)
             {
-                rpta = "1"; // Indicar que hubo un error
+                rpta = "1";
                 msg = ex.Message;
             }
 
