@@ -424,9 +424,9 @@ namespace AltoChicamaSystem.Data.Documento
                         {
                             if (sdr.Read())
                             {
-                                if (sdr["MayorDocumentoID"] != DBNull.Value)
+                                if (sdr["UltimoDocumentoID"] != DBNull.Value)
                                 {
-                                    mayorDocumentoID = Convert.ToInt32(sdr["MayorDocumentoID"]);
+                                    mayorDocumentoID = Convert.ToInt32(sdr["UltimoDocumentoID"]);
                                 }
                             }
                         }

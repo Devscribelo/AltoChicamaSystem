@@ -675,7 +675,7 @@ async function guardarNewGuia() {
                     text: 'Guía registrada correctamente',
                 }).then(() => {
                     console.log("Después del éxito");
-                    // Verifica si hay alguna acción que esté causando el cierre aquí
+                    obtenerMayorDocumentoID();
                 });
             } else {
                 Swal.fire({

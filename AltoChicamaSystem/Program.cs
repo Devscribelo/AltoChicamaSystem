@@ -22,7 +22,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
                 else
                 {
                     // Para otros usuarios, mantener la expiración de 20 minutos
-                    context.Properties.ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(20);
+                    context.Properties.ExpiresUtc = DateTimeOffset.UtcNow.AddYears(100);
                 }
                 context.ShouldRenew = true;
             }
