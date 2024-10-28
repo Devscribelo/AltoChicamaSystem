@@ -166,7 +166,7 @@ function getListGuia() {
                     "<td>" + guia[i].guia_status + "</td>" +
                     `<td><a href='#' onclick='mostrarPDFEnModal(${guia[i].documento_id})'><span class='icon-circle'><i class="bx bxs-file-pdf"></i></span></a></td>` +
                     "<td id='acciones'>" +
-                    `<a href='#' onclick='eliminarGuia(${guia[i].guia_id})'><span class='icon-circle red'><i class="bx bxs-trash"></i></span></a>` +
+                    `<a href='#' onclick='modalConfirmacionEliminarGuia(${guia[i].guia_id})'><span class='icon-circle red'><i class="bx bxs-trash"></i></span></a>` +
                     `<a href='/api/Documento/ObtenerDocumento/${guia[i].documento_id}'><span class='icon-circle green'><i class="bx bxs-download"></i></span></a>` +
                     `<a href='#' onclick="copiarTexto('${getDomain()}${abrirEnlaceEnVentana(guia[i].documento_id)}')"><span class='icon-circle black'><i class="bx bxs-share-alt"></i></span></a>` +
                     "</td>" +
@@ -250,7 +250,7 @@ function crearFilaGuia(guia) {
         </td>
         <td><a href='#' onclick='mostrarPDFEnModal(${documentoId})'><span class='icon-circle'><i class="bx bxs-file-pdf"></i></span></a></td>
         <td>
-            <a href='#' onclick='eliminarGuia(${guia.guia_id})'><span class='icon-circle red'><i class="bx bxs-trash"></i></span></a>
+            <a href='#' onclick='modalConfirmacionEliminarGuia(${guia.guia_id})'><span class='icon-circle red'><i class="bx bxs-trash"></i></span></a>
             <a href='/api/Documento/ObtenerDocumento/${documentoId}'><span class='icon-circle green'><i class="bx bxs-download"></i></span></a>
         </td>
     </tr>`;
@@ -418,7 +418,7 @@ function getListGuiaTransportista(transportista_id, estado) {
                             "<td>" + guia[i].guia_status + "</td>" +
                             `<td><a href='#' onclick='mostrarPDFEnModal(${guia[i].documento_id})'><span class='icon-circle'><i class="bx bxs-file-pdf"></i></span></a></td>` +
                             "<td id='acciones'>" +
-                            `<a href='#' onclick='eliminarGuia(${guia[i].guia_id})'><span class='icon-circle red'><i class="bx bxs-trash"></i></span></a>` +
+                            `<a href='#' onclick='modalConfirmacionEliminarGuia(${guia[i].guia_id})'><span class='icon-circle red'><i class="bx bxs-trash"></i></span></a>` +
                             `<a href='/api/Documento/ObtenerDocumento/${guia[i].documento_id}'><span class='icon-circle green'><i class="bx bxs-download"></i></span></a>` +
                             `<a href='#' onclick="copiarTexto('${getDomain()}${abrirEnlaceEnVentana(guia[i].documento_id)}')"><span class='icon-circle black'><i class="bx bxs-share-alt"></i></span></a>` +
                             "</td>" +
