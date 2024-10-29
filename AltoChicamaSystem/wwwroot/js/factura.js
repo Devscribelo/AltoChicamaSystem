@@ -183,7 +183,7 @@ function modalNuevaFactura() {
         TransportistaSelect2("#input_transportista_modal");
     });
 
-    $("form").off("submit").one("submit", function (event) {
+    $("form").off("submit").on("submit", function (event) {
         event.preventDefault();
         guardarNewFactura();
     });
@@ -220,6 +220,7 @@ function guardarNewFactura() {
     var dataPost = {
         factura_monto: $("#input_factura_monto").val(),
         num_factura: $("#input_factura_numfactura").val(),
+        factura_detraccion: $("#input_factura_detraccion").val(),
         factura_status: '0',
         transportista_id: $("#input_transportista_modal").val(),
         guias_ids: guias.getAttribute('data-id-guia'),
@@ -750,12 +751,16 @@ function getListFactura() {
                         "data-num_factura='" + dataFactura[i].num_factura + "'" +
                         "data-factura_status='" + dataFactura[i].factura_status + "'" +
                         "data-transportista_id='" + dataFactura[i].transportista_id + "'" +
+                        "data-factura_detraccion='" + dataFactura[i].factura_detraccion + "' " +
+                        "data-factura_monto_final='" + dataFactura[i].factura_monto_final + "' " +
                         "data-transportista_nombre='" + dataFactura[i].transportista_nombre + "'>" +
                         "<td>" + dataFactura[i].id_factura + "</td>" +
                         "<td>" + dataFactura[i].num_factura + "</td>" +
                         "<td>" + dataFactura[i].factura_fecha_pago + "</td>" +
                         "<td>" + dataFactura[i].transportista_nombre + "</td>" +
                         "<td>" + dataFactura[i].factura_monto + "</td>" +
+                        "<td>" + dataFactura[i].factura_detraccion + "</td>" +
+                        "<td>" + dataFactura[i].factura_monto_final + "</td>" +
                         "<td>" +
                         "<div class='form-check form-switch'>" +
                         `<input style='width: 46px; margin-top: 4px;' class='form-check-input status3' type='checkbox' id='flexSwitchCheckDefault${i}' ${dataFactura[i].factura_status === 'True' ? 'checked' : ''} data-factura_status='${dataFactura[i].id_factura}'>` +
@@ -1273,3 +1278,20 @@ $(document).ready(function () {
         allowClear: true
     });
 });
+
+
+function toggleDetraccionField() {
+    const select = document.getElementById("detraccion_select");
+    const input = document.getElementById("input_factura_detraccion");
+
+    if (select.value === "si") {
+        input.disabled = false; // Habilita el campo de entrada
+        input.value = ""; // Limpia el campo si se habilita
+    } else if (select.value === "no") {
+        input.disabled = true; // Desactiva el campo de entrada
+        input.value = "0"; // Asigna 0 si se selecciona "No"
+    } else {
+        input.disabled = true; // Desactiva el campo de entrada
+        input.value = ""; // Limpia el campo si no hay opción seleccionada
+    }
+}

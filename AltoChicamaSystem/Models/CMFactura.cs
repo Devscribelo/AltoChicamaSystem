@@ -11,6 +11,7 @@
         public int estado { get; set; }
         public string guias_ids { get; set; }
         public string factura_fecha_pago { get; set; }
-
+        public decimal factura_detraccion { get; set; }
+        public decimal factura_monto_final { get; set; }
     }
 }

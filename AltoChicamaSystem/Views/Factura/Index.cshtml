@@ -103,6 +103,8 @@
                                             <th>Fecha de Pago</th>
                                             <th>Transportista</th>
                                             <th>Monto</th>
+                                            <th>Detraccion</th>
+                                            <th>Deposito Total</th>
                                             <th style="width:65px;">Estado</th>
                                             <th>Acciones</th>
                                         </tr>
@@ -245,6 +247,31 @@
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Monto</span>
                                         <input type="text" class="form-control rounded-0 mt-1" id="input_factura_monto" required autocomplete="off"
                                                inputmode="decimal" placeholder="Ingrese el Monto" disabled>
+                                    </div>
+
+                                    <div class="container">
+                                        <div class="row">
+                                            <!-- Primer elemento ocupando 6 columnas -->
+                                            <div class="col-md-6">
+                                                <div class="input-group input-group-sm mb-3">
+                                                    <span class="input-group-text">¿Tiene detracción?</span>
+                                                    <select class="form-select" id="detraccion_select" style="padding:2% !important;" required onchange="toggleDetraccionField()">
+                                                        <option value="" disabled selected>Seleccione Opcion</option> <!-- Placeholder no seleccionable -->
+                                                        <option value="no">No</option>
+                                                        <option value="si">Sí</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <!-- Segundo elemento ocupando 6 columnas -->
+                                            <div class="col-md-6">
+                                                <div class="input-group input-group-sm mb-3">
+                                                    <span class="input-group-text">Detracción</span>
+                                                    <input type="text" class="form-control" id="input_factura_detraccion" autocomplete="off"
+                                                           inputmode="decimal" placeholder="Ingrese el porcentaje de detracción" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <!-- Guías -->
