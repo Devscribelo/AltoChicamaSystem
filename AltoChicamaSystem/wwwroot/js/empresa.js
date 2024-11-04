@@ -3,9 +3,18 @@
     agregarBotonesExportacion("#table_empresa");
 
     // Asignar el event listener fuera de la función getListEmpresa()
-    $(document).on('change', '.status3', function () {
+    $(document).on('change', '.status3', function (e) {
+        // Prevent the default checkbox behavior
+        e.preventDefault();
+
+        // Store checkbox element
+        const checkbox = $(this);
+
+        // Revert checkbox to previous state until confirmation
+        checkbox.prop('checked', !checkbox.prop('checked'));
+
         var rowData = $(this).closest('tr').data();
-        alterEmpresaStatus(rowData.empresa_id);
+        modalConfirmacionAlterStatus(rowData.empresa_id, checkbox);
     });
 });
 
@@ -70,6 +79,47 @@ function guardarNewEmpresa() {
     });
 }
 
+function modalConfirmacionAlterStatus(data, checkbox) {
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+    });
+
+    swalWithBootstrapButtons.fire({
+        title: '¿Estás segur@?',
+        text: "¿Deseas cambiar el estado de esta empresa? Este cambio afectará su visibilidad en el sistema.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, actualizar!',
+        cancelButtonText: 'No, cancelar!',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Toggle checkbox state
+            checkbox.prop('checked', !checkbox.prop('checked'));
+            // Call status change function
+            alterEmpresaStatus(data);
+
+            swalWithBootstrapButtons.fire(
+                'Estado Actualizado!',
+                'El estado fue actualizado correctamente.',
+                'success'
+            );
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            swalWithBootstrapButtons.fire({
+                title: 'Cancelado',
+                text: 'El estado de la empresa no ha sido actualizado!',
+                icon: 'error',
+                showCancelButton: false,
+                confirmButtonText: 'Ok',
+                reverseButtons: true
+            });
+        }
+    });
+}
 function getListEmpresa() {
     var endpoint = getDomain() + "/Empresa/ListaEmpresa";
 

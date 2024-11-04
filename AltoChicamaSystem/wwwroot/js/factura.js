@@ -6,9 +6,18 @@
     obtenerDeudasTransportista();
 
     // Cuando se cambia el valor del elemento con clase .status3
-    $(document).on('change', '.status3', function () {
+    $(document).on('change', '.status3', function (e) {
+        // Prevent the default checkbox behavior
+        e.preventDefault();
+
+        // Store checkbox element
+        const checkbox = $(this);
+
+        // Revert checkbox to previous state until confirmation
+        checkbox.prop('checked', !checkbox.prop('checked'));
+
         var rowData = $(this).closest('tr').data();
-        alterFacturaStatus(rowData.id_factura);
+        modalConfirmacionAlterStatus(rowData.id_factura, checkbox);
     });
 
     // Cuando se hace clic en el botón de consulta
@@ -69,6 +78,48 @@ function obtenerGananciasTransportista() {
             // Manejo de errores de la petición
             alert('Error al cargar ganancias: ' + textStatus + ' - ' + errorThrown);
             console.error("Error al cargar ganancias:", textStatus, errorThrown);
+        }
+    });
+}
+
+function modalConfirmacionAlterStatus(data, checkbox) {
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+    });
+
+    swalWithBootstrapButtons.fire({
+        title: '¿Estás segur@?',
+        text: "Deseas cambiar el estado de esta factura? Este cambio afectará su visibilidad en el sistema.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, actualizar!',
+        cancelButtonText: 'No, cancelar!',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Toggle checkbox state
+            checkbox.prop('checked', !checkbox.prop('checked'));
+            // Call status change function
+            alterFacturaStatus(data);
+
+            swalWithBootstrapButtons.fire(
+                'Estado Actualizado!',
+                'El estado fue actualizado correctamente.',
+                'success'
+            );
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            swalWithBootstrapButtons.fire({
+                title: 'Cancelado',
+                text: 'El estado de la factura no ha sido actualizado!',
+                icon: 'error',
+                showCancelButton: false,
+                confirmButtonText: 'Ok',
+                reverseButtons: true
+            });
         }
     });
 }
@@ -594,7 +645,6 @@ function getListFacturaTransportista(transportista_id, estado, transportista_nom
                             "</td>" +
                             "<td id='acciones'>" +
                             `<i class='bx bx-detail detalle-factura icon-circle' id='detalle_factura" + i + "' onclick='modalDetalleFactura(${dataFactura[i].id_factura})'></i>` +
-                            "<i class='bx bx-edit editar-button icon-circle' id='editar_factura" + i + "'></i>" +
                             "<i style='margin-left: 9px;' class='bx bx-trash eliminar-button icon-circle red' id='eliminar_factura" + i + "'></i>" +
                             "</td>" +
                             "</tr>";
@@ -768,7 +818,6 @@ function getListFactura() {
                         "</td>" +
                         "<td id='acciones'>" +
                         `<i class='bx bx-detail detalle-factura icon-circle' id='detalle_factura" + i + "' onclick='modalDetalleFactura(${dataFactura[i].id_factura})'></i>` +
-                        "<i class='bx bx-edit editar-button icon-circle' id='editar_factura" + i + "'></i>" +
                         "<i style='margin-left: 9px;' class='bx bx-trash eliminar-button icon-circle red' id='eliminar_factura" + i + "'></i>" +
                         "</td>" +
                         "</tr>";
