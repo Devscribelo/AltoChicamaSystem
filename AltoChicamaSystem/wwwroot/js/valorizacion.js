@@ -366,9 +366,9 @@ function getListValorizacionDetail(valorizacion_id) {
                 $("#totalCostoTotalDisplay").text(totalCosto.toFixed(2));
 
                 // Actualizar subtotal, IGV y precio total
-                $("#subtotal").text(totalCosto.toFixed(2)).css("border-bottom", "1px solid green"); // Establecer subtotal igual a totalCostoTotal y aplicar estilo
+                $("#subtotal").text(totalCosto.toFixed(2)) // Establecer subtotal igual a totalCostoTotal y aplicar estilo
                 const igv = totalCosto * 0.18; // Calcular IGV (18%)
-                $("#valorigv").text(igv.toFixed(2)).css("border-bottom", "1px solid green"); // Establecer IGV y aplicar estilo
+                $("#valorigv").text(igv.toFixed(2))
                 const precioTotal = totalCosto + igv; // Calcular precio total
                 $("#preciototal").text(precioTotal.toFixed(2)); // Establecer precio total
 

@@ -152,21 +152,24 @@
                             <!-- Tabla de Resumen -->
                             <div class="row mt-4" style="height: 100%;">
                                 <div class="col-md-4" style="border-top: 1px solid green;border-bottom: 1px solid green;border-left: 1px solid green; max-height: 100% !important;">
-                                    <div style="border: 1px green; padding: 10px; height: 100%; text-align: center; display: flex; align-items: center; justify-content: center;">
+                                    <div style="border: 1px green; padding: 10px; height: 100%; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;">
                                         <p style="font-weight: bold; height: 100%;">FIRMA</p>
+                                        <div style="margin-top: 5px; max-width: 50%;">
+                                            <img src="img/Firma2.png" alt="Firma" style="width: 100%; height: auto;" />
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6" style="border: 1px solid green; max-height: 100% !important;">
                                     <table class="table" style="height: 100%;">
                                         <tbody>
                                             <tr>
-                                                <td style="text-align: center; font-weight: bold;border-bottom: 1px solid green;">SUB TOTAL</td>
+                                                <td style="text-align: center; font-weight: bold; border-bottom: 1px solid green; height: 50px; align-content:center;">SUB TOTAL</td>
                                             </tr>
                                             <tr>
-                                                <td style="text-align: center; font-weight: bold;border-bottom: 1px solid green;">IGV</td>
+                                                <td style="text-align: center; font-weight: bold; border-bottom: 1px solid green; height: 50px;align-content:center;">IGV</td>
                                             </tr>
                                             <tr>
-                                                <td style="text-align: center; font-weight: bold;">PRECIO TOTAL DEL SERVICIO</td>
+                                                <td style="text-align: center; font-weight: bold; height: 50px; align-content:center;">PRECIO TOTAL DEL SERVICIO</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -175,13 +178,13 @@
                                     <table class="table" style="height: 100%;">
                                         <tbody>
                                             <tr>
-                                                <td id="subtotal"></td>
+                                                <td id="subtotal" style="border-bottom: 1px solid green; text-align: center; height: 54px; align-content:center;"></td>
                                             </tr>
                                             <tr>
-                                                <td id="valorigv"></td>
+                                                <td id="valorigv" style="border-bottom: 1px solid green; text-align: center; height: 54px; align-content:center;"></td>
                                             </tr>
                                             <tr>
-                                                <td id="preciototal"></td>
+                                                <td id="preciototal" style="text-align: center; height: 54px; align-content:center;"></td>
                                             </tr>
                                         </tbody>
                                     </table>
