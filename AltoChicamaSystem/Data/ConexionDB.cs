@@ -4,10 +4,10 @@ namespace AltoChicamaSystem.Data
 {
     public class ConexionDB
     {
-        private string SERVER = "192.168.18.79";
+        private string SERVER = "190.234.242.76";
         private string DB_NAME = "altochicama";
         private string USER = "devscribelo";
-        private string PASSWORD = "canicas123"; 
+        private string PASSWORD = "rzwn9uRc5Q11T42dO9KE"; 
         private int PORT = 3306;
 
         public string obtenerDatosConexion(string bandera)
