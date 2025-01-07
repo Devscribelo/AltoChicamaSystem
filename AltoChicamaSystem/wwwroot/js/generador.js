@@ -1377,7 +1377,7 @@ async function generarPDF() {
             doc.setFont(undefined, "normal");
 
             let textoPredeterminado =
-                "Con RGR N° 1165-2021-GR-LL-GGR-GRS, la Gerencia Regional de Salud – La Libertad, nos otorga la Autorización Sanitaria para el tratamiento de Aguas Residuales – Tipo Domésticas, a través del uso de tanque sépticos y un filtro biológico.";
+                "Con RGR N° 1536-2024-GR-LL-GGR-GRS, la Gerencia Regional de Salud – La Libertad, nos otorga la Autorización Sanitaria para el tratamiento de Aguas Residuales – Tipo Domésticas, a través del uso de tanques sépticos y filtros.";
 
             let textoYPosition = textYPosition + 10; // Ajusta la posición Y
             let textLines = doc.splitTextToSize(textoPredeterminado, contentWidth);
