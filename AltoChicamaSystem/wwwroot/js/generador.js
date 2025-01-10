@@ -1,6 +1,5 @@
 ﻿
 $(document).ready(function () {
-
     initTransportistaSelect();
     initEmpresaSelect();
 });
@@ -113,6 +112,7 @@ function EmpresaSelect(id_grupo) {
 
                         // Llamar a la función para cargar direcciones basadas en la empresa seleccionada
                         cargarDirecciones(selectedEmpresaId);
+
                     } else {
                         document.getElementById('ruc').disabled = true;
                         $("#residuos").prop("disabled", true);
@@ -254,9 +254,9 @@ function guardarNewDireccion(empresa_id) {
                     console.log("Después del éxito");
                     // Llama a cargarDirecciones para actualizar la lista de direcciones
                     cargarDirecciones(empresa_id);
-                });
 
-                $("#modal_nueva_empresa").modal("hide");
+                    $("#modal_nueva_empresa").modal("hide");
+                });
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -636,7 +636,8 @@ function formatDate(date) {
 
 async function guardarNewGuia() {
     var { guia_numero, descarga, cantidad, unidad, transportistaid, fechaformulario, cero, direccionform, pdfData, empresaid, num_doc } = await generarPDF();
-    var direccion = document.getElementById("residuos").textContent;
+    let residuosSelect = document.getElementById("residuos");
+    let residuosNombre = residuosSelect.options[residuosSelect.selectedIndex].text;
     var formData = new FormData();
     var fecha = formatDate(fechaformulario);
     formData.append('guia_numero', guia_numero);
@@ -645,7 +646,7 @@ async function guardarNewGuia() {
     formData.append('guia_cantidad', cantidad);
     formData.append('transportista_id', transportistaid);
     formData.append('guia_fecha_servicio', fechaformulario);
-    formData.append('guia_direccion', direccion);
+    formData.append('guia_direccion', residuosNombre);
     formData.append('guia_costo', cero);
     formData.append('documento_pdf', pdfData);
     formData.append('empresa_id', empresaid);
@@ -728,7 +729,7 @@ async function generarPDF() {
     let direccionform = document.getElementById("residuos").value;
     let [anio, mes, dia] = fechaformulario.split("-");
     
-    if (descarga === "Desmedros" || descarga === "Residuos Orgánicos" || descarga === "Residuos Inorgánicos" || descarga === "Residuos de Construcción y Demolición" || descarga === "Grasas Residuales" || descarga === "Lodos Organicos" || descarga === "Lodos de PTAR") {
+    if (descarga === "Desmedros" || descarga === "Residuos Orgánicos" || descarga === "Residuos Inorgánicos" || descarga === "Residuos de Construcción y Demolición" || descarga === "Grasas Residuales" || descarga === "Lodos Organicos" || descarga === "Biosólidos de PTARIL" || descarga === "Lodos de limpieza" || descarga === "Lodos de PTAR") {
         formId = "pdfResiduos";
         unidad = "TN";
         if (descarga === "Desmedros") {
@@ -773,6 +774,23 @@ async function generarPDF() {
             residuoDir = "Lodos orgánicos";
             numeroCert = "009-" + num_doc_str + "-" + anio; 
         }
+
+        else if (descarga === "Biosólidos de PTARIL") {
+            titulo = "VALORIZACIÓN DE LODOS NO PELIGROSOS";
+            tipoResiduotittle = "Tipo de Residuo";
+            tipoResiduo = "Biosólidos de PTARIL";
+            residuoDir = "Biosólidos de PTARIL";
+            numeroCert = "009-" + num_doc_str + "-" + anio;
+        }
+
+        else if (descarga === "Lodos de limpieza") {
+            titulo = "VALORIZACIÓN DE LODOS NO PELIGROSOS";
+            tipoResiduotittle = "Tipo de Residuo";
+            tipoResiduo = "Lodos de limpieza";
+            residuoDir = "Lodos de limpieza";
+            numeroCert = "009-" + num_doc_str + "-" + anio;
+        }
+
         else if (descarga === "Lodos de PTAR") {
             titulo = "VALORIZACIÓN DE LODOS NO PELIGROSOS";
             tipoResiduotittle = "Tipo de Residuo";
@@ -1099,7 +1117,7 @@ async function generarPDF() {
             let nombreEmpresa = document.getElementById("nomEmpresa").value;
             let ruct = document.getElementById("ruct").value;
 
-            let textoPredeterminado3 = `Transportados por la empresa ${nombreEmpresa} con RUC: ${ruct} hacia la Infraestructura de Valorización Alto Chicama, ubicada en la Panamericana Norte Km 594, Sector La Soledad – Chicama – Ascope – La Libertad; para su valorización.`;
+            let textoPredeterminado3 = `Transportados por la empresa ${nombreEmpresa} con RUC: ${ruct} hacia la Planta de Valorización Alto Chicama, ubicada en la Panamericana Norte Km 594, Sector La Soledad – Chicama – Ascope – La Libertad; para su valorización.`;
 
             let splittedText = doc.splitTextToSize(
                 textoPredeterminado3,
@@ -1334,7 +1352,7 @@ async function generarPDF() {
             doc.setTextColor(0, 0, 0);
             doc.setFont(undefined, "bold");
             doc.text(
-                "N°" + numeroCert + "-" + "002" + "-2024",
+                "N°" + numeroCert + "-" + "002" + "-2025",
                 pageWidth / 2, 44, null, null, "center");
             doc.setFont(undefined, "normal");
 
@@ -1377,7 +1395,7 @@ async function generarPDF() {
             doc.setFont(undefined, "normal");
 
             let textoPredeterminado =
-                "Con RGR N° 1536-2024-GR-LL-GGR-GRS, la Gerencia Regional de Salud – La Libertad, nos otorga la Autorización Sanitaria para el tratamiento de Aguas Residuales – Tipo Domésticas, a través del uso de tanques sépticos y filtros.";
+                "Con RGR N° 1536-2025-GR-LL-GGR-GRS, la Gerencia Regional de Salud – La Libertad, nos otorga la Autorización Sanitaria para el tratamiento de Aguas Residuales – Tipo Domésticas, a través del uso de tanques sépticos y filtros.";
 
             let textoYPosition = textYPosition + 10; // Ajusta la posición Y
             let textLines = doc.splitTextToSize(textoPredeterminado, contentWidth);
@@ -1590,7 +1608,7 @@ async function generarPDF() {
             let ruct = document.getElementById("ruct").value;
 
             // Texto con los datos de la empresa y el RUC
-            let textoPredeterminado3 = `Transportados por la empresa ${nombreEmpresa} con RUC: ${ruct} hacia la Infraestructura de Alto Chicama, ubicada en la Panamericana Norte Km 594, Sector La Soledad – Chicama – Ascope – La Libertad; para su tratamiento.`;
+            let textoPredeterminado3 = `Transportados por la empresa ${nombreEmpresa} con RUC: ${ruct} hacia la Planta de Alto Chicama, ubicada en la Panamericana Norte Km 594, Sector La Soledad – Chicama – Ascope – La Libertad; para su tratamiento.`;
 
             // Dividir el texto en líneas que se ajusten al ancho del contenido
             let splittedText = doc.splitTextToSize(textoPredeterminado3, contentWidth);
