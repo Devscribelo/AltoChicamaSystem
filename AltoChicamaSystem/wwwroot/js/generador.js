@@ -2,6 +2,7 @@
 $(document).ready(function () {
     initTransportistaSelect();
     initEmpresaSelect();
+    obtenerMayorNumDocumento();
 });
 
 
@@ -450,7 +451,7 @@ function obtenerMayorNumDocumento() {
             success: function (data) {
                 console.log("Respuesta del servidor:", data); // Inspecciona la respuesta completa
                 //console.log(data.item3);
-                documento_num = parseInt(data.item3) + 1;
+                documento_num = parseInt(data.item3);
                 resolve(documento_num);
             },
             error: function (xhr, status, error) {
