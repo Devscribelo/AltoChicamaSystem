@@ -487,7 +487,15 @@ namespace AltoChicamaSystem.Data.Documento
 
                         using (MySqlDataReader sdr = mySqlCmd.ExecuteReader())
                         {
+                            // Consumir el primer conjunto de resultados (mensaje)
                             if (sdr.Read())
+                            {
+                                string mensaje = sdr["Msg"].ToString();  // 'DATOS OBTENIDOS CORRECTAMENTE'
+                                Console.WriteLine(mensaje); // O lo que necesites hacer con el mensaje
+                            }
+
+                            // Consumir el segundo conjunto de resultados (valor de MaxDocumentoNumero)
+                            if (sdr.NextResult() && sdr.Read())
                             {
                                 if (sdr["MaxDocumentoNumero"] != DBNull.Value)
                                 {
@@ -504,5 +512,6 @@ namespace AltoChicamaSystem.Data.Documento
             }
             return MaxDocumentoNumero;
         }
+
     }
 }

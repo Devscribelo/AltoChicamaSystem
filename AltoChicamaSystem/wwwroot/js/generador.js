@@ -3,6 +3,7 @@ $(document).ready(function () {
     initTransportistaSelect();
     initEmpresaSelect();
     obtenerMayorNumDocumento();
+    TipoServicioSelect();
 });
 
 
@@ -127,6 +128,127 @@ function EmpresaSelect(id_grupo) {
         }
     });
 }
+
+// Función para obtener el conteo por tipo de servicio
+function obtenerConteoPorTipoServicio(tipoServicioId) {
+    return new Promise((resolve, reject) => {
+        var endpoint = getDomain() + "/TipoServicio/ContarPorTipoServicio";
+
+        $.ajax({
+            type: "POST",
+            url: endpoint,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify({ tiposervicio_id: tipoServicioId }),
+            dataType: "json",
+            success: function (data) {
+                console.log("Respuesta del contador:", data);
+                
+                resolve(data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error("Error al obtener conteo:", textStatus, errorThrown);
+                reject(errorThrown);
+            }
+        });
+    });
+}
+
+function TipoServicioSelect() {
+    var endpoint = getDomain() + "/TipoServicio/ListaTipoServicio";
+
+    // Solo destruye Select2 si está inicializado
+    if ($.fn.select2 && $('#Descarga').data('select2')) {
+        $('#Descarga').select2('destroy');
+    }
+
+    // Inicializar Select2 después de destruir la instancia previa
+    $('#Descarga').select2({
+        placeholder: "Seleccione un Tipo de Descarga...",
+        allowClear: true,
+        language: "es",
+        dropdownCssClass: 'limit-dropdown'
+    });
+
+    $.ajax({
+        type: "GET",
+        url: endpoint,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        dataType: "json",
+        beforeSend: function () {
+            console.log("Cargando Descarga...");
+        },
+        success: function (data) {
+            var TipoServicio = data.item3;
+            var $select = $('#Descarga');
+
+            // Limpiar el select
+            $select.empty();
+
+            // Agregar la opción predeterminada
+            $select.append(new Option("Seleccione un Tipo de Descarga...", "", true, true));
+
+            // Agregar las opciones si existen datos
+            if (TipoServicio && TipoServicio.length > 0) {
+                TipoServicio.forEach(function (item) {
+                    $select.append($('<option>', {
+                        value: item.tiposervicio_id,
+                        text: item.tipo_residuo,
+                        'data-titulo': item.tipo_titulo,
+                        'data-numero': item.tipo_numero_certificado,
+                        'data-residuotittle': item.tipoResiduotittle,
+                        'data-residuo': item.tipoResiduo,
+                        'data-residuodir': item.residuoDir
+                    }));
+                });
+            } else {
+                console.log("No se encontraron tipos de servicio.");
+                $select.append(new Option("No hay tipos de servicio disponibles", ""));
+            }
+
+            // Habilitar y actualizar Select2
+            $select.prop("disabled", false).select2({
+                placeholder: "Seleccione un Tipo de Descarga...",
+                allowClear: true,
+                language: "es",
+                dropdownCssClass: 'limit-dropdown'
+            });
+
+            // Forzar la actualización de Select2
+            $select.trigger('change');
+
+            // Log para depuración
+            console.log("Opciones cargadas:", $select.find('option').map(function () { return $(this).val(); }).get());
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Error al cargar tipos de servicio: ' + textStatus);
+            console.error("Error al cargar tipos de servicio:", textStatus, errorThrown);
+        }
+    });
+
+    // Manejar el evento de cambio de selección
+    $('#Descarga').off('change').on('change', async function () {
+        var $selected = $(this).find(':selected');
+        var tipoServicioId = $selected.val();
+
+        console.log("Valor seleccionado:", tipoServicioId); // Depuración
+
+        if (tipoServicioId) {
+            try {
+                const conteoData = await obtenerConteoPorTipoServicio(tipoServicioId);
+                $(this).data('conteoActual', conteoData.item3);
+                console.log("Conteo obtenido:", conteoData.item3); // Depuración
+            } catch (error) {
+                console.error("Error al obtener el conteo:", error);
+            }
+        }
+    });
+}
+
+
 
 
 // Manejar el envío del formulario con el nombre de la empresa
@@ -704,8 +826,47 @@ async function guardarNewGuia() {
 }
 
 
+
+
+
 async function generarPDF() {
-    let num_doc = await obtenerMayorNumDocumento();
+    const selectedOption = $("#Descarga option:selected");
+    const tipoServicioId = selectedOption.val();
+
+    if (!tipoServicioId) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Por favor seleccione un tipo de descarga'
+        });
+        return;
+    }
+
+    // Obtener el conteo
+    let num_doc;
+    try {
+        var conteoData = 0;
+        var rpst = await obtenerConteoPorTipoServicio(tipoServicioId);
+        conteoData = rpst.item3;
+        console.log("Respuesta del contador:", conteoData); 
+        if (parseInt(rpst.item1) === 0) {
+            // Si el backend devuelve 0, será 1; si devuelve 1, será 2, etc.
+            num_doc = parseInt(rpst.item3) + 1;
+            console.log("Número de documento:", num_doc); // Para debug
+        } else {
+            throw new Error(rpst.item2);
+        }
+    } catch (error) {
+        console.error("Error al obtener conteo:", error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error al obtener el conteo'
+        });
+        return;
+    }
+
+    // Formatear el número
     let num_doc_str = "";
     if (num_doc < 10) {
         num_doc_str = "00" + num_doc.toString();
@@ -713,10 +874,11 @@ async function generarPDF() {
     else if (num_doc < 100) {
         num_doc_str = "0" + num_doc.toString();
     }
+
     let formId = "";
     const { jsPDF } = window.jspdf;
     let empresaid = document.getElementById("ide").value;
-    let descarga = document.getElementById("descarga").value;
+    let descarga = selectedOption.val();
     let titulo = "";
     let tipoResiduotittle = "";
     let tipoResiduo = "";
@@ -724,99 +886,30 @@ async function generarPDF() {
     let cantidad = document.getElementById("cantidad").value;
     let numeroCert = "";
     let unidad = "";
-    let guia_numero = document.getElementById("numeroGuia").value; 
+    let guia_numero = document.getElementById("numeroGuia").value;
     let transportistaid = document.getElementById('idt').value;
     let fechaformulario = document.getElementById("fecha").value;
     let direccionform = document.getElementById("residuos").value;
     let [anio, mes, dia] = fechaformulario.split("-");
-    
-    if (descarga === "Desmedros" || descarga === "Residuos Orgánicos" || descarga === "Residuos Inorgánicos" || descarga === "Residuos de Construcción y Demolición" || descarga === "Grasas Residuales" || descarga === "Lodos Organicos" || descarga === "Biosólidos de PTARIL" || descarga === "Lodos de limpieza" || descarga === "Lodos de PTAR") {
-        formId = "pdfResiduos";
-        unidad = "TN";
-        if (descarga === "Desmedros") {
-            titulo = "DESTRUCCIÓN Y VALORIZACIÓN DE DESMEDROS";
-            tipoResiduotittle = "Tipo de Residuo";
-            tipoResiduo = "Desmedros (Productos Vencidos)";
-            residuoDir = "Desmedros";
-            numeroCert = "002-" + num_doc_str + "-" + anio;            
-        }
-        else if (descarga === "Residuos Orgánicos") {
-            titulo = "VALORIZACIÓN DE RESIDUOS DE SÓLIDOS ORGÁNICOS";
-            tipoResiduotittle = "Tipo de Residuos Orgánicos";
-            tipoResiduo = "Descarte de espárragos";
-            residuoDir = "Residuos orgánicos";
-            numeroCert = "003-" + num_doc_str + "-" + anio;  
-        }
-        else if (descarga === "Residuos Inorgánicos") {
-            titulo = "VALORIZACIÓN DE RESIDUOS INORGÁNICOS APROVECHABLES";
-            tipoResiduotittle = "Tipo de Residuo Sólido";
-            tipoResiduo = "Residuos Inorgánicos Aprovechables";
-            residuoDir = "Residuos inorgánicos aprovechables";
-            numeroCert = "005-" + num_doc_str + "-" + anio; 
-        }
-        else if (descarga === "Residuos de Construcción y Demolición") {
-            titulo = "VALORIZACIÓN DE RESIDUOS DE CONSTRUCCIÓN Y DEMOLICIÓN - APROVECHABLES";
-            tipoResiduotittle = "Tipo de Residuo Sólido";
-            tipoResiduo = "Escombros no peligrosos";
-            residuoDir = "Residuos sólidos";
-            numeroCert = "006-" + num_doc_str + "-" + anio; 
-        }
-        else if (descarga === "Grasas Residuales") {
-            titulo = "TRATAMIENTO DE GRASAS RESIDUALES DOMÉSTICAS";
-            tipoResiduotittle = "Tipo de Residuo Líquido";
-            tipoResiduo = "Grasa Residual Doméstica";
-            residuoDir = "Grasas Residuales Domésticas";
-            numeroCert = "007-" + num_doc_str + "-" + anio; 
-        }
-        else if (descarga === "Lodos Organicos") {
-            titulo = "VALORIZACIÓN DE LODOS NO PELIGROSOS";
-            tipoResiduotittle = "Tipo de Residuo";
-            tipoResiduo = "Lodos Orgánicos";
-            residuoDir = "Lodos orgánicos";
-            numeroCert = "009-" + num_doc_str + "-" + anio; 
-        }
 
-        else if (descarga === "Biosólidos de PTARIL") {
-            titulo = "VALORIZACIÓN DE LODOS NO PELIGROSOS";
-            tipoResiduotittle = "Tipo de Residuo";
-            tipoResiduo = "Biosólidos de PTARIL";
-            residuoDir = "Biosólidos de PTARIL";
-            numeroCert = "009-" + num_doc_str + "-" + anio;
-        }
+    // Obtener los datos del servicio seleccionado
+    if (selectedOption.length > 0) {
+        titulo = selectedOption.data('titulo');
+        tipoResiduotittle = selectedOption.data('residuotittle');
+        tipoResiduo = selectedOption.data('residuo');
+        residuoDir = selectedOption.data('residuodir');
+        numeroCert = selectedOption.data('numero') + "-" + num_doc_str + "-" + anio;
 
-        else if (descarga === "Lodos de limpieza") {
-            titulo = "VALORIZACIÓN DE LODOS NO PELIGROSOS";
-            tipoResiduotittle = "Tipo de Residuo";
-            tipoResiduo = "Lodos de limpieza";
-            residuoDir = "Lodos de limpieza";
-            numeroCert = "009-" + num_doc_str + "-" + anio;
-        }
-
-        else if (descarga === "Lodos de PTAR") {
-            titulo = "VALORIZACIÓN DE LODOS NO PELIGROSOS";
-            tipoResiduotittle = "Tipo de Residuo";
-            tipoResiduo = "Lodos de PTAR";
-            residuoDir = "Lodos de PTAR";
-            numeroCert = "009-" + num_doc_str + "-" + anio;
-        }
-
-    }
-    else if (descarga === "Líquidos Residuales" || descarga === "Aguas Residuales") {
-        formId = "pdfAguas";
-        unidad = "M³";
-        if (descarga === "Líquidos Residuales") {
-            titulo = "TRATAMIENTO DE LÍQUIDOS RESIDUALES";
-            tipoResiduotittle = "Tipo de Agua Residual";
-            tipoResiduo = "Líquidos Residuales";
-            residuoDir = "Líquidos residuales";
-            numeroCert = "008-" + num_doc_str + "-" + anio; 
-        }
-        else if (descarga === "Aguas Residuales") {
-            titulo = "TRATAMIENTO DE AGUAS RESIDUALES – TIPO DOMÉSTICAS";
-            tipoResiduotittle = "Tipo de Agua Residual";
-            tipoResiduo = "Agua Residual – Tipo Doméstica";
-            residuoDir = "Aguas Residuales – Tipo Domésticas";
-            numeroCert = "004-" + num_doc_str + "-" + anio; 
+        // Determinar el tipo de formulario basado en el servicio
+        const tipoDescarga = rpst.item4;
+        if (tipoDescarga.includes("Residuos") || tipoDescarga.includes("Desmedros") ||
+            tipoDescarga.includes("Grasas") || tipoDescarga.includes("Lodos") ||
+            tipoDescarga.includes("Biosólidos")) {
+            formId = "pdfResiduos";
+            unidad = "TN";
+        } else if (tipoDescarga.includes("Líquidos") || tipoDescarga.includes("Aguas")) {
+            formId = "pdfAguas";
+            unidad = "M³";
         }
     }
 
